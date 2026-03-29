@@ -1,8 +1,14 @@
 """
-Database seeding – workspaces and admin user.
+Database seeding – workspaces, admin, and dev/test accounts.
 Called once at startup. Idempotent.
+
+Security note:
+- All credentials come from environment variables.
+- ADMIN_PASSWORD is required; DEV seed accounts use SEED_DEV_PASSWORD.
+- Never hardcode credentials in this file.
 """
 import logging
+import os
 import bcrypt
 from datetime import datetime, timezone
 from database import get_db
@@ -34,7 +40,7 @@ WORKSPACE_SEEDS = [
     },
     {
         "slug": "sprachkurse",
-        "name": "Sprachkurse (A1–C1)",
+        "name": "Sprachkurse (A1-C1)",
         "area": "language_courses",
         "active": True,
         "pipeline_stages": [
@@ -74,19 +80,6 @@ async def seed_workspaces() -> None:
 
 
 async def seed_admin() -> None:
-    """
-    Seed the initial superadmin.
-    Credentials come from environment variables (ADMIN_EMAIL, ADMIN_PASSWORD).
-    No password defaults in code – ADMIN_PASSWORD is required in .env.
-
-    This function is idempotent:
-    - If admin already exists with correct password → no-op.
-    - If admin exists with different password → updates hash (useful for secret rotation).
-    - If admin does not exist → creates it.
-
-    To DISABLE seeding in production, remove ADMIN_EMAIL/ADMIN_PASSWORD from .env
-    and handle initial admin creation via a one-time migration script instead.
-    """
     db = get_db()
     existing = await db.users.find_one({"email": ADMIN_EMAIL})
     if existing is None:
@@ -109,3 +102,54 @@ async def seed_admin() -> None:
         logger.info(f"[SEED] Admin password rotated: {ADMIN_EMAIL}")
     else:
         logger.info(f"[SEED] Admin already exists, no changes: {ADMIN_EMAIL}")
+
+    # Seed dev/test accounts (only if SEED_DEV_PASSWORD is set in env)
+    seed_pw = os.environ.get("SEED_DEV_PASSWORD", "")
+    if not seed_pw:
+        logger.info("[SEED] SEED_DEV_PASSWORD not set, skipping dev accounts")
+        return
+
+    dev_accounts = [
+        {
+            "email": "staff@studienkolleg-aachen.de",
+            "full_name": "Maria Schmidt",
+            "role": "staff",
+        },
+        {
+            "email": "teacher@studienkolleg-aachen.de",
+            "full_name": "Dr. Thomas Mueller",
+            "role": "teacher",
+        },
+        {
+            "email": "applicant@studienkolleg-aachen.de",
+            "full_name": "Ahmed Hassan",
+            "role": "applicant",
+        },
+    ]
+
+    for acct in dev_accounts:
+        existing = await db.users.find_one({"email": acct["email"]})
+        if existing is None:
+            await db.users.insert_one({
+                "email": acct["email"],
+                "password_hash": _hash(seed_pw),
+                "full_name": acct["full_name"],
+                "role": acct["role"],
+                "language_pref": "de",
+                "active": True,
+                "created_at": datetime.now(timezone.utc),
+                "seeded": True,
+            })
+            logger.info(f"[SEED] Dev account created: {acct['email']} ({acct['role']})")
+        elif not _verify(seed_pw, existing.get("password_hash", "")):
+            await db.users.update_one(
+                {"email": acct["email"]},
+                {"$set": {
+                    "password_hash": _hash(seed_pw),
+                    "role": acct["role"],
+                    "full_name": acct["full_name"],
+                }},
+            )
+            logger.info(f"[SEED] Dev account password synced: {acct['email']}")
+        else:
+            logger.info(f"[SEED] Dev account exists, no changes: {acct['email']}")

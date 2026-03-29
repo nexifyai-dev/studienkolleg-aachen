@@ -10,6 +10,8 @@ from config import JWT_SECRET, JWT_ALGORITHM
 # ─── Role groups ─────────────────────────────────────────────────────────────
 ADMIN_ROLES = frozenset(["superadmin", "admin"])
 STAFF_ROLES = frozenset(["superadmin", "admin", "staff", "accounting_staff"])
+TEACHING_ROLES = frozenset(["superadmin", "admin", "staff", "accounting_staff", "teacher"])
+TEACHER_ROLES = frozenset(["teacher"])
 PARTNER_ROLES = frozenset(["agency_admin", "agency_agent", "affiliate"])
 ALL_PORTAL_ROLES = frozenset(["applicant", "agency_admin", "agency_agent", "affiliate"])
 

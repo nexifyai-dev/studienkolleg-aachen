@@ -50,7 +50,7 @@ function PublicRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return null;
   if (user) {
-    const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff'];
+    const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff', 'teacher'];
     if (staffRoles.includes(user.role)) return <Navigate to="/staff" replace />;
     return <Navigate to="/portal" replace />;
   }
@@ -94,7 +94,7 @@ export default function App() {
 
           {/* Staff */}
           <Route path="/staff" element={
-            <ProtectedRoute allowedRoles={['superadmin','admin','staff','accounting_staff']}>
+            <ProtectedRoute allowedRoles={['superadmin','admin','staff','accounting_staff','teacher']}>
               <StaffLayout />
             </ProtectedRoute>
           }>

@@ -8,65 +8,22 @@ import { CheckCircle, Loader2, AlertCircle, Upload, X, FileText } from 'lucide-r
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
-const COURSES = [
-  { value: 'T-Course', label: 'T-Kurs – Technik (Maschinenbau, Elektrotechnik, Mathematik, Physik)' },
-  { value: 'M-Course', label: 'M-Kurs – Medizin (Medizin, Zahnmedizin, Biologie, Pharmazie)' },
-  { value: 'W-Course', label: 'W-Kurs – Wirtschaft (BWL, Informatik, Sozialwissenschaften, Jura)' },
-  { value: 'M/T-Course', label: 'M/T-Kurs – Kombi Medizin + Technik' },
-  { value: 'Language Course', label: 'Sprachkurs (A1–C1 Deutschvorbereitung)' },
-];
+const COURSE_VALUES = ['T-Course', 'M-Course', 'W-Course', 'M/T-Course', 'Language Course'];
+const COURSE_KEYS = ['t', 'm', 'w', 'mt', 'lang'];
 
-const COMBO_OPTIONS = [
-  { value: 'none', label: 'Keine Kombination' },
-  { value: 'T-Course', label: 'Zusätzlich T-Kurs' },
-  { value: 'M-Course', label: 'Zusätzlich M-Kurs' },
-  { value: 'W-Course', label: 'Zusätzlich W-Kurs' },
-];
+const COMBO_VALUES = ['none', 'T-Course', 'M-Course', 'W-Course'];
+const COMBO_KEYS = ['none', 't', 'm', 'w'];
 
-const SEMESTERS = [
-  { value: 'Winter Semester 2025/26', label: 'Wintersemester 2025/26' },
-  { value: 'Summer Semester 2026', label: 'Sommersemester 2026' },
-  { value: 'Winter Semester 2026/27', label: 'Wintersemester 2026/27' },
-  { value: 'Summer Semester 2027', label: 'Sommersemester 2027' },
-  { value: 'Winter Semester 2027/28', label: 'Wintersemester 2027/28' },
-];
+const SEMESTER_VALUES = ['Winter Semester 2025/26', 'Summer Semester 2026', 'Winter Semester 2026/27', 'Summer Semester 2027', 'Winter Semester 2027/28'];
+const SEMESTER_KEYS = ['ws2526', 'ss26', 'ws2627', 'ss27', 'ws2728'];
 
-const GERMAN_LEVELS = [
-  { value: 'A1', label: 'A1 – Keine oder sehr geringe Kenntnisse' },
-  { value: 'A2', label: 'A2 – Grundkenntnisse' },
-  { value: 'B1', label: 'B1 – Mittelstufe (für Studienkolleg erforderlich)' },
-  { value: 'B2', label: 'B2 – Obermittelstufe' },
-  { value: 'C1', label: 'C1 – Fortgeschritten' },
-  { value: 'C2', label: 'C2 – Muttersprachliches Niveau' },
-];
+const LEVEL_VALUES = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
-const REQUIRED_DOCS = [
-  {
-    key: 'language_certificate',
-    label: 'Deutsches Sprachzertifikat *',
-    desc: 'Zertifikat über aktuelle Deutschkenntnisse (z. B. Goethe, TELC, DSH, TestDaF)',
-    accept: '.pdf,.jpg,.jpeg,.png,.webp',
-    required: true,
-  },
-  {
-    key: 'highschool_diploma',
-    label: 'Schulzeugnis / Abschlusszeugnis *',
-    desc: 'Letztes Zeugnis / Hochschulzugangsberechtigung aus dem Herkunftsland',
-    accept: '.pdf,.jpg,.jpeg,.png,.webp',
-    required: true,
-  },
-  {
-    key: 'passport',
-    label: 'Reisepass *',
-    desc: 'Gültiger Reisepass (Personalausweis wird für EU-Bürger akzeptiert)',
-    accept: '.pdf,.jpg,.jpeg,.png,.webp',
-    required: true,
-  },
-];
+const REQUIRED_DOC_KEYS = ['language_certificate', 'highschool_diploma', 'passport'];
 
 const MAX_FILE_MB = 10;
 
-function FileDropZone({ docConfig, file, onFileChange, onClear }) {
+function FileDropZone({ docKey, file, onFileChange, onClear, t }) {
   const inputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
 
@@ -74,7 +31,7 @@ function FileDropZone({ docConfig, file, onFileChange, onClear }) {
     e.preventDefault();
     setDragging(false);
     const f = e.dataTransfer.files[0];
-    if (f) onFileChange(docConfig.key, f);
+    if (f) onFileChange(docKey, f);
   };
 
   const sizeOk = !file || file.size <= MAX_FILE_MB * 1024 * 1024;
@@ -82,20 +39,20 @@ function FileDropZone({ docConfig, file, onFileChange, onClear }) {
   return (
     <div>
       <label className="block text-sm font-medium text-slate-700 mb-1">
-        {docConfig.label}
-        <span className="ml-1 text-xs text-slate-400 font-normal">({docConfig.desc})</span>
+        {t(`apply.doc_labels.${docKey}`)} *
+        <span className="ml-1 text-xs text-slate-400 font-normal">({t(`apply.doc_descs.${docKey}`)})</span>
       </label>
       {file ? (
         <div className={`flex items-center gap-3 border rounded-sm px-4 py-3 ${sizeOk ? 'border-primary/30 bg-primary/5' : 'border-red-200 bg-red-50'}`}
-          data-testid={`file-selected-${docConfig.key}`}>
+          data-testid={`file-selected-${docKey}`}>
           <FileText size={18} className={sizeOk ? 'text-primary' : 'text-red-500'} />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-slate-800 truncate">{file.name}</p>
             <p className={`text-xs ${sizeOk ? 'text-slate-500' : 'text-red-600'}`}>
-              {sizeOk ? `${(file.size / 1024).toFixed(0)} KB` : `Datei zu groß (max. ${MAX_FILE_MB} MB)`}
+              {sizeOk ? `${(file.size / 1024).toFixed(0)} ${t('apply.file_size_display')}` : t('apply.file_too_large_label')}
             </p>
           </div>
-          <button type="button" onClick={() => onClear(docConfig.key)}
+          <button type="button" onClick={() => onClear(docKey)}
             className="text-slate-400 hover:text-red-500 transition-colors shrink-0">
             <X size={16} />
           </button>
@@ -109,17 +66,17 @@ function FileDropZone({ docConfig, file, onFileChange, onClear }) {
           className={`border-2 border-dashed rounded-sm px-4 py-5 text-center cursor-pointer transition-all ${
             dragging ? 'border-primary bg-primary/5' : 'border-slate-200 hover:border-primary/60 hover:bg-slate-50'
           }`}
-          data-testid={`file-drop-${docConfig.key}`}
+          data-testid={`file-drop-${docKey}`}
         >
           <Upload size={20} className="mx-auto text-slate-400 mb-2" />
-          <p className="text-sm text-slate-600">Datei hierher ziehen oder <span className="text-primary font-medium">klicken zum Auswählen</span></p>
-          <p className="text-xs text-slate-400 mt-1">PDF, JPG, PNG, WEBP – max. {MAX_FILE_MB} MB</p>
+          <p className="text-sm text-slate-600">{t('apply.drag_drop')} <span className="text-primary font-medium">{t('apply.browse')}</span></p>
+          <p className="text-xs text-slate-400 mt-1">{t('apply.file_types')}</p>
           <input
             ref={inputRef}
             type="file"
-            accept={docConfig.accept}
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
             className="hidden"
-            onChange={e => e.target.files[0] && onFileChange(docConfig.key, e.target.files[0])}
+            onChange={e => e.target.files[0] && onFileChange(docKey, e.target.files[0])}
           />
         </div>
       )}
@@ -165,30 +122,27 @@ export default function ApplyPage() {
     e.preventDefault();
     setError('');
 
-    // Client-seitige Validierung
-    const missingFiles = REQUIRED_DOCS.filter(d => d.required && !files[d.key]).map(d => d.label.replace(' *', ''));
+    const missingFiles = REQUIRED_DOC_KEYS.filter(k => !files[k]).map(k => t(`apply.doc_labels.${k}`));
     if (missingFiles.length > 0) {
-      setError(`Bitte lade alle Pflichtdokumente hoch: ${missingFiles.join(', ')}`);
+      setError(`${t('apply.error_missing_docs')} ${missingFiles.join(', ')}`);
       return;
     }
 
-    // Datei-Größe prüfen
     const tooLarge = Object.values(files).filter(Boolean).find(f => f.size > MAX_FILE_MB * 1024 * 1024);
     if (tooLarge) {
-      setError(`Datei "${tooLarge.name}" ist zu groß (max. ${MAX_FILE_MB} MB).`);
+      setError(`"${tooLarge.name}" ${t('apply.error_file_too_large')}`);
       return;
     }
 
     setLoading(true);
     try {
-      // Dateien in Base64 konvertieren
       const documentsPayload = [];
-      for (const doc of REQUIRED_DOCS) {
-        const f = files[doc.key];
+      for (const docKey of REQUIRED_DOC_KEYS) {
+        const f = files[docKey];
         if (f) {
           const b64 = await fileToBase64(f);
           documentsPayload.push({
-            document_type: doc.key,
+            document_type: docKey,
             filename: f.name,
             content_type: f.type || 'application/octet-stream',
             file_data: b64,
@@ -219,7 +173,7 @@ export default function ApplyPage() {
       setSuccess(true);
     } catch (err) {
       const detail = err.response?.data?.detail;
-      setError(typeof detail === 'string' ? detail : 'Fehler beim Absenden. Bitte versuche es erneut.');
+      setError(typeof detail === 'string' ? detail : t('apply.error_generic'));
     } finally {
       setLoading(false);
     }
@@ -236,11 +190,11 @@ export default function ApplyPage() {
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
             <div className="bg-slate-50 border border-slate-200 rounded-sm p-8 sm:p-10 text-center" data-testid="apply-success">
               <CheckCircle size={48} className="text-primary mx-auto mb-5" />
-              <h2 className="text-2xl font-heading font-bold text-slate-800 mb-3">Bewerbung eingegangen!</h2>
-              <p className="text-slate-600 text-sm mb-2">Deine Bewerbung und Dokumente wurden erfolgreich übermittelt.</p>
-              <p className="text-slate-600 text-sm mb-6">Wir prüfen deine Unterlagen und melden uns innerhalb von 24 Stunden bei dir.</p>
+              <h2 className="text-2xl font-heading font-bold text-slate-800 mb-3">{t('apply.success_title')}</h2>
+              <p className="text-slate-600 text-sm mb-2">{t('apply.success_msg1')}</p>
+              <p className="text-slate-600 text-sm mb-6">{t('apply.success_msg2')}</p>
               <Link to="/" className="inline-block bg-primary text-white font-semibold px-6 py-3 rounded-sm hover:bg-primary-hover transition-all text-sm">
-                Zurück zur Startseite
+                {t('apply.back_link')}
               </Link>
             </div>
           </div>
@@ -256,8 +210,8 @@ export default function ApplyPage() {
       <main className="pt-16">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
           <div className="text-center mb-8 sm:mb-10">
-            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-primary mb-3">Jetzt bewerben</h1>
-            <p className="text-slate-600">Fülle das Formular vollständig aus. Wir melden uns innerhalb von 24 Stunden.</p>
+            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-primary mb-3">{t('apply.title')}</h1>
+            <p className="text-slate-600">{t('apply.sub')}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6" data-testid="apply-form">
@@ -267,122 +221,123 @@ export default function ApplyPage() {
               </div>
             )}
 
-            {/* Persönliche Daten */}
+            {/* Personal Data */}
             <div className="bg-white border border-slate-200 rounded-sm p-5 sm:p-6 space-y-4">
-              <h2 className="font-semibold text-slate-800 text-base border-b border-slate-100 pb-3">Persönliche Daten</h2>
+              <h2 className="font-semibold text-slate-800 text-base border-b border-slate-100 pb-3">{t('apply.personal_data')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className={labelCls}>Vorname *</label>
+                  <label className={labelCls}>{t('apply.firstname')} *</label>
                   <input name="first_name" value={form.first_name} onChange={handleChange} required
-                    data-testid="apply-input-firstname" className={inputCls} placeholder="Dein Vorname" />
+                    data-testid="apply-input-firstname" className={inputCls} placeholder={t('apply.firstname')} />
                 </div>
                 <div>
-                  <label className={labelCls}>Nachname *</label>
+                  <label className={labelCls}>{t('apply.lastname')} *</label>
                   <input name="last_name" value={form.last_name} onChange={handleChange} required
-                    data-testid="apply-input-lastname" className={inputCls} placeholder="Dein Nachname" />
+                    data-testid="apply-input-lastname" className={inputCls} placeholder={t('apply.lastname')} />
                 </div>
                 <div>
-                  <label className={labelCls}>E-Mail-Adresse *</label>
+                  <label className={labelCls}>{t('apply.email')} *</label>
                   <input name="email" type="email" value={form.email} onChange={handleChange} required
                     data-testid="apply-input-email" className={inputCls} placeholder="deine@email.com" />
                 </div>
                 <div>
-                  <label className={labelCls}>Geburtsdatum *</label>
+                  <label className={labelCls}>{t('apply.dob')} *</label>
                   <input name="date_of_birth" type="date" value={form.date_of_birth} onChange={handleChange} required
                     data-testid="apply-input-dob" className={inputCls} />
                 </div>
                 <div>
-                  <label className={labelCls}>Herkunftsland *</label>
+                  <label className={labelCls}>{t('apply.country')} *</label>
                   <input name="country" value={form.country} onChange={handleChange} required
-                    data-testid="apply-input-country" className={inputCls} placeholder="z. B. Indien, Ägypten…" />
+                    data-testid="apply-input-country" className={inputCls} placeholder={t('apply.country_placeholder')} />
                 </div>
                 <div>
-                  <label className={labelCls}>Telefon / WhatsApp *</label>
+                  <label className={labelCls}>{t('apply.phone')} *</label>
                   <input name="phone" value={form.phone} onChange={handleChange} required
-                    data-testid="apply-input-phone" className={inputCls} placeholder="+49 …" />
+                    data-testid="apply-input-phone" className={inputCls} placeholder={t('apply.phone_placeholder')} />
                 </div>
               </div>
             </div>
 
-            {/* Kurs-/Bewerbungsdetails */}
+            {/* Study Details */}
             <div className="bg-white border border-slate-200 rounded-sm p-5 sm:p-6 space-y-4">
-              <h2 className="font-semibold text-slate-800 text-base border-b border-slate-100 pb-3">Studiendetails</h2>
+              <h2 className="font-semibold text-slate-800 text-base border-b border-slate-100 pb-3">{t('apply.study_details')}</h2>
               <div>
-                <label className={labelCls}>Gewünschter Kurs *</label>
+                <label className={labelCls}>{t('apply.course_type_label')} *</label>
                 <select name="course_type" value={form.course_type} onChange={handleChange} required
                   data-testid="apply-select-course" className={inputCls}>
-                  <option value="">-- Kurs auswählen --</option>
-                  {COURSES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                  <option value="">{t('apply.course_select_placeholder')}</option>
+                  {COURSE_VALUES.map((val, i) => <option key={val} value={val}>{t(`apply.courses.${COURSE_KEYS[i]}`)}</option>)}
                 </select>
               </div>
               <div>
-                <label className={labelCls}>Kombination mit weiterem Kurs möglich?</label>
+                <label className={labelCls}>{t('apply.combo_label')}</label>
                 <select name="combo_option" value={form.combo_option} onChange={handleChange}
                   data-testid="apply-select-combo" className={inputCls}>
-                  {COMBO_OPTIONS.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                  {COMBO_VALUES.map((val, i) => <option key={val} value={val}>{t(`apply.combos.${COMBO_KEYS[i]}`)}</option>)}
                 </select>
               </div>
               <div>
-                <label className={labelCls}>Gewünschtes Startsemester *</label>
+                <label className={labelCls}>{t('apply.semester_label')} *</label>
                 <select name="desired_start" value={form.desired_start} onChange={handleChange} required
                   data-testid="apply-select-semester" className={inputCls}>
-                  <option value="">-- Semester auswählen --</option>
-                  {SEMESTERS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  <option value="">{t('apply.semester_placeholder')}</option>
+                  {SEMESTER_VALUES.map((val, i) => <option key={val} value={val}>{t(`apply.semesters.${SEMESTER_KEYS[i]}`)}</option>)}
                 </select>
               </div>
               <div>
-                <label className={labelCls}>Aktuelles Deutschniveau *</label>
+                <label className={labelCls}>{t('apply.german_level_label')} *</label>
                 <select name="language_level" value={form.language_level} onChange={handleChange} required
                   data-testid="apply-select-level" className={inputCls}>
-                  <option value="">-- Niveau auswählen --</option>
-                  {GERMAN_LEVELS.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
+                  <option value="">{t('apply.german_level_placeholder')}</option>
+                  {LEVEL_VALUES.map(val => <option key={val} value={val}>{t(`apply.levels.${val}`)}</option>)}
                 </select>
               </div>
               <div>
-                <label className={labelCls}>In welchem Land hast du deinen letzten Schulabschluss gemacht? *</label>
+                <label className={labelCls}>{t('apply.degree_country_label')} *</label>
                 <input name="degree_country" value={form.degree_country} onChange={handleChange} required
                   data-testid="apply-input-degree-country" className={inputCls}
-                  placeholder="z. B. Indien, Ägypten, China…" />
+                  placeholder={t('apply.degree_country_placeholder')} />
               </div>
               <div>
-                <label className={labelCls}>Nachricht / Anmerkungen</label>
+                <label className={labelCls}>{t('apply.notes_label')}</label>
                 <textarea name="notes" value={form.notes} onChange={handleChange} rows={3}
                   data-testid="apply-textarea-notes"
                   className={`${inputCls} resize-none`}
-                  placeholder="Weitere Informationen, Fragen oder besondere Umstände…" />
+                  placeholder={t('apply.notes_placeholder')} />
               </div>
             </div>
 
-            {/* Pflicht-Uploads */}
+            {/* Document Uploads */}
             <div className="bg-white border border-slate-200 rounded-sm p-5 sm:p-6 space-y-5">
               <div>
-                <h2 className="font-semibold text-slate-800 text-base border-b border-slate-100 pb-3 mb-1">Pflichtdokumente hochladen</h2>
-                <p className="text-xs text-slate-500">Alle drei Dokumente sind für die Bearbeitung deiner Bewerbung erforderlich. Erlaubte Formate: PDF, JPG, PNG, WEBP (max. 10 MB je Datei).</p>
+                <h2 className="font-semibold text-slate-800 text-base border-b border-slate-100 pb-3 mb-1">{t('apply.docs_title')}</h2>
+                <p className="text-xs text-slate-500">{t('apply.docs_desc')}</p>
               </div>
-              {REQUIRED_DOCS.map(doc => (
+              {REQUIRED_DOC_KEYS.map(docKey => (
                 <FileDropZone
-                  key={doc.key}
-                  docConfig={doc}
-                  file={files[doc.key]}
+                  key={docKey}
+                  docKey={docKey}
+                  file={files[docKey]}
                   onFileChange={handleFileChange}
                   onClear={handleFileClear}
+                  t={t}
                 />
               ))}
             </div>
 
-            {/* Datenschutz */}
+            {/* Privacy Notice */}
             <p className="text-xs text-slate-500 text-center">
-              Mit dem Absenden stimmst du unserer{' '}
-              <Link to="/privacy" className="underline text-primary">Datenschutzerklärung</Link>{' '}
-              und den{' '}
-              <Link to="/agb" className="underline text-primary">AGB</Link>{' '}
-              zu.
+              {t('apply.privacy_agree')}{' '}
+              <Link to="/privacy" className="underline text-primary">{t('apply.privacy_link')}</Link>{' '}
+              {t('apply.and')}{' '}
+              <Link to="/agb" className="underline text-primary">{t('apply.agb_link')}</Link>{' '}
+              {t('apply.zu')}
             </p>
 
             <button type="submit" disabled={loading} data-testid="apply-submit-btn"
               className="w-full bg-primary text-white font-semibold py-3.5 rounded-sm hover:bg-primary-hover transition-all disabled:opacity-60 flex items-center justify-center gap-2 text-sm">
               {loading && <Loader2 size={18} className="animate-spin" />}
-              {loading ? 'Wird übermittelt…' : 'Bewerbung mit Dokumenten absenden'}
+              {loading ? t('apply.submitting') : t('apply.submit_btn')}
             </button>
           </form>
         </div>

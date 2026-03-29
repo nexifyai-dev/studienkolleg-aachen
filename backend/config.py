@@ -35,7 +35,8 @@ REFRESH_TOKEN_TTL_DAYS: int = int(os.environ.get("REFRESH_TOKEN_TTL_DAYS", "7"))
 # ─── Email (Resend) ───────────────────────────────────────────────────────────
 # [OFFEN] RESEND_API_KEY must be set before email delivery is active.
 RESEND_API_KEY: str = os.environ.get("RESEND_API_KEY", "")
-EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "noreply@studienkolleg-aachen.de")
+EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "noreply@send.nexify-automate.com")
+REPLY_TO: str = os.environ.get("REPLY_TO", "info@stk-aachen.de")
 EMAIL_ENABLED: bool = bool(RESEND_API_KEY)
 
 # ─── Storage ─────────────────────────────────────────────────────────────────

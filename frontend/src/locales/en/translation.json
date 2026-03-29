@@ -9,7 +9,7 @@
     "portal": "Go to Portal"
   },
   "hero": {
-    "badge": "Studienkolleg Aachen",
+    "badge": "Studienkolleg Aachen / Way2Germany",
     "headline": "Your Path to Germany – structured and digitally guided.",
     "sub": "We prepare international students for university in Germany: from language certificates to the Feststellungsprüfung – personal, clear and transparent.",
     "cta_primary": "Apply Now",
@@ -18,20 +18,196 @@
   },
   "courses": {
     "title": "Our Courses",
-    "sub": "All courses prepare for the official Feststellungsprüfung (FSP).",
-    "t_course": { "name": "T-Course", "desc": "For technical programs: Engineering, Mathematics, Physics." },
-    "m_course": { "name": "M-Course", "desc": "For Medicine, Dentistry, Biology, Biochemistry, Pharmaceutics." },
-    "w_course": { "name": "W-Course", "desc": "For Economics, Business, Informatics, Law, Social Sciences." },
-    "mt_course": { "name": "M/T-Course", "desc": "Combines T and M courses for both technical and medical programs." }
+    "sub": "All courses prepare for the official Feststellungsprüfung (FSP) university entrance exam.",
+    "t_course": {
+      "name": "T-Course",
+      "desc": "For technical programs: Engineering, Mathematics, Physics, Computer Science."
+    },
+    "m_course": {
+      "name": "M-Course",
+      "desc": "For Medicine, Dentistry, Biology, Biochemistry, Pharmaceutics."
+    },
+    "w_course": {
+      "name": "W-Course",
+      "desc": "For Economics, Business, Informatics, Law, Social Sciences."
+    },
+    "mt_course": {
+      "name": "M/T-Course",
+      "desc": "Combines T and M courses for both technical and medical programs."
+    },
+    "view_all": "View All Courses"
   },
-  "trust": {
-    "title": "Why Studienkolleg Aachen?",
-    "items": {
-      "recognized": { "title": "Recognized Pathway", "desc": "Official preparation for the Feststellungsprüfung (FSP)." },
-      "allinone": { "title": "All-in-One Support", "desc": "Language. Visa. Housing. University application. You study – we handle the rest." },
-      "community": { "title": "International Community", "desc": "Students from 50+ nations. Intercultural coaching." },
-      "central": { "title": "Central Location", "desc": "The only Studienkolleg in the heart of Aachen." }
+  "courses_page": {
+    "hero_title": "Our Courses",
+    "hero_sub": "All courses prepare for the official Feststellungsprüfung (FSP) university entrance exam.",
+    "fsp_notice": "All courses prepare for the FSP. Eligibility is determined by the responsible regional authority. The Studienkolleg guides you through the entire process.",
+    "main_title": "University Preparatory Courses",
+    "main_desc": "All courses run for two semesters and conclude with the Feststellungsprüfung (FSP) – the gateway to German universities.",
+    "duration_label": "Duration",
+    "schedule_label": "Classes",
+    "subjects_label": "Core Subjects",
+    "lang_title": "Language Courses Before Studienkolleg",
+    "lang_desc": "If your German level is below B1, we offer intensive preparatory language courses.",
+    "lang_level": "Level",
+    "lang_weeks": "Weeks",
+    "lang_hours": "Hrs/week",
+    "lang_note": "Courses can be combined or booked flexibly depending on demand.",
+    "starts_title": "Upcoming Course Starts",
+    "starts_note": "Exact dates by individual arrangement. Early application recommended.",
+    "cta_title": "Which course fits you?",
+    "cta_desc": "We help you choose the right course and guide you from your first inquiry to enrollment.",
+    "cta_apply": "Apply Now",
+    "cta_contact": "Request Consultation",
+    "course_cards": {
+      "t": {
+        "label": "Engineering & Natural Sciences",
+        "for": "For aspiring engineers and natural scientists",
+        "fsp": "FSP – Technical Track"
+      },
+      "m": {
+        "label": "Medicine & Life Sciences",
+        "for": "For aspiring doctors and life scientists",
+        "fsp": "FSP – Medicine/Biology Track"
+      },
+      "w": {
+        "label": "Business & Social Sciences",
+        "for": "For aspiring business and social science students",
+        "fsp": "FSP – Business Track"
+      },
+      "mt": {
+        "label": "Medicine + Engineering Combined",
+        "for": "For students with broad interdisciplinary interest",
+        "fsp": "FSP – M+T Combined Track"
+      }
+    },
+    "lang_req": "Min. B1 German",
+    "expand_btn": "Suitable Study Programs",
+    "levels": {
+      "A1": {
+        "label": "Beginner",
+        "desc": "No prior knowledge required – structured entry."
+      },
+      "A2": {
+        "label": "Elementary",
+        "desc": "Builds on A1, everyday communication."
+      },
+      "B1": {
+        "label": "Intermediate",
+        "desc": "Minimum requirement for Studienkolleg courses."
+      },
+      "B2": {
+        "label": "Upper Intermediate",
+        "desc": "Fluent communication, complex texts."
+      },
+      "C1": {
+        "label": "Advanced",
+        "desc": "Academic-level German, DSH preparation."
+      }
+    },
+    "lang_badge": "Language Course",
+    "lang_course_title": "German A1–C1",
+    "lang_course_desc": "Our language courses prepare you linguistically for the Studienkolleg or German university. B1 is the minimum requirement for all preparatory courses.",
+    "lang_course_btn": "Inquire About Language Course",
+    "semester_running": "Running",
+    "semester_open": "Open",
+    "semester_soon": "Soon",
+    "semester_start": "Course start"
+  },
+  "services": {
+    "title": "Our Services",
+    "visa": {
+      "name": "Visa Support",
+      "desc": "We assist with all necessary visa documents and translations."
+    },
+    "housing": {
+      "name": "Housing",
+      "desc": "Furnished accommodation solutions in Aachen – ready before your arrival."
+    },
+    "mentoring": {
+      "name": "Mentoring & Guidance",
+      "desc": "Personal advisors, check-ins and orientation support."
+    },
+    "documents": {
+      "name": "Credential Recognition",
+      "desc": "We guide you through the recognition process for your school certificates."
+    },
+    "uni": {
+      "name": "University Application Coaching",
+      "desc": "From course selection to uni-assist – we guide you through it."
+    },
+    "insurance": {
+      "name": "Health Insurance",
+      "desc": "Comprehensive insurance meeting visa and university requirements."
     }
+  },
+  "services_page": {
+    "hero_title": "Our Services",
+    "hero_sub": "We guide you from application to admission – and beyond.",
+    "location_title": "Your Study City: Aachen",
+    "location_desc": "Aachen is located at the tri-border region of Germany, Belgium and the Netherlands – home to RWTH Aachen, one of Europe's most prestigious technical universities. International environment, short distances, excellent academic infrastructure.",
+    "process_title": "How We Support You",
+    "process_desc": "From first contact to successful course completion.",
+    "cta_title": "Ready to Start?",
+    "cta_desc": "Apply now and receive a personal response within 24 hours.",
+    "cta_apply": "Apply Now",
+    "cta_contact": "Request Consultation",
+    "steps": {
+      "apply": {
+        "title": "Apply",
+        "desc": "Fill in the online form – done in 10 minutes."
+      },
+      "check": {
+        "title": "Review",
+        "desc": "We review your documents and respond within 24 hours."
+      },
+      "confirm": {
+        "title": "Confirmation",
+        "desc": "Course place secured. Portal access. Visa support begins."
+      },
+      "start": {
+        "title": "Course Start",
+        "desc": "Arrival, orientation, classes – we are with you from day one."
+      }
+    }
+  },
+  "contact_page": {
+    "title": "Contact",
+    "sub": "We are here for you – personal, fast and reliable.",
+    "standort_label": "Studienkolleg / Way2Germany",
+    "location_name": "Location",
+    "phone_label": "Phone",
+    "email_label": "Email",
+    "whatsapp_label": "WhatsApp",
+    "hours_label": "Office Hours",
+    "hours_value": "Mon–Fri: 9:00 am – 5:00 pm",
+    "office_note": "Teaching, Consulting, Way2Germany Office",
+    "registered_label": "Registered Office",
+    "privacy_notice": "Your contact data is used exclusively to process your inquiry.",
+    "cta_apply_title": "Apply Now",
+    "cta_apply_desc": "Start your application with the full online form. We respond within 24 hours.",
+    "cta_apply_btn": "Apply Now →",
+    "whatsapp_title": "Direct WhatsApp Contact",
+    "whatsapp_desc": "Quick questions, document checks or scheduling – we typically respond within a few hours on weekdays.",
+    "whatsapp_btn": "Open WhatsApp",
+    "legal_link_note": "Legal information pursuant to § 5 TMG –",
+    "impressum_link": "Legal Notice",
+    "privacy_link": "Privacy Policy"
+  },
+  "legal_page": {
+    "impressum": "Legal Notice (Impressum)",
+    "agb": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "company_heading": "Company Information (§ 5 TMG)",
+    "office_heading": "Teaching & Consulting Location",
+    "registered_seat": "Registered Business Address",
+    "company_label": "Company",
+    "rep_label": "Representative",
+    "contact_label": "Contact",
+    "registry_label": "Commercial Register",
+    "office_note": "This location is used for teaching, consulting and applicant reception. It is not identical to the registered business address.",
+    "contact_faq": "Questions about our legal documents?",
+    "review_note": "Final legal review pending before go-live.",
+    "de_only_note": "These legal documents are legally binding in German only. The English version is provided for orientation purposes only and does not constitute a legally binding translation."
   },
   "apply": {
     "title": "Apply Now",
@@ -45,7 +221,179 @@
     "level": "German Language Level",
     "submit": "Submit Application",
     "success": "Your application has been submitted. We will contact you soon.",
-    "privacy": "By submitting, you agree to our privacy policy."
+    "privacy": "By submitting, you agree to our privacy policy.",
+    "success_title": "Application Received!",
+    "success_msg1": "Your application and documents have been submitted successfully.",
+    "success_msg2": "We will review your documents and get back to you within 24 hours.",
+    "back_link": "Back to Home",
+    "docs_title": "Upload Required Documents",
+    "docs_desc": "All three documents are required to process your application. Allowed formats: PDF, JPG, PNG, WEBP (max. 10 MB per file).",
+    "drag_drop": "Drop file here or",
+    "browse": "click to select",
+    "file_types": "PDF, JPG, PNG, WEBP – max. 10 MB",
+    "step1": "Personal Information",
+    "step2": "Course Selection",
+    "step3": "Documents",
+    "combo_label": "Would you like to combine with another course?",
+    "course_type_label": "Desired Course Type",
+    "degree_country_label": "Country of Last School Diploma",
+    "language_level_label": "Current German Level",
+    "motivation_label": "Motivation Letter (optional)",
+    "motivation_placeholder": "Brief introduction: Why Studienkolleg Aachen? What do you want to study?",
+    "next_btn": "Continue",
+    "back_btn": "Back",
+    "personal_data": "Personal Information",
+    "firstname": "First Name",
+    "lastname": "Last Name",
+    "dob": "Date of Birth",
+    "country_placeholder": "e.g. India, Egypt…",
+    "phone_placeholder": "+49 …",
+    "study_details": "Study Details",
+    "course_select_placeholder": "-- Select Course --",
+    "semester_label": "Desired Start Semester",
+    "semester_placeholder": "-- Select Semester --",
+    "german_level_label": "Current German Level",
+    "german_level_placeholder": "-- Select Level --",
+    "degree_country_placeholder": "e.g. India, Egypt, China…",
+    "notes_label": "Message / Notes",
+    "notes_placeholder": "Additional information, questions or special circumstances…",
+    "privacy_agree": "By submitting, you agree to our",
+    "privacy_link": "Privacy Policy",
+    "agb_link": "Terms & Conditions",
+    "and": "and the",
+    "zu": ".",
+    "submit_btn": "Submit Application with Documents",
+    "submitting": "Submitting…",
+    "error_missing_docs": "Please upload all required documents:",
+    "error_file_too_large": "is too large (max. 10 MB).",
+    "error_generic": "Submission failed. Please try again.",
+    "file_size_display": "KB",
+    "file_too_large_label": "File too large (max. 10 MB)",
+    "courses": {
+      "t": "T-Course – Technical (Engineering, Electrical Engineering, Mathematics, Physics)",
+      "m": "M-Course – Medical (Medicine, Dentistry, Biology, Pharmacy)",
+      "w": "W-Course – Business (Economics, Informatics, Social Sciences, Law)",
+      "mt": "M/T-Course – Combined Medicine + Technical",
+      "lang": "Language Course (A1–C1 German Preparation)"
+    },
+    "combos": {
+      "none": "No combination",
+      "t": "Additionally T-Course",
+      "m": "Additionally M-Course",
+      "w": "Additionally W-Course"
+    },
+    "semesters": {
+      "ws2526": "Winter Semester 2025/26",
+      "ss26": "Summer Semester 2026",
+      "ws2627": "Winter Semester 2026/27",
+      "ss27": "Summer Semester 2027",
+      "ws2728": "Winter Semester 2027/28"
+    },
+    "levels": {
+      "A1": "A1 – No or very little knowledge",
+      "A2": "A2 – Basic knowledge",
+      "B1": "B1 – Intermediate (required for Studienkolleg)",
+      "B2": "B2 – Upper Intermediate",
+      "C1": "C1 – Advanced",
+      "C2": "C2 – Native-level proficiency"
+    },
+    "doc_labels": {
+      "language_certificate": "German Language Certificate",
+      "highschool_diploma": "School Diploma / Graduation Certificate",
+      "passport": "Passport"
+    },
+    "doc_descs": {
+      "language_certificate": "Certificate of current German proficiency (e.g. Goethe, TELC, DSH, TestDaF)",
+      "highschool_diploma": "Last diploma / university entrance qualification from your home country",
+      "passport": "Valid passport (ID card accepted for EU citizens)"
+    }
+  },
+  "home": {
+    "video_title": "Discover Studienkolleg Aachen",
+    "video_desc": "We guide international applicants from the first inquiry to university admission – personal, digital and with full transparency at every step.",
+    "video_bullets": [
+      "Official preparation for the Feststellungsprüfung (FSP)",
+      "Personal guidance and support in German and English",
+      "Digital portal for documents, status and communication",
+      "Housing, visa support and insurance solutions"
+    ],
+    "services_sub": "Everything from one source – from consultation to the first semester.",
+    "process_title": "How the Process Works",
+    "process_desc": "From inquiry to Studienkolleg – digital, transparent, personal.",
+    "process_steps": [
+      { "step": "01", "title": "Submit Application", "desc": "Complete the full form and upload your required documents. We will respond within 24 hours." },
+      { "step": "02", "title": "AI-Assisted Pre-Screening", "desc": "Our system automatically checks document completeness and prepares the staff evaluation." },
+      { "step": "03", "title": "Portal Access & Status Tracking", "desc": "You receive your personal portal with a clear task dashboard and direct contact with the team." },
+      { "step": "04", "title": "Admission & Start", "desc": "After review and payment, you receive your admission letter and begin at the Studienkolleg." }
+    ],
+    "partner_text": "A trusted partner for international students on their way to Germany for years.",
+    "faq_more": "More questions?",
+    "faq_contact": "Get in touch",
+    "cta_title": "Ready to start your journey?",
+    "cta_desc": "Apply now with your documents and receive a response within 24 hours.",
+    "cta_consultation": "Free Consultation"
+  },
+  "trust": {
+    "title": "Why Studienkolleg Aachen?",
+    "items": {
+      "recognized": {
+        "title": "Recognized Pathway",
+        "desc": "Official preparation for the Feststellungsprüfung (FSP)."
+      },
+      "allinone": {
+        "title": "All-in-One Support",
+        "desc": "Language. Visa. Housing. University application. You study – we handle the rest."
+      },
+      "community": {
+        "title": "International Community",
+        "desc": "Students from 50+ nations. Intercultural coaching."
+      },
+      "central": {
+        "title": "Central Location",
+        "desc": "The only Studienkolleg in the heart of Aachen."
+      }
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      {
+        "q": "Do I need German at B1 level?",
+        "a": "For direct enrollment, B1 is required. If your level is lower, we offer preparatory language courses."
+      },
+      {
+        "q": "Is the FSP exam guaranteed?",
+        "a": "No. The final decision is made by the responsible regional authority. We prepare you and support your application."
+      },
+      {
+        "q": "What happens after I apply?",
+        "a": "Our team contacts you within 24 hours and you get access to your personal portal."
+      },
+      {
+        "q": "Do you help with the visa?",
+        "a": "Yes. We support all necessary visa documentation in collaboration with reliable partners."
+      },
+      {
+        "q": "Are there online courses?",
+        "a": "Partial online attendance is possible in the first semester for some programs."
+      }
+    ]
+  },
+  "footer": {
+    "contact": "Contact",
+    "location": "Location & Contact",
+    "address_office": "Theaterstraße 30–32, 52062 Aachen",
+    "address_office_note": "Teaching / Consulting / Way2Germany",
+    "address_legal": "Theaterstraße 24 · 52062 Aachen",
+    "address_legal_label": "Registered Office",
+    "phone": "+49 241 990 322 92",
+    "email": "info@stk-aachen.de",
+    "legal": "Legal Notice",
+    "privacy": "Privacy Policy",
+    "agb": "Terms",
+    "legal_nav": "Legal",
+    "copyright": "W2G Academy GmbH · Amtsgericht Aachen HRB 23610",
+    "rights": "All rights reserved."
   },
   "auth": {
     "login_title": "Sign In",
@@ -75,24 +423,17 @@
     "upload_doc": "Upload Document",
     "logout": "Sign Out"
   },
-  "faq": {
-    "title": "Frequently Asked Questions",
-    "items": [
-      { "q": "Do I need German at B1 level?", "a": "For direct enrollment, B1 is required. If your level is lower, we offer preparatory language courses." },
-      { "q": "Is the FSP exam guaranteed?", "a": "No. The final decision is made by the responsible regional authority. We prepare you and support your application." },
-      { "q": "What happens after I apply?", "a": "Our team contacts you within 24 hours and you get access to your personal portal." },
-      { "q": "Do you help with the visa?", "a": "Yes. We support all necessary visa documentation in collaboration with reliable partners." },
-      { "q": "Are there online courses?", "a": "Partial online attendance is possible in the first semester for some programs. Details depend on your chosen track." }
-    ]
+  "staff": {
+    "kanban": "Kanban Board",
+    "applicants": "Applicants",
+    "documents": "Documents",
+    "tasks": "Tasks",
+    "reports": "Reports"
   },
-  "footer": {
-    "contact": "Contact",
-    "address": "Theaterstraße 30-32, 52062 Aachen",
-    "phone": "+49 241 990 322 92",
-    "email": "info@stk-aachen.de",
-    "legal": "Legal Notice",
-    "privacy": "Privacy Policy",
-    "agb": "Terms",
-    "note": "[OPEN] Address and contact data not yet fully verified."
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "Users",
+    "workspaces": "Workspaces",
+    "audit": "Audit Logs"
   }
 }

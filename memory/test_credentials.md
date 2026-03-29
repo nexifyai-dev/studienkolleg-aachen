@@ -17,8 +17,8 @@
 - Application ID: 69c8b08ac3ab59729d52e226
 
 ## URLs (aktuell)
-- Frontend: https://ui-polish-phase-3.preview.emergentagent.com
-- Backend: https://ui-polish-phase-3.preview.emergentagent.com/api
+- Frontend: https://legal-i18n-verify.preview.emergentagent.com
+- Backend: https://legal-i18n-verify.preview.emergentagent.com/api
 - Backend (lokal): http://localhost:8001
 
 ## Testrouten

@@ -37,18 +37,19 @@ def _send(to: str, subject: str, html: str) -> bool:
         logger.info(f"[EMAIL:DEV] Would send to={to} subject='{subject}' (RESEND disabled)")
         return False
     try:
-        from config import RESEND_API_KEY, EMAIL_FROM
+        from config import RESEND_API_KEY, EMAIL_FROM, REPLY_TO
         r = _get_resend()
         if r is None:
             return False
         r.api_key = RESEND_API_KEY
         r.Emails.send({
-            "from": EMAIL_FROM,
+            "from": f"Studienkolleg Aachen <{EMAIL_FROM}>",
             "to": [to],
+            "reply_to": REPLY_TO,
             "subject": subject,
             "html": html,
         })
-        logger.info(f"[EMAIL] Sent to={to} subject='{subject}'")
+        logger.info(f"[EMAIL] Sent to={to} subject='{subject}' via {EMAIL_FROM}")
         return True
     except Exception as e:
         logger.error(f"[EMAIL] Send failed to={to}: {e}")

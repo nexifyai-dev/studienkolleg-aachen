@@ -9,7 +9,7 @@
     "portal": "Zum Portal"
   },
   "hero": {
-    "badge": "Studienkolleg Aachen",
+    "badge": "Studienkolleg Aachen / Way2Germany",
     "headline": "Dein Weg nach Deutschland – strukturiert und digital begleitet.",
     "sub": "Wir bereiten internationale Bewerber auf das Studium in Deutschland vor: von Sprachnachweisen bis zur Feststellungsprüfung – persönlich, klar und transparent.",
     "cta_primary": "Jetzt bewerben",
@@ -19,22 +19,56 @@
   "courses": {
     "title": "Unsere Kurse",
     "sub": "Alle Kurse bereiten auf die offizielle Feststellungsprüfung (FSP) vor.",
-    "t_course": {
-      "name": "T-Kurs",
-      "desc": "Für technische Studiengänge: Maschinenbau, Elektrotechnik, Mathematik, Physik."
+    "t_course": { "name": "T-Kurs", "desc": "Für technische Studiengänge: Maschinenbau, Elektrotechnik, Mathematik, Physik." },
+    "m_course": { "name": "M-Kurs", "desc": "Für Medizin, Zahnmedizin, Biologie, Biochemie, Pharmazie." },
+    "w_course": { "name": "W-Kurs", "desc": "Für Wirtschaft, BWL, Informatik, Tourismus, Sozialwissenschaften, Jura." },
+    "mt_course": { "name": "M/T-Kurs", "desc": "Kombiniert T- und M-Kurs für technische und medizinische Studiengänge." },
+    "view_all": "Alle Kurse ansehen"
+  },
+  "courses_page": {
+    "hero_title": "Unsere Kurse",
+    "hero_sub": "Alle Kurse bereiten auf die offizielle Feststellungsprüfung (FSP) vor.",
+    "fsp_notice": "Alle Kurse bereiten auf die FSP vor. Die Berechtigung zur Teilnahme wird durch die zuständige Bezirksregierung entschieden. Das Studienkolleg begleitet dich durch den gesamten Prozess.",
+    "main_title": "Studienvorbereitende Schwerpunktkurse",
+    "main_desc": "Alle Kurse laufen über zwei Semester und schließen mit der Feststellungsprüfung (FSP) ab – dem Eintrittsticket für deutsche Hochschulen.",
+    "duration_label": "Dauer",
+    "schedule_label": "Unterricht",
+    "subjects_label": "Schwerpunktfächer",
+    "lang_title": "Sprachkurse vor dem Studienkolleg",
+    "lang_desc": "Wenn dein Deutschniveau noch unter B1 liegt, bieten wir vorgelagerte Intensivkurse an.",
+    "lang_level": "Niveau",
+    "lang_weeks": "Wochen",
+    "lang_hours": "Std./Woche",
+    "lang_note": "Kurse können je nach Nachfrage kombiniert oder flexibel gebucht werden.",
+    "starts_title": "Nächste Kursstarts",
+    "starts_note": "Genauere Termine nach individueller Absprache. Frühzeitige Bewerbung empfohlen.",
+    "cta_title": "Welcher Kurs passt zu dir?",
+    "cta_desc": "Wir helfen dir bei der Kursauswahl und begleiten dich von der ersten Anfrage bis zur Zulassung.",
+    "cta_apply": "Jetzt bewerben",
+    "cta_contact": "Beratungsgespräch anfragen",
+    "course_cards": {
+      "t": { "label": "Technik & Naturwissenschaften", "for": "Für angehende Ingenieure und Naturwissenschaftler", "fsp": "Feststellungsprüfung Technik" },
+      "m": { "label": "Medizin & Biowissenschaften", "for": "Für angehende Mediziner und Biowissenschaftler", "fsp": "Feststellungsprüfung Medizin/Bio" },
+      "w": { "label": "Wirtschaft & Sozialwissenschaften", "for": "Für angehende Wirtschafts- und Sozialwissenschaftler", "fsp": "Feststellungsprüfung Wirtschaft" },
+      "mt": { "label": "Kombination Medizin + Technik", "for": "Für Studierende mit breitem Fächerinteresse", "fsp": "Feststellungsprüfung M+T" }
     },
-    "m_course": {
-      "name": "M-Kurs",
-      "desc": "Für Medizin, Zahnmedizin, Biologie, Biochemie, Pharmazie."
+    "lang_req": "Mindest B1 Deutsch",
+    "expand_btn": "Geeignete Studienbereiche",
+    "levels": {
+      "A1": { "label": "Anfänger", "desc": "Keine Vorkenntnisse – strukturierter Einstieg." },
+      "A2": { "label": "Grundstufe", "desc": "Aufbau auf A1, Alltagskommunikation." },
+      "B1": { "label": "Mittelstufe", "desc": "Voraussetzung für Studienkolleg-Kurse." },
+      "B2": { "label": "Obermittelstufe", "desc": "Flüssige Kommunikation, komplexe Texte." },
+      "C1": { "label": "Fortgeschritten", "desc": "Studiumsreifes Deutsch, DSH-Vorbereitung." }
     },
-    "w_course": {
-      "name": "W-Kurs",
-      "desc": "Für Wirtschaft, BWL, Informatik, Tourismus, Sozialwissenschaften, Jura."
-    },
-    "mt_course": {
-      "name": "M/T-Kurs",
-      "desc": "Kombiniert T- und M-Kurs für technische und medizinische Studiengänge."
-    }
+    "lang_badge": "Sprachkurs",
+    "lang_course_title": "Deutsch A1–C1",
+    "lang_course_desc": "Unsere Sprachkurse bereiten sprachlich auf das Studienkolleg oder das deutsche Studium vor. B1 ist die Mindestvoraussetzung für alle studienvorbereitenden Kurse.",
+    "lang_course_btn": "Sprachkurs anfragen",
+    "semester_running": "Läuft",
+    "semester_open": "Offen",
+    "semester_soon": "Bald",
+    "semester_start": "Kursstart"
   },
   "services": {
     "title": "Unsere Services",
@@ -44,6 +78,63 @@
     "documents": { "name": "Zeugnisanerkennung", "desc": "Wir begleiten den Anerkennungsprozess deiner Schulzeugnisse." },
     "uni": { "name": "Uni-Bewerbungscoaching", "desc": "Von der Kurswahl bis zum uni-assist – wir begleiten dich." },
     "insurance": { "name": "Krankenversicherung", "desc": "Vollversicherung, die Visa- und Hochschulanforderungen erfüllt." }
+  },
+  "services_page": {
+    "hero_title": "Unsere Services",
+    "hero_sub": "Wir begleiten dich von der Bewerbung bis zur Zulassung – und darüber hinaus.",
+    "location_title": "Dein Studienort: Aachen",
+    "location_desc": "Aachen liegt im Dreiländereck Deutschland–Belgien–Niederlande und ist Heimat einer der technisch renommiertesten Hochschulen Europas: der RWTH Aachen. Internationales Umfeld, kurze Wege, hervorragende Studieninfrastruktur.",
+    "process_title": "Wie wir dich begleiten",
+    "process_desc": "Von der ersten Kontaktaufnahme bis zum erfolgreichen Kursabschluss.",
+    "cta_title": "Bereit loszulegen?",
+    "cta_desc": "Bewirb dich jetzt und erhalte innerhalb von 24 Stunden eine persönliche Rückmeldung.",
+    "cta_apply": "Jetzt bewerben",
+    "cta_contact": "Beratung anfragen",
+    "steps": {
+      "apply": { "title": "Bewerben", "desc": "Online-Formular ausfüllen – in 10 Minuten erledigt." },
+      "check": { "title": "Prüfung", "desc": "Wir prüfen deine Unterlagen und melden uns innerhalb von 24 Stunden." },
+      "confirm": { "title": "Bestätigung", "desc": "Kursplatz gesichert. Zugang zum Portal. Visum-Support startet." },
+      "start": { "title": "Kursstart", "desc": "Ankunft, Einführung, Unterricht – wir sind von Anfang an dabei." }
+    }
+  },
+  "contact_page": {
+    "title": "Kontakt",
+    "sub": "Wir sind für dich da – persönlich, schnell und zuverlässig.",
+    "standort_label": "Studienkolleg / Way2Germany",
+    "location_name": "Standort",
+    "phone_label": "Telefon",
+    "email_label": "E-Mail",
+    "whatsapp_label": "WhatsApp",
+    "hours_label": "Bürozeiten",
+    "hours_value": "Mo–Fr: 9:00 – 17:00 Uhr",
+    "office_note": "Unterricht, Beratung, Way2Germany Office",
+    "registered_label": "Gesellschaftssitz",
+    "privacy_notice": "Deine Kontaktdaten werden ausschließlich zur Bearbeitung deiner Anfrage verwendet.",
+    "cta_apply_title": "Jetzt bewerben",
+    "cta_apply_desc": "Starte deine Bewerbung mit dem vollständigen Online-Formular. Wir melden uns innerhalb von 24 Stunden.",
+    "cta_apply_btn": "Jetzt bewerben →",
+    "whatsapp_title": "Direkter WhatsApp-Kontakt",
+    "whatsapp_desc": "Schnelle Fragen, Dokument-Checks oder Terminabstimmung – wir antworten werktags innerhalb weniger Stunden.",
+    "whatsapp_btn": "WhatsApp öffnen",
+    "legal_link_note": "Rechtliche Angaben gemäß § 5 TMG –",
+    "impressum_link": "Impressum",
+    "privacy_link": "Datenschutzerklärung"
+  },
+  "legal_page": {
+    "impressum": "Impressum",
+    "agb": "Allgemeine Geschäftsbedingungen",
+    "privacy": "Datenschutzerklärung",
+    "company_heading": "Angaben gemäß § 5 TMG",
+    "office_heading": "Unterrichts- und Beratungsstandort",
+    "registered_seat": "Eingetragener Gesellschaftssitz",
+    "company_label": "Unternehmen",
+    "rep_label": "Vertretung",
+    "contact_label": "Kontakt",
+    "registry_label": "Registereintrag",
+    "office_note": "Dieser Standort wird für Unterricht, Beratung und den Bewerberempfang genutzt. Er ist nicht identisch mit dem eingetragenen Gesellschaftssitz.",
+    "contact_faq": "Fragen zu unseren Rechtsdokumenten?",
+    "review_note": "Finale rechtliche Prüfung vor Go-Live ausstehend.",
+    "de_only_note": "Diese Rechtsdokumente sind ausschließlich in deutscher Sprache rechtlich bindend."
   },
   "apply": {
     "title": "Jetzt bewerben",
@@ -57,7 +148,117 @@
     "level": "Deutschkenntnisse",
     "submit": "Bewerbung absenden",
     "success": "Deine Bewerbung wurde eingereicht. Wir kontaktieren dich bald.",
-    "privacy": "Mit dem Absenden stimmst du unserer Datenschutzerklärung zu."
+    "privacy": "Mit dem Absenden stimmst du unserer Datenschutzerklärung zu.",
+    "success_title": "Bewerbung eingegangen!",
+    "success_msg1": "Deine Bewerbung und Dokumente wurden erfolgreich übermittelt.",
+    "success_msg2": "Wir prüfen deine Unterlagen und melden uns innerhalb von 24 Stunden bei dir.",
+    "back_link": "Zurück zur Startseite",
+    "docs_title": "Pflichtdokumente hochladen",
+    "docs_desc": "Alle drei Dokumente sind für die Bearbeitung deiner Bewerbung erforderlich. Erlaubte Formate: PDF, JPG, PNG, WEBP (max. 10 MB je Datei).",
+    "drag_drop": "Datei hier ablegen oder",
+    "browse": "klicken zum Auswählen",
+    "file_types": "PDF, JPG, PNG, WEBP – max. 10 MB",
+    "step1": "Persönliche Angaben",
+    "step2": "Kursauswahl",
+    "step3": "Dokumente",
+    "combo_label": "Kombination mit weiterem Kurs möglich?",
+    "course_type_label": "Gewünschter Kurs",
+    "degree_country_label": "Land deines letzten Schulabschlusses",
+    "language_level_label": "Aktuelles Deutschniveau",
+    "motivation_label": "Motivationsschreiben (optional)",
+    "motivation_placeholder": "Kurze Vorstellung: Warum Studienkolleg Aachen? Was möchtest du studieren?",
+    "next_btn": "Weiter",
+    "back_btn": "Zurück",
+    "personal_data": "Persönliche Daten",
+    "firstname": "Vorname",
+    "lastname": "Nachname",
+    "dob": "Geburtsdatum",
+    "country_placeholder": "z. B. Indien, Ägypten…",
+    "phone_placeholder": "+49 …",
+    "study_details": "Studiendetails",
+    "course_select_placeholder": "-- Kurs auswählen --",
+    "semester_label": "Gewünschtes Startsemester",
+    "semester_placeholder": "-- Semester auswählen --",
+    "german_level_label": "Aktuelles Deutschniveau",
+    "german_level_placeholder": "-- Niveau auswählen --",
+    "degree_country_placeholder": "z. B. Indien, Ägypten, China…",
+    "notes_label": "Nachricht / Anmerkungen",
+    "notes_placeholder": "Weitere Informationen, Fragen oder besondere Umstände…",
+    "privacy_agree": "Mit dem Absenden stimmst du unserer",
+    "privacy_link": "Datenschutzerklärung",
+    "agb_link": "AGB",
+    "and": "und den",
+    "zu": "zu.",
+    "submit_btn": "Bewerbung mit Dokumenten absenden",
+    "submitting": "Wird übermittelt…",
+    "error_missing_docs": "Bitte lade alle Pflichtdokumente hoch:",
+    "error_file_too_large": "ist zu groß (max. 10 MB).",
+    "error_generic": "Fehler beim Absenden. Bitte versuche es erneut.",
+    "file_size_display": "KB",
+    "file_too_large_label": "Datei zu groß (max. 10 MB)",
+    "courses": {
+      "t": "T-Kurs – Technik (Maschinenbau, Elektrotechnik, Mathematik, Physik)",
+      "m": "M-Kurs – Medizin (Medizin, Zahnmedizin, Biologie, Pharmazie)",
+      "w": "W-Kurs – Wirtschaft (BWL, Informatik, Sozialwissenschaften, Jura)",
+      "mt": "M/T-Kurs – Kombi Medizin + Technik",
+      "lang": "Sprachkurs (A1–C1 Deutschvorbereitung)"
+    },
+    "combos": {
+      "none": "Keine Kombination",
+      "t": "Zusätzlich T-Kurs",
+      "m": "Zusätzlich M-Kurs",
+      "w": "Zusätzlich W-Kurs"
+    },
+    "semesters": {
+      "ws2526": "Wintersemester 2025/26",
+      "ss26": "Sommersemester 2026",
+      "ws2627": "Wintersemester 2026/27",
+      "ss27": "Sommersemester 2027",
+      "ws2728": "Wintersemester 2027/28"
+    },
+    "levels": {
+      "A1": "A1 – Keine oder sehr geringe Kenntnisse",
+      "A2": "A2 – Grundkenntnisse",
+      "B1": "B1 – Mittelstufe (für Studienkolleg erforderlich)",
+      "B2": "B2 – Obermittelstufe",
+      "C1": "C1 – Fortgeschritten",
+      "C2": "C2 – Muttersprachliches Niveau"
+    },
+    "doc_labels": {
+      "language_certificate": "Deutsches Sprachzertifikat",
+      "highschool_diploma": "Schulzeugnis / Abschlusszeugnis",
+      "passport": "Reisepass"
+    },
+    "doc_descs": {
+      "language_certificate": "Zertifikat über aktuelle Deutschkenntnisse (z. B. Goethe, TELC, DSH, TestDaF)",
+      "highschool_diploma": "Letztes Zeugnis / Hochschulzugangsberechtigung aus dem Herkunftsland",
+      "passport": "Gültiger Reisepass (Personalausweis wird für EU-Bürger akzeptiert)"
+    }
+  },
+  "home": {
+    "video_title": "Lerne das Studienkolleg Aachen kennen",
+    "video_desc": "Wir begleiten internationale Bewerber von der ersten Anfrage bis zum Studienplatz – persönlich, digital und mit voller Transparenz in jedem Schritt.",
+    "video_bullets": [
+      "Offizielle Vorbereitung auf die Feststellungsprüfung (FSP)",
+      "Persönliche Beratung und Begleitung auf Deutsch und Englisch",
+      "Digitales Portal für Dokumente, Status und Kommunikation",
+      "Unterkunft, Visum-Support und Versicherungslösungen"
+    ],
+    "services_sub": "Alles aus einer Hand – von der Beratung bis zum ersten Semester.",
+    "process_title": "So funktioniert der Prozess",
+    "process_desc": "Von der Anfrage bis zum Studienkolleg – digital, transparent, persönlich.",
+    "process_steps": [
+      { "step": "01", "title": "Bewerbung einreichen", "desc": "Fülle das vollständige Formular aus und lade deine Pflichtdokumente hoch. Wir melden uns innerhalb von 24 Stunden." },
+      { "step": "02", "title": "KI-gestützte Vorprüfung", "desc": "Unser System prüft automatisch die Vollständigkeit deiner Unterlagen und bereitet die Staffbewertung vor." },
+      { "step": "03", "title": "Portalzugang & Statusverfolgung", "desc": "Du erhältst dein persönliches Portal mit klarem Aufgaben-Dashboard und direktem Kontakt zum Team." },
+      { "step": "04", "title": "Zulassung & Start", "desc": "Nach Prüfung und Zahlung erhältst du deinen Zulassungsbescheid und startest ins Studienkolleg." }
+    ],
+    "partner_text": "Seit Jahren vertrauenswürdiger Partner für internationale Studierende auf dem Weg nach Deutschland.",
+    "faq_more": "Weitere Fragen?",
+    "faq_contact": "Kontakt aufnehmen",
+    "cta_title": "Bereit, deinen Weg zu starten?",
+    "cta_desc": "Bewirb dich jetzt mit deinen Unterlagen und erhalte innerhalb von 24 Stunden eine Rückmeldung.",
+    "cta_consultation": "Kostenlose Beratung"
   },
   "trust": {
     "title": "Warum Studienkolleg Aachen?",
@@ -80,13 +281,19 @@
   },
   "footer": {
     "contact": "Kontakt",
-    "address": "Theaterstraße 24, 52062 Aachen",
-    "phone": "+49 (0) 241 990 322 92",
+    "location": "Standort & Kontakt",
+    "address_office": "Theaterstraße 30–32, 52062 Aachen",
+    "address_office_note": "Unterricht / Beratung / Way2Germany",
+    "address_legal": "Theaterstraße 24 · 52062 Aachen",
+    "address_legal_label": "Gesellschaftssitz",
+    "phone": "+49 241 990 322 92",
     "email": "info@stk-aachen.de",
     "legal": "Impressum",
     "privacy": "Datenschutz",
     "agb": "AGB",
-    "note": "W2G Academy GmbH · Amtsgericht Aachen HRB 23610 · Adresse vor Go-Live final bestätigt."
+    "legal_nav": "Rechtliches",
+    "copyright": "W2G Academy GmbH · Amtsgericht Aachen HRB 23610",
+    "rights": "Alle Rechte vorbehalten."
   },
   "auth": {
     "login_title": "Anmelden",

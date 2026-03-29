@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
 import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
@@ -341,35 +342,35 @@ function AccordionSection({ title, content, defaultOpen = false }) {
 
 /* ─── Seitentypen ───────────────────────────────────────────────────────────── */
 
-function ImpressumContent() {
+function ImpressumContent({ t, isEN }) {
   return (
     <div data-testid="legal-content-impressum" className="space-y-8">
 
       {/* Gesellschaftssitz */}
       <div className="border border-slate-100 rounded-sm overflow-hidden">
         <div className="bg-primary px-5 py-3">
-          <h2 className="text-sm font-semibold text-white">Angaben gemäß § 5 TMG</h2>
+          <h2 className="text-sm font-semibold text-white">{t('legal_page.company_heading')}</h2>
         </div>
         <div className="px-5 py-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Unternehmen</p>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">{t('legal_page.company_label')}</p>
             <p className="text-slate-800 font-semibold">W2G Academy GmbH</p>
             <p className="text-slate-600 text-sm mt-1">Theaterstraße 24</p>
             <p className="text-slate-600 text-sm">52062 Aachen</p>
-            <p className="text-xs text-slate-400 mt-1.5">Eingetragener Gesellschaftssitz</p>
+            <p className="text-xs text-slate-400 mt-1.5">{t('legal_page.registered_seat')}</p>
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Vertretung</p>
-            <p className="text-slate-600 text-sm">Geschäftsführerin</p>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">{t('legal_page.rep_label')}</p>
+            <p className="text-slate-600 text-sm">{isEN ? 'Managing Director' : 'Geschäftsführerin'}</p>
             <p className="text-slate-800 font-semibold">Laura Saboor</p>
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Kontakt</p>
-            <p className="text-slate-600 text-sm">Tel: <a href="tel:+4924199032292" className="text-primary hover:underline">+49 (0) 241 990 322 92</a></p>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">{t('legal_page.contact_label')}</p>
+            <p className="text-slate-600 text-sm">{isEN ? 'Phone' : 'Tel'}: <a href="tel:+4924199032292" className="text-primary hover:underline">+49 (0) 241 990 322 92</a></p>
             <p className="text-slate-600 text-sm">E-Mail: <a href="mailto:info@stk-aachen.de" className="text-primary hover:underline">info@stk-aachen.de</a></p>
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Registereintrag</p>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">{t('legal_page.registry_label')}</p>
             <p className="text-slate-600 text-sm">Amtsgericht Aachen</p>
             <p className="text-slate-600 text-sm">HRB 23610</p>
           </div>
@@ -379,15 +380,14 @@ function ImpressumContent() {
       {/* Unterrichtsstandort */}
       <div className="border border-slate-100 rounded-sm overflow-hidden">
         <div className="bg-slate-800 px-5 py-3">
-          <h2 className="text-sm font-semibold text-white">Unterrichts- und Beratungsstandort</h2>
+          <h2 className="text-sm font-semibold text-white">{t('legal_page.office_heading')}</h2>
         </div>
         <div className="px-5 py-5">
           <p className="text-slate-800 font-semibold">Studienkolleg Aachen / Way2Germany</p>
           <p className="text-slate-600 text-sm mt-1">Theaterstraße 30–32</p>
           <p className="text-slate-600 text-sm">52062 Aachen</p>
           <p className="text-xs text-slate-400 mt-3 border-t border-slate-100 pt-3">
-            Dieser Standort wird für Unterricht, Beratung und den Bewerberempfang genutzt.
-            Er ist nicht identisch mit dem eingetragenen Gesellschaftssitz.
+            {t('legal_page.office_note')}
           </p>
         </div>
       </div>
@@ -425,14 +425,16 @@ function DatenschutzContent() {
 }
 
 const TYPES = {
-  legal: { title: 'Impressum', Component: ImpressumContent },
-  agb: { title: 'Allgemeine Geschäftsbedingungen', Component: AGBContent },
-  privacy: { title: 'Datenschutzerklärung', Component: DatenschutzContent },
+  legal: { titleKey: 'legal_page.impressum', Component: ImpressumContent },
+  agb: { titleKey: 'legal_page.agb', Component: AGBContent },
+  privacy: { titleKey: 'legal_page.privacy', Component: DatenschutzContent },
 };
 
 export default function LegalPage({ type = 'legal' }) {
+  const { t, i18n } = useTranslation();
   const config = TYPES[type] || TYPES.legal;
-  const { title, Component } = config;
+  const { titleKey, Component } = config;
+  const isEN = i18n.language === 'en';
 
   return (
     <div className="min-h-screen bg-white">
@@ -453,27 +455,35 @@ export default function LegalPage({ type = 'legal' }) {
                 }`}
                 data-testid={`legal-tab-${key}`}
               >
-                {val.title}
+                {t(val.titleKey)}
               </Link>
             ))}
           </nav>
 
+          {/* EN-Hinweis für Rechtstexte */}
+          {isEN && (
+            <div className="mb-6 flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-sm px-4 py-3">
+              <span className="text-slate-400 text-xs mt-0.5">ⓘ</span>
+              <p className="text-slate-600 text-xs">{t('legal_page.de_only_note')}</p>
+            </div>
+          )}
+
           <h1 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-8" data-testid="legal-page-title">
-            {title}
+            {t(titleKey)}
           </h1>
 
-          <Component />
+          <Component t={t} isEN={isEN} />
 
           {/* Kontakt */}
           <div className="mt-10 pt-6 border-t border-slate-100">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <p className="text-slate-400 text-xs">
-                Fragen zu unseren Rechtsdokumenten? –{' '}
+                {t('legal_page.contact_faq')} –{' '}
                 <a href="mailto:info@stk-aachen.de" className="text-primary hover:underline">
                   info@stk-aachen.de
                 </a>
               </p>
-              <p className="text-slate-300 text-xs">Finale rechtliche Prüfung vor Go-Live ausstehend.</p>
+              <p className="text-slate-300 text-xs">{t('legal_page.review_note')}</p>
             </div>
           </div>
         </div>

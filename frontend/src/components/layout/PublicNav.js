@@ -87,7 +87,20 @@ export default function PublicNav() {
               {l.label}
             </Link>
           ))}
-          <div className="pt-2 border-t border-slate-100 flex gap-3">
+          {/* Mobile Language Switcher */}
+          <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+            <Globe size={14} className="text-slate-400" />
+            {LANGUAGES.map(lang => (
+              <button key={lang.code}
+                onClick={() => { i18n.changeLanguage(lang.code); setOpen(false); }}
+                className={`text-xs px-2 py-1 rounded-sm font-medium transition-colors ${i18n.language === lang.code ? 'bg-primary text-white' : 'text-slate-500 hover:text-primary'}`}
+                data-testid={`mobile-lang-${lang.code}`}
+              >
+                {lang.code.toUpperCase()}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-3">
             <Link to="/auth/login" onClick={() => setOpen(false)}
               className="text-sm font-medium text-slate-600 hover:text-primary">
               {t('nav.login')}

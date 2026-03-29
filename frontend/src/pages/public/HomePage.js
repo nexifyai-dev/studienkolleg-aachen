@@ -8,12 +8,10 @@ import {
   Phone, ArrowRight, Shield, Users, BookOpen, Award, Play
 } from 'lucide-react';
 
-// Echte Assets von studienkollegaachen.de
 const HERO_IMAGE = "https://www.studienkollegaachen.de/images/foto_1_startseite_studienkolleg_aachen_studium_germany_study_deutschland-1052.webp";
 const AACHEN_GRAPHIC = "https://www.studienkollegaachen.de/images/grafik_hi_aachen_deutschkurs_german_course_a1_c1-380.webp";
 const LOGO_W2G = "https://www.studienkollegaachen.de/images/logo_gross_studienkolleg_aachen_way_2_germany_studie_german_courses-684.webp";
 
-// YouTube-Videos
 const VIDEO_MAIN = "https://www.youtube.com/embed/oD9UIiTOT8E";
 const VIDEO_SERVICES = "https://www.youtube.com/embed/kZ-sxLHH5-g";
 
@@ -82,6 +80,9 @@ export default function HomePage() {
     { icon: MapPin, key: 'central' },
   ];
 
+  const processSteps = t('home.process_steps', { returnObjects: true });
+  const videoBullets = t('home.video_bullets', { returnObjects: true });
+
   return (
     <div className="min-h-screen bg-white">
       <PublicNav />
@@ -93,7 +94,7 @@ export default function HomePage() {
             <div className="animate-slide-up">
               <div className="inline-flex items-center gap-2 bg-primary/8 text-primary px-3 py-1.5 rounded-sm text-xs font-semibold mb-6 border border-primary/20">
                 <GraduationCap16 />
-                Studienkolleg Aachen / Way2Germany
+                {t('hero.badge')}
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold text-primary leading-tight tracking-tight text-balance mb-6">
                 {t('hero.headline')}
@@ -118,12 +119,11 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Hero image – echtes Foto von studienkollegaachen.de */}
             <div className="relative hidden lg:block">
               <div className="absolute inset-0 bg-primary/5 rounded-sm transform rotate-3 scale-105"></div>
               <img
                 src={HERO_IMAGE}
-                alt="Studienkolleg Aachen – Internationale Studenten"
+                alt="Studienkolleg Aachen"
                 className="relative rounded-sm object-cover w-full h-[480px] shadow-card-hover"
                 data-testid="hero-image"
                 onError={e => { e.target.src = "https://images.pexels.com/photos/7683629/pexels-photo-7683629.jpeg"; }}
@@ -186,32 +186,26 @@ export default function HomePage() {
           </div>
           <div className="text-center mt-8">
             <Link to="/courses" className="text-primary font-semibold text-sm hover:underline flex items-center gap-1 justify-center">
-              Alle Kurse ansehen <ArrowRight size={16} />
+              {t('courses.view_all')} <ArrowRight size={16} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Video – Hauptvideo */}
+      {/* Video */}
       <section className="py-16 sm:py-24 bg-white" data-testid="video-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-4">
-                Lerne das Studienkolleg Aachen kennen
+                {t('home.video_title')}
               </h2>
               <p className="text-slate-600 mb-6 leading-relaxed">
-                Wir begleiten internationale Bewerber von der ersten Anfrage bis zum Studienplatz –
-                persönlich, digital und mit voller Transparenz in jedem Schritt.
+                {t('home.video_desc')}
               </p>
               <ul className="space-y-3 mb-8">
-                {[
-                  'Offizielle Vorbereitung auf die Feststellungsprüfung (FSP)',
-                  'Persönliche Beratung und Begleitung auf Deutsch und Englisch',
-                  'Digitales Portal für Dokumente, Status und Kommunikation',
-                  'Unterkunft, Visum-Support und Versicherungslösungen',
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
+                {Array.isArray(videoBullets) && videoBullets.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700">
                     <CheckCircle size={16} className="text-primary mt-0.5 shrink-0" />
                     {item}
                   </li>
@@ -219,7 +213,7 @@ export default function HomePage() {
               </ul>
               <Link to="/apply" data-testid="video-cta"
                 className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-sm hover:bg-primary-hover transition-all hover:-translate-y-0.5">
-                Jetzt bewerben <ArrowRight size={16} />
+                {t('hero.cta_primary')} <ArrowRight size={16} />
               </Link>
             </div>
             <div>
@@ -229,7 +223,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Aachen Graphic + Services Video */}
+      {/* Services */}
       <section className="py-16 sm:py-24 bg-slate-50" data-testid="services-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -237,15 +231,13 @@ export default function HomePage() {
               {t('services.title')}
             </h2>
             <p className="text-slate-600 max-w-xl mx-auto">
-              Alles aus einer Hand – von der Beratung bis zum ersten Semester.
+              {t('home.services_sub')}
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Services-Video */}
             <div>
-              <YouTubeEmbed src={VIDEO_SERVICES} title="Unsere Services – Studienkolleg Aachen" />
+              <YouTubeEmbed src={VIDEO_SERVICES} title={t('services.title')} />
             </div>
-            {/* Aachen Grafik + Services-Liste */}
             <div className="space-y-4">
               <img
                 src={AACHEN_GRAPHIC}
@@ -272,18 +264,13 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-4">
-                So funktioniert der Prozess
+                {t('home.process_title')}
               </h2>
               <p className="text-slate-600 mb-8">
-                Von der Anfrage bis zum Studienkolleg – digital, transparent, persönlich.
+                {t('home.process_desc')}
               </p>
               <div className="space-y-4">
-                {[
-                  { step: '01', title: 'Bewerbung einreichen', desc: 'Fülle das vollständige Formular aus und lade deine Pflichtdokumente hoch. Wir melden uns innerhalb von 24 Stunden.' },
-                  { step: '02', title: 'KI-gestützte Vorprüfung', desc: 'Unser System prüft automatisch die Vollständigkeit deiner Unterlagen und bereitet die Staffbewertung vor.' },
-                  { step: '03', title: 'Portalzugang & Statusverfolgung', desc: 'Du erhältst dein persönliches Portal mit klarem Aufgaben-Dashboard und direktem Kontakt zum Team.' },
-                  { step: '04', title: 'Zulassung & Start', desc: 'Nach Prüfung und Zahlung erhältst du deinen Zulassungsbescheid und startest ins Studienkolleg.' },
-                ].map(item => (
+                {Array.isArray(processSteps) && processSteps.map(item => (
                   <div key={item.step} className="flex gap-4 items-start" data-testid={`process-step-${item.step}`}>
                     <div className="w-8 h-8 bg-primary text-white rounded-sm flex items-center justify-center text-xs font-bold shrink-0">
                       {item.step}
@@ -297,10 +284,9 @@ export default function HomePage() {
               </div>
               <Link to="/apply" data-testid="process-cta"
                 className="mt-8 inline-flex items-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-sm hover:bg-primary-hover transition-all hover:-translate-y-0.5">
-                Jetzt bewerben <ArrowRight size={16} />
+                {t('hero.cta_primary')} <ArrowRight size={16} />
               </Link>
             </div>
-            {/* W2G Logo mit Kontrast-Hintergrund */}
             <div className="hidden lg:flex flex-col items-center justify-center bg-primary rounded-sm p-12 border border-primary/20">
               <img
                 src={LOGO_W2G}
@@ -310,7 +296,7 @@ export default function HomePage() {
               />
               <div className="w-16 h-0.5 bg-white/20 my-6 rounded-full" />
               <p className="text-white/70 text-sm text-center max-w-xs leading-relaxed">
-                Seit Jahren vertrauenswürdiger Partner für internationale Studierende auf dem Weg nach Deutschland.
+                {t('home.partner_text')}
               </p>
               <div className="mt-6 text-center">
                 <p className="text-white/60 text-xs">W2G Academy GmbH</p>
@@ -335,10 +321,10 @@ export default function HomePage() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <p className="text-slate-600 text-sm mb-3">Weitere Fragen?</p>
+            <p className="text-slate-600 text-sm mb-3">{t('home.faq_more')}</p>
             <Link to="/contact" data-testid="faq-contact-link"
               className="text-primary font-semibold hover:underline text-sm flex items-center gap-1 justify-center">
-              Kontakt aufnehmen <ArrowRight size={16} />
+              {t('home.faq_contact')} <ArrowRight size={16} />
             </Link>
           </div>
         </div>
@@ -348,19 +334,19 @@ export default function HomePage() {
       <section className="bg-primary py-16" data-testid="cta-banner">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white mb-4">
-            Bereit, deinen Weg zu starten?
+            {t('home.cta_title')}
           </h2>
           <p className="text-white/70 mb-8 max-w-xl mx-auto">
-            Bewirb dich jetzt mit deinen Unterlagen und erhalte innerhalb von 24 Stunden eine Rückmeldung.
+            {t('home.cta_desc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/apply" data-testid="bottom-cta-apply"
               className="bg-white text-primary font-semibold px-8 py-3.5 rounded-sm hover:bg-slate-50 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2">
-              Jetzt bewerben <ArrowRight size={18} />
+              {t('hero.cta_primary')} <ArrowRight size={18} />
             </Link>
             <Link to="/contact" data-testid="bottom-cta-contact"
               className="border-2 border-white/40 text-white font-semibold px-8 py-3.5 rounded-sm hover:border-white/70 transition-all flex items-center justify-center">
-              Kostenlose Beratung
+              {t('home.cta_consultation')}
             </Link>
           </div>
         </div>

@@ -34,6 +34,8 @@ import StaffDashboard from './pages/staff/StaffDashboard';
 import TeacherDashboard from './pages/staff/TeacherDashboard';
 import KanbanPage from './pages/staff/KanbanPage';
 import ApplicantDetailPage from './pages/staff/ApplicantDetailPage';
+import StaffTasksPage from './pages/staff/StaffTasksPage';
+import StaffMessagingPage from './pages/staff/StaffMessagingPage';
 
 // Admin pages
 import AdminLayout from './components/layout/AdminLayout';
@@ -112,6 +114,8 @@ export default function App() {
           }>
             <Route index element={<StaffDashboardOrTeacher />} />
             <Route path="kanban" element={<KanbanPage />} />
+            <Route path="tasks" element={<StaffTasksPage />} />
+            <Route path="messaging" element={<StaffMessagingPage />} />
             <Route path="applicants/:id" element={<ApplicantDetailPage />} />
             <Route path="applications/:id" element={<ApplicantDetailPage />} />
           </Route>

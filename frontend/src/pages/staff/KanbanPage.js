@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 import {
@@ -155,11 +155,19 @@ function ArchivedSection({ apps }) {
 }
 
 export default function KanbanPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [applications, setApplications] = useState([]);
-  const [screenings, setScreenings] = useState({});  // appId → latest screening
+  const [screenings, setScreenings] = useState({});
   const [loading, setLoading] = useState(true);
   const [filterCourse, setFilterCourse] = useState('');
+  const [filterStage, setFilterStage] = useState(searchParams.get('stage') || '');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+
+  // Read URL stage filter on mount
+  useEffect(() => {
+    const stage = searchParams.get('stage');
+    if (stage) setFilterStage(stage);
+  }, [searchParams]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -192,14 +200,26 @@ export default function KanbanPage() {
     } catch {}
   };
 
-  const filtered = filterCourse
-    ? applications.filter(a => a.course_type === filterCourse)
-    : applications;
+  const clearStageFilter = () => {
+    setFilterStage('');
+    setSearchParams({});
+  };
 
-  const pipeline = filtered.filter(a => !ARCHIVED_STAGES.includes(a.current_stage));
-  const archived = filtered.filter(a => ARCHIVED_STAGES.includes(a.current_stage));
+  const filtered = applications.filter(a => {
+    if (filterCourse && a.course_type !== filterCourse) return false;
+    return true;
+  });
 
-  const appsByStage = PIPELINE_STAGES.reduce((acc, stage) => {
+  const pipeline = filterStage
+    ? filtered.filter(a => a.current_stage === filterStage)
+    : filtered.filter(a => !ARCHIVED_STAGES.includes(a.current_stage));
+  const archived = filterStage
+    ? []
+    : filtered.filter(a => ARCHIVED_STAGES.includes(a.current_stage));
+
+  const activePipelineStages = filterStage ? [filterStage] : PIPELINE_STAGES;
+
+  const appsByStage = activePipelineStages.reduce((acc, stage) => {
     acc[stage] = pipeline.filter(a => a.current_stage === stage);
     return acc;
   }, {});
@@ -255,6 +275,18 @@ export default function KanbanPage() {
         </div>
       </div>
 
+      {/* Active Stage Filter Banner */}
+      {filterStage && (
+        <div className="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-sm px-4 py-2" data-testid="kanban-stage-filter-banner">
+          <span className="text-sm text-primary font-medium">
+            Filter: {STAGE_LABELS[filterStage] || filterStage} ({pipeline.length} Bewerbungen)
+          </span>
+          <button onClick={clearStageFilter} className="text-xs text-primary hover:underline flex items-center gap-1" data-testid="clear-stage-filter">
+            <XCircle size={13} /> Filter entfernen
+          </button>
+        </div>
+      )}
+
       {/* AI-Badge Legende */}
       <div className="flex items-center gap-4 text-xs text-slate-500 bg-slate-50 border border-slate-100 rounded-sm px-4 py-2">
         <span className="flex items-center gap-1"><Brain size={12} className="text-primary" /> Anabin-Kategorie:</span>
@@ -269,8 +301,8 @@ export default function KanbanPage() {
 
       {/* Kanban Columns */}
       <div className="overflow-x-auto pb-4">
-        <div className="flex gap-3" style={{ minWidth: `${PIPELINE_STAGES.length * 200}px` }}>
-          {PIPELINE_STAGES.map((stage, stageIdx) => (
+        <div className="flex gap-3" style={{ minWidth: `${activePipelineStages.length * 200}px` }}>
+          {activePipelineStages.map((stage, stageIdx) => (
             <div key={stage} className="flex-1 min-w-[185px]" data-testid={`kanban-col-${stage}`}>
               <div className="flex items-center justify-between mb-3">
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-sm ${STAGE_COLORS[stage] || 'bg-slate-100 text-slate-700'}`}>
@@ -288,7 +320,7 @@ export default function KanbanPage() {
                     app={app}
                     latestScreening={screenings[app.id]}
                     onMove={moveApplication}
-                    nextStage={stageIdx < PIPELINE_STAGES.length - 1 ? PIPELINE_STAGES[stageIdx + 1] : null}
+                    nextStage={!filterStage && stageIdx < activePipelineStages.length - 1 ? activePipelineStages[stageIdx + 1] : null}
                   />
                 ))}
                 {appsByStage[stage].length === 0 && (

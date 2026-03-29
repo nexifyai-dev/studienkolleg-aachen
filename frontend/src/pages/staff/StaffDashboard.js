@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '../../lib/apiClient';
 import {
   Users, FileText, CheckSquare, TrendingUp, Clock,
-  ArrowRight, AlertCircle, ChevronRight, RefreshCw
+  ArrowRight, AlertCircle, ChevronRight, RefreshCw,
+  MessageSquare, Columns
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -21,11 +22,11 @@ function StatCard({ label, value, icon: Icon, color, link, testId }) {
       <p className="text-slate-500 text-xs mt-0.5">{label}</p>
     </div>
   );
-  return link ? <Link to={link}>{inner}</Link> : inner;
+  return link ? <Link to={link} data-testid={`${testId}-link`}>{inner}</Link> : inner;
 }
 
 function timeAgo(dateStr) {
-  if (!dateStr) return '–';
+  if (!dateStr) return '';
   const now = new Date();
   const d = new Date(dateStr);
   const diff = Math.floor((now - d) / 1000);
@@ -41,17 +42,20 @@ export default function StaffDashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
   const [apps, setApps] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [statsRes, appsRes] = await Promise.all([
+        const [statsRes, appsRes, tasksRes] = await Promise.all([
           apiClient.get('/api/dashboard/stats'),
           apiClient.get('/api/applications'),
+          apiClient.get('/api/tasks'),
         ]);
         setStats(statsRes.data);
         setApps(appsRes.data || []);
+        setTasks(tasksRes.data || []);
       } catch {}
       finally { setLoading(false); }
     };
@@ -67,21 +71,19 @@ export default function StaffDashboard() {
   const pendingDocs = apps.filter(a => a.current_stage === 'pending_docs');
   const newLeads = apps.filter(a => a.current_stage === 'lead_new');
   const inReview = apps.filter(a => a.current_stage === 'in_review');
+  const openTasks = tasks.filter(t => t.status === 'open' || t.status === 'in_progress');
   const recentApps = [...apps].sort((a, b) =>
     new Date(b.last_activity_at || b.created_at) - new Date(a.last_activity_at || a.created_at)
   ).slice(0, 8);
 
   return (
     <div className="space-y-5 animate-fade-in" data-testid="staff-dashboard">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-xl font-heading font-bold text-primary">Dashboard</h1>
           <p className="text-slate-500 text-sm">Willkommen, {user?.full_name || user?.email}</p>
         </div>
-        <Link to="/staff/kanban" data-testid="goto-kanban"
-          className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
-          Kanban Board <ArrowRight size={14} />
-        </Link>
       </div>
 
       {/* KPI Stats */}
@@ -101,11 +103,13 @@ export default function StaffDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Recent Applications – Main */}
+        {/* Recent Applications */}
         <div className="lg:col-span-2 bg-white border border-slate-200 rounded-sm overflow-hidden">
           <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
             <h3 className="font-semibold text-slate-800 text-sm">Zuletzt bearbeitet</h3>
-            <Link to="/staff/kanban" className="text-xs text-primary hover:underline">Alle ansehen</Link>
+            <Link to="/staff/kanban" className="text-xs text-primary hover:underline flex items-center gap-1">
+              Alle ansehen <ArrowRight size={12} />
+            </Link>
           </div>
           {recentApps.length === 0 ? (
             <div className="p-8 text-center text-slate-400 text-sm">Keine Bewerbungen</div>
@@ -145,11 +149,11 @@ export default function StaffDashboard() {
           )}
         </div>
 
-        {/* Quick Actions Sidebar */}
+        {/* Right Sidebar */}
         <div className="space-y-3">
           {/* Handlungsbedarf */}
           {(pendingDocs.length > 0 || newLeads.length > 0) && (
-            <div className="bg-white border border-slate-200 rounded-sm p-4">
+            <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="action-needed-panel">
               <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
                 <AlertCircle size={14} className="text-amber-500" /> Handlungsbedarf
               </h3>
@@ -173,15 +177,16 @@ export default function StaffDashboard() {
           )}
 
           {/* Schnellzugriff */}
-          <div className="bg-white border border-slate-200 rounded-sm p-4">
+          <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="quick-access-panel">
             <h3 className="font-semibold text-slate-800 text-sm mb-3">Schnellzugriff</h3>
             <div className="space-y-1.5">
               {[
-                { to: '/staff/kanban', label: 'Kanban Board', icon: CheckSquare },
-                { to: '/staff/tasks', label: 'Aufgaben', icon: FileText },
-                { to: '/staff/messaging', label: 'Nachrichten', icon: Users },
+                { to: '/staff/kanban', label: 'Kanban Board', icon: Columns },
+                { to: '/staff/tasks', label: 'Aufgaben', icon: CheckSquare },
+                { to: '/staff/messaging', label: 'Nachrichten', icon: MessageSquare },
               ].map(item => (
                 <Link key={item.to} to={item.to}
+                  data-testid={`quick-${item.to.split('/').pop()}`}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-sm text-sm text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors">
                   <item.icon size={14} />
                   {item.label}
@@ -190,23 +195,43 @@ export default function StaffDashboard() {
             </div>
           </div>
 
-          {/* Stats summary */}
-          <div className="bg-white border border-slate-200 rounded-sm p-4">
+          {/* Offene Aufgaben */}
+          {openTasks.length > 0 && (
+            <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="open-tasks-panel">
+              <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                <CheckSquare size={14} className="text-primary" /> Offene Aufgaben ({openTasks.length})
+              </h3>
+              <div className="space-y-1.5">
+                {openTasks.slice(0, 5).map(t => (
+                  <Link key={t.id} to="/staff/tasks" data-testid={`open-task-${t.id}`}
+                    className="flex items-center justify-between px-2 py-1.5 rounded-sm text-xs hover:bg-slate-50 transition-colors">
+                    <span className="text-slate-700 truncate">{t.title}</span>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                      t.priority === 'high' ? 'border-red-200 text-red-600 bg-red-50' : 'border-slate-200 text-slate-500'
+                    }`}>{t.priority === 'high' ? 'Hoch' : t.priority}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Systemstatus */}
+          <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="system-status-panel">
             <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
               <Clock size={14} className="text-slate-400" /> Systemstatus
             </h3>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <dt className="text-slate-500">Offene Aufgaben</dt>
-                <dd className="font-medium text-slate-800">{stats?.open_tasks ?? 0}</dd>
+                <dd className="font-medium text-slate-800">{stats?.open_tasks ?? openTasks.length}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-slate-500">Offene Docs</dt>
-                <dd className="font-medium text-slate-800">{stats?.pending_documents ?? 0}</dd>
+                <dd className="font-medium text-slate-800">{stats?.pending_documents ?? pendingDocs.length}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-slate-500">Gesamt Leads</dt>
-                <dd className="font-medium text-slate-800">{stats?.total_leads ?? 0}</dd>
+                <dd className="font-medium text-slate-800">{stats?.total_leads ?? apps.length}</dd>
               </div>
             </dl>
           </div>

@@ -54,7 +54,14 @@ async def create_task(data: TaskCreate, user: dict = Depends(require_roles(*STAF
         "created_at": datetime.now(timezone.utc),
     }
     result = await db.tasks.insert_one(task)
-    return {**task, "id": str(result.inserted_id)}
+    # Serialize response - remove _id (added by insert_one) and convert datetime
+    response = {k: v for k, v in task.items() if k != "_id"}
+    response["id"] = str(result.inserted_id)
+    if response.get("created_at") and hasattr(response["created_at"], "isoformat"):
+        response["created_at"] = response["created_at"].isoformat()
+    if response.get("due_date") and hasattr(response["due_date"], "isoformat"):
+        response["due_date"] = response["due_date"].isoformat()
+    return response
 
 
 @router.put("/{task_id}")

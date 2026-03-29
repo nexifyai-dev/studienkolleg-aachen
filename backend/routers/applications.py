@@ -358,18 +358,11 @@ async def send_case_email(
     to_name = applicant.get("full_name", "")
 
     try:
-        from services.email import _send, _wrap, _btn, _get_app_url
+        from services.email import send_case_email as _send_case_email
         lang = data.lang
-        app_url = _get_app_url()
 
-        # Wrap body in standard template
         sender_name = user.get("full_name", "Staff")
-        content = f"""<h3 style="color:#113655;margin-top:0">{"Hello" if lang == "en" else "Hallo"} {to_name or ("Applicant" if lang == "en" else "Bewerber/in")},</h3>
-        <div style="color:#475569;line-height:1.7;white-space:pre-wrap">{data.body}</div>
-        <p style="color:#64748b;font-size:13px;margin-top:24px">{"Best regards" if lang == "en" else "Mit freundlichen Grüßen"},<br/>{sender_name}<br/>Studienkolleg Aachen</p>
-        {_btn(f'{app_url}/portal', 'Zum Portal' if lang == 'de' else 'Go to Portal')}"""
-
-        _send(to_email, data.subject, _wrap(content, lang))
+        _send_case_email(to_email, to_name, data.subject, data.body, lang)
 
         # Log the email event
         await db.email_events.insert_one({

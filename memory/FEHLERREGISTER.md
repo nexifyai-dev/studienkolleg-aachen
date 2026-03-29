@@ -70,6 +70,30 @@ Vor jedem Run gegen dieses Register prüfen.
 - **Behebung**: Manage-Modus, Footer-Link, Event-basierter Reopen
 - **Vermeidungsregel**: Consent-Systeme IMMER mit Änderungsmöglichkeit bauen. Footer-Link ist Pflicht.
 
+## Fehler 9: Dashboard ohne operative Arbeitsfähigkeit
+- **Fehlerbild**: Dashboard zeigte nur statische KPI-Karten und eine Tabelle ohne klickbare Zeilen. Kein direkter Zugriff auf Bewerber möglich.
+- **Ursache**: Rein dekorativer Aufbau statt operativem Arbeits-Dashboard
+- **Bereich**: Frontend / StaffDashboard.js
+- **Erkennung**: User-Review der Portal-Screenshots in Phase 3.7h
+- **Behebung**: Kompletter Rewrite mit klickbaren Zeilen, Quick Actions, Handlungsbedarf-Sidebar
+- **Vermeidungsregel**: Dashboards IMMER als Arbeits-Tool bauen. Jeder angezeigte Datensatz muss anklickbar/bearbeitbar sein.
+
+## Fehler 10: Bewerberdaten nicht manuell bearbeitbar
+- **Fehlerbild**: Alle Felder in der Bewerberdetailansicht waren read-only. Kein Edit-Mechanismus.
+- **Ursache**: Nur Anzeige-Logik implementiert, keine Inline-Edit-Funktionalität
+- **Bereich**: Frontend + Backend / ApplicantDetailPage + applications.py
+- **Erkennung**: User-Review in Phase 3.7h
+- **Behebung**: EditableField-Komponente, PUT /profile Endpunkt, Audit-Trail
+- **Vermeidungsregel**: Bei Datenansichten IMMER prüfen: Muss dieses Feld editierbar sein? Staff/Admin brauchen operative Bearbeitungsmöglichkeiten.
+
+## Fehler 11: Keine Bearbeitungshistorie sichtbar im UI
+- **Fehlerbild**: Audit-Trail existierte im Backend, war aber im Frontend nicht sichtbar.
+- **Ursache**: Backend-only Audit ohne UI-Darstellung
+- **Bereich**: Frontend / ApplicantDetailPage
+- **Erkennung**: User-Review in Phase 3.7h
+- **Behebung**: ActivityHistory-Komponente, GET /activities Endpunkt, unified stream
+- **Vermeidungsregel**: Audit-Daten IMMER auch im UI zugänglich machen (mindestens als "Bearbeitungsverlauf").
+
 ---
 
 ## Prüfcheckliste vor jedem Run

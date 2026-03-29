@@ -46,29 +46,53 @@ async def _find_staff_user(db) -> str | None:
 
 
 async def _enrich_conversations(db, convs: list) -> list:
-    """Add participant_names and last_message_preview to conversations."""
+    """Add participant_names and last_message_preview to conversations (batch)."""
+    if not convs:
+        return []
+
+    # Batch-fetch all participants
     user_ids = set()
     for c in convs:
         for pid in c.get("participants", []):
             user_ids.add(pid)
 
     user_map = {}
-    for uid in user_ids:
+    if user_ids:
         try:
-            u = await db.users.find_one({"_id": ObjectId(uid)}, {"_id": 0, "full_name": 1, "email": 1, "role": 1})
-            if u:
+            users = await db.users.find(
+                {"_id": {"$in": [ObjectId(uid) for uid in user_ids]}},
+                {"full_name": 1, "email": 1, "role": 1},
+            ).to_list(None)
+            for u in users:
+                uid = str(u["_id"])
                 user_map[uid] = {"name": u.get("full_name") or u.get("email", ""), "role": u.get("role", "")}
         except Exception:
             pass
 
+    # Batch-fetch last messages using aggregation
+    serialized_convs = [_serialize_conv(c) for c in convs]
+    conv_ids = [sc["id"] for sc in serialized_convs]
+    msg_map = {}
+    if conv_ids:
+        try:
+            pipeline = [
+                {"$match": {"conversation_id": {"$in": conv_ids}}},
+                {"$sort": {"sent_at": -1}},
+                {"$group": {"_id": "$conversation_id", "last": {"$first": "$$ROOT"}}},
+            ]
+            last_msgs = await db.messages.aggregate(pipeline).to_list(None)
+            msg_map = {m["_id"]: m["last"] for m in last_msgs}
+        except Exception:
+            pass
+
     enriched = []
-    for c in convs:
-        sc = _serialize_conv(c)
+    for sc in serialized_convs:
         sc["participant_names"] = {pid: user_map.get(pid, {}).get("name", "Unbekannt") for pid in sc.get("participants", [])}
         sc["participant_roles"] = {pid: user_map.get(pid, {}).get("role", "") for pid in sc.get("participants", [])}
-        last_msg = await db.messages.find_one({"conversation_id": sc["id"]}, sort=[("sent_at", -1)])
+        last_msg = msg_map.get(sc["id"])
         if last_msg:
-            sc["last_message_preview"] = (last_msg.get("content", "")[:80] + "...") if len(last_msg.get("content", "")) > 80 else last_msg.get("content", "")
+            content = last_msg.get("content", "")
+            sc["last_message_preview"] = (content[:80] + "...") if len(content) > 80 else content
             sc["last_message_sender"] = last_msg.get("sender_id", "")
         enriched.append(sc)
     return enriched

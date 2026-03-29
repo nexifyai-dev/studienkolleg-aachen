@@ -74,45 +74,52 @@ async def get_my_students(
     for f in TEACHER_EXCLUDED_FIELDS:
         projection[f] = 0
 
-    # Fetch user data for consented students
+    # Fetch user data for consented students (batch)
     skip = (page - 1) * limit
+    page_ids = consented_ids[skip:skip + limit]
     students = []
 
-    for cid in consented_ids[skip:skip + limit]:
-        # Get user info
-        user_doc = await db.users.find_one(
-            {"_id": ObjectId(cid)},
-            {"_id": 1, "full_name": 1, "first_name": 1, "last_name": 1,
+    if page_ids:
+        # Batch-fetch users
+        user_docs = await db.users.find(
+            {"_id": {"$in": [ObjectId(cid) for cid in page_ids]}},
+            {"full_name": 1, "first_name": 1, "last_name": 1,
              "email": 1, "phone": 1, "language_pref": 1},
-        )
-        if not user_doc:
-            continue
+        ).to_list(None)
+        user_map = {str(u["_id"]): u for u in user_docs}
 
-        # Get application info
-        app_doc = await db.applications.find_one(
-            {"applicant_id": cid},
-            {"_id": 0, "applicant_id": 0, "notes": 0, "priority": 0,
-             "duplicate_flag": 0, "referral_code": 0},
-        )
+        # Batch-fetch applications
+        app_docs = await db.applications.find(
+            {"applicant_id": {"$in": page_ids}},
+            {"applicant_id": 1, "course_type": 1, "language_level": 1,
+             "degree_country": 1, "current_stage": 1, "created_at": 1},
+        ).to_list(None)
+        app_map = {a["applicant_id"]: a for a in app_docs}
 
-        student = {
-            "id": str(user_doc["_id"]),
-            "full_name": user_doc.get("full_name", ""),
-            "first_name": user_doc.get("first_name", ""),
-            "last_name": user_doc.get("last_name", ""),
-            "email": user_doc.get("email", ""),
-            "phone": user_doc.get("phone", ""),
-        }
-        if app_doc:
-            student.update({
-                "course_type": app_doc.get("course_type"),
-                "language_level": app_doc.get("language_level"),
-                "degree_country": app_doc.get("degree_country"),
-                "current_stage": app_doc.get("current_stage"),
-                "created_at": str(app_doc.get("created_at", "")),
-            })
+        for cid in page_ids:
+            user_doc = user_map.get(cid)
+            if not user_doc:
+                continue
 
-        students.append(student)
+            student = {
+                "id": str(user_doc["_id"]),
+                "full_name": user_doc.get("full_name", ""),
+                "first_name": user_doc.get("first_name", ""),
+                "last_name": user_doc.get("last_name", ""),
+                "email": user_doc.get("email", ""),
+                "phone": user_doc.get("phone", ""),
+            }
+            app_doc = app_map.get(cid)
+            if app_doc:
+                student.update({
+                    "course_type": app_doc.get("course_type"),
+                    "language_level": app_doc.get("language_level"),
+                    "degree_country": app_doc.get("degree_country"),
+                    "current_stage": app_doc.get("current_stage"),
+                    "created_at": str(app_doc.get("created_at", "")),
+                })
+
+            students.append(student)
 
     # Audit log
     await write_audit_log(

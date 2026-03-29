@@ -47,28 +47,44 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
     apps = await db.applications.find(query).sort("last_activity_at", -1).to_list(500)
 
     result = []
-    for app in apps:
-        app_dict = to_str_id(app)
-        if user["role"] in STAFF_ROLES:
-            # Enrich with applicant info (inclusion-only projection)
-            if app_dict.get("applicant_id"):
-                try:
-                    applicant = await db.users.find_one(
-                        {"_id": ObjectId(app_dict["applicant_id"])},
-                        {"full_name": 1, "email": 1, "phone": 1, "country": 1},
-                    )
-                    if applicant:
-                        app_dict["applicant"] = to_str_id(applicant)
-                except Exception:
-                    pass
-            if app_dict.get("workspace_id"):
-                try:
-                    ws = await db.workspaces.find_one({"_id": ObjectId(app_dict["workspace_id"])}, {"name": 1})
-                    if ws:
-                        app_dict["workspace_name"] = ws.get("name")
-                except Exception:
-                    pass
-        result.append(app_dict)
+    if user["role"] in STAFF_ROLES and apps:
+        # Batch-fetch applicants and workspaces (avoid N+1)
+        applicant_ids = list(set(str(a.get("applicant_id", "")) for a in apps if a.get("applicant_id")))
+        workspace_ids = list(set(str(a.get("workspace_id", "")) for a in apps if a.get("workspace_id")))
+
+        applicant_map = {}
+        if applicant_ids:
+            try:
+                applicants = await db.users.find(
+                    {"_id": {"$in": [ObjectId(aid) for aid in applicant_ids]}},
+                    {"full_name": 1, "email": 1, "phone": 1, "country": 1},
+                ).to_list(None)
+                applicant_map = {str(a["_id"]): a for a in applicants}
+            except Exception:
+                pass
+
+        ws_map = {}
+        if workspace_ids:
+            try:
+                workspaces = await db.workspaces.find(
+                    {"_id": {"$in": [ObjectId(wid) for wid in workspace_ids]}},
+                    {"name": 1},
+                ).to_list(None)
+                ws_map = {str(w["_id"]): w.get("name") for w in workspaces}
+            except Exception:
+                pass
+
+        for app in apps:
+            app_dict = to_str_id(app)
+            aid = app_dict.get("applicant_id")
+            if aid and aid in applicant_map:
+                app_dict["applicant"] = to_str_id(applicant_map[aid])
+            wid = app_dict.get("workspace_id")
+            if wid and wid in ws_map:
+                app_dict["workspace_name"] = ws_map[wid]
+            result.append(app_dict)
+    else:
+        result = [to_str_id(a) for a in apps]
     return result
 
 

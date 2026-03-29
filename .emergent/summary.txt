@@ -1,150 +1,156 @@
 <analysis>**original_problem_statement**: 
-Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany. 
-**Aktuelle Phase (3.7i - Fix- und Abschlusslauf für operative Staff-Portal-Reife):**
-1. **Bugs fixen:** Dashboard-Links Aufgaben und Nachrichten führen falsch zur Home-Seite. Docs ausstehend filtert das Kanban-Board nicht.
-2. **Kritischer Bug (User Add-on):** Senden und Empfangen von Nachrichten im Bewerberprofil funktioniert nicht. E2E Test zwingend erforderlich.
-3. **Struktur-Umbau:** Linke Staff-Navigation in eine responsive Top-Header-Navigation umbauen. Layout aufräumen.
-4. **E-Mails finalisieren:** Registrierungs-/System-/Staff-Mails CI- und rechtskonform abschließen (Footer, Reply-To, keine Festpreise).
-5. **Arbeitsregeln:** ZWINGEND  und Drive vorab prüfen. KEINE Potenziellen Verbesserungen am Ende pitchen. GitHub-Push sauber vorbereiten.
+Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany.
+**Current Phase (3.7k - UX/Portal Consistency & Applicant Flow Finalization):**
+1. **Messaging UI:** Visually correct the messages view to be flush top/bottom, fully responsive, with logical input area anchoring.
+2. **i18n (DE/EN):** Fully translate the applicant portal (remove hardcoded German texts).
+3. **AI Screening (Staff):** Make the KI-Prüfung starten button more prominent. Make the AI suggestion explicitly actionable (e.g., clicking to accept the suggestion triggers a status change with an audit trail).
+4. **Applicant Portal-First Flow:** Finalize the application->registration->portal flow (empty states, logical first steps, portal as the primary communication channel).
+5. **Operability:** Ensure tasks, messages, and AI tools are fully operable, not just visible.
+6. **Github Push:** Push the final state to the specific Nexify repository.
 
 **User's preferred language**: **German** (Deutsch). INSTRUCT the next agent to respond in **German** ONLY.
 
 **what currently exists?** 
-Das Staff-Dashboard und die Bewerber-Detailansicht wurden in Phase 3.7h operativ ausgebaut (Notizen, Historie, manuelle Bearbeitung funktionieren im Backend). Ein Fehlerregister () ist aktiv. **Allerdings ist das Routing fehlerhaft:**  und  existieren nicht in . Das Kanban-Board ignoriert Filter-URL-Parameter. Das Staff-Layout nutzt noch eine linke Sidebar statt eines Top-Headers. Das In-App Messaging-System ist komplett defekt (laut User-Feedback). 
+Phases 3.7i and 3.7j were successfully completed and tested (100% pass in ). The application now features a unified top-header navigation across all portals, file upload capabilities in messaging, coupled application and registration flows, and N+1 query/CORS fixes for deployment. However, the applicant portal still contains hardcoded German strings, the Messaging UI layout is visually disjointed, and the Staff AI screening panel has passive suggestions instead of actionable ones.
 
 **Last working item**: 
-- Last item agent was working: Diagnose der Bugs aus Phase 3.7i. Der Agent hat , , ,  und  gelesen, um die fehlenden Routen und den defekten Messaging-Flow zu analysieren.
+- Last item agent was working: Investigating the applicant portal for hardcoded German strings. The agent executed a  in  and found un-translated text in , , and  to prepare for full i18n integration.
 - Status: IN PROGRESS
 - Agent Testing Done: N
-- Which testing method agent to use? backend testing via curl -> frontend testing via screenshot tool -> **deep manual E2E testing of messaging** ->  for full verification.
+- Which testing method agent to use? Both (Frontend screenshot testing for Messaging UI layout; backend/frontend testing agent for the actionable AI screening feature).
 - User Testing Done: N
 
 **All Pending/In progress Issue list**: 
-  Issue 1: Messaging-System im Bewerberprofil komplett defekt (P0 - *Vom User explizit eskaliert*)
-     - Attempted fixes: Agent hat  und  eingelesen, aber noch nichts geändert.
-     - Next debug checklist: Prüfen, warum Nachrichten nicht gesendet/empfangen werden (API-Endpunkte, WebSocket/Polling, DB-Schema, Frontend-State in  und ). 
-     - Why fix this issue and what will be achieved with the fix?: Kernfunktion der Kommunikation; Blocker für produktiven Betrieb.
-     - Status: NOT STARTED
-     - Is recurring issue? N
-     - Should Test frontend/backend/both after fix?: Both (Deep E2E required)
-     - Blocked on other issue: None
-
-  Issue 2: Fehlendes Routing für Staff Dashboard Quick-Links (P0)
-     - Attempted fixes: Agent hat erkannt, dass  und  in  fehlen.
-     - Next debug checklist: Routen in  unter dem Staff-Bereich anlegen und entsprechende Dummy/Live-Pages verknüpfen.
-     - Why fix this issue and what will be achieved with the fix?: Behebt fehlerhafte Redirects zur Home-Page.
+  Issue 1: Applicant Portal is not fully bilingual (P0)
+     - Attempted fixes: Agent used  to identify hardcoded strings but hasn't updated files yet.
+     - Next debug checklist: Replace hardcoded strings in  (specifically , , ) with  function calls and add keys to  and .
+     - Why fix this issue and what will be achieved with the fix?: Fulfills the requirement for a fully DE/EN supported portal.
      - Status: IN PROGRESS
      - Is recurring issue? N
      - Should Test frontend/backend/both after fix?: Frontend
+     - Blocked on other issue: None
 
-  Issue 3: Kanban-Board Docs ausstehend Filter funktioniert nicht (P1)
-     - Attempted fixes: Diagnose, dass  URL-Query-Parameter () nicht auswertet.
-     - Next debug checklist:  anpassen, um initiale Filter aus der URL zu lesen.  anpassen, um korrekte Parameter mitzugeben.
+  Issue 2: Messaging UI layout issues (P0)
+     - Attempted fixes: None yet.
+     - Next debug checklist: Modify  (and Staff counterpart if needed) to ensure the chat window is flush top/bottom, visually balanced, and the input area is anchored at the bottom without dead space. Test on mobile and desktop views.
+     - Why fix this issue and what will be achieved with the fix?: Fixes visual disjointedness flagged by the user.
+     - Status: NOT STARTED
+     - Is recurring issue? Y (UI inconsistencies)
+     - Should Test frontend/backend/both after fix?: Frontend (Screenshot tool highly recommended)
+     - Blocked on other issue: None
+
+  Issue 3: AI Screening UX and Actionable Suggestions (P0)
+     - Attempted fixes: Agent reviewed  but made no edits yet.
+     - Next debug checklist: In , redesign the KI-Prüfung starten button for higher prominence. Modify the AI suggestion display to include a CTA (e.g., Vorschlag übernehmen). Implement backend logic (likely in  or a dedicated endpoint) to apply the suggested status change and write an audit log.
+     - Why fix this issue and what will be achieved with the fix?: Moves the AI tool from a passive reader to an active operational tool.
+     - Status: NOT STARTED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix?: Both
+     - Blocked on other issue: None
+
+  Issue 4: Portal-First Flow Polish (Empty states & Onboarding) (P1)
+     - Attempted fixes: Application is already linked to registration, but empty states and first-steps need validation.
+     - Next debug checklist: Review the user journey immediately post-registration. Ensure logical empty states in the Dashboard/Journey pages, a clear first message, and obvious next actions for document uploads.
      - Status: NOT STARTED
      - Is recurring issue? N
      - Should Test frontend/backend/both after fix?: Frontend
 
 **In progress Task List**: 
-  Task 1: Umbau Staff-Navigation auf Top-Header (P0)
-     - Where to resume: . Linke Sidebar entfernen und in ein responsives (Mobile/Tablet/Desktop) Top-Header-Menü umbauen.
-     - What will be achieved with this?: Bessere Informationsarchitektur und Platznutzung laut User-Feedback.
-     - Status: NOT STARTED
-     - Should Test frontend/backend/both after fix?: Frontend (Screenshots mobile + desktop)
-     - Blocked on something: None
-
-  Task 2: Finalisierung E-Mail-Templates (P1)
-     - Where to resume: . 
-     - What will be achieved with this?: CI/CD-konforme, rechtskonforme Templates (Footer, Signatur, keine Festpreise).
-     - Status: NOT STARTED
-     - Should Test frontend/backend/both after fix?: Backend (Review generated HTML)
+  Task 1: Replace Hardcoded text with i18n
+     - Where to resume: Replace texts found via grep in  and add to .
+     - What will be achieved with this?: Full English/German support.
+     - Status: IN PROGRESS
+     - Should Test frontend/backend/both after fix?: Frontend
      - Blocked on something: None
 
 **Upcoming and Future Tasks**
   Future Tasks:
-  - Payment-Freischaltung (P2)
   - Partner-/Sub-Agentur-Portal (P2)
-  - Exportfunktionen (P2)
+  - Payment-Freischaltung (P2)
   - PWA-Fähigkeit (P3)
-  - Wiedervorlage-System für Bewerber (P2)
+  - Erweiterte Suchfilter (P2)
 
 **Completed work in this session**
-- Phase 3.7g: Cookie-Einstellungen nachträglich bearbeitbar gemacht (Footer-Link) (DONE)
-- Phase 3.7h: Staff Dashboard überarbeitet (KPIs, klickbare Zeilen) (DONE)
-- Phase 3.7h: Applicant Detail Page überarbeitet (Notizen, Manuelle Bearbeitung, Historie) (DONE)
-- FEHLERREGISTER in  angelegt. (DONE)
+- Fixed CORS configuration for production deployment (DONE)
+- Fixed N+1 Queries in , , and  (DONE)
+- Phase 3.7j: Replaced sidebar with Top-Navigation portal-wide (Applicant/Staff) (DONE)
+- Phase 3.7j: Made tasks operable and added follow-up/export endpoints (DONE)
+- Phase 3.7j: Added file attachment support to messages (DONE)
+- Phase 3.7j: Coupled public application form with immediate account registration (DONE)
 
 **Earlier issues found/mentioned but not fixed**
-   - Issue 1: Senden und empfangen von Nachrichten funktioniert nicht.
-   - Debug checklist: Frontend-API-Aufrufe ( / Bewerberprofil) und Backend-Router () tiefgreifend debuggen. User verlangt explizit E2E-Test dieser Funktion!
+   - Issue 1: GitHub Push Execution
+   - Debug checklist: Ensure the final completed state is actively pushed to  via bash commands, rather than instructing the user to click Save to Github. If authentication blocks this, provide a highly detailed technical justification.
+   - Why to solve this issue and what will be achieved with this?: Explicit user demand across multiple phases.
+   - Should Test frontend/backend/both after fix: NA
+   - Is recurring issue? Y
 
 **Known issue recurrence from previous fork**
-  - Issue recurrence in previous fork: Agent hat wiederholt Nice-to-haves am Ende gepitcht und Frontend-Ansichten nicht via Screenshot gegen Code-Annahmen validiert (Preview schlägt Handoff).
-  - Recurrence count: Mehrfach
-  - Status: IN PROGRESS (Fehlerregister wurde genau dafür erstellt. Muss vor jedem Run gelesen werden).
-  - *Note:* Lese zwingend  bevor du anfängst.
+  - Issue recurrence in previous fork: Handoff visual state not matching preview expectations; adding potential improvements to the finish summary against user instructions.
+  - Recurrence count: Multiple
+  - Status: IN PROGRESS
+  - Note: You MUST read  before starting. Do NOT pitch future ideas in the finish summary. Rely strictly on Preview screenshots instead of assumed code states.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-React, Tailwind CSS, FastAPI, MongoDB, NSCall (AI Provider - exclusively), Resend (Emails). 
+React, Tailwind CSS, FastAPI, MongoDB, NSCall (AI Provider exclusively), Resend (Emails), i18next (Translations).
 
 **key DB schema**
-- : Bewerberfälle (Enthält Status, Notizen, Historie).
-- : In-App Kommunikation (Muss dringend gedebuggt werden).
+- : Contains applicant cases.
+- : Messaging system (now supports file attachments).
+- : Re-submission / follow-up tasks.
 
 **changes in tech stack**
-- KI **ausschließlich** über NSCall.
-- Preise sind individuell (keine Hardcodes).
+- None.
 
 **All files of reference**
--  (PFLICHT-LEKTÜRE)
+-  (MANDATORY READ)
 - 
-- 
-- 
+-  (Target for UI fix & i18n)
+-  (Target for AI Screening panel update)
 -  & 
-- 
 
 **Areas that need refactoring**:
--  muss von Sidebar auf Top-Nav umgebaut werden.
--  Routing für Staff-Bereich muss bereinigt werden.
+-  (Applicant and Staff): Needs flex/grid refactoring to ensure proper full-height flush layout without scroll breaks or empty gaps.
 
 **Critical Info for New Agent**
-1. **SPRACHE:** Ausschließlich **Deutsch**.
-2. **NO PITCH RULE:** Keine Ausbauideen im Finish-Summary. Halte dich exakt an die Definition of Done!
-3. **MESSAGING BUG:** Der User ist frustriert, dass Nachrichten nicht funktionieren. Fixe dies als erstes und teste es E2E (Applicant sendet, Staff empfängt/antwortet).
-4. **GITHUB PUSH:** Du kannst nicht direkt pushen. Bereite das Repo vor und instruiere den User in der Abschlussmeldung *konkret*, die Save to Github-Funktion in der Chat-Eingabe zu nutzen. Verweise auf Branch/Commits.
-5. **PFLICHT:** Rufe  (PRD + FEHLERREGISTER) und Drive vor Beginn ab.
+1. **LANGUAGE:** Ausschließlich **Deutsch** for all interactions.
+2. **AI TOOLS:** NSCall only. 
+3. **NO PITCH RULE:** Do not pitch improvements or nice-to-haves in the finish summary.
+4. **OPERABILITY RULE:** Ensure that tasks, messages, and AI suggestions are actively usable/executable. A visual UI representation is not enough.
+5. **MANDATORY CHECK:** You must load  (PRD, FEHLERREGISTER) and review the current Preview state before writing code.
 
 **documents and test reports created in this job**
 - 
--  (Phase 3.7h Test - 100% Pass)
+- 
 - 
 
-**Last 10 User Messages and any pending HUMAN messages**
-1. User fordert Phase 3.7i (Abschlusslauf operative Portal-Reife).
-2. Bug-Fixes für Dashboard-Links gefordert.
-3. Staff-Layout: Linke Leiste muss zum Top-Header werden.
-4. E-Mail-Templates finalisieren (Design, Rechtsangaben).
-5. User verlangt verifizierten Github-Push.
-6. **Zusatzhinweis (WICHTIG):** User meldet, dass In-App-Messaging komplett defekt ist. Fordert vollumfängliche E2E-Tests und keine oberflächlichen Prüfungen mehr.
+**Last 10 User Messages and any pending HUMAN messages** 
+1. User confirmed 3.7i was successful, initiated Phase 3.7j (portal-wide top-nav, file uploads in messages, application+registration coupling).
+2. Agent implemented and tested 3.7j (100% pass).
+3. User requested a Deployment Health Check.
+4. Deployment agent flagged CORS and N+1 queries. Agent fixed these.
+5. User initiated Phase 3.7k: Focus on messaging UI layout fix, complete applicant portal i18n (DE/EN), actionable AI suggestions in Staff panel, and finalizing the portal-first application flow. (Pending implementation).
 
 **Project Health Check:**
-- Broken: Messaging-System (Applicant <-> Staff Kommunikation). Staff-Dashboard Routen (, ).
-- Mocked: Preiskalkulator, Payment-Modul.
+- Broken: Applicant Portal hardcoded German text, Messaging UI layout inconsistencies.
+- Mocked: Payment Module, Pricing Calculator.
 
 **3rd Party Integrations**
 - NSCall / nscale (AI Inference) — requires User API Key
 - Resend (Emails) — requires User API Key
 
 **Testing status**
-- Testing agent used after significant changes: NO (für 3.7i noch ausstehend).
-- Test files created: None neu.
-- Known regressions: Messaging ist kaputt.
+- Testing agent used after significant changes: YES (for 3.7j).
+- Troubleshoot agent used after agent stuck in loop: NO.
+- Test files created: None new.
+- Known regressions: None currently, but UI layout requires manual screenshot verification.
 
 **Credentials to test flow:**
-Siehe . 
-Rollen: , , ,  (Passwort: ).
+Refer to .
+, , ,  (Default Password: ).
 
 **What agent forgot to execute**
-Der Agent hat die Fehleranalyse für Phase 3.7i gestartet, wurde aber unterbrochen, bevor Code geschrieben wurde. Der Messaging-Bug aus dem Zusatzhinweis des Users ist noch völlig unberührt.</analysis>
+The agent was in the middle of analyzing the codebase for Phase 3.7k (finding hardcoded portal strings). It has not yet implemented the i18n extraction, the Messaging UI fix, or the actionable AI screening feature requested in the latest prompt.</analysis>

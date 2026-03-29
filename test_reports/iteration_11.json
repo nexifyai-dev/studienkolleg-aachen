@@ -1,0 +1,112 @@
+{
+  "summary": "Phase 3.7h Testing Complete - Operative Portal-Reife features verified. All 20 backend tests passed. All frontend UI tests passed. Dashboard KPIs, clickable rows, case notes, activities, profile edit, email composer all working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase37h_features.py",
+    "/app/test_reports/pytest/pytest_results_phase37h.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "POST /api/applications/{id}/notes - creates internal case note with author info and audit trail ✓",
+    "GET /api/applications/{id}/notes - lists notes for a case (internal for staff, shared for applicants) ✓",
+    "GET /api/applications/{id}/activities - returns unified activity stream (activities + audit + email events) ✓",
+    "PUT /api/applications/{id}/profile - updates applicant profile fields with audit trail ✓",
+    "POST /api/applications/{id}/send-email - sends ad-hoc email from case context with logging ✓",
+    "Staff Dashboard: 4 KPI cards (Neue Anfragen, In Bearbeitung, Docs ausstehend, Gesamt) with clickable links ✓",
+    "Staff Dashboard: Zuletzt bearbeitet list with clickable rows that navigate to /staff/applications/{id} ✓",
+    "Staff Dashboard: Handlungsbedarf sidebar (neue Anfragen, Docs ausstehend counts) ✓",
+    "Staff Dashboard: Schnellzugriff links (Kanban, Aufgaben, Nachrichten) ✓",
+    "Applicant Detail: Editable personal data fields (Name, E-Mail, Telefon, Land, Geb.-Datum) with hover edit icon ✓",
+    "Applicant Detail: Editable application data fields (Kurstyp, Semester, Deutsch, Abschlussland, Kombination, Quelle) ✓",
+    "Applicant Detail: Quick Actions bar with Anrufen, E-Mail, WhatsApp buttons (shown when data available) ✓",
+    "Applicant Detail: WhatsApp deep-link with pre-filled message opens wa.me in new tab ✓",
+    "Applicant Detail: E-Mail composer (subject + body + send) sends via backend and logs event ✓",
+    "Applicant Detail: Case Notes section - add internal notes with textarea and send button ✓",
+    "Applicant Detail: Activity History showing status changes, profile edits, notes, emails with timestamps ✓",
+    "Applicant Detail: Status change buttons working correctly (9 stage buttons) ✓",
+    "Applicant Detail: AI Screening panel and Teacher Assignment panel still functional ✓",
+    "Login works for all 4 roles: Admin, Staff, Teacher, Applicant ✓",
+    "Notification Bell visible in Staff and Applicant layouts ✓",
+    "Cookie Banner and Footer Cookie Settings link working ✓",
+    "No [OFFEN]/[HINWEIS] staging warnings on any page ✓"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_phase37h_features.py"
+  ],
+  "success_rate": {
+    "backend": "100% (20/20 tests passed)",
+    "frontend": "100% (all UI tests passed)"
+  },
+  "test_credentials": {
+    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
+    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
+    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+  },
+  "seed_data_creation": "4 accounts seeded via seed.py, test application 69c8b7f98fed65b8d953ffb0 used for testing",
+  "retest_needed": false,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "Phase 3.7h complete. All operative portal features working: Dashboard KPIs, clickable rows, case notes CRUD, activity history, profile edit, email composer, WhatsApp deep-link. Quick Actions (call, mailto, whatsapp) only show when applicant has corresponding data. Some test applications don't have linked users so personal data shows '–'. Kanban board has 74 cards. All 4 role logins verified. Cookie management working.",
+  "passed_checks": [
+    "Backend: Health endpoint returns OK",
+    "Backend: Admin login returns superadmin role",
+    "Backend: Staff login returns staff role",
+    "Backend: Teacher login returns teacher role",
+    "Backend: Applicant login returns applicant role",
+    "Backend: Dashboard stats endpoint works",
+    "Backend: Applications list endpoint works",
+    "Backend: Application 69c8b7f98fed65b8d953ffb0 exists",
+    "Backend: Create case note works",
+    "Backend: List case notes works",
+    "Backend: Empty note rejected with 400",
+    "Backend: List activities works",
+    "Backend: Update applicant profile works",
+    "Backend: Profile edit endpoint responds correctly",
+    "Backend: Send case email works",
+    "Backend: Update application stage works",
+    "Backend: Update application fields works",
+    "Backend: List documents works",
+    "Backend: Staff notifications endpoint works",
+    "Backend: Applicant notifications endpoint works",
+    "Frontend: Staff Dashboard loads with data-testid='staff-dashboard'",
+    "Frontend: 4 KPI cards visible (stat-new-leads, stat-in-review, stat-pending-docs, stat-total)",
+    "Frontend: Kanban link visible (goto-kanban)",
+    "Frontend: Recent applications rows visible (8 rows)",
+    "Frontend: Handlungsbedarf sidebar visible (action-new-leads, action-pending-docs)",
+    "Frontend: Notification bell visible in Staff layout",
+    "Frontend: Applicant Detail Page loads with data-testid='applicant-detail-page'",
+    "Frontend: Back to Kanban link visible",
+    "Frontend: Personal data fields visible (field-full_name, field-email, field-phone, field-country)",
+    "Frontend: Application data fields visible (field-course_type, field-language_level)",
+    "Frontend: Case Notes section visible with input and submit button",
+    "Frontend: Activity History visible",
+    "Frontend: AI Screening Panel visible",
+    "Frontend: Teacher Assignment Panel visible",
+    "Frontend: Email Composer button visible",
+    "Frontend: 9 Status change buttons visible",
+    "Frontend: Edit button appears on hover for editable fields",
+    "Frontend: Note submission works",
+    "Frontend: Email composer opens with subject, body, send button",
+    "Frontend: All 4 role logins redirect correctly",
+    "Frontend: No staging warnings on /staff",
+    "Frontend: No staging warnings on /portal",
+    "Frontend: Cookie banner appears on first visit",
+    "Frontend: Cookie accept button works",
+    "Frontend: Footer Cookie Settings link visible",
+    "Frontend: Cookie Manage Panel opens from footer link",
+    "Frontend: Kanban board loads with 74 cards"
+  ],
+  "failed_checks": [],
+  "mocked_apis": {
+    "cost_simulator": "MOCKED internally (COST_SIMULATOR_ENABLED=false)",
+    "payment_module": "Not active - shows 'in Vorbereitung' message"
+  }
+}

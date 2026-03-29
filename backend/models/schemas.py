@@ -56,6 +56,25 @@ class ApplicationUpdate(BaseModel):
     assigned_staff_id: Optional[str] = None
     priority: Optional[str] = None
     notes: Optional[str] = None
+    # Editable case fields (Staff/Admin only)
+    course_type: Optional[str] = None
+    desired_start: Optional[str] = None
+    language_level: Optional[str] = None
+    degree_country: Optional[str] = None
+    combo_option: Optional[str] = None
+    source: Optional[str] = None
+    date_of_birth: Optional[str] = None
+
+
+class CaseNoteCreate(BaseModel):
+    content: str
+    visibility: str = "internal"  # internal | shared
+
+
+class CaseEmailSend(BaseModel):
+    subject: str
+    body: str
+    lang: str = "de"
 
 
 # ─── Document schemas ─────────────────────────────────────────────────────────

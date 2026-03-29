@@ -1,104 +1,216 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../lib/apiClient';
-import { Users, FileText, CheckSquare, TrendingUp } from 'lucide-react';
+import {
+  Users, FileText, CheckSquare, TrendingUp, Clock,
+  ArrowRight, AlertCircle, ChevronRight, RefreshCw
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { STAGE_LABELS } from '../../lib/utils';
+import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 
+function StatCard({ label, value, icon: Icon, color, link, testId }) {
+  const inner = (
+    <div className="bg-white border border-slate-200 rounded-sm p-4 hover:border-primary/30 transition-colors group" data-testid={testId}>
+      <div className="flex items-center justify-between mb-2">
+        <div className={`w-9 h-9 rounded-sm flex items-center justify-center ${color}`}>
+          <Icon size={18} />
+        </div>
+        {link && <ChevronRight size={14} className="text-slate-300 group-hover:text-primary transition-colors" />}
+      </div>
+      <p className="text-2xl font-heading font-bold text-slate-800">{value}</p>
+      <p className="text-slate-500 text-xs mt-0.5">{label}</p>
+    </div>
+  );
+  return link ? <Link to={link}>{inner}</Link> : inner;
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '–';
+  const now = new Date();
+  const d = new Date(dateStr);
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return 'gerade eben';
+  if (diff < 3600) return `vor ${Math.floor(diff / 60)} Min.`;
+  if (diff < 86400) return `vor ${Math.floor(diff / 3600)} Std.`;
+  const days = Math.floor(diff / 86400);
+  if (days === 1) return 'gestern';
+  return `vor ${days} Tagen`;
+}
 
 export default function StaffDashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
-  const [recentApps, setRecentApps] = useState([]);
+  const [apps, setApps] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
         const [statsRes, appsRes] = await Promise.all([
-          apiClient.get(`/api/dashboard/stats`, { withCredentials: true }),
-          apiClient.get(`/api/applications`, { withCredentials: true }),
+          apiClient.get('/api/dashboard/stats'),
+          apiClient.get('/api/applications'),
         ]);
         setStats(statsRes.data);
-        setRecentApps(appsRes.data.slice(0, 10));
+        setApps(appsRes.data || []);
       } catch {}
       finally { setLoading(false); }
     };
     load();
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
+  if (loading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+    </div>
+  );
+
+  const pendingDocs = apps.filter(a => a.current_stage === 'pending_docs');
+  const newLeads = apps.filter(a => a.current_stage === 'lead_new');
+  const inReview = apps.filter(a => a.current_stage === 'in_review');
+  const recentApps = [...apps].sort((a, b) =>
+    new Date(b.last_activity_at || b.created_at) - new Date(a.last_activity_at || a.created_at)
+  ).slice(0, 8);
 
   return (
-    <div className="space-y-6 animate-fade-in" data-testid="staff-dashboard">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-primary">Staff Dashboard</h1>
-        <p className="text-slate-500 text-sm">Willkommen zurück, {user?.full_name || user?.email}</p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Gesamt Leads', value: stats?.total_leads ?? '–', icon: Users, color: 'text-primary bg-primary/8' },
-          { label: 'Aktive Leads', value: stats?.open_leads ?? '–', icon: TrendingUp, color: 'text-primary bg-primary/10' },
-          { label: 'Offene Aufgaben', value: stats?.open_tasks ?? '–', icon: CheckSquare, color: 'text-slate-600 bg-slate-100' },
-          { label: 'Dokumente offen', value: stats?.pending_documents ?? '–', icon: FileText, color: 'text-slate-600 bg-slate-50 border border-slate-200' },
-        ].map(item => {
-          const Icon = item.icon;
-          return (
-            <div key={item.label} className="bg-white border border-slate-200 rounded-sm p-5"
-              data-testid={`staff-stat-${item.label.toLowerCase().replace(/ /g, '-')}`}>
-              <div className={`w-10 h-10 rounded-sm flex items-center justify-center mb-3 ${item.color}`}>
-                <Icon size={20} />
-              </div>
-              <p className="text-2xl font-heading font-bold text-slate-800">{item.value}</p>
-              <p className="text-slate-500 text-xs mt-1">{item.label}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Recent applications */}
-      <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="font-semibold text-slate-800">Aktuelle Bewerbungen</h3>
-          <Link to="/staff/kanban" className="text-sm text-primary hover:underline">Kanban ansehen →</Link>
+    <div className="space-y-5 animate-fade-in" data-testid="staff-dashboard">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-heading font-bold text-primary">Dashboard</h1>
+          <p className="text-slate-500 text-sm">Willkommen, {user?.full_name || user?.email}</p>
         </div>
-        {recentApps.length === 0 ? (
-          <div className="p-8 text-center text-slate-400 text-sm">Keine Bewerbungen vorhanden</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-50 text-xs text-slate-500 font-medium">
-                  <th className="px-4 py-3 text-left">Bewerber</th>
-                  <th className="px-4 py-3 text-left">Status</th>
-                  <th className="px-4 py-3 text-left">Quelle</th>
-                  <th className="px-4 py-3 text-left">Erstellt</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentApps.map(app => (
-                  <tr key={app.id} className="border-t border-slate-50 hover:bg-slate-50 transition-colors"
-                    data-testid={`staff-app-row-${app.id}`}>
-                    <td className="px-4 py-3 text-sm font-medium text-slate-800">
-                      {app.applicant?.full_name || app.applicant?.email || app.applicant_id?.slice(-8)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="text-xs bg-primary/8 text-primary px-2 py-0.5 rounded-sm">
-                        {STAGE_LABELS[app.current_stage] || app.current_stage}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-slate-500">{app.source || '–'}</td>
-                    <td className="px-4 py-3 text-xs text-slate-500">
-                      {app.created_at ? new Date(app.created_at).toLocaleDateString('de-DE') : '–'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <Link to="/staff/kanban" data-testid="goto-kanban"
+          className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
+          Kanban Board <ArrowRight size={14} />
+        </Link>
+      </div>
+
+      {/* KPI Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard label="Neue Anfragen" value={newLeads.length} icon={TrendingUp}
+          color="text-primary bg-primary/8" link="/staff/kanban?stage=lead_new"
+          testId="stat-new-leads" />
+        <StatCard label="In Bearbeitung" value={inReview.length} icon={RefreshCw}
+          color="text-primary bg-primary/10" link="/staff/kanban?stage=in_review"
+          testId="stat-in-review" />
+        <StatCard label="Docs ausstehend" value={pendingDocs.length} icon={FileText}
+          color="text-amber-600 bg-amber-50" link="/staff/kanban?stage=pending_docs"
+          testId="stat-pending-docs" />
+        <StatCard label="Gesamt Bewerber" value={apps.length} icon={Users}
+          color="text-slate-600 bg-slate-100" link="/staff/kanban"
+          testId="stat-total" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Recent Applications – Main */}
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-sm overflow-hidden">
+          <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+            <h3 className="font-semibold text-slate-800 text-sm">Zuletzt bearbeitet</h3>
+            <Link to="/staff/kanban" className="text-xs text-primary hover:underline">Alle ansehen</Link>
           </div>
-        )}
+          {recentApps.length === 0 ? (
+            <div className="p-8 text-center text-slate-400 text-sm">Keine Bewerbungen</div>
+          ) : (
+            <div className="divide-y divide-slate-50">
+              {recentApps.map(app => (
+                <Link key={app.id} to={`/staff/applications/${app.id}`}
+                  data-testid={`dash-app-${app.id}`}
+                  className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 transition-colors group">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 bg-primary/8 rounded-sm flex items-center justify-center shrink-0">
+                      <span className="text-xs font-bold text-primary">
+                        {(app.applicant?.full_name || '?')[0].toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-800 truncate">
+                        {app.applicant?.full_name || app.applicant?.email || 'Unbekannt'}
+                      </p>
+                      <p className="text-xs text-slate-400 truncate">
+                        {app.applicant?.email || ''} {app.applicant?.country ? `· ${app.applicant.country}` : ''}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className={`text-[11px] font-medium px-2 py-0.5 rounded-sm whitespace-nowrap ${STAGE_COLORS[app.current_stage] || 'bg-slate-100 text-slate-600'}`}>
+                      {STAGE_LABELS[app.current_stage] || app.current_stage}
+                    </span>
+                    <span className="text-[10px] text-slate-300 hidden sm:block whitespace-nowrap">
+                      {timeAgo(app.last_activity_at || app.created_at)}
+                    </span>
+                    <ChevronRight size={14} className="text-slate-300 group-hover:text-primary" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Quick Actions Sidebar */}
+        <div className="space-y-3">
+          {/* Handlungsbedarf */}
+          {(pendingDocs.length > 0 || newLeads.length > 0) && (
+            <div className="bg-white border border-slate-200 rounded-sm p-4">
+              <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                <AlertCircle size={14} className="text-amber-500" /> Handlungsbedarf
+              </h3>
+              <div className="space-y-2">
+                {newLeads.length > 0 && (
+                  <Link to="/staff/kanban?stage=lead_new" data-testid="action-new-leads"
+                    className="flex items-center justify-between px-3 py-2 bg-primary/5 border border-primary/15 rounded-sm text-sm hover:bg-primary/10 transition-colors">
+                    <span className="text-slate-700">{newLeads.length} neue Anfrage{newLeads.length !== 1 ? 'n' : ''}</span>
+                    <ArrowRight size={14} className="text-primary" />
+                  </Link>
+                )}
+                {pendingDocs.length > 0 && (
+                  <Link to="/staff/kanban?stage=pending_docs" data-testid="action-pending-docs"
+                    className="flex items-center justify-between px-3 py-2 bg-amber-50 border border-amber-200 rounded-sm text-sm hover:bg-amber-100/50 transition-colors">
+                    <span className="text-slate-700">{pendingDocs.length} Docs ausstehend</span>
+                    <ArrowRight size={14} className="text-amber-600" />
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Schnellzugriff */}
+          <div className="bg-white border border-slate-200 rounded-sm p-4">
+            <h3 className="font-semibold text-slate-800 text-sm mb-3">Schnellzugriff</h3>
+            <div className="space-y-1.5">
+              {[
+                { to: '/staff/kanban', label: 'Kanban Board', icon: CheckSquare },
+                { to: '/staff/tasks', label: 'Aufgaben', icon: FileText },
+                { to: '/staff/messaging', label: 'Nachrichten', icon: Users },
+              ].map(item => (
+                <Link key={item.to} to={item.to}
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-sm text-sm text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors">
+                  <item.icon size={14} />
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Stats summary */}
+          <div className="bg-white border border-slate-200 rounded-sm p-4">
+            <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
+              <Clock size={14} className="text-slate-400" /> Systemstatus
+            </h3>
+            <dl className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <dt className="text-slate-500">Offene Aufgaben</dt>
+                <dd className="font-medium text-slate-800">{stats?.open_tasks ?? 0}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-slate-500">Offene Docs</dt>
+                <dd className="font-medium text-slate-800">{stats?.pending_documents ?? 0}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-slate-500">Gesamt Leads</dt>
+                <dd className="font-medium text-slate-800">{stats?.total_leads ?? 0}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
       </div>
     </div>
   );

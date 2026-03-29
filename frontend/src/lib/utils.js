@@ -61,6 +61,7 @@ export const ROLE_LABELS = {
   superadmin: 'Superadmin',
   admin: 'Admin',
   staff: 'Mitarbeiter',
+  teacher: 'Lehrer',
   accounting_staff: 'Buchhaltung',
   agency_admin: 'Agentur Admin',
   agency_agent: 'Agentur Agent',

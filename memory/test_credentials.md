@@ -2,7 +2,7 @@
 
 ## Admin
 - **Email:** admin@studienkolleg-aachen.de
-- **Password:** DevSeed@2026!
+- **Password:** Admin@2026!
 - **Role:** superadmin
 
 ## Staff

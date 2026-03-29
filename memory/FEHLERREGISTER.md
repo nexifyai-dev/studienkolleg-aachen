@@ -94,6 +94,22 @@ Vor jedem Run gegen dieses Register prüfen.
 - **Behebung**: ActivityHistory-Komponente, GET /activities Endpunkt, unified stream
 - **Vermeidungsregel**: Audit-Daten IMMER auch im UI zugänglich machen (mindestens als "Bearbeitungsverlauf").
 
+## Fehler 12: Task-Erstellung wirft 500 wegen ObjectId-Serialisierung
+- **Fehlerbild**: POST /api/tasks lieferte 500 Internal Server Error
+- **Ursache**: MongoDB insert_one() fügt _id (ObjectId) zum Dict hinzu; datetime-Objekte nicht serialisiert
+- **Bereich**: Backend / tasks.py
+- **Erkennung**: Testing Agent (iteration_12.json)
+- **Behebung**: _id aus Response ausschließen, datetime zu ISO-String konvertieren
+- **Vermeidungsregel**: Bei JEDEM insert_one() den Response-Dict von _id bereinigen und datetime-Felder serialisieren. Nie das Original-Dict direkt returnen.
+
+## Fehler 13: Messaging ohne Konversation → leere Seite, kein Senden möglich
+- **Fehlerbild**: Bewerber-Messaging zeigte "Noch keine Nachrichten" ohne Möglichkeit, eine Konversation zu starten
+- **Ursache**: Frontend sendete conversation_id=undefined ohne recipient_id; Backend konnte keine sinnvolle Konversation erstellen
+- **Bereich**: Backend messaging.py + Frontend MessagesPage.js
+- **Erkennung**: User-Feedback in Phase 3.7i
+- **Behebung**: Auto-Support-Conversation via GET /api/conversations/support; Auto-Staff-Zuweisung als Gesprächspartner
+- **Vermeidungsregel**: Messaging-Systeme IMMER mit einem Default-Kanal bauen. Nie darauf vertrauen, dass eine Konversation bereits existiert.
+
 ---
 
 ## Prüfcheckliste vor jedem Run

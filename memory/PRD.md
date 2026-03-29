@@ -8,6 +8,7 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 2. **Alle KI im Produkt nur über NSCall/nscale**
 3. **Preise individuell** – keine pauschalen Festpreise, einzelfallabhängig (auch für Sub-Agenturen/Partner)
 4. **Drive + Mem0** als Projektquellen-of-Truth pro Lauf
+5. **Keine "Potenzielle Verbesserungen"** am Ende jedes Laufs
 
 ## Tech Stack
 - **Frontend**: React 18, Tailwind CSS, Shadcn/UI, react-i18next
@@ -33,31 +34,36 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 │   ├── routers/
 │   │   ├── auth.py           # Login, Register, Invite, Password Reset
 │   │   ├── leads.py          # Lead-Ingest, Pipeline
-│   │   ├── applications.py   # Bewerbungs-CRUD
-│   │   ├── documents.py      # Dokument-Upload/Review
+│   │   ├── applications.py   # Bewerbungs-CRUD + Status-Change-Trigger
+│   │   ├── documents.py      # Dokument-Upload/Review + Upload-Trigger
 │   │   ├── tasks.py          # Aufgabenmanagement
 │   │   ├── messaging.py      # Nachrichten-System
-│   │   ├── consents.py       # DSGVO-Consent-Management
-│   │   ├── teacher.py        # Lehrer-Zuweisungen + /list + Schülerzugriff
+│   │   ├── consents.py       # DSGVO-Consent + Consent-Change-Trigger
+│   │   ├── teacher.py        # Lehrer-Zuweisungen + Assignment-Trigger
+│   │   ├── notifications.py  # In-App Notification CRUD (NEU Phase 3.7e)
 │   │   ├── ai_screening.py   # AI-Analyse + /ai/model-registry
 │   │   └── cost_simulator.py # MOCKED, intern, individuelle Preise
 │   └── services/
 │       ├── nscale_provider.py # NSCall AI-Provider (4 Task-Modelle)
 │       ├── ai_screening.py   # AI-Screening-Logik (nscale)
-│       ├── email.py          # Resend
+│       ├── email.py          # Resend – 7 DE/EN Templates
+│       ├── notifications.py  # Notification-Service (8 Typen, DE/EN)
+│       ├── automation.py     # Workflow-Trigger (E-Mail + Notification)
 │       └── audit.py          # Audit-Logging
 ├── frontend/
 │   ├── src/
 │   │   ├── locales/          # DE/EN (inkl. Pricing-FAQ)
 │   │   ├── components/
 │   │   │   ├── OnboardingTour.js    # 5-Schritt Bewerber-Onboarding
+│   │   │   ├── shared/
+│   │   │   │   └── NotificationBell.js  # Glocke + Dropdown (NEU Phase 3.7e)
 │   │   │   └── layout/
-│   │   │       ├── ApplicantLayout.js  # Portal + Consent-Nav + Onboarding
-│   │   │       └── StaffLayout.js      # Staff + Teacher-Modus
+│   │   │       ├── ApplicantLayout.js  # Portal + Consent-Nav + Onboarding + Bell
+│   │   │       └── StaffLayout.js      # Staff + Teacher-Modus + Bell
 │   │   └── pages/
 │   │       ├── public/        # 8 Seiten (DE/EN, individuelle Preise)
 │   │       ├── portal/        # Bewerber (+ ConsentPage)
-│   │       └── staff/         # Staff + TeacherDashboard + ApplicantDetail (+ TeacherAssignmentPanel)
+│   │       └── staff/         # Staff + TeacherDashboard + ApplicantDetail
 │   └── .env
 └── memory/
     ├── PRD.md
@@ -80,30 +86,37 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 - NSCall-only AI, Teacher-Dashboard, Consent-UI, Onboarding-Tour, WhatsApp +49 1520 8496876
 
 ### Phase 3.7d: Individuelle Preisregel + Lehrer-Zuweisungs-UI (DONE - 2026-03-29)
-- **Individuelle Preisregel systemweit verankert**:
-  - AGB §5: Einzelfallabhängig, keine Pauschalpreise, individuelles Angebot
-  - AGB §8: Storno "sofern nicht im Einzelfall abweichend vereinbart"
-  - AGB §10: Verwaltungspauschale "Im Einzelfall können die tatsächlichen Kosten abweichen"
-  - FAQ: Neue Frage "Was kosten die Kurse?" → individuell, kein Festpreis
-  - Prozess-Schritt 4: "individuelles Angebot" statt "Zahlung"
-  - Cost Simulator: Disclaimer für Einzelfallabhängigkeit + Sub-Agenturen
-- **Sub-Agenturen/Partner**: Textlich und architektonisch vorbereitet für individuelle Konditionen
-- **Lehrer-Zuweisungs-UI**:
-  - TeacherAssignmentPanel in ApplicantDetailPage
-  - Staff kann Lehrer zuweisen/entfernen
-  - Datenschutz-Hinweis im Panel
-  - GET /api/teacher/list für Staff-Zugriff
-- **100% Tests**: 23/23 Backend + alle Frontend
+- Individuelle Preisregel systemweit verankert (AGB, FAQ, Prozess, Cost Simulator)
+- Sub-Agenturen/Partner: Textlich und architektonisch vorbereitet
+- Lehrer-Zuweisungs-UI (TeacherAssignmentPanel)
+
+### Phase 3.7e: E-Mail-Templates DE/EN + Notification-System (DONE - 2026-03-29)
+- **7 mehrsprachige E-Mail-Templates (DE/EN)**:
+  - send_welcome, send_application_received, send_document_requested,
+  - send_status_changed, send_password_reset, send_invite, send_teacher_assigned
+  - Alle ohne Festpreise, professionelle D/A/CH-konforme Sprache
+  - W2G Academy GmbH korrekt referenziert, Reply-To: info@stk-aachen.de
+- **In-App Notification-System**:
+  - 8 Notification-Typen mit DE/EN-Templates
+  - 4 API-Endpunkte: GET list, GET unread-count, PATCH read, PATCH read-all
+  - NotificationBell-Komponente in Staff- und Applicant-Layout
+  - Unread-Badge, Dropdown, Mark-as-Read, Mark-All-Read
+  - Auto-Polling alle 30 Sekunden
+- **Trigger-Verkabelung an Kernflows**:
+  - Statuswechsel → E-Mail + Notification an Bewerber
+  - Teacher-Zuweisung → E-Mail + Notification an Bewerber + Lehrer
+  - Consent Grant/Revoke → Notification an zugewiesenen Lehrer
+  - Dokument-Upload → Notification an Staff/Admin
+- **100% Tests**: 23/23 Backend + alle Frontend (iteration_8.json)
 
 ## Pending / Backlog
 
 ### P1 (Nächste Priorität)
-- E-Mail-Templates mehrsprachig (DE/EN)
-- Notification-System (Push + In-App)
 - Erweiterte Bewerber-Detail-Ansicht für Lehrer
 - Staff-Dashboard KPIs / Reporting
 
 ### P2 (Zukunft)
+- Payment-Freischaltung
 - Preiskalkulator entmocken (erst nach freigegebener Preislogik)
 - Partner-/Sub-Agentur-Portal (individuelle Konditionen)
 - Pflegefachschule & Arbeit/Ausbildung Workspaces

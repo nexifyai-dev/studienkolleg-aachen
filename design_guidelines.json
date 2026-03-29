@@ -1,0 +1,103 @@
+{
+  "theme": "Light Theme",
+  "archetype": "4 (Swiss & High-Contrast) modified with brand colors #113655 and #B3CDE1 for Authority and Clarity",
+  "colors": {
+    "primary": "#113655",
+    "primary_hover": "#0e2d47",
+    "accent": "#B3CDE1",
+    "accent_hover": "#a2bad1",
+    "background_marketing": "#FFFFFF",
+    "background_dashboard": "#F8FAFC",
+    "surface": "#FFFFFF",
+    "text_primary": "#0F172A",
+    "text_secondary": "#475569",
+    "border": "#E2E8F0",
+    "success": "#10B981",
+    "warning": "#F59E0B",
+    "error": "#EF4444"
+  },
+  "typography": {
+    "headings": {
+      "font": "Arboria, Inter, sans-serif",
+      "weight": "800",
+      "tracking": "tracking-tight"
+    },
+    "body": {
+      "font": "Inter, sans-serif",
+      "weight": "400",
+      "tracking": "tracking-normal"
+    },
+    "display": {
+      "font": "'KG Second Chances Sketch', cursive",
+      "usage": "Use sparingly for hand-drawn annotations, background text textures, or highlighting."
+    },
+    "scale": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl",
+      "h3": "text-xl sm:text-2xl",
+      "body": "text-base",
+      "small": "text-sm"
+    }
+  },
+  "layout_and_spacing": {
+    "marketing": {
+      "grid": "grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12",
+      "container_padding": "py-20 md:py-32 px-6 lg:px-12",
+      "style": "Asymmetric bento layouts, generous negative space, optical alignment."
+    },
+    "dashboard": {
+      "grid": "grid-cols-1 md:grid-cols-4 gap-4 md:gap-6",
+      "container_padding": "p-6 lg:p-8",
+      "style": "Dense data presentation, 1px solid borders, strict hierarchy."
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#113655] text-white hover:bg-[#0e2d47] rounded-none md:rounded-sm transition-all",
+      "secondary": "bg-[#B3CDE1] text-[#113655] hover:bg-[#a2bad1] rounded-none md:rounded-sm transition-all",
+      "outline": "border-2 border-[#113655] text-[#113655] hover:bg-slate-50 rounded-none md:rounded-sm transition-all"
+    },
+    "cards": {
+      "marketing": "bg-white p-8 border border-slate-100 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300",
+      "dashboard": "bg-white p-6 border border-slate-200 rounded-sm shadow-sm"
+    },
+    "inputs": "Shadcn defaults customized with focus:ring-[#B3CDE1] focus:border-[#113655] rounded-sm",
+    "navigation": "Crystal glassmorphism for marketing (backdrop-blur-xl bg-white/80 border-b border-slate-200/50). Solid white for dashboard."
+  },
+  "motion_and_interactions": {
+    "hover_states": "translate-y-[-2px] shadow-lg transition-transform duration-200 ease-out",
+    "page_transitions": "opacity fade-in duration-300",
+    "loading": "Subtle pulsing or skeleton loaders using #E2E8F0"
+  },
+  "media_urls": {
+    "hero_marketing": {
+      "url": "https://images.pexels.com/photos/7683629/pexels-photo-7683629.jpeg",
+      "description": "Group of college students walking together outdoors on a sunny day."
+    },
+    "about_students": {
+      "url": "https://images.pexels.com/photos/9158999/pexels-photo-9158999.jpeg",
+      "description": "A young woman uses a laptop in a cozy library setting."
+    },
+    "abstract_background": {
+      "url": "https://images.unsplash.com/photo-1583443965608-57b6bc3198e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxuYXZ5JTIwYmx1ZSUyMGFic3RyYWN0JTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzQ3NTYyNDZ8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Navy blue abstract background texture."
+    }
+  },
+  "icons": {
+    "library": "lucide-react",
+    "style": "stroke-width: 1.5, simple and legible"
+  },
+  "accessibility": {
+    "contrast": "Ensure APCA compliant contrast. Minimum 4.5:1 for standard text. Never use text lighter than slate-500 on white.",
+    "focus": "Visible focus rings on all interactive elements (ring-2 ring-offset-2 ring-[#113655]).",
+    "motion": "Respect prefers-reduced-motion media query for animations."
+  },
+  "instructions_to_main_agent": [
+    "Build the marketing website using the 'marketing' layout rules: high contrast, bento grids, emotional but controlled.",
+    "Build the dashboard portals (Applicant, Staff, Admin) using Shadcn primitives customized to #113655 primary and #B3CDE1 accent.",
+    "Implement navigation with glassmorphism for public site and solid sidebar/header for portal.",
+    "Use Arboria/Inter for headings and Inter for body. Use KG Second Chances Sketch ONLY as a subtle design motif (e.g., watermark, highlight text).",
+    "Add 'data-testid' to all interactive and significant informational elements.",
+    "Use the provided image URLs exclusively for media slots."
+  ]
+}

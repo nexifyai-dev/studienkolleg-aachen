@@ -246,7 +246,13 @@ COST_SIMULATOR_ENABLED=false (intern, nicht öffentlich)
 - E-Mail-Templates (Willkommen, Bewerbung, Dokument, Reset, Invite)
 - Go-Live-Blocker-Dokumentation
 
-### v1.3.0 – Phase 3.6 – Systemweite UI-Harmonisierung (29. März 2026)
+### v1.3.1 – Phase 3.6b – Preview-Wahrheit hergestellt (29. März 2026)
+- **Rechtsseiten vollständig produktionsreif gemacht**: Impressum zeigt alle Pflichtangaben direkt in strukturierten Karten (W2G Academy GmbH, Theaterstraße 24, Laura Saboor, HRB 23610, Beratungsstandort Theaterstraße 30–32) – kein Accordion-Versteck mehr für Kerndaten
+- **Entwickler-Staging-Banners entfernt**: "Neue Kontaktbasis", "Quelle:", "Basis:", globaler "Rechtlicher Hinweis"-Box – alle aus öffentlicher Ansicht entfernt. Nur kleiner Fußnotentext "Finale rechtliche Prüfung vor Go-Live ausstehend"
+- **AGB** (/agb): §1–§16 direkt als Accordions, "Stand: 06.02.2026" Fußnote
+- **Datenschutz** (/privacy): Abschnitte 1–10, "Stand: Februar 2026" Fußnote
+- **10/10 Tests bestanden** – alle öffentlichen Rechts- und Kursseiten korrekt im Live-Preview
+- **Kritische Regel**: Preview schlägt Handoff – immer Preview verifizieren vor Fertigmeldung
 - **Farb-Vollbereinigung**: Kein Pastell, kein helles Blau, kein Grün mehr in der gesamten Plattform (public/staff/portal/admin/auth)
 - **Designregel systemweit**: NUR Corporate Blau (#113655) + Weiß + neutrale Grautöne; `text-blue-*` → `text-white/*` in dunklen Bereichen; `bg-green-*` → `bg-primary/*` oder `bg-slate-*`
 - **Öffentliche Seiten vollständig harmonisiert**: CoursesPage, ServicesPage, ContactPage, ApplyPage, LegalPage, HomePage, Footer

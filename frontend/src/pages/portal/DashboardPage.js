@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { FileText, MessageSquare, CreditCard, CheckCircle, Clock, AlertCircle, BookOpen } from 'lucide-react';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function DashboardPage() {
   const { t } = useTranslation();
@@ -19,8 +18,8 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         const [statsRes, appsRes] = await Promise.all([
-          axios.get(`${API}/api/dashboard/stats`, { withCredentials: true }),
-          axios.get(`${API}/api/applications`, { withCredentials: true }),
+          apiClient.get(`/api/dashboard/stats`, { withCredentials: true }),
+          apiClient.get(`/api/applications`, { withCredentials: true }),
         ]);
         setStats(statsRes.data);
         setApplications(appsRes.data);

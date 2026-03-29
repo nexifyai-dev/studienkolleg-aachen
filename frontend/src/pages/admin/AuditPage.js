@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { formatDate } from '../../lib/utils';
 import { RefreshCw } from 'lucide-react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function AuditPage() {
   const [logs, setLogs] = useState([]);
@@ -12,7 +11,7 @@ export default function AuditPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API}/api/audit-logs`, { withCredentials: true });
+      const res = await apiClient.get(`/api/audit-logs`, { withCredentials: true });
       setLogs(res.data);
     } catch {}
     finally { setLoading(false); }

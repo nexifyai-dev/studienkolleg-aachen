@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 import { CheckCircle, Circle, Clock } from 'lucide-react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 const ALL_STAGES = [
   'lead_new','contacted','docs_requested','docs_received',
@@ -17,7 +16,7 @@ export default function JourneyPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${API}/api/applications`, { withCredentials: true })
+    apiClient.get(`/api/applications`, { withCredentials: true })
       .then(r => setApplications(r.data))
       .catch(() => {})
       .finally(() => setLoading(false));

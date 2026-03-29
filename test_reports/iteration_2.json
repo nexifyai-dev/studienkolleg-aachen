@@ -1,0 +1,51 @@
+{
+  "summary": "Security Hardening iteration 2 test. All RBAC checks pass (403/401), auth flows pass, Kanban board works, applicant/admin login redirect works. One critical bug: brute force protection broken due to Kubernetes load balancer splitting requests across multiple proxy IPs. 12/14 backend tests pass, 1 skipped (task creation requires application_id), 1 failed (brute force).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/auth/login (brute force lockout)",
+        "issue": "Brute force protection does NOT work in Kubernetes deployment. Uses request.client.host for IP, but k8s ingress routes through multiple proxy IPs (10.64.129.7, 10.64.130.89), splitting the attempt count across two identifiers. After 5 failed attempts, the count never reaches 5 on a single identifier, so 429 is never triggered.",
+        "priority": "CRITICAL",
+        "rca": "auth.py line 73: identifier = f'{client_ip}:{email}' — client_ip comes from request.client.host which is the k8s proxy IP, not the real client IP. Fix: Use X-Forwarded-For header with fallback: client_ip = request.headers.get('X-Forwarded-For', request.client.host if request.client else 'unknown').split(',')[0].strip()"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_security_hardening.py",
+    "/app/test_reports/pytest/pytest_results_iter2.xml"
+  ],
+  "action_items": [
+    "CRITICAL: Fix brute force IP detection in routers/auth.py. Change: client_ip = request.headers.get('X-Forwarded-For', request.client.host if request.client else 'unknown').split(',')[0].strip()"
+  ],
+  "critical_code_review_comments": [
+    "Brute force uses request.client.host — fails behind k8s ingress/load balancer where traffic comes from multiple proxy nodes",
+    "Task creation endpoint requires application_id — standalone task creation not supported, ownership check test needs rework"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_security_hardening.py"
+  ],
+  "success_rate": {
+    "backend": "86% (12/14: 12 passed, 1 failed, 1 skipped)",
+    "frontend": "100% (Homepage, Login form, Admin→/staff, Applicant→/portal, Kanban board all working)"
+  },
+  "test_credentials": {
+    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "test_applicant_ui": "TEST_portal_ui@example.com / Portal@2026!"
+  },
+  "seed_data_creation": "Created multiple TEST_ prefixed applicants and lead users during testing",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All security RBAC tests pass (403/401 for applicant on audit-logs, users, other user update; 401 for unauth workspace POST). Admin login→/staff, Applicant→/portal, Kanban board, Token refresh, Logout, Lead claiming all work. Only failing: brute force (k8s multi-IP issue). Fix: use X-Forwarded-For header in auth.py.",
+  "rca_of_issue": {
+    "bug": "Brute force lockout returns 401 on 6th attempt instead of 429",
+    "root_cause": "auth.py uses request.client.host for IP identification. Behind Kubernetes ingress/load balancer, requests rotate between proxy IPs (10.64.129.7 and 10.64.130.89). The count is split across two identifiers (e.g., '10.64.129.7:email' and '10.64.130.89:email'), neither reaching threshold of 5.",
+    "fix": "In routers/auth.py line ~73: client_ip = request.headers.get('X-Forwarded-For', request.client.host if request.client else 'unknown').split(',')[0].strip()",
+    "reproduction": "Send 6 rapid POST /api/auth/login requests with wrong password — check login_attempts collection to see count split across 2 IPs"
+  }
+}

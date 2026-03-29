@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { Users, FileText, CheckSquare, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { STAGE_LABELS } from '../../lib/utils';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function StaffDashboard() {
   const { user } = useAuth();
@@ -17,8 +16,8 @@ export default function StaffDashboard() {
     const load = async () => {
       try {
         const [statsRes, appsRes] = await Promise.all([
-          axios.get(`${API}/api/dashboard/stats`, { withCredentials: true }),
-          axios.get(`${API}/api/applications`, { withCredentials: true }),
+          apiClient.get(`/api/dashboard/stats`, { withCredentials: true }),
+          apiClient.get(`/api/applications`, { withCredentials: true }),
         ]);
         setStats(statsRes.data);
         setRecentApps(appsRes.data.slice(0, 10));

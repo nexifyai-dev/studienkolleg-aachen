@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 import { Users, RefreshCw } from 'lucide-react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 const KANBAN_STAGES = [
   'lead_new', 'contacted', 'docs_requested', 'docs_received',
@@ -17,7 +16,7 @@ export default function KanbanPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API}/api/applications`, { withCredentials: true });
+      const res = await apiClient.get(`/api/applications`, { withCredentials: true });
       setApplications(res.data);
     } catch {}
     finally { setLoading(false); }
@@ -27,7 +26,7 @@ export default function KanbanPage() {
 
   const moveApplication = async (appId, newStage) => {
     try {
-      await axios.put(`${API}/api/applications/${appId}`, { current_stage: newStage }, { withCredentials: true });
+      await apiClient.put(`/api/applications/${appId}`, { current_stage: newStage }, { withCredentials: true });
       setApplications(prev => prev.map(a => a.id === appId ? { ...a, current_stage: newStage } : a));
     } catch (e) { console.error(e); }
   };

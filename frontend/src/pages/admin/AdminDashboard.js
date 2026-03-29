@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { Users, Activity, Database, Link } from 'lucide-react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${API}/api/dashboard/stats`, { withCredentials: true })
+    apiClient.get(`/api/dashboard/stats`, { withCredentials: true })
       .then(r => setStats(r.data))
       .catch(() => {})
       .finally(() => setLoading(false));

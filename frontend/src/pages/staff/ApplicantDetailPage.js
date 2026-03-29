@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS, formatDate } from '../../lib/utils';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function ApplicantDetailPage() {
   const { id } = useParams();
@@ -17,10 +16,10 @@ export default function ApplicantDetailPage() {
     const load = async () => {
       try {
         const [appRes] = await Promise.all([
-          axios.get(`${API}/api/applications/${id}`, { withCredentials: true }),
+          apiClient.get(`/api/applications/${id}`, { withCredentials: true }),
         ]);
         setApp(appRes.data);
-        const docsRes = await axios.get(`${API}/api/applications/${id}/documents`, { withCredentials: true });
+        const docsRes = await apiClient.get(`/api/applications/${id}/documents`, { withCredentials: true });
         setDocs(docsRes.data);
       } catch {}
       finally { setLoading(false); }

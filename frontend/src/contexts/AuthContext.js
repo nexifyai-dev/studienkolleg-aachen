@@ -1,16 +1,17 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import apiClient from '../lib/apiClient';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(undefined); // undefined = loading
+  const [user, setUser] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
   const checkAuth = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${API}/api/auth/me`, { withCredentials: true });
+      const { data } = await apiClient.get('/api/auth/me');
       setUser(data);
     } catch {
       setUser(null);
@@ -22,19 +23,20 @@ export function AuthProvider({ children }) {
   useEffect(() => { checkAuth(); }, [checkAuth]);
 
   const login = async (email, password) => {
+    // Login uses raw axios (no interceptor loop needed – this IS the auth call)
     const { data } = await axios.post(`${API}/api/auth/login`, { email, password }, { withCredentials: true });
     setUser(data);
     return data;
   };
 
   const logout = async () => {
-    try { await axios.post(`${API}/api/auth/logout`, {}, { withCredentials: true }); } catch {}
+    try { await apiClient.post('/api/auth/logout', {}); } catch {}
     setUser(null);
   };
 
   const refreshUser = async () => {
     try {
-      const { data } = await axios.get(`${API}/api/auth/me`, { withCredentials: true });
+      const { data } = await apiClient.get('/api/auth/me');
       setUser(data);
       return data;
     } catch {

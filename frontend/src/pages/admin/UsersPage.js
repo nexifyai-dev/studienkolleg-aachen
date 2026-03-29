@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { ROLE_LABELS, formatDate } from '../../lib/utils';
 import { UserPlus, RefreshCw } from 'lucide-react';
 import { formatApiError } from '../../contexts/AuthContext';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -17,7 +16,7 @@ export default function UsersPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API}/api/users`, { withCredentials: true });
+      const res = await apiClient.get(`/api/users`, { withCredentials: true });
       setUsers(res.data);
     } catch {}
     finally { setLoading(false); }
@@ -28,7 +27,7 @@ export default function UsersPage() {
   const handleInvite = async e => {
     e.preventDefault(); setError(''); setInviteResult(null);
     try {
-      const res = await axios.post(`${API}/api/auth/invite`, invite, { withCredentials: true });
+      const res = await apiClient.post(`/api/auth/invite`, invite, { withCredentials: true });
       setInviteResult(res.data);
     } catch (err) {
       setError(formatApiError(err.response?.data?.detail));

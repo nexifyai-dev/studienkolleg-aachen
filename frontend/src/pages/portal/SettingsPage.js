@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { Loader2, CheckCircle } from 'lucide-react';
 import { formatApiError } from '../../contexts/AuthContext';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function SettingsPage() {
   const { user, refreshUser } = useAuth();
@@ -17,7 +16,7 @@ export default function SettingsPage() {
     e.preventDefault();
     setLoading(true); setError(''); setSuccess(false);
     try {
-      await axios.put(`${API}/api/users/${user.id}`, form, { withCredentials: true });
+      await apiClient.put(`/api/users/${user.id}`, form, { withCredentials: true });
       await refreshUser();
       setSuccess(true);
     } catch (err) {

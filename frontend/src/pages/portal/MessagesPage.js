@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { MessageSquare, Send } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 import { useAuth } from '../../contexts/AuthContext';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -16,7 +15,7 @@ export default function MessagesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${API}/api/conversations`, { withCredentials: true })
+    apiClient.get(`/api/conversations`, { withCredentials: true })
       .then(r => { setConversations(r.data); if (r.data[0]) setActiveConv(r.data[0]); })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -24,7 +23,7 @@ export default function MessagesPage() {
 
   useEffect(() => {
     if (!activeConv) return;
-    axios.get(`${API}/api/conversations/${activeConv.id}/messages`, { withCredentials: true })
+    apiClient.get(`/api/conversations/${activeConv.id}/messages`, { withCredentials: true })
       .then(r => setMessages(r.data))
       .catch(() => {});
   }, [activeConv]);
@@ -34,14 +33,14 @@ export default function MessagesPage() {
     if (!newMsg.trim()) return;
     setSending(true);
     try {
-      const res = await axios.post(`${API}/api/messages`,
+      const res = await apiClient.post(`/api/messages`,
         { conversation_id: activeConv?.id, content: newMsg },
         { withCredentials: true }
       );
       setMessages(p => [...p, res.data]);
       setNewMsg('');
       if (!activeConv) {
-        const convs = await axios.get(`${API}/api/conversations`, { withCredentials: true });
+        const convs = await apiClient.get(`/api/conversations`, { withCredentials: true });
         setConversations(convs.data);
         setActiveConv(convs.data[0]);
       }

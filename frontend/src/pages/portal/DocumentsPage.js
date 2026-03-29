@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import apiClient from '../../lib/apiClient';
 import { FileText, Upload, CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 
 const STATUS_CONFIG = {
   uploaded: { label: 'Hochgeladen', icon: Clock, color: 'text-blue-600 bg-blue-50' },
@@ -26,10 +25,10 @@ export default function DocumentsPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const appsRes = await axios.get(`${API}/api/applications`, { withCredentials: true });
+        const appsRes = await apiClient.get(`/api/applications`, { withCredentials: true });
         setApps(appsRes.data);
         if (appsRes.data[0]) {
-          const docsRes = await axios.get(`${API}/api/applications/${appsRes.data[0].id}/documents`, { withCredentials: true });
+          const docsRes = await apiClient.get(`/api/applications/${appsRes.data[0].id}/documents`, { withCredentials: true });
           setDocs(docsRes.data);
         }
       } catch {}
@@ -43,11 +42,11 @@ export default function DocumentsPage() {
     if (!apps[0]) return;
     setUploading(true);
     try {
-      await axios.post(`${API}/api/applications/${apps[0].id}/documents/upload`,
+      await apiClient.post(`/api/applications/${apps[0].id}/documents/upload`,
         { document_type: uploadForm.doc_type, filename: uploadForm.filename || uploadForm.doc_type },
         { withCredentials: true }
       );
-      const docsRes = await axios.get(`${API}/api/applications/${apps[0].id}/documents`, { withCredentials: true });
+      const docsRes = await apiClient.get(`/api/applications/${apps[0].id}/documents`, { withCredentials: true });
       setDocs(docsRes.data);
       setShowUpload(false);
     } catch (e) { console.error(e); }

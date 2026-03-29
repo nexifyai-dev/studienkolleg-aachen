@@ -152,13 +152,13 @@ export default function ConsentPage() {
             <div className="p-5 sm:p-6">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-sm flex items-center justify-center ${isActive ? 'bg-green-50' : 'bg-slate-100'}`}>
-                    <Shield size={20} className={isActive ? 'text-green-600' : 'text-slate-400'} />
+                  <div className={`w-10 h-10 rounded-sm flex items-center justify-center ${isActive ? 'bg-primary/10' : 'bg-slate-100'}`}>
+                    <Shield size={20} className={isActive ? 'text-primary' : 'text-slate-400'} />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-800 text-sm">{info.title}</h3>
                     <span className={`text-xs px-2 py-0.5 rounded-sm border ${
-                      isActive ? 'bg-green-50 text-green-700 border-green-200' : 'bg-slate-50 text-slate-500 border-slate-200'
+                      isActive ? 'bg-primary/10 text-primary border-primary/20' : 'bg-slate-50 text-slate-500 border-slate-200'
                     }`}>
                       {isActive ? l.active : l.not_granted}
                     </span>

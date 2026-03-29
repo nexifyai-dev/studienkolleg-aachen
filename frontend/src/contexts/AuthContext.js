@@ -1,9 +1,16 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import apiClient from '../lib/apiClient';
+import i18n from '../i18n';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 const AuthContext = createContext(null);
+
+function syncLanguage(userData) {
+  if (userData?.language_pref && i18n.language !== userData.language_pref) {
+    i18n.changeLanguage(userData.language_pref);
+  }
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(undefined);
@@ -13,6 +20,7 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await apiClient.get('/api/auth/me');
       setUser(data);
+      syncLanguage(data);
     } catch {
       setUser(null);
     } finally {
@@ -23,9 +31,9 @@ export function AuthProvider({ children }) {
   useEffect(() => { checkAuth(); }, [checkAuth]);
 
   const login = async (email, password) => {
-    // Login uses raw axios (no interceptor loop needed – this IS the auth call)
     const { data } = await axios.post(`${API}/api/auth/login`, { email, password }, { withCredentials: true });
     setUser(data);
+    syncLanguage(data);
     return data;
   };
 
@@ -38,6 +46,7 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await apiClient.get('/api/auth/me');
       setUser(data);
+      syncLanguage(data);
       return data;
     } catch {
       setUser(null);

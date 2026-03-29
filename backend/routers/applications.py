@@ -132,6 +132,26 @@ async def get_application(app_id: str, user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Forbidden")
     if user["role"] in PARTNER_ROLES and app_dict.get("organization_id") != user.get("organization_id"):
         raise HTTPException(status_code=403, detail="Forbidden")
+    # Join applicant user data for staff
+    if user["role"] in STAFF_ROLES and app_dict.get("applicant_id"):
+        try:
+            applicant = await db.users.find_one(
+                {"_id": ObjectId(app_dict["applicant_id"])},
+                {"full_name": 1, "email": 1, "phone": 1, "country": 1,
+                 "first_name": 1, "last_name": 1, "date_of_birth": 1, "language_pref": 1},
+            )
+            if applicant:
+                app_dict["applicant"] = to_str_id(dict(applicant))
+        except Exception:
+            pass
+    # Join workspace name
+    if app_dict.get("workspace_id"):
+        try:
+            ws = await db.workspaces.find_one({"_id": ObjectId(app_dict["workspace_id"])}, {"name": 1})
+            if ws:
+                app_dict["workspace_name"] = ws.get("name")
+        except Exception:
+            pass
     return app_dict
 
 

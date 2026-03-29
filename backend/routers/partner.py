@@ -29,9 +29,9 @@ async def partner_dashboard(user: dict = Depends(get_current_user)):
     db = get_db()
     uid = user["id"]
 
-    total = await db.applications.count_documents({"referred_by": uid})
-    active = await db.applications.count_documents({"referred_by": uid, "current_stage": {"$nin": ["declined", "archived"]}})
-    enrolled = await db.applications.count_documents({"referred_by": uid, "current_stage": "enrolled"})
+    total = await db.applications.count_documents({"referral_code": uid})
+    active = await db.applications.count_documents({"referral_code": uid, "current_stage": {"$nin": ["declined", "archived"]}})
+    enrolled = await db.applications.count_documents({"referral_code": uid, "current_stage": "enrolled"})
 
     return {
         "total_referrals": total,
@@ -49,7 +49,7 @@ async def list_referrals(user: dict = Depends(get_current_user)):
     uid = user["id"]
 
     apps_raw = await db.applications.find(
-        {"referred_by": uid},
+        {"referral_code": uid},
         {"_id": 1, "applicant_id": 1, "current_stage": 1, "course_type": 1, "created_at": 1}
     ).sort("created_at", -1).to_list(200)
 

@@ -103,7 +103,7 @@ export default function StaffDashboard() {
           color="text-primary bg-primary/10" link="/staff/kanban?stage=in_review"
           testId="stat-in-review" />
         <StatCard label="Docs ausstehend" value={pendingDocs.length} icon={FileText}
-          color="text-amber-600 bg-amber-50" link="/staff/kanban?stage=pending_docs"
+          color="text-primary bg-primary/10" link="/staff/kanban?stage=pending_docs"
           testId="stat-pending-docs" />
         <StatCard label="Gesamt Bewerber" value={apps.length} icon={Users}
           color="text-slate-600 bg-slate-100" link="/staff/kanban"
@@ -175,9 +175,9 @@ export default function StaffDashboard() {
                 )}
                 {pendingDocs.length > 0 && (
                   <Link to="/staff/kanban?stage=pending_docs" data-testid="action-pending-docs"
-                    className="flex items-center justify-between px-3 py-2 bg-amber-50 border border-amber-200 rounded-sm text-sm hover:bg-amber-100/50 transition-colors">
+                    className="flex items-center justify-between px-3 py-2 bg-primary/5 border border-primary/15 rounded-sm text-sm hover:bg-primary/10 transition-colors">
                     <span className="text-slate-700">{pendingDocs.length} Docs ausstehend</span>
-                    <ArrowRight size={14} className="text-amber-600" />
+                    <ArrowRight size={14} className="text-primary" />
                   </Link>
                 )}
               </div>
@@ -246,20 +246,20 @@ export default function StaffDashboard() {
 
           {/* Wiedervorlagen */}
           {followups.length > 0 && (
-            <div className="bg-white border border-amber-200 rounded-sm p-4" data-testid="followups-panel">
+            <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="followups-panel">
               <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
-                <CalendarClock size={14} className="text-amber-500" /> Wiedervorlagen ({followups.length})
+                <CalendarClock size={14} className="text-primary" /> Wiedervorlagen ({followups.length})
               </h3>
               <div className="space-y-2">
                 {followups.slice(0, 5).map(f => (
                   <Link key={f.id} to={`/staff/applications/${f.application_id}`}
                     data-testid={`followup-${f.id}`}
-                    className="flex items-center justify-between px-2 py-2 rounded-sm text-xs hover:bg-amber-50 transition-colors border border-amber-100">
+                    className="flex items-center justify-between px-2 py-2 rounded-sm text-xs hover:bg-primary/5 transition-colors border border-slate-100">
                     <div className="min-w-0">
                       <p className="font-medium text-slate-700 truncate">{f.applicant_name || 'Bewerber'}</p>
                       <p className="text-slate-500 truncate">{f.reason}</p>
                     </div>
-                    <span className="text-[10px] text-amber-600 whitespace-nowrap ml-2">{f.due_date}</span>
+                    <span className="text-[10px] text-primary whitespace-nowrap ml-2">{f.due_date}</span>
                   </Link>
                 ))}
               </div>

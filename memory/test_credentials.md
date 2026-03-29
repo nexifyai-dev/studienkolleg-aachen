@@ -1,42 +1,37 @@
 # Test Credentials – W2G Platform
 
-## Admin-Zugang
-- E-Mail: admin@studienkolleg-aachen.de
-- Passwort: Admin@2026!
-- Rolle: superadmin
-- Hinweis: Idempotent durch seed.py erzeugt
+## Kernrollen (Dev/Preview)
 
-## Test-Bewerber
-- E-Mail: TEST_portal_ui@example.com
-- Passwort: Portal@2026!
-- Rolle: applicant
-- Hinweis: Wird vom Testing-Agent erwartet
+| Rolle | E-Mail | Passwort | Systemrolle |
+|-------|--------|----------|-------------|
+| Admin | admin@studienkolleg-aachen.de | Admin@2026! | superadmin |
+| Staff | staff@studienkolleg-aachen.de | DevSeed@2026! | staff |
+| Lehrer | teacher@studienkolleg-aachen.de | DevSeed@2026! | teacher |
+| Bewerber | applicant@studienkolleg-aachen.de | DevSeed@2026! | applicant |
 
-## Test-Bewerberdaten (für Formular-Tests)
-- E-Mail: test-phase3-2026@example.com (bereits in DB)
-- Application ID: 69c8b08ac3ab59729d52e226
+## Wie Accounts erzeugt werden
 
-## URLs (aktuell)
-- Frontend: https://legal-i18n-verify.preview.emergentagent.com
-- Backend: https://legal-i18n-verify.preview.emergentagent.com/api
-- Backend (lokal): http://localhost:8001
+- **Admin**: via `ADMIN_EMAIL` + `ADMIN_PASSWORD` in `backend/.env` (seed.py)
+- **Staff/Teacher/Applicant**: via `SEED_DEV_PASSWORD` in `backend/.env` (seed.py)
+- Alle Accounts werden idempotent beim Backend-Start geseeded
+- Passwort-Rotation: Ändern der ENV-Variable → nächster Start aktualisiert den Hash
 
-## Testrouten
-- Öffentlich: /, /apply, /legal, /agb, /privacy, /courses, /services, /contact
-- Auth: /auth/login, /auth/register, /auth/forgot-password
-- Staff: /staff, /staff/kanban, /staff/applications/{id}
-- Admin: /admin, /admin/users, /admin/audit
-- Portal: /portal, /portal/documents, /portal/journey, /portal/messages
+## API Testing
 
-## Test-API-Endpunkte
-- POST /api/leads/ingest (öffentlich)
-- POST /api/auth/login
-- GET /api/applications/{id}/ai-screenings (Staff)
-- POST /api/applications/{id}/ai-screen (Staff)
-- GET /api/internal/cost-simulator/config (Staff, Feature-Flag)
+```bash
+API_URL=https://legal-i18n-verify.preview.emergentagent.com
 
-## Wichtige Hinweise für Testing
-- Auth: httpOnly Cookies (nicht Authorization Header für Login)
-- AI Screening: LLM kann null sein (Budget), lokale Checks laufen immer
-- Email: Resend-Domain nicht verifiziert → Emails loggen, nicht senden (kein Test-Fehler)
-- Uploads: base64-encoded im JSON-Body bei /api/leads/ingest
+# Admin Login
+curl -s -X POST "$API_URL/api/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@studienkolleg-aachen.de","password":"Admin@2026!"}'
+
+# Teacher Login
+curl -s -X POST "$API_URL/api/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"teacher@studienkolleg-aachen.de","password":"DevSeed@2026!"}'
+```
+
+## Lead/Application Test (Formular)
+
+Dokument-Uploads: base64-encoded im JSON-Body bei /api/leads/ingest

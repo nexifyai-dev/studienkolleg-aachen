@@ -1,0 +1,145 @@
+<analysis>**original_problem_statement**: 
+Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany mit Public Website, Applicant Portal und Staff/Admin-Bereich. 
+**Aktuelle Phase (Nach erfolgreichem Foundation-Build & Hardening):** 
+1. Neue Kontakt-/Legal-Basis (AGB, Impressum, Datenschutz) strukturiert integrieren.
+2. Bestehende Medien-Assets (Bilder, Logos, Videos) der Live-Seite in das neue Frontend einbinden.
+3. Bewerbungsformular fachlich komplettieren (spezifische Pflichtfelder wie Kurs, Semester, Sprachniveau, sowie Pflicht-Uploads: Sprachzertifikat, Zeugnis, Pass).
+4. KI-gestützte Bewerberprüfung einbauen (Anabin als Referenz, formale Vorprüfung, Vollständigkeit, Statusvorschlag).
+5. Workflow-Automationen pro Bewerberfall (Emails, Reminder, Statuswechsel).
+6. Internen (nicht-öffentlichen) Staff-Kosten-Simulator architektonisch vorbereiten.
+
+**User's preferred language**: INSTRUCT next agent to respond in **German** (Deutsch).
+
+**what currently exists?**: 
+Ein funktionales, gehärtetes MVP (v1.1.0). Backend: FastAPI + MongoDB mit modularer Struktur (Routers, Services), JWT Auth inkl. Auto-Refresh, und RBAC Middleware mit Brute-Force-Schutz. Frontend: React + Tailwind + React Router + i18next (DE/EN) mit einem Axios- und etablierten Shells für Public, Applicant, Staff und Admin. Lokale Storage-Abstraktion und Resend-Mail-Struktur sind vorbereitet.
+
+**Last working item**:
+- Last item agent was working: The agent just received the massive prompt for Phase 3. It executed initial reconnaissance (fetching the Emergent LLM Key, crawling the old AGB site) but has not yet updated the  with the user-provided Resend API key or started the code implementations for the AI screening, assets, and form updates.
+- Status: IN PROGRESS
+- Agent Testing Done: N
+- Which testing method agent to use? backend testing agent & frontend testing agent (After major feature implementations).
+- User Testing Done: N
+
+**All Pending/In progress Issue list**:
+Issue 1: Update  with 
+- Description: User provided the Resend key () in the text prompt, but it has not been saved to the backend  file yet. Priority: P0.
+- Attempted fixes: Agent only ran  which returned empty.
+- Next debug checklist: Update  with the key.
+- Why fix this issue and what will be achieved with the fix?: Required to finalize the email automation service structure.
+- Status: NOT STARTED
+- Is recurring issue? N
+- Should Test frontend/backend/both after fix?: backend
+- Blocked on other issue: None
+
+**In progress Task List**:
+Task 1: Legal & Contact texts integration
+- Where to resume: Agent just crawled the AGB URL. Needs to integrate Impressum, Datenschutz, and AGB into the React frontend pages ().
+- What will be achieved with this?: Compliance with the requested W2G Academy GmbH legal structure.
+- Status: IN PROGRESS
+- Should Test frontend/backend/both after fix?: frontend
+- Blocked on something: None
+
+**Upcoming and Future Tasks**:
+Upcoming Tasks:
+- Task 1 (P0): Complete the Application/Registration Form with specific fields (Course, Date, Language Level, Degree Country) and enforce required document uploads (German Lang Cert, Highschool Diploma, Passport). Update DB schemas accordingly.
+- Task 2 (P0): Incorporate specific existing media assets (URLs provided in prompt) and YouTube videos into the Public Website UI while maintaining the modern, high-contrast Swiss archetype design.
+- Task 3 (P0): Build AI-assisted application screening. Use the Emergent LLM key () to evaluate uploaded form data & docs against Anabin criteria, generating staff recommendations and audit trails.
+- Task 4 (P0): Implement backend automation pipelines (Triggers for incoming applications, missing docs notifications, staff review queues, emails via Resend).
+- Task 5 (P1): Prepare an internal, feature-flagged Staff Cost Simulator (DO NOT make it public).
+
+Future Tasks:
+- Finalize Pricing & Refund Logic (Currently marked as  / Blocked pending user business decisions).
+
+**Completed work in this session**:
+- Full repository  analysis and MVP planning (DONE)
+- Foundational Frontend & Backend Setup (DONE)
+- JWT Auth implementation with refresh tokens and RBAC (DONE)
+- Backend modularization ( split into  and ) (DONE)
+- Security hardening (Fixed MongoDB mixed projections, horizontal privilege leaks, Brute-Force proxy IP extraction) (DONE)
+- PRD and Go-Live Blockers documentation (DONE)
+
+**Earlier issues found/mentioned but not fixed**:
+Issue 1: Pricing/Refund rules and Final Legal texts are pending business approval.
+- Debug checklist: Do not invent pricing or legal rules. Keep them marked as .
+- Why to solve this issue and what will be achieved with this?: Ensures compliance with user instructions not to fake unverified business logic.
+- Should Test frontend/backend/both after fix: NA
+- Is recurring issue? N
+
+**Known issue recurrence from previous fork**:
+- Issue recurrence in previous fork: N/A (First fork)
+- Recurrence count: 0
+- Status: NOT STARTED
+
+**Code Architecture**:
+
+
+**Key Technical Concepts**:
+React, Tailwind CSS, FastAPI, MongoDB (Motor), JWT Authentication, i18next (Multi-language), Resend (Email Automation), AI Screening (LLM integration via Emergent).
+
+**key DB schema**:
+- : {id, email, password_hash, role, workspace_id, language_pref}
+- : {id, user_id, course, status, documents}
+- : {identifier, count, expires_at}
+- : {id, name, active}
+
+**changes in tech stack**:
+- Strict usage of MongoDB as per user instruction (overriding any Supabase suggestions in the initial docs).
+
+**All files of reference**:
+-  (Needs RESEND_API_KEY injection)
+-  (Main entry point, now an App Factory)
+-  (Axios interceptor for tokens)
+-  (Contains admin login info)
+- 
+
+**Areas that need refactoring**:
+- None currently. Backend was just heavily modularized. 
+
+**key api endpoints**:
+- 
+- 
+- 
+-  (Needs expansion for new form fields & uploads)
+
+**Critical Info for New Agent**:
+- **Emergent LLM Key**: The agent fetched it successfully (). Use this strictly for the AI application screening implementation.
+- **Resend Key**: User provided  in the last message. Inject this into .
+- **Anabin**: The user explicitly requires you to use the Anabin database logic conceptually for the AI degree validation.
+- **Pricing**: Do NOT build a public pricing calculator. Only scaffold an internal staff simulator. Keep actual prices as .
+
+**documents and test reports created in this job**:
+- 
+- 
+- 
+- 
+- 
+
+**Last 10 User Messages and any pending HUMAN messages**:
+1. (Pending Execution) User provides  and a large prompt for Phase 3: Integrate new Legal info, bind existing media assets (images/videos from live site), expand the application form with specific fields/uploads, build AI application screening (with Anabin), add workflow automations, and prep an internal cost simulator.
+2. User provides Phase 2 instructions: Hardening, modularization, security fixes, and Go-Live Blocker documentation. (COMPLETED)
+3. User gives Phase 1 feedback: Fix small remaining issues, finish foundation. (COMPLETED)
+
+**Project Health Check**:
+- Broken: None (v1.1.0 passed testing)
+- Mocked: File Storage is currently purely metadata/local (needs S3 abstraction preparation as requested).
+
+**3rd Party Integrations**:
+- Resend (Emails) — requires User API Key (Provided in the chat).
+- OpenAI/Claude (AI Screening) — uses Emergent LLM Key (Fetched: ).
+
+**Testing status**:
+- Testing agent used after significant changes: YES
+- Troubleshoot agent used after agent stuck in loop: NO
+- Test files created: None explicitly created, reports generated at 
+- Known regressions: None
+
+**Credentials to test flow**:
+Check . Default admin is  / .
+
+**What agent forgot to execute**:
+The agent fetched the AGB content and the Emergent LLM key, but forgot to immediately write the  (provided by the user) into . It also has not yet started implementing the form expansion, media asset integration, or AI screening workflows requested in the user's latest prompt.
+
+**Debugging checklist for current issue**:
+Issue: Missing Resend API Key in environment.
+Backend files to check: 
+Fix: Use  or echo to append  into the backend  file and restart supervisor.</analysis>

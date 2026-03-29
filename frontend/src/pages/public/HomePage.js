@@ -66,10 +66,10 @@ function YouTubeEmbed({ src, title }) {
 }
 
 const COURSES = [
-  { key: 't_course', color: 'bg-blue-50 border-blue-200 hover:border-blue-400', badge: 'T-Kurs', badgeColor: 'bg-blue-100 text-blue-700' },
-  { key: 'm_course', color: 'bg-green-50 border-green-200 hover:border-green-400', badge: 'M-Kurs', badgeColor: 'bg-green-100 text-green-700' },
-  { key: 'w_course', color: 'bg-purple-50 border-purple-200 hover:border-purple-400', badge: 'W-Kurs', badgeColor: 'bg-purple-100 text-purple-700' },
-  { key: 'mt_course', color: 'bg-orange-50 border-orange-200 hover:border-orange-400', badge: 'M/T-Kurs', badgeColor: 'bg-orange-100 text-orange-700' },
+  { key: 't_course', badge: 'T-Kurs', accentColor: 'border-l-blue-500' },
+  { key: 'm_course', badge: 'M-Kurs', accentColor: 'border-l-primary' },
+  { key: 'w_course', badge: 'W-Kurs', accentColor: 'border-l-slate-500' },
+  { key: 'mt_course', badge: 'M/T-Kurs', accentColor: 'border-l-slate-700' },
 ];
 
 export default function HomePage() {
@@ -174,9 +174,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {COURSES.map(course => (
               <div key={course.key}
-                className={`border rounded-sm p-6 ${course.color} hover:-translate-y-1 hover:shadow-card-hover transition-all duration-300`}
+                className={`bg-white border border-slate-200 border-l-4 ${course.accentColor} rounded-sm p-6 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-300`}
                 data-testid={`course-card-${course.key}`}>
-                <span className={`inline-block text-xs font-bold px-2 py-1 rounded-sm mb-4 ${course.badgeColor}`}>
+                <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-sm mb-4 bg-primary/8 text-primary border border-primary/20">
                   {course.badge}
                 </span>
                 <h3 className="font-heading font-bold text-primary text-lg mb-2">{t(`courses.${course.key}.name`)}</h3>
@@ -300,17 +300,22 @@ export default function HomePage() {
                 Jetzt bewerben <ArrowRight size={16} />
               </Link>
             </div>
-            {/* W2G Logo */}
-            <div className="hidden lg:flex flex-col items-center justify-center bg-slate-50 rounded-sm p-12 border border-slate-100">
+            {/* W2G Logo mit Kontrast-Hintergrund */}
+            <div className="hidden lg:flex flex-col items-center justify-center bg-primary rounded-sm p-12 border border-primary/20">
               <img
                 src={LOGO_W2G}
                 alt="Studienkolleg Aachen – Way2Germany"
-                className="max-w-xs w-full object-contain"
+                className="max-w-[200px] w-full object-contain brightness-0 invert"
                 onError={e => { e.target.style.display = 'none'; }}
               />
-              <p className="text-slate-500 text-sm text-center mt-6 max-w-xs">
+              <div className="w-16 h-0.5 bg-white/20 my-6 rounded-full" />
+              <p className="text-blue-200 text-sm text-center max-w-xs leading-relaxed">
                 Seit Jahren vertrauenswürdiger Partner für internationale Studierende auf dem Weg nach Deutschland.
               </p>
+              <div className="mt-6 text-center">
+                <p className="text-white/60 text-xs">W2G Academy GmbH</p>
+                <p className="text-white/60 text-xs">Amtsgericht Aachen · HRB 23610</p>
+              </div>
             </div>
           </div>
         </div>

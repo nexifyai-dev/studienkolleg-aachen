@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './i18n';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import ScrollToTop from './components/ScrollToTop';
 
 // Public pages
 import HomePage from './pages/public/HomePage';
@@ -60,6 +61,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Public */}
           <Route path="/" element={<HomePage />} />
@@ -99,6 +101,7 @@ export default function App() {
             <Route index element={<StaffDashboard />} />
             <Route path="kanban" element={<KanbanPage />} />
             <Route path="applicants/:id" element={<ApplicantDetailPage />} />
+            <Route path="applications/:id" element={<ApplicantDetailPage />} />
           </Route>
 
           {/* Admin */}

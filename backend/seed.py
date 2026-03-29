@@ -26,31 +26,37 @@ WORKSPACE_SEEDS = [
         "area": "studienkolleg",
         "active": True,
         "pipeline_stages": [
-            "lead_new", "contacted", "docs_requested", "docs_received",
-            "docs_review", "invoice_open", "payment_received",
-            "process_next", "completed", "dormant", "archived",
+            "lead_new", "in_review", "pending_docs", "interview_scheduled",
+            "conditional_offer", "offer_sent", "enrolled",
+            "declined", "on_hold", "archived",
         ],
+        "available_courses": ["T-Course", "M-Course", "W-Course", "M/T-Course"],
     },
     {
         "slug": "sprachkurse",
-        "name": "Sprachkurse",
+        "name": "Sprachkurse (A1–C1)",
         "area": "language_courses",
         "active": True,
-        "pipeline_stages": ["lead_new", "interested", "enrolled", "active", "completed", "archived"],
+        "pipeline_stages": [
+            "lead_new", "in_review", "pending_docs", "offer_sent", "enrolled", "declined", "archived",
+        ],
+        "available_courses": ["Language Course"],
     },
     {
         "slug": "pflege",
         "name": "Pflegefachschule",
         "area": "nursing",
-        "active": False,  # Not in MVP scope
-        "pipeline_stages": ["lead_new", "qualified", "docs_submitted", "enrolled", "completed", "archived"],
+        "active": False,
+        "pipeline_stages": ["lead_new", "in_review", "enrolled", "declined", "archived"],
+        "available_courses": [],
     },
     {
         "slug": "arbeit",
         "name": "Arbeit & Ausbildung",
         "area": "work_training",
-        "active": False,  # Not in MVP scope
-        "pipeline_stages": ["lead_new", "qualified", "docs_submitted", "matched", "completed", "archived"],
+        "active": False,
+        "pipeline_stages": ["lead_new", "in_review", "enrolled", "declined", "archived"],
+        "available_courses": [],
     },
 ]
 

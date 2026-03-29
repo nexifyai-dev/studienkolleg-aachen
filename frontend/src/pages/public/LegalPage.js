@@ -8,10 +8,13 @@ import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 
 const IMPRESSUM_SECTIONS = [
   {
-    title: 'Angaben gemäß § 5 TMG',
+    title: 'Gesellschaftssitz – Angaben gemäß § 5 TMG',
     content: `W2G Academy GmbH
 Theaterstraße 24
-52062 Aachen`,
+52062 Aachen
+
+Hinweis: Theaterstraße 24 ist der eingetragene Gesellschaftssitz.
+Der Unterrichts- und Beratungsstandort (Way2Germany / Studienkolleg Aachen) befindet sich in Theaterstraße 30–32, 52062 Aachen.`,
   },
   {
     title: 'Vertreten durch',
@@ -28,9 +31,13 @@ E-Mail: info@stk-aachen.de`,
 Registernummer: HRB 23610`,
   },
   {
-    title: 'Hinweis zur Adresse',
-    content: '[OFFEN – Abweichung zwischen Theaterstraße 24 (laut Auftraggeber) und 30–32 (laut AGB-Alttext). Bitte vor Go-Live final abstimmen und rechtlich freigeben.]',
-    open: true,
+    title: 'Unterrichts-/Beratungsstandort (Way2Germany)',
+    content: `Studienkolleg Aachen / Way2Germany
+Theaterstraße 30–32
+52062 Aachen
+
+Dieser Standort wird für Unterricht, Beratung und den Bewerberempfang genutzt.
+Er ist nicht identisch mit dem eingetragenen Gesellschaftssitz.`,
   },
   {
     title: 'Haftung für Inhalte',
@@ -41,6 +48,11 @@ Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach 
   {
     title: 'Urheberrecht',
     content: `Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.`,
+  },
+  {
+    title: 'Hinweis zur rechtlichen Prüfung',
+    content: '[OFFEN – Dieses Impressum wurde auf Basis der gelieferten Angaben erstellt. Eine finale juristische Prüfung und Freigabe vor Go-Live ist erforderlich. Insbesondere: E-Mail-Adresse (info@stk-aachen.de vs info@cd-stk.com) und vollständige Angaben zum Datenschutzbeauftragten müssen abschließend verifiziert werden.]',
+    open: true,
   },
 ];
 

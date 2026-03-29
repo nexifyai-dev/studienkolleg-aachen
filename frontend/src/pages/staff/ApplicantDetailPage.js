@@ -4,7 +4,8 @@ import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS, formatDate } from '../../lib/utils';
 import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
-  FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2
+  FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2,
+  Phone, Mail, MessageCircle, Building2
 } from 'lucide-react';
 
 const DOC_STATUS = {
@@ -285,6 +286,32 @@ export default function ApplicantDetailPage() {
                 </div>
               ))}
             </dl>
+
+            {/* Kommunikations-Shortcuts */}
+            <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-2">
+              {app.applicant?.phone && (
+                <a href={`tel:${app.applicant.phone.replace(/\s/g,'')}`}
+                  data-testid="detail-click-to-dial"
+                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-green-50 text-green-700 border border-green-200 rounded-sm hover:bg-green-100 transition-colors">
+                  <Phone size={13} /> Anrufen
+                </a>
+              )}
+              {app.applicant?.email && (
+                <a href={`mailto:${app.applicant.email}?subject=Ihre Bewerbung beim Studienkolleg Aachen`}
+                  data-testid="detail-email-link"
+                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-sm hover:bg-blue-100 transition-colors">
+                  <Mail size={13} /> E-Mail schreiben
+                </a>
+              )}
+              {app.applicant?.phone && (
+                <a href={`https://wa.me/${app.applicant.phone.replace(/[^0-9+]/g,'').replace('+','')}`}
+                  target="_blank" rel="noopener noreferrer"
+                  data-testid="detail-whatsapp-link"
+                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-sm hover:bg-emerald-100 transition-colors">
+                  <MessageCircle size={13} /> WhatsApp
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Bewerbungsdetails */}

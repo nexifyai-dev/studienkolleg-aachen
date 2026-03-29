@@ -56,6 +56,9 @@ AI_SCREENING_ENABLED: bool = bool(EMERGENT_LLM_KEY)
 # ─── Feature Flags ────────────────────────────────────────────────────────────
 COST_SIMULATOR_ENABLED: bool = os.environ.get("COST_SIMULATOR_ENABLED", "false").lower() == "true"
 
+# ─── Mem0 (Project Memory – not a product feature) ────────────────────────────
+MEM0_API_KEY: str = os.environ.get("MEM0_API_KEY", "")
+
 # ─── Env validation on import ─────────────────────────────────────────────────
 def _validate():
     if len(JWT_SECRET) < 32:

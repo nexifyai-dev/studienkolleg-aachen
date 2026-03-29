@@ -246,7 +246,18 @@ COST_SIMULATOR_ENABLED=false (intern, nicht öffentlich)
 - E-Mail-Templates (Willkommen, Bewerbung, Dokument, Reset, Invite)
 - Go-Live-Blocker-Dokumentation
 
-### v1.2.0 – Phase 3 (29. März 2026)
+### v1.2.5 – Phase 3.5 (29. März 2026)
+- **Mem0-Projektgedächtnis**: 6 Wissensblöcke eingerichtet, MEM0_API_KEY in .env
+- **Scroll-to-Top**: ScrollToTop-Komponente, jeder Routenwechsel startet oben
+- **Adresstrennung**: Gesellschaftssitz (Theaterstr. 24) klar getrennt von Bewerberbereich (Theaterstr. 30-32) in Footer, ContactPage, LegalPage
+- **Design-Veredelung**: Kurskarten einheitlich neutral (border-l-4 statt bunt), W2G-Logo auf primärem Hintergrund mit Kontrast
+- **KanbanPage**: AI-Schnellbadges (Anabin H+/H/D, Vollständigkeit, Sprachniveau), Archiv-Sektion, Kurs-Filter, Link zu Detailseite
+- **ApplicantDetailPage**: Click-to-Dial, WhatsApp-Direktlink, E-Mail-Shortcut
+- **UsersPage**: Rollen-Filter (Alle/Mitarbeiter/Bewerber), Aktivieren/Deaktivieren
+- **Kommunikationsarchitektur**: COMMUNICATION_ARCHITECTURE.md dokumentiert
+- **Route-Bug gefixt**: `/staff/applications/:id` registriert (Testing Agent gefunden)
+- **AI-Screening LLM**: Funktioniert jetzt vollständig (Budget aufgeladen) – deutschsprachige Berichte
+- **Seed-Daten**: Pipeline-Stages aktualisiert auf neue Stages
 - RESEND_API_KEY und EMERGENT_LLM_KEY in .env konfiguriert
 - Legal-Seiten: Impressum, AGB (16 §§), Datenschutz mit W2G-Daten
 - Bewerbungsformular vollständig: 12 Felder + 3 Pflicht-Uploads (base64)

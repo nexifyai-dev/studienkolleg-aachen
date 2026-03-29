@@ -340,7 +340,32 @@ async def register(data: RegisterRequest, request: Request):
     
     existing = await db.users.find_one({"email": email})
     if existing:
-        raise HTTPException(status_code=409, detail="Email already registered")
+        # If existing user was created by lead ingest (no password), allow claiming account
+        if existing.get("password_hash"):
+            raise HTTPException(status_code=409, detail="Email bereits registriert. Bitte melde dich an.")
+        # Lead record without password: claim the account
+        hashed = hash_password(data.password)
+        await db.users.update_one(
+            {"_id": existing["_id"]},
+            {"$set": {"password_hash": hashed, "full_name": data.full_name or existing.get("full_name"),
+                      "role": role, "active": True, "claimed_at": datetime.now(timezone.utc)}}
+        )
+        user_id = str(existing["_id"])
+        if workspace_id:
+            existing_mem = await db.workspace_members.find_one({"user_id": user_id, "workspace_id": workspace_id})
+            if not existing_mem:
+                await db.workspace_members.insert_one({"user_id": user_id, "workspace_id": workspace_id,
+                    "role": role, "status": "active", "joined_at": datetime.now(timezone.utc)})
+        if data.invite_token:
+            await db.invite_tokens.update_one({"token": data.invite_token}, {"$set": {"used": True, "used_by": user_id}})
+        await write_audit_log("user_claimed", user_id, "user", user_id, {"role": role})
+        access_token = create_access_token(user_id, email, role)
+        refresh_token = create_refresh_token(user_id)
+        resp_data = {"id": user_id, "email": email, "full_name": data.full_name or existing.get("full_name"), "role": role}
+        resp = JR(content=resp_data)
+        resp.set_cookie("access_token", access_token, httponly=True, secure=False, samesite="lax", max_age=3600, path="/")
+        resp.set_cookie("refresh_token", refresh_token, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
+        return resp
     
     hashed = hash_password(data.password)
     user_doc = {

@@ -115,7 +115,15 @@ export default function DocumentsPage() {
         <div className="bg-white border border-slate-200 rounded-sm p-8 text-center" data-testid="docs-empty">
           <FileText size={32} className="text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500 text-sm">{t('portal.no_docs')}</p>
-          {apps[0] && <p className="text-xs text-slate-400 mt-2">Klicke auf „Dokument hochladen" um zu beginnen.</p>}
+          {apps[0] ? (
+            <p className="text-xs text-slate-400 mt-2">Klicke auf „Dokument hochladen" um zu beginnen.</p>
+          ) : (
+            <div className="mt-4">
+              <p className="text-xs text-slate-500 mb-3">Um Dokumente hochzuladen, starte zunächst deine Bewerbung.</p>
+              <a href="/apply" className="bg-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-primary-hover transition-colors inline-block"
+                data-testid="docs-apply-link">Jetzt bewerben →</a>
+            </div>
+          )}
         </div>
       ) : (
         <div className="space-y-2">

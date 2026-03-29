@@ -267,6 +267,13 @@
     "error_missing_docs": "Please upload all required documents:",
     "error_file_too_large": "is too large (max. 10 MB).",
     "error_generic": "Submission failed. Please try again.",
+    "error_privacy": "Please accept the privacy policy and terms of service.",
+    "error_password_short": "Password must be at least 8 characters.",
+    "error_password_mismatch": "Passwords do not match.",
+    "account_title": "Create Portal Access",
+    "account_desc": "Create your portal account to track your application status, submit documents and communicate with the team.",
+    "password_label": "Password",
+    "password_confirm_label": "Confirm Password",
     "file_size_display": "KB",
     "file_too_large_label": "File too large (max. 10 MB)",
     "courses": {

@@ -3,7 +3,7 @@ import apiClient from '../../lib/apiClient';
 import {
   Users, FileText, CheckSquare, TrendingUp, Clock,
   ArrowRight, AlertCircle, ChevronRight, RefreshCw,
-  MessageSquare, Columns
+  MessageSquare, Columns, CalendarClock, DownloadCloud
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -43,19 +43,22 @@ export default function StaffDashboard() {
   const [stats, setStats] = useState(null);
   const [apps, setApps] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [followups, setFollowups] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [statsRes, appsRes, tasksRes] = await Promise.all([
+        const [statsRes, appsRes, tasksRes, followupsRes] = await Promise.all([
           apiClient.get('/api/dashboard/stats'),
           apiClient.get('/api/applications'),
           apiClient.get('/api/tasks'),
+          apiClient.get('/api/followups/due').catch(() => ({ data: [] })),
         ]);
         setStats(statsRes.data);
         setApps(appsRes.data || []);
         setTasks(tasksRes.data || []);
+        setFollowups(followupsRes.data || []);
       } catch {}
       finally { setLoading(false); }
     };
@@ -84,6 +87,11 @@ export default function StaffDashboard() {
           <h1 className="text-xl font-heading font-bold text-primary">Dashboard</h1>
           <p className="text-slate-500 text-sm">Willkommen, {user?.full_name || user?.email}</p>
         </div>
+        <a href={`${process.env.REACT_APP_BACKEND_URL}/api/export/applications`}
+          data-testid="export-btn"
+          className="flex items-center gap-1.5 text-xs font-medium border border-slate-200 text-slate-600 px-3 py-2 rounded-sm hover:bg-slate-50 hover:border-primary/30 transition-colors">
+          <DownloadCloud size={14} /> CSV-Export
+        </a>
       </div>
 
       {/* KPI Stats */}
@@ -235,6 +243,28 @@ export default function StaffDashboard() {
               </div>
             </dl>
           </div>
+
+          {/* Wiedervorlagen */}
+          {followups.length > 0 && (
+            <div className="bg-white border border-amber-200 rounded-sm p-4" data-testid="followups-panel">
+              <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                <CalendarClock size={14} className="text-amber-500" /> Wiedervorlagen ({followups.length})
+              </h3>
+              <div className="space-y-2">
+                {followups.slice(0, 5).map(f => (
+                  <Link key={f.id} to={`/staff/applications/${f.application_id}`}
+                    data-testid={`followup-${f.id}`}
+                    className="flex items-center justify-between px-2 py-2 rounded-sm text-xs hover:bg-amber-50 transition-colors border border-amber-100">
+                    <div className="min-w-0">
+                      <p className="font-medium text-slate-700 truncate">{f.applicant_name || 'Bewerber'}</p>
+                      <p className="text-slate-500 truncate">{f.reason}</p>
+                    </div>
+                    <span className="text-[10px] text-amber-600 whitespace-nowrap ml-2">{f.due_date}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

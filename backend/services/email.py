@@ -78,7 +78,7 @@ def _footer(lang: str = "de") -> str:
       <p style="color:#94a3b8;font-size:11px;line-height:1.7;margin:0">
         <strong>W2G Academy GmbH</strong><br>
         Theaterstr. 30–32, 52062 Aachen, Germany<br>
-        Managing Director: [Name]<br>
+        Managing Director: Laura Saboor<br>
         Registered: Amtsgericht Aachen, HRB 23610<br>
         Email: <a href="mailto:info@stk-aachen.de" style="color:#113655;text-decoration:none">info@stk-aachen.de</a><br><br>
         This is an automated message from Studienkolleg Aachen.<br>
@@ -88,7 +88,7 @@ def _footer(lang: str = "de") -> str:
       <p style="color:#94a3b8;font-size:11px;line-height:1.7;margin:0">
         <strong>W2G Academy GmbH</strong><br>
         Theaterstr. 30–32, 52062 Aachen<br>
-        Geschäftsführung: [Name]<br>
+        Geschäftsführung: Laura Saboor<br>
         Registergericht: Amtsgericht Aachen, HRB 23610<br>
         Kontakt: <a href="mailto:info@stk-aachen.de" style="color:#113655;text-decoration:none">info@stk-aachen.de</a><br><br>
         Dies ist eine automatische Nachricht von Studienkolleg Aachen.<br>

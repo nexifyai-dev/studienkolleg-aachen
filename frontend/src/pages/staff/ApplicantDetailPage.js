@@ -6,8 +6,107 @@ import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
   FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2,
   Phone, Mail, MessageCircle, Users, GraduationCap, Trash2,
-  Edit3, Save, X, Send, StickyNote, History
+  Edit3, Save, X, Send, StickyNote, History, CalendarClock, Plus
 } from 'lucide-react';
+
+/* ═══════ Followup / Wiedervorlage Panel ═══════ */
+function FollowupPanel({ appId }) {
+  const [followups, setFollowups] = useState([]);
+  const [showCreate, setShowCreate] = useState(false);
+  const [form, setForm] = useState({ due_date: '', reason: '' });
+  const [creating, setCreating] = useState(false);
+
+  useEffect(() => { loadFollowups(); }, [appId]);
+
+  const loadFollowups = async () => {
+    try {
+      const r = await apiClient.get('/api/followups', { withCredentials: true });
+      setFollowups((r.data || []).filter(f => f.application_id === appId));
+    } catch {}
+  };
+
+  const create = async () => {
+    if (!form.due_date || !form.reason) return;
+    setCreating(true);
+    try {
+      await apiClient.post('/api/followups', {
+        application_id: appId,
+        due_date: form.due_date,
+        reason: form.reason,
+      }, { withCredentials: true });
+      setForm({ due_date: '', reason: '' });
+      setShowCreate(false);
+      await loadFollowups();
+    } catch {} finally { setCreating(false); }
+  };
+
+  const markDone = async (id) => {
+    try {
+      await apiClient.put(`/api/followups/${id}`, { status: 'done' }, { withCredentials: true });
+      await loadFollowups();
+    } catch {}
+  };
+
+  const dismiss = async (id) => {
+    try {
+      await apiClient.delete(`/api/followups/${id}`, { withCredentials: true });
+      await loadFollowups();
+    } catch {}
+  };
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="followup-panel">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-semibold text-slate-700 text-xs flex items-center gap-1.5">
+          <CalendarClock size={14} className="text-amber-500" /> Wiedervorlagen ({followups.length})
+        </h3>
+        <button onClick={() => setShowCreate(!showCreate)} data-testid="create-followup-btn"
+          className="text-[10px] text-primary hover:underline flex items-center gap-1">
+          <Plus size={12} /> Neu
+        </button>
+      </div>
+
+      {showCreate && (
+        <div className="border border-slate-200 rounded-sm p-3 mb-3 space-y-2 bg-slate-50" data-testid="followup-create-form">
+          <input type="date" value={form.due_date} onChange={e => setForm(f => ({ ...f, due_date: e.target.value }))}
+            data-testid="followup-date" className="w-full text-xs border border-slate-200 rounded-sm px-2 py-1.5 focus:outline-none focus:border-primary" />
+          <input value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
+            placeholder="Grund / Aktion..."
+            data-testid="followup-reason" className="w-full text-xs border border-slate-200 rounded-sm px-2 py-1.5 focus:outline-none focus:border-primary" />
+          <button onClick={create} disabled={creating || !form.due_date || !form.reason}
+            data-testid="followup-submit" className="text-[11px] bg-primary text-white px-3 py-1.5 rounded-sm hover:bg-primary/90 disabled:opacity-50">
+            {creating ? <Loader2 size={12} className="animate-spin" /> : 'Erstellen'}
+          </button>
+        </div>
+      )}
+
+      {followups.length === 0 ? (
+        <p className="text-[10px] text-slate-400">Keine Wiedervorlagen</p>
+      ) : (
+        <div className="space-y-1.5">
+          {followups.map(f => (
+            <div key={f.id} className={`flex items-start justify-between border rounded-sm p-2 text-xs ${
+              f.status === 'done' ? 'border-green-100 bg-green-50' : 'border-amber-100 bg-amber-50/50'
+            }`} data-testid={`followup-item-${f.id}`}>
+              <div className="min-w-0">
+                <p className={`font-medium ${f.status === 'done' ? 'text-green-600 line-through' : 'text-slate-700'}`}>{f.reason}</p>
+                <p className="text-[10px] text-slate-400">Fällig: {f.due_date}</p>
+              </div>
+              {f.status !== 'done' && (
+                <div className="flex items-center gap-1 shrink-0 ml-2">
+                  <button onClick={() => markDone(f.id)} data-testid={`followup-done-${f.id}`}
+                    className="text-green-600 hover:bg-green-100 p-0.5 rounded"><CheckCircle size={13} /></button>
+                  <button onClick={() => dismiss(f.id)} data-testid={`followup-dismiss-${f.id}`}
+                    className="text-slate-400 hover:text-red-500 p-0.5 rounded"><Trash2 size={13} /></button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ═══════ Teacher Assignment Panel ═══════ */
 function TeacherAssignmentPanel({ applicantId, applicantName }) {
@@ -512,6 +611,7 @@ export default function ApplicantDetailPage() {
         {/* Right Sidebar */}
         <div className="xl:col-span-1 space-y-4">
           <CaseNotes appId={id} />
+          <FollowupPanel appId={id} />
           <ActivityHistory appId={id} />
           <AIScreeningPanel appId={id} />
           <TeacherAssignmentPanel applicantId={app.applicant_id || id} applicantName={app.applicant?.full_name} />

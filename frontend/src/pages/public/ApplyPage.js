@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
-import { CheckCircle, Loader2, AlertCircle, Upload, X, FileText } from 'lucide-react';
+import { CheckCircle, Loader2, AlertCircle, Upload, X, FileText, Eye, EyeOff } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -95,6 +96,8 @@ function fileToBase64(file) {
 
 export default function ApplyPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { refreshUser } = useAuth();
   const [form, setForm] = useState({
     first_name: '',
     last_name: '',
@@ -108,11 +111,15 @@ export default function ApplyPage() {
     language_level: '',
     degree_country: '',
     notes: '',
+    password: '',
+    password_confirm: '',
   });
   const [files, setFiles] = useState({ language_certificate: null, highschool_diploma: null, passport: null });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const handleChange = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
   const handleFileChange = (key, file) => setFiles(p => ({ ...p, [key]: file }));
@@ -121,6 +128,20 @@ export default function ApplyPage() {
   const handleSubmit = async e => {
     e.preventDefault();
     setError('');
+
+    if (!privacyAccepted) {
+      setError(t('apply.error_privacy') || 'Bitte akzeptiere die Datenschutzbestimmungen.');
+      return;
+    }
+
+    if (form.password && form.password.length < 8) {
+      setError(t('apply.error_password_short') || 'Passwort muss mindestens 8 Zeichen haben.');
+      return;
+    }
+    if (form.password && form.password !== form.password_confirm) {
+      setError(t('apply.error_password_mismatch') || 'Passwörter stimmen nicht überein.');
+      return;
+    }
 
     const missingFiles = REQUIRED_DOC_KEYS.filter(k => !files[k]).map(k => t(`apply.doc_labels.${k}`));
     if (missingFiles.length > 0) {
@@ -169,8 +190,19 @@ export default function ApplyPage() {
         documents: documentsPayload,
       };
 
-      await axios.post(`${API}/api/leads/ingest`, payload);
-      setSuccess(true);
+      if (form.password && form.password.length >= 8) {
+        payload.password = form.password;
+      }
+
+      const res = await axios.post(`${API}/api/leads/ingest`, payload, { withCredentials: true });
+
+      if (res.data?.account_created) {
+        // Account wurde erstellt, auto-login via Cookie
+        await refreshUser();
+        navigate('/portal');
+      } else {
+        setSuccess(true);
+      }
     } catch (err) {
       const detail = err.response?.data?.detail;
       setError(typeof detail === 'string' ? detail : t('apply.error_generic'));
@@ -325,14 +357,48 @@ export default function ApplyPage() {
               ))}
             </div>
 
-            {/* Privacy Notice */}
-            <p className="text-xs text-slate-500 text-center">
-              {t('apply.privacy_agree')}{' '}
-              <Link to="/privacy" className="underline text-primary">{t('apply.privacy_link')}</Link>{' '}
-              {t('apply.and')}{' '}
-              <Link to="/agb" className="underline text-primary">{t('apply.agb_link')}</Link>{' '}
-              {t('apply.zu')}
-            </p>
+            {/* Account-Erstellung */}
+            <div className="bg-white border border-slate-200 rounded-sm p-5 sm:p-6 space-y-4">
+              <div>
+                <h2 className="font-semibold text-slate-800 text-base border-b border-slate-100 pb-3 mb-1">
+                  {t('apply.account_title') || 'Portal-Zugang erstellen'}
+                </h2>
+                <p className="text-xs text-slate-500">
+                  {t('apply.account_desc') || 'Erstelle direkt deinen Portalzugang, um den Bewerbungsstatus zu verfolgen, Dokumente nachzureichen und mit dem Team zu kommunizieren.'}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative">
+                  <label className={labelCls}>{t('apply.password_label') || 'Passwort'} *</label>
+                  <input name="password" type={showPassword ? 'text' : 'password'} value={form.password} onChange={handleChange} required minLength={8}
+                    data-testid="apply-input-password" className={inputCls} placeholder="Min. 8 Zeichen" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-8 text-slate-400 hover:text-slate-600">
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                <div>
+                  <label className={labelCls}>{t('apply.password_confirm_label') || 'Passwort bestätigen'} *</label>
+                  <input name="password_confirm" type={showPassword ? 'text' : 'password'} value={form.password_confirm} onChange={handleChange} required minLength={8}
+                    data-testid="apply-input-password-confirm" className={inputCls} placeholder="Passwort wiederholen" />
+                </div>
+              </div>
+            </div>
+
+            {/* Privacy Notice + Checkbox */}
+            <div className="space-y-3">
+              <label className="flex items-start gap-3 cursor-pointer" data-testid="apply-privacy-checkbox">
+                <input type="checkbox" checked={privacyAccepted} onChange={e => setPrivacyAccepted(e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" />
+                <span className="text-xs text-slate-600">
+                  {t('apply.privacy_agree')}{' '}
+                  <Link to="/privacy" className="underline text-primary">{t('apply.privacy_link')}</Link>{' '}
+                  {t('apply.and')}{' '}
+                  <Link to="/agb" className="underline text-primary">{t('apply.agb_link')}</Link>{' '}
+                  {t('apply.zu')}
+                </span>
+              </label>
+            </div>
 
             <button type="submit" disabled={loading} data-testid="apply-submit-btn"
               className="w-full bg-primary text-white font-semibold py-3.5 rounded-sm hover:bg-primary-hover transition-all disabled:opacity-60 flex items-center justify-center gap-2 text-sm">

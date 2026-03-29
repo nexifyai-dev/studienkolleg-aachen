@@ -3,8 +3,21 @@ import apiClient from '../../lib/apiClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { formatDate } from '../../lib/utils';
 import {
-  MessageSquare, Send, Users, Search, ArrowLeft, Loader2
+  MessageSquare, Send, Users, Search, ArrowLeft, Loader2,
+  Paperclip, FileText, Download, X
 } from 'lucide-react';
+
+const API = process.env.REACT_APP_BACKEND_URL;
+const MAX_FILE_MB = 10;
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 function ConversationItem({ conv, active, onClick, currentUserId }) {
   const otherNames = Object.entries(conv.participant_names || {})
@@ -45,6 +58,42 @@ function ConversationItem({ conv, active, onClick, currentUserId }) {
   );
 }
 
+function MessageBubble({ msg, isOwn }) {
+  const hasAttachment = msg.attachment && msg.attachment.filename;
+  return (
+    <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`} data-testid="staff-message-item">
+      <div className={`max-w-sm rounded-sm px-4 py-2.5 text-sm ${isOwn ? 'bg-primary text-white' : 'bg-slate-100 text-slate-800'}`}>
+        {!isOwn && msg.sender_name && (
+          <p className={`text-[10px] font-medium mb-1 ${isOwn ? 'text-white/70' : 'text-primary'}`}>{msg.sender_name}</p>
+        )}
+        {hasAttachment ? (
+          <div className={`flex items-center gap-2 p-2 rounded ${isOwn ? 'bg-white/10' : 'bg-white'} mb-1`}>
+            <FileText size={16} className={isOwn ? 'text-white/70' : 'text-primary'} />
+            <div className="flex-1 min-w-0">
+              <p className={`text-xs font-medium truncate ${isOwn ? 'text-white' : 'text-slate-700'}`}>{msg.attachment.filename}</p>
+              {msg.attachment.file_size && (
+                <p className={`text-[10px] ${isOwn ? 'text-white/50' : 'text-slate-400'}`}>
+                  {(msg.attachment.file_size / 1024).toFixed(0)} KB
+                </p>
+              )}
+            </div>
+            <a href={`${API}/api/messages/${msg.id}/attachment`}
+              target="_blank" rel="noreferrer"
+              data-testid={`download-attachment-${msg.id}`}
+              className={`shrink-0 ${isOwn ? 'text-white/70 hover:text-white' : 'text-primary hover:text-primary/70'}`}>
+              <Download size={14} />
+            </a>
+          </div>
+        ) : null}
+        {msg.content && !msg.content.startsWith('[Datei:') && <p>{msg.content}</p>}
+        <p className={`text-[10px] mt-1 ${isOwn ? 'text-white/50' : 'text-slate-400'}`}>
+          {msg.sent_at ? new Date(msg.sent_at).toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : ''}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function StaffMessagingPage() {
   const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
@@ -56,6 +105,8 @@ export default function StaffMessagingPage() {
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showList, setShowList] = useState(true);
+  const [attachFile, setAttachFile] = useState(null);
+  const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const pollRef = useRef(null);
 
@@ -98,17 +149,39 @@ export default function StaffMessagingPage() {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!newMsg.trim() || !activeConv?.id) return;
+    if ((!newMsg.trim() && !attachFile) || !activeConv?.id) return;
     setSending(true);
     try {
-      const res = await apiClient.post('/api/messages',
-        { conversation_id: activeConv.id, content: newMsg },
-        { withCredentials: true }
-      );
-      setMessages(p => [...p, res.data]);
+      if (attachFile) {
+        const b64 = await fileToBase64(attachFile);
+        const res = await apiClient.post(`/api/conversations/${activeConv.id}/attachments`, {
+          filename: attachFile.name,
+          content_type: attachFile.type || 'application/octet-stream',
+          file_data: b64,
+          content: newMsg || '',
+        }, { withCredentials: true });
+        setMessages(p => [...p, res.data]);
+        setAttachFile(null);
+      } else {
+        const res = await apiClient.post('/api/messages',
+          { conversation_id: activeConv.id, content: newMsg },
+          { withCredentials: true }
+        );
+        setMessages(p => [...p, res.data]);
+      }
       setNewMsg('');
       loadConversations();
     } catch {} finally { setSending(false); }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > MAX_FILE_MB * 1024 * 1024) {
+      alert(`Datei zu groß (max. ${MAX_FILE_MB} MB)`);
+      return;
+    }
+    setAttachFile(file);
   };
 
   const filtered = searchTerm
@@ -176,7 +249,6 @@ export default function StaffMessagingPage() {
         <div className={`flex-1 flex flex-col ${showList && !activeConv ? 'hidden md:flex' : 'flex'}`}>
           {activeConv ? (
             <>
-              {/* Chat Header */}
               <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-3 bg-slate-50/50">
                 <button onClick={() => setShowList(true)} className="md:hidden text-slate-400 hover:text-primary">
                   <ArrowLeft size={18} />
@@ -190,7 +262,6 @@ export default function StaffMessagingPage() {
                 </div>
               </div>
 
-              {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3" data-testid="staff-messages-list">
                 {loadingMsgs && messages.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
@@ -202,29 +273,31 @@ export default function StaffMessagingPage() {
                     <p className="text-sm">Noch keine Nachrichten</p>
                   </div>
                 ) : (
-                  messages.map(msg => {
-                    const isOwn = msg.sender_id === user?.id;
-                    return (
-                      <div key={msg.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`} data-testid="staff-message-item">
-                        <div className={`max-w-sm rounded-sm px-4 py-2.5 text-sm ${isOwn ? 'bg-primary text-white' : 'bg-slate-100 text-slate-800'}`}>
-                          {!isOwn && msg.sender_name && (
-                            <p className={`text-[10px] font-medium mb-1 ${isOwn ? 'text-white/70' : 'text-primary'}`}>{msg.sender_name}</p>
-                          )}
-                          <p>{msg.content}</p>
-                          <p className={`text-[10px] mt-1 ${isOwn ? 'text-white/50' : 'text-slate-400'}`}>
-                            {msg.sent_at ? new Date(msg.sent_at).toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : ''}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })
+                  messages.map(msg => (
+                    <MessageBubble key={msg.id} msg={msg} isOwn={msg.sender_id === user?.id} />
+                  ))
                 )}
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Input */}
+              {/* Attachment Preview */}
+              {attachFile && (
+                <div className="px-3 py-2 border-t border-slate-100 flex items-center gap-2 bg-slate-50" data-testid="staff-attachment-preview">
+                  <FileText size={14} className="text-primary" />
+                  <span className="text-xs text-slate-700 truncate flex-1">{attachFile.name} ({(attachFile.size / 1024).toFixed(0)} KB)</span>
+                  <button onClick={() => setAttachFile(null)} className="text-slate-400 hover:text-red-500"><X size={14} /></button>
+                </div>
+              )}
+
               <div className="border-t border-slate-100 p-3">
                 <form onSubmit={sendMessage} className="flex gap-2" data-testid="staff-message-form">
+                  <button type="button" onClick={() => fileInputRef.current?.click()}
+                    data-testid="staff-attach-btn"
+                    className="text-slate-400 hover:text-primary transition-colors px-2 py-2">
+                    <Paperclip size={18} />
+                  </button>
+                  <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileSelect}
+                    accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" />
                   <input
                     value={newMsg}
                     onChange={e => setNewMsg(e.target.value)}
@@ -232,12 +305,9 @@ export default function StaffMessagingPage() {
                     data-testid="staff-message-input"
                     className="flex-1 border border-slate-200 rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-primary"
                   />
-                  <button
-                    type="submit"
-                    disabled={sending || !newMsg.trim()}
+                  <button type="submit" disabled={sending || (!newMsg.trim() && !attachFile)}
                     data-testid="staff-message-send"
-                    className="bg-primary text-white px-4 py-2 rounded-sm hover:bg-primary/90 disabled:opacity-60 transition-colors"
-                  >
+                    className="bg-primary text-white px-4 py-2 rounded-sm hover:bg-primary/90 disabled:opacity-60 transition-colors">
                     <Send size={16} />
                   </button>
                 </form>

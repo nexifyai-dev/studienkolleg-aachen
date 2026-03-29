@@ -39,6 +39,8 @@ from routers.ai_screening import router as ai_screening_router
 from routers.cost_simulator import router as cost_simulator_router
 from routers.consents import router as consent_router
 from routers.teacher import router as teacher_router
+from routers.followups import router as followups_router
+from routers.export import router as export_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -83,6 +85,8 @@ app.include_router(cost_simulator_router)
 app.include_router(consent_router)
 app.include_router(teacher_router)
 app.include_router(notifications_router)
+app.include_router(followups_router)
+app.include_router(export_router)
 
 # ─── Lifecycle ────────────────────────────────────────────────────────────────
 @app.on_event("startup")

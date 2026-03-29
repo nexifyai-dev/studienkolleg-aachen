@@ -1,7 +1,57 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import apiClient from '../../lib/apiClient';
-import { MessageSquare, Send, Loader2 } from 'lucide-react';
+import { MessageSquare, Send, Loader2, Paperclip, FileText, Download, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+
+const API = process.env.REACT_APP_BACKEND_URL;
+const MAX_FILE_MB = 10;
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function MessageBubble({ msg, isOwn }) {
+  const hasAttachment = msg.attachment && msg.attachment.filename;
+  return (
+    <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`} data-testid="message-item">
+      <div className={`max-w-xs sm:max-w-sm rounded-sm px-4 py-2.5 text-sm ${
+        isOwn ? 'bg-primary text-white' : 'bg-slate-100 text-slate-800'
+      }`}>
+        {!isOwn && msg.sender_name && (
+          <p className="text-[10px] font-medium text-primary mb-1">{msg.sender_name}</p>
+        )}
+        {hasAttachment ? (
+          <div className={`flex items-center gap-2 p-2 rounded ${isOwn ? 'bg-white/10' : 'bg-white'} mb-1`}>
+            <FileText size={16} className={isOwn ? 'text-white/70' : 'text-primary'} />
+            <div className="flex-1 min-w-0">
+              <p className={`text-xs font-medium truncate ${isOwn ? 'text-white' : 'text-slate-700'}`}>{msg.attachment.filename}</p>
+              {msg.attachment.file_size && (
+                <p className={`text-[10px] ${isOwn ? 'text-white/50' : 'text-slate-400'}`}>
+                  {(msg.attachment.file_size / 1024).toFixed(0)} KB
+                </p>
+              )}
+            </div>
+            <a href={`${API}/api/messages/${msg.id}/attachment`}
+              target="_blank" rel="noreferrer"
+              data-testid={`download-attachment-${msg.id}`}
+              className={`shrink-0 ${isOwn ? 'text-white/70 hover:text-white' : 'text-primary hover:text-primary/70'}`}>
+              <Download size={14} />
+            </a>
+          </div>
+        ) : null}
+        {msg.content && !msg.content.startsWith('[Datei:') && <p>{msg.content}</p>}
+        <p className={`text-[10px] mt-1 ${isOwn ? 'text-white/50' : 'text-slate-400'}`}>
+          {msg.sent_at ? new Date(msg.sent_at).toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : ''}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -12,33 +62,27 @@ export default function MessagesPage() {
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
+  const [attachFile, setAttachFile] = useState(null);
+  const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const pollRef = useRef(null);
 
   const initConversation = useCallback(async () => {
     try {
-      // Ensure a support conversation exists
       const supportRes = await apiClient.get('/api/conversations/support', { withCredentials: true });
       const supportConv = supportRes.data;
-
-      // Load all conversations
       const convsRes = await apiClient.get('/api/conversations', { withCredentials: true });
       const convs = convsRes.data || [];
       setConversations(convs);
-
-      // Set active conversation: prefer support, fallback to first
       const found = convs.find(c => c.id === supportConv?.id);
       setActiveConv(found || convs[0] || supportConv);
     } catch {
-      // Fallback: just try to load conversations
       try {
         const convsRes = await apiClient.get('/api/conversations', { withCredentials: true });
         setConversations(convsRes.data || []);
         if (convsRes.data?.[0]) setActiveConv(convsRes.data[0]);
       } catch {}
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { initConversation(); }, [initConversation]);
@@ -66,22 +110,39 @@ export default function MessagesPage() {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!newMsg.trim()) return;
+    if ((!newMsg.trim() && !attachFile)) return;
     setSending(true);
     try {
-      const payload = { content: newMsg };
-      if (activeConv?.id) {
-        payload.conversation_id = activeConv.id;
-      }
-      const res = await apiClient.post('/api/messages', payload, { withCredentials: true });
-      setMessages(p => [...p, res.data]);
-      setNewMsg('');
-
-      // Reload conversations to update previews
-      if (!activeConv?.id) {
-        await initConversation();
+      if (attachFile && activeConv?.id) {
+        const b64 = await fileToBase64(attachFile);
+        const res = await apiClient.post(`/api/conversations/${activeConv.id}/attachments`, {
+          filename: attachFile.name,
+          content_type: attachFile.type || 'application/octet-stream',
+          file_data: b64,
+          content: newMsg || '',
+        }, { withCredentials: true });
+        setMessages(p => [...p, res.data]);
+        setAttachFile(null);
+        setNewMsg('');
+      } else {
+        const payload = { content: newMsg };
+        if (activeConv?.id) payload.conversation_id = activeConv.id;
+        const res = await apiClient.post('/api/messages', payload, { withCredentials: true });
+        setMessages(p => [...p, res.data]);
+        setNewMsg('');
+        if (!activeConv?.id) await initConversation();
       }
     } catch {} finally { setSending(false); }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > MAX_FILE_MB * 1024 * 1024) {
+      alert(`Datei zu groß (max. ${MAX_FILE_MB} MB)`);
+      return;
+    }
+    setAttachFile(file);
   };
 
   if (loading) return (
@@ -99,12 +160,11 @@ export default function MessagesPage() {
   return (
     <div className="space-y-4 animate-fade-in" data-testid="messages-page">
       <div>
-        <h1 className="text-2xl font-heading font-bold text-primary">Nachrichten</h1>
+        <h1 className="text-xl font-heading font-bold text-primary">Nachrichten</h1>
         <p className="text-slate-500 text-sm mt-1">Direkter Kontakt mit dem Team</p>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-sm overflow-hidden" style={{ minHeight: '400px' }}>
-        {/* Header */}
         <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
             <MessageSquare size={14} className="text-primary" />
@@ -115,7 +175,6 @@ export default function MessagesPage() {
           </div>
         </div>
 
-        {/* Messages */}
         <div className="p-4 overflow-y-auto space-y-3" style={{ height: '320px' }} data-testid="messages-list">
           {loadingMsgs && messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
@@ -128,31 +187,31 @@ export default function MessagesPage() {
               <p className="text-xs mt-1">Schreibe deine erste Nachricht an das Team</p>
             </div>
           ) : (
-            messages.map(msg => {
-              const isOwn = msg.sender_id === user?.id;
-              return (
-                <div key={msg.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`} data-testid="message-item">
-                  <div className={`max-w-xs sm:max-w-sm rounded-sm px-4 py-2.5 text-sm ${
-                    isOwn ? 'bg-primary text-white' : 'bg-slate-100 text-slate-800'
-                  }`}>
-                    {!isOwn && msg.sender_name && (
-                      <p className="text-[10px] font-medium text-primary mb-1">{msg.sender_name}</p>
-                    )}
-                    <p>{msg.content}</p>
-                    <p className={`text-[10px] mt-1 ${isOwn ? 'text-white/50' : 'text-slate-400'}`}>
-                      {msg.sent_at ? new Date(msg.sent_at).toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : ''}
-                    </p>
-                  </div>
-                </div>
-              );
-            })
+            messages.map(msg => (
+              <MessageBubble key={msg.id} msg={msg} isOwn={msg.sender_id === user?.id} />
+            ))
           )}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
+        {/* Attachment Preview */}
+        {attachFile && (
+          <div className="px-3 py-2 border-t border-slate-100 flex items-center gap-2 bg-slate-50" data-testid="attachment-preview">
+            <FileText size={14} className="text-primary" />
+            <span className="text-xs text-slate-700 truncate flex-1">{attachFile.name} ({(attachFile.size / 1024).toFixed(0)} KB)</span>
+            <button onClick={() => setAttachFile(null)} className="text-slate-400 hover:text-red-500"><X size={14} /></button>
+          </div>
+        )}
+
         <div className="border-t border-slate-100 p-3">
           <form onSubmit={sendMessage} className="flex gap-2" data-testid="message-form">
+            <button type="button" onClick={() => fileInputRef.current?.click()}
+              data-testid="message-attach-btn"
+              className="text-slate-400 hover:text-primary transition-colors px-2 py-2">
+              <Paperclip size={18} />
+            </button>
+            <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileSelect}
+              accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" />
             <input
               value={newMsg}
               onChange={e => setNewMsg(e.target.value)}
@@ -160,12 +219,9 @@ export default function MessagesPage() {
               data-testid="message-input"
               className="flex-1 border border-slate-200 rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />
-            <button
-              type="submit"
-              disabled={sending || !newMsg.trim()}
+            <button type="submit" disabled={sending || (!newMsg.trim() && !attachFile)}
               data-testid="message-send-btn"
-              className="bg-primary text-white px-4 py-2 rounded-sm hover:bg-primary/90 disabled:opacity-60 transition-colors"
-            >
+              className="bg-primary text-white px-4 py-2 rounded-sm hover:bg-primary/90 disabled:opacity-60 transition-colors">
               <Send size={16} />
             </button>
           </form>

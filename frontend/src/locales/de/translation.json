@@ -194,6 +194,13 @@
     "error_missing_docs": "Bitte lade alle Pflichtdokumente hoch:",
     "error_file_too_large": "ist zu groß (max. 10 MB).",
     "error_generic": "Fehler beim Absenden. Bitte versuche es erneut.",
+    "error_privacy": "Bitte akzeptiere die Datenschutzbestimmungen und AGB.",
+    "error_password_short": "Passwort muss mindestens 8 Zeichen haben.",
+    "error_password_mismatch": "Passwörter stimmen nicht überein.",
+    "account_title": "Portal-Zugang erstellen",
+    "account_desc": "Erstelle direkt deinen Portalzugang, um den Bewerbungsstatus zu verfolgen, Dokumente nachzureichen und mit dem Team zu kommunizieren.",
+    "password_label": "Passwort",
+    "password_confirm_label": "Passwort bestätigen",
     "file_size_display": "KB",
     "file_too_large_label": "Datei zu groß (max. 10 MB)",
     "courses": {

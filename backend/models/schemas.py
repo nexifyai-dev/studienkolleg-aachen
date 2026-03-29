@@ -102,6 +102,8 @@ class LeadIngest(BaseModel):
     phone: Optional[str] = None
     date_of_birth: Optional[str] = None
     country: Optional[str] = None
+    # Account creation (Bewerbung + Registrierung gekoppelt)
+    password: Optional[str] = None  # wenn gesetzt, wird ein Account erstellt
     # Application specifics
     area_interest: str = "studienkolleg"
     course_type: Optional[str] = None       # M-Course | T-Course | W-Course | M/T-Course | Language Course
@@ -114,6 +116,20 @@ class LeadIngest(BaseModel):
     referral_code: Optional[str] = None
     # Inline document uploads (optional)
     documents: Optional[List[LeadDocumentUpload]] = None
+
+
+# ─── Followup / Wiedervorlage schemas ─────────────────────────────────────────
+class FollowupCreate(BaseModel):
+    application_id: str
+    due_date: str
+    reason: str
+    assigned_to: Optional[str] = None
+
+
+class FollowupUpdate(BaseModel):
+    status: Optional[str] = None  # pending | done | dismissed
+    due_date: Optional[str] = None
+    reason: Optional[str] = None
 
 
 # ─── Task schemas ─────────────────────────────────────────────────────────────

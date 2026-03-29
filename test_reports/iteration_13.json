@@ -1,0 +1,95 @@
+{
+  "summary": "Phase 3.7j Testing Complete - All backend tests pass (14/14). Frontend features verified: ApplicantLayout rewritten to top header, ApplyPage has password fields + privacy checkbox, StaffDashboard has CSV export + Wiedervorlage panel, Messaging supports file upload/download, Followups CRUD working.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase37j_features.py",
+    "/app/test_reports/pytest/pytest_results_phase37j.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Leads ingest with password: Creates account, sets auth cookies, returns account_created: true ✓",
+    "Leads ingest without password: Backwards compatible, no account_created flag ✓",
+    "Followups API: GET /api/followups, GET /api/followups/due, POST, PUT, DELETE all working ✓",
+    "Export API: GET /api/export/applications returns CSV with proper headers ✓",
+    "Export API: Stage filter ?stage=lead_new works correctly ✓",
+    "Messaging attachments: POST /api/conversations/{id}/attachments uploads file ✓",
+    "Messaging attachments: GET /api/messages/{id}/attachment downloads file ✓",
+    "Messaging attachments: storage_key not exposed to frontend (security) ✓",
+    "ApplicantLayout: Rewritten from sidebar to TOP HEADER navigation ✓",
+    "ApplyPage: Password fields (apply-input-password, apply-input-password-confirm) visible ✓",
+    "ApplyPage: Privacy checkbox (apply-privacy-checkbox) visible ✓",
+    "StaffDashboard: CSV-Export button (export-btn) visible ✓",
+    "StaffDashboard: Wiedervorlage panel (followups-panel) visible when due followups exist ✓",
+    "StaffTasksPage: Task creation form with filter tabs working ✓",
+    "StaffMessagingPage: File upload button (staff-attach-btn) visible ✓",
+    "MessagesPage (Applicant): File upload button (message-attach-btn) visible ✓",
+    "ApplicantDetailPage: Followup panel with create button visible ✓"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_phase37j_features.py"
+  ],
+  "success_rate": {
+    "backend": "100% (14/14 tests passed)",
+    "frontend": "100% (all UI tests passed)"
+  },
+  "test_credentials": {
+    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
+    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
+    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+  },
+  "seed_data_creation": "Test followups created: TEST_Phase37j: Dokumente nachfragen, TEST_Phase37j: Update test, TEST_Phase37j: Dismiss test. Test message attachments: test_phase37j.pdf, download_test.pdf, staff_test.pdf. Test leads: test_phase37j_*, test_nopass_*, test_portal_access_*",
+  "retest_needed": false,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "Phase 3.7j complete. Key changes: 1) ApplicantLayout rewritten from sidebar to top header matching StaffLayout, 2) ApplyPage now has password fields + privacy checkbox for account creation during application, 3) Leads/ingest endpoint accepts password field - creates account and sets auth cookies, 4) New followups router for Wiedervorlage CRUD, 5) New export router for CSV download, 6) Messaging supports file attachments via POST /api/conversations/{id}/attachments. Cookie banner must be dismissed before login. Onboarding tour modal may appear for applicants.",
+  "passed_checks": [
+    "Backend: Health endpoint returns OK",
+    "Backend: Staff login returns staff role",
+    "Backend: Applicant login returns applicant role",
+    "Backend: POST /api/leads/ingest with password creates account and sets cookies",
+    "Backend: POST /api/leads/ingest without password works (backwards compatible)",
+    "Backend: GET /api/followups returns list",
+    "Backend: GET /api/followups/due returns due followups",
+    "Backend: POST /api/followups creates followup",
+    "Backend: PUT /api/followups/{id} updates followup",
+    "Backend: DELETE /api/followups/{id} dismisses followup",
+    "Backend: GET /api/export/applications returns CSV",
+    "Backend: GET /api/export/applications?stage=lead_new filters by stage",
+    "Backend: POST /api/conversations/{id}/attachments uploads file",
+    "Backend: GET /api/messages/{id}/attachment downloads file",
+    "Backend: Staff can download applicant attachments",
+    "Backend: Auth cookies work after ingest (can access /api/auth/me)",
+    "Frontend: Apply page has password input field",
+    "Frontend: Apply page has password confirm field",
+    "Frontend: Apply page has privacy checkbox",
+    "Frontend: Staff login redirects to /staff",
+    "Frontend: Staff portal has top header navigation",
+    "Frontend: Staff dashboard has CSV-Export button",
+    "Frontend: Staff dashboard has Wiedervorlage panel",
+    "Frontend: /staff/tasks page loads with task creation button",
+    "Frontend: /staff/tasks page has filter tabs",
+    "Frontend: /staff/messaging page loads with conversation list",
+    "Frontend: Staff messaging has file upload button (after selecting conversation)",
+    "Frontend: Applicant login redirects to /portal",
+    "Frontend: Applicant portal has TOP HEADER navigation (not sidebar)",
+    "Frontend: Applicant portal has logo and user menu",
+    "Frontend: /portal/messages page loads correctly",
+    "Frontend: Applicant messages page has file upload (paperclip) button",
+    "Frontend: Applicant detail page has followup panel",
+    "Frontend: Applicant detail page has create followup button"
+  ],
+  "failed_checks": [],
+  "mocked_apis": {
+    "cost_simulator": "MOCKED internally (COST_SIMULATOR_ENABLED=false)",
+    "payment_module": "Not active - shows 'in Vorbereitung' message"
+  },
+  "notes": "Onboarding tour modal may block interactions for applicants on first visit - can be dismissed with Skip or X button. File upload accepts: .pdf, .jpg, .jpeg, .png, .webp, .doc, .docx (text/plain NOT allowed)."
+}

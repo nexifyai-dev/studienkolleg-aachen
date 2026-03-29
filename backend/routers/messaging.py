@@ -8,7 +8,7 @@ Security notes:
 - Auto-creates support conversation for applicants without explicit recipient
 """
 from datetime import datetime, timezone
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from bson import ObjectId
 from database import get_db
 from deps import get_current_user, STAFF_ROLES, ADMIN_ROLES
@@ -202,3 +202,104 @@ async def mark_message_read(msg_id: str, user: dict = Depends(get_current_user))
     except Exception:
         raise HTTPException(status_code=400, detail="Ungültige ID")
     return {"status": "ok"}
+
+
+@router.post("/conversations/{conv_id}/attachments")
+async def upload_message_attachment(conv_id: str, request: Request, user: dict = Depends(get_current_user)):
+    """Upload a file attachment to a conversation message."""
+    import base64
+    from services.storage import storage, sanitize_filename, validate_upload
+
+    db = get_db()
+    try:
+        conv = await db.conversations.find_one({"_id": ObjectId(conv_id)})
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungültige Konversations-ID")
+    if not conv:
+        raise HTTPException(status_code=404, detail="Konversation nicht gefunden")
+    if user["role"] == "applicant" and user["id"] not in conv.get("participants", []):
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    body = await request.json()
+    filename = sanitize_filename(body.get("filename", "attachment"))
+    content_type = body.get("content_type", "application/octet-stream")
+    file_data_b64 = body.get("file_data")
+    message_text = body.get("content", "")
+
+    if not file_data_b64:
+        raise HTTPException(status_code=400, detail="Keine Datei-Daten")
+
+    try:
+        file_bytes = base64.b64decode(file_data_b64)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungültige Datei-Kodierung")
+
+    try:
+        validate_upload(filename, len(file_bytes), content_type)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    import uuid
+    storage_key = f"messages/{conv_id}/{uuid.uuid4().hex[:8]}_{filename}"
+    await storage().upload(storage_key, file_bytes, content_type)
+
+    now = datetime.now(timezone.utc)
+    msg = {
+        "conversation_id": conv_id,
+        "content": message_text or f"[Datei: {filename}]",
+        "sender_id": user["id"],
+        "sender_name": user.get("full_name") or user.get("email", ""),
+        "visibility": "public",
+        "sent_at": now,
+        "read": False,
+        "attachment": {
+            "filename": filename,
+            "content_type": content_type,
+            "file_size": len(file_bytes),
+            "storage_key": storage_key,
+        },
+    }
+    result = await db.messages.insert_one(msg)
+    await db.conversations.update_one(
+        {"_id": ObjectId(conv_id)},
+        {"$set": {"last_message_at": now}},
+    )
+    msg.pop("_id", None)
+    msg["id"] = str(result.inserted_id)
+    msg["sent_at"] = now.isoformat()
+    # Never expose storage_key to frontend
+    if "attachment" in msg:
+        msg["attachment"].pop("storage_key", None)
+        msg["attachment"]["id"] = msg["id"]
+    return msg
+
+
+@router.get("/messages/{msg_id}/attachment")
+async def download_message_attachment(msg_id: str, user: dict = Depends(get_current_user)):
+    """Download a message attachment."""
+    from fastapi.responses import Response
+    from services.storage import storage as get_storage
+
+    db = get_db()
+    try:
+        msg = await db.messages.find_one({"_id": ObjectId(msg_id)})
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungültige ID")
+    if not msg or not msg.get("attachment"):
+        raise HTTPException(status_code=404, detail="Kein Anhang gefunden")
+
+    conv = await db.conversations.find_one({"_id": ObjectId(msg["conversation_id"])})
+    if user["role"] == "applicant" and user["id"] not in (conv or {}).get("participants", []):
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    storage_key = msg["attachment"]["storage_key"]
+    try:
+        file_bytes = await get_storage().download(storage_key)
+    except (FileNotFoundError, NotImplementedError):
+        raise HTTPException(status_code=404, detail="Datei nicht gefunden")
+
+    return Response(
+        content=file_bytes,
+        media_type=msg["attachment"].get("content_type", "application/octet-stream"),
+        headers={"Content-Disposition": f'attachment; filename="{msg["attachment"]["filename"]}"'},
+    )

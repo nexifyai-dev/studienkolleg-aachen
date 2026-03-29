@@ -2,18 +2,17 @@
 Leads router – public ingest endpoint.
 No authentication required (public-facing form submission).
 Duplicate detection prevents double-entries.
-
-Phase 3 Updates:
-- Erweiterte Formularfelder: course_type, semester, degree_country, date_of_birth, combo_option
-- Inline Dokument-Uploads (language_certificate, highschool_diploma, passport)
-- Workflow-Automation: trigger_application_received nach Eingang
-- AI-Screening-Trigger nach erfolgreicher Lead-Erstellung
+Bewerbung + Registrierung gekoppelt: Optional password creates portal account.
 """
 import base64
+import bcrypt
+import jwt
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 from database import get_db
+from config import JWT_SECRET, JWT_ALGORITHM, ACCESS_TOKEN_TTL_MINUTES, REFRESH_TOKEN_TTL_DAYS, COOKIE_SECURE, COOKIE_SAMESITE
 from models.schemas import LeadIngest, to_str_id
 from services.audit import write_audit_log
 from services.storage import storage, build_storage_key, sanitize_filename, validate_upload
@@ -24,12 +23,31 @@ router = APIRouter(prefix="/api/leads", tags=["leads"])
 logger = logging.getLogger(__name__)
 
 
+def _hash(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+
+def _access_token(user_id: str, email: str, role: str) -> str:
+    return jwt.encode(
+        {"sub": user_id, "email": email, "role": role, "type": "access",
+         "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_TTL_MINUTES)},
+        JWT_SECRET, algorithm=JWT_ALGORITHM,
+    )
+
+
+def _refresh_token(user_id: str) -> str:
+    return jwt.encode(
+        {"sub": user_id, "type": "refresh",
+         "exp": datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_TTL_DAYS)},
+        JWT_SECRET, algorithm=JWT_ALGORITHM,
+    )
+
+
 @router.post("/ingest")
 async def ingest_lead(data: LeadIngest):
     db = get_db()
     email = data.email.lower().strip()
 
-    # full_name aus first/last ableiten wenn vorhanden
     full_name = data.full_name
     if not full_name and data.first_name:
         full_name = f"{data.first_name} {data.last_name or ''}".strip()
@@ -37,12 +55,23 @@ async def ingest_lead(data: LeadIngest):
     existing_user = await db.users.find_one({"email": email})
     duplicate_flag = bool(existing_user)
     user_id = None
+    password_hash = _hash(data.password) if data.password and len(data.password) >= 8 else None
 
     if existing_user:
         user_id = str(existing_user["_id"])
+        # Claim account: set password if not yet set
+        if password_hash and not existing_user.get("password_hash"):
+            await db.users.update_one(
+                {"_id": existing_user["_id"]},
+                {"$set": {
+                    "password_hash": password_hash,
+                    "full_name": full_name or existing_user.get("full_name"),
+                    "claimed_at": datetime.now(timezone.utc),
+                }},
+            )
         await write_audit_log("lead_duplicate_flagged", "system", "lead", user_id, {"email": email})
     else:
-        result = await db.users.insert_one({
+        user_doc = {
             "email": email,
             "full_name": full_name,
             "first_name": data.first_name,
@@ -54,7 +83,10 @@ async def ingest_lead(data: LeadIngest):
             "language_pref": "de",
             "active": True,
             "created_at": datetime.now(timezone.utc),
-        })
+        }
+        if password_hash:
+            user_doc["password_hash"] = password_hash
+        result = await db.users.insert_one(user_doc)
         user_id = str(result.inserted_id)
 
     # Workspace auflösen
@@ -64,7 +96,6 @@ async def ingest_lead(data: LeadIngest):
         workspace = await db.workspaces.find_one({"slug": "studienkolleg"})
     workspace_id = str(workspace["_id"]) if workspace else None
 
-    # Prüfen ob bereits aktive Bewerbung vorhanden
     existing_app = None
     if workspace_id:
         existing_app = await db.applications.find_one({
@@ -80,7 +111,6 @@ async def ingest_lead(data: LeadIngest):
             "workspace_id": workspace_id,
             "current_stage": "lead_new",
             "source": data.source,
-            # Neue Pflichtfelder
             "course_type": data.course_type,
             "desired_start": data.desired_start,
             "combo_option": data.combo_option,
@@ -102,7 +132,7 @@ async def ingest_lead(data: LeadIngest):
              "course": data.course_type, "degree_country": data.degree_country}
         )
 
-        # Inline-Dokument-Uploads verarbeiten
+        # Inline document uploads
         uploaded_doc_types = []
         if data.documents:
             for doc_upload in data.documents:
@@ -141,19 +171,33 @@ async def ingest_lead(data: LeadIngest):
                 except Exception as e:
                     logger.warning(f"[LEADS] Doc upload failed for {doc_upload.document_type}: {e}")
 
-        # Fehlende Pflichtdokumente ermitteln
         missing_types = [t for t in REQUIRED_DOCUMENT_TYPES if t not in uploaded_doc_types]
-
-        # Automationen auslösen
         await trigger_application_received(application_id, email, full_name, data.course_type)
-
         if missing_types:
             await trigger_missing_documents(application_id, email, full_name, missing_types)
 
-    return {
+    # Welcome email
+    if password_hash:
+        from services.email import send_welcome
+        send_welcome(email, full_name)
+
+    # Build response – set auth cookies if password was provided
+    response_data = {
         "success": True,
         "user_id": user_id,
         "application_id": application_id,
         "duplicate_flag": duplicate_flag,
         "message": "Deine Bewerbung ist eingegangen. Wir melden uns innerhalb von 24 Stunden.",
     }
+
+    if password_hash:
+        response_data["account_created"] = True
+        access = _access_token(user_id, email, "applicant")
+        refresh = _refresh_token(user_id)
+        resp = JSONResponse(content=response_data)
+        common = dict(httponly=True, secure=COOKIE_SECURE, samesite=COOKIE_SAMESITE, path="/")
+        resp.set_cookie("access_token", access, max_age=ACCESS_TOKEN_TTL_MINUTES * 60, **common)
+        resp.set_cookie("refresh_token", refresh, max_age=REFRESH_TOKEN_TTL_DAYS * 86400, **common)
+        return resp
+
+    return response_data

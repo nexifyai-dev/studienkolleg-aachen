@@ -237,7 +237,7 @@ export default function ConsentPage() {
                   {history.slice(0, 5).map((entry, idx) => (
                     <div key={idx} className="flex items-center gap-2 text-xs text-slate-500">
                       {entry.granted && !entry.revoked_at ? (
-                        <CheckCircle size={12} className="text-green-500" />
+                        <CheckCircle size={12} className="text-primary" />
                       ) : entry.revoked_at ? (
                         <XCircle size={12} className="text-red-400" />
                       ) : (

@@ -4,70 +4,92 @@
 **Plattform:** Studienkolleg Aachen / Way2Germany
 **Betreiber:** W2G Academy GmbH, Theaterstraße 30–32, 52062 Aachen
 **Typ:** Multi-Tenant Applicant Management Platform
-**Stack:** React (Frontend) + FastAPI (Backend) + MongoDB
+**Stack:** React + FastAPI + MongoDB
 **Sprachen:** Deutsch (Standard), Englisch (vollständig)
+**CI-Farbe:** #113655 (primary)
 
 ---
 
-## Implementierte Features (Stand 29.03.2026)
+## Implementierte Features
 
-### Phase 1–3.7j (Abgeschlossen)
-- Öffentliche Website: Homepage, Kurse, Services, Kontakt, Bewerbungsformular
-- Cookie-basierte JWT-Authentifizierung (httponly, Secure, SameSite)
-- Rollenbasiertes System: superadmin, admin, staff, teacher, applicant, affiliate
-- Bewerberportal: Dashboard, Journey/Status, Dokumente, Nachrichten, Finanzen, Einstellungen, Einwilligungen
-- Staff-Portal: Dashboard, Kanban, Aufgaben, Nachrichten, Bewerber-Detailseite
-- Admin-Portal: Dashboard, Benutzerverwaltung, Audit-Logs
-- KI-Screening über NSCall (nscale)
-- E-Mail-Versand via Resend
-- Datei-Uploads in Nachrichten
-- Onboarding-Tour für Bewerber
-- Top-Navigation portal-weit
-- Bewerbungs-/Registrierungs-Kopplung
+### Öffentliche Website
+- Homepage, Kurse, Services, Kontakt, Bewerbungsformular
+- SEO: Meta-Titel, Descriptions, OG-Tags, hreflang DE/EN (react-helmet-async)
+- Favicon: W2G-Markenicon (favicon.ico, logo192, logo512, apple-touch-icon)
+- Cookie-Banner mit Consent-Logik
+- Impressum, Datenschutzerklärung, AGB (Legal Pages)
 
-### Phase 3.7k (Abgeschlossen – 29.03.2026)
-- **i18n Bewerberportal komplett:** Alle Portal-Seiten (Dashboard, Journey, Documents, Messages, Financials, Settings) vollständig DE/EN über t()-Aufrufe
-- **Messaging-UI Fix:** Chat bündig oben/unten, Input am Boden verankert, keine toten Flächen (Bewerber + Staff)
-- **KI-Prüfung operativ:** Prominenter "KI-Prüfung starten"-Button, "Vorschlag übernehmen" mit echtem Statuswechsel + Audit-Trail
-- **SEO:** Alle öffentlichen Seiten mit korrekten Meta-Titeln, Descriptions, OG-Tags, hreflang DE/EN via react-helmet-async
-- **Partner-Portal:** Eigenes Portal für Affiliates mit Dashboard, Referrals-Tabelle, Empfehlungslink, Einstellungen
-- **Login-Bug Fix:** CORS/Cookie-Problem für Deployment gelöst (relative URLs, Secure=true, SameSite=none)
-- **index.html:** "Studienkolleg Aachen – Way2Germany" statt "React App"
+### Authentifizierung
+- Cookie-basierte JWT (httponly, Secure=true, SameSite=none)
+- Rollen: superadmin, admin, staff, teacher, applicant, affiliate
+- Relative API-URLs (REACT_APP_BACKEND_URL=leer) für Same-Origin-Betrieb
+- Sprach-Synchronisation bei Login (i18n ← language_pref)
+
+### Bewerberportal (/portal)
+- Dashboard: Willkommen, Status-Karte, Quick-Stats, Quick-Actions, Nächste Schritte
+- Journey: Bewerbungsfortschritt-Timeline
+- Dokumente: Upload, Statusanzeige (Hochgeladen/In Prüfung/Akzeptiert/Abgelehnt)
+- Nachrichten: Echtzeit-Chat mit Anhängen, bündig oben/unten, Input verankert
+- Finanzen: "Zahlungsmodul in Vorbereitung" (Platzhalter)
+- Einstellungen: Name, Sprache, Speichern
+- Einwilligungen: DSGVO-Consent-Verwaltung
+- Vollständig DE/EN (i18n über t()-Aufrufe)
+- Onboarding-Tour (5 Schritte, DE/EN)
+
+### Staff-Portal (/staff)
+- Dashboard: KPIs, Schnellzugriff, Wiedervorlagen
+- Kanban: Pipeline-Board nach Bewerbungsstatus
+- Bewerberdetail: Alle Daten (Name, E-Mail, Telefon, Land, Geb.-Datum), Stage-Selector, Follow-ups, Notizen, Audit-Log, KI-Screening
+- Aufgaben: Volloperativ (CRUD, Detail-Modal, Notizen, Anhänge, Download, Historie, Filter, Zuweisung, Priorität, Toast-Feedback)
+- Nachrichten: Staff-Messaging mit Konversationsliste + Chat
+- KI-Prüfung: Prominenter Button, "Vorschlag übernehmen" → Statuswechsel + Audit (NSCall/nscale)
+- Export: CSV-Export der Bewerbungen
+
+### Teacher-Portal (/staff als teacher-Rolle)
+- Dashboard: Zugewiesene Fälle, Consent-gated Zugriff
+- CI-Blau-Design durchgehend
+
+### Partner-Portal (/partner)
+- Dashboard: Statistiken (Gesamt/Aktiv/Eingeschrieben)
+- Vermittlungen: Tabelle mit Name, Kurs, Status, Datum
+- Empfehlungslink: Kopierbarer Link mit ?ref=-Parameter
+- Einstellungen: Organisationsname, Sprache
+
+### Admin-Portal (/admin)
+- Dashboard, Benutzerverwaltung, Audit-Logs
+
+### Systemweit
+- CI-Blau (#113655) als einzige Primärfarbe für Buttons/Actions
+- Sekundär: Outline/Neutral nur bei Primär-/Sekundär-Paaren
+- Toast-Benachrichtigungen (sonner) für Aktions-Feedback
+- Keine generischen Platzhalter (kein "React App")
+- Responsive Design
 
 ---
 
 ## Architektur
-
 ```
 /app/
-├── backend/
-│   ├── config.py (Env-Config)
-│   ├── database.py (MongoDB)
-│   ├── deps.py (Auth Dependencies)
-│   ├── seed.py (Idempotent Seeding)
-│   ├── server.py (FastAPI App)
-│   ├── routers/ (auth, users, applications, documents, tasks, messaging, ai_screening, partner, export, followups, etc.)
+├── backend/ (FastAPI)
+│   ├── routers/ (auth, users, applications, documents, tasks, messaging, ai_screening, partner, export, followups, leads, teacher)
 │   ├── services/ (audit, email, storage, ai, nscale_provider, automation)
-│   ├── models/ (schemas.py)
+│   ├── models/schemas.py
+│   ├── config.py, database.py, deps.py, seed.py, server.py
 │   └── tests/
-├── frontend/
+├── frontend/ (React + Tailwind + Shadcn)
 │   ├── src/
-│   │   ├── App.js (Routing inkl. HelmetProvider)
-│   │   ├── contexts/AuthContext.js
+│   │   ├── App.js (HelmetProvider + Toaster + Routes)
+│   │   ├── contexts/AuthContext.js (syncLanguage)
 │   │   ├── lib/apiClient.js (relative URLs)
-│   │   ├── locales/ (de/translation.json, en/translation.json)
-│   │   ├── components/shared/SEOHead.js
-│   │   ├── components/layout/ (ApplicantLayout, StaffLayout, AdminLayout, PartnerLayout, PublicNav, PublicFooter)
-│   │   ├── pages/public/ (Home, Courses, Services, Contact, Apply, Legal)
-│   │   ├── pages/portal/ (Dashboard, Journey, Documents, Messages, Financials, Settings, Consent)
-│   │   ├── pages/staff/ (Dashboard, Kanban, Tasks, Messaging, ApplicantDetail)
-│   │   ├── pages/admin/ (Dashboard, Users, Audit)
-│   │   └── pages/partner/ (Dashboard, Referrals, Link, Settings)
+│   │   ├── locales/ (de + en translation.json)
+│   │   ├── components/ (layout, shared, ui, OnboardingTour)
+│   │   └── pages/ (public, portal, staff, partner, admin, auth)
+│   └── public/ (favicon.ico, logo192, logo512, manifest.json)
 ```
 
 ---
 
-## Zugangsdaten (Test)
+## Zugangsdaten
 
 | Rolle      | E-Mail                                | Passwort        |
 |------------|---------------------------------------|-----------------|
@@ -79,20 +101,14 @@
 
 ---
 
-## Offene Punkte / Backlog
-
-### P2
-- Payment-Freischaltung (Zahlungsmodul – aktuell "in Vorbereitung")
-- Erweiterte Suchfilter im Staff-Portal
-- Preiskalkulator (feature-flagged)
-
-### P3
-- PWA-Fähigkeit
-- Erweiterte Partner-Statistiken / Provisionsabrechnung
-
----
-
 ## Mocked / Feature-Flagged
 - Zahlungsmodul: "in Vorbereitung"
 - Preiskalkulator: feature-flagged
 - AI-Screening: abhängig von NSCALE_API_KEY
+
+## Offene Punkte (P2/P3 Backlog)
+- Payment-Modul Anbindung (P2)
+- Erweiterte Suchfilter im Staff-Portal (P2)
+- Partner-Provisionsabrechnung (P2)
+- PWA-Fähigkeit (P3)
+- E-Mail-Benachrichtigungen erweitern (P2)

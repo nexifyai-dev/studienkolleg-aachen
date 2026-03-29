@@ -59,7 +59,7 @@ function FollowupPanel({ appId }) {
     <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="followup-panel">
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-semibold text-slate-700 text-xs flex items-center gap-1.5">
-          <CalendarClock size={14} className="text-amber-500" /> Wiedervorlagen ({followups.length})
+          <CalendarClock size={14} className="text-primary" /> Wiedervorlagen ({followups.length})
         </h3>
         <button onClick={() => setShowCreate(!showCreate)} data-testid="create-followup-btn"
           className="text-[10px] text-primary hover:underline flex items-center gap-1">

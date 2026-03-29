@@ -163,7 +163,7 @@ export default function StaffDashboard() {
           {(pendingDocs.length > 0 || newLeads.length > 0) && (
             <div className="bg-white border border-slate-200 rounded-sm p-4" data-testid="action-needed-panel">
               <h3 className="font-semibold text-slate-800 text-sm mb-3 flex items-center gap-2">
-                <AlertCircle size={14} className="text-amber-500" /> Handlungsbedarf
+                <AlertCircle size={14} className="text-primary" /> Handlungsbedarf
               </h3>
               <div className="space-y-2">
                 {newLeads.length > 0 && (

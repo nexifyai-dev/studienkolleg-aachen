@@ -5,8 +5,176 @@ import { STAGE_LABELS, STAGE_COLORS, formatDate } from '../../lib/utils';
 import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
   FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2,
-  Phone, Mail, MessageCircle, Building2
+  Phone, Mail, MessageCircle, Building2, Users, GraduationCap, Trash2
 } from 'lucide-react';
+
+/* ═══════════════════════════════════════════════════════════════
+   Teacher Assignment Panel (Staff/Admin only)
+   ═══════════════════════════════════════════════════════════════ */
+function TeacherAssignmentPanel({ applicantId, applicantName }) {
+  const [teachers, setTeachers] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState('');
+  const [showPicker, setShowPicker] = useState(false);
+
+  useEffect(() => {
+    loadData();
+  }, [applicantId]);
+
+  const loadData = async () => {
+    try {
+      const [assignRes, usersRes] = await Promise.all([
+        apiClient.get(`/api/teacher/assignments`, { withCredentials: true }),
+        apiClient.get('/api/teacher/list', { withCredentials: true }),
+      ]);
+      const allAssignments = assignRes.data.assignments || [];
+      setAssignments(allAssignments.filter(a => a.applicant_id === applicantId));
+      setTeachers((usersRes.data || []).filter(u => u.role === 'teacher' && u.active));
+    } catch (e) {
+      console.error('Failed to load teacher data', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const assignTeacher = async (teacherId) => {
+    setActionLoading(teacherId);
+    try {
+      await apiClient.post(`/api/teacher/assignments?applicant_id=${applicantId}&teacher_id=${teacherId}`, {}, { withCredentials: true });
+      await loadData();
+      setShowPicker(false);
+    } catch (e) {
+      console.error('Assign failed', e);
+    } finally {
+      setActionLoading('');
+    }
+  };
+
+  const removeAssignment = async (teacherId) => {
+    setActionLoading(teacherId);
+    try {
+      await apiClient.delete(`/api/teacher/assignments?applicant_id=${applicantId}&teacher_id=${teacherId}`, { withCredentials: true });
+      await loadData();
+    } catch (e) {
+      console.error('Remove failed', e);
+    } finally {
+      setActionLoading('');
+    }
+  };
+
+  const assignedTeacherIds = new Set(assignments.map(a => a.teacher_id));
+  const availableTeachers = teachers.filter(t => !assignedTeacherIds.has(t.id));
+
+  if (loading) return (
+    <div className="bg-white border border-slate-200 rounded-sm p-5">
+      <div className="flex items-center gap-2 mb-3">
+        <GraduationCap size={18} className="text-primary" />
+        <h3 className="font-semibold text-slate-700 text-sm">Lehrer-Zuweisung</h3>
+      </div>
+      <div className="flex items-center justify-center py-4"><Loader2 size={18} className="animate-spin text-slate-400" /></div>
+    </div>
+  );
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-sm p-5 space-y-3" data-testid="teacher-assignment-panel">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <GraduationCap size={18} className="text-primary" />
+          <h3 className="font-semibold text-slate-700 text-sm">Lehrer-Zuweisung</h3>
+        </div>
+        {availableTeachers.length > 0 && (
+          <button
+            onClick={() => setShowPicker(!showPicker)}
+            data-testid="assign-teacher-btn"
+            className="flex items-center gap-1.5 text-xs font-medium text-primary border border-primary/30 px-3 py-1.5 rounded-sm hover:bg-primary/5 transition-all"
+          >
+            <Users size={14} /> Lehrer zuweisen
+          </button>
+        )}
+      </div>
+
+      {/* Datenschutz-Hinweis */}
+      <div className="bg-slate-50 border border-slate-200 rounded-sm px-3 py-2 flex items-start gap-2">
+        <AlertCircle size={13} className="text-slate-500 mt-0.5 shrink-0" />
+        <p className="text-slate-600 text-xs">
+          Lehrer sehen nur Daten, für die der Bewerber eine aktive Einwilligung erteilt hat. Finanz-, Pass- und AI-Daten bleiben ausgeschlossen.
+        </p>
+      </div>
+
+      {/* Aktuelle Zuweisungen */}
+      {assignments.length > 0 ? (
+        <div className="space-y-2">
+          {assignments.map(a => {
+            const teacher = teachers.find(t => t.id === a.teacher_id);
+            return (
+              <div key={a.teacher_id} className="flex items-center justify-between border border-slate-100 rounded-sm px-3 py-2.5"
+                data-testid={`assignment-${a.teacher_id}`}>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 bg-primary/8 rounded-sm flex items-center justify-center">
+                    <GraduationCap size={14} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-slate-800">{teacher?.full_name || teacher?.email || a.teacher_id}</p>
+                    <p className="text-xs text-slate-400">
+                      Zugewiesen: {a.assigned_at ? new Date(a.assigned_at).toLocaleDateString('de-DE') : '–'}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => removeAssignment(a.teacher_id)}
+                  disabled={actionLoading === a.teacher_id}
+                  data-testid={`remove-assignment-${a.teacher_id}`}
+                  className="text-slate-400 hover:text-red-500 transition-colors p-1.5 rounded-sm hover:bg-red-50 disabled:opacity-50"
+                  title="Zuweisung entfernen"
+                >
+                  {actionLoading === a.teacher_id
+                    ? <Loader2 size={14} className="animate-spin" />
+                    : <Trash2 size={14} />}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-4" data-testid="no-assignments">
+          <Users size={24} className="text-slate-300 mx-auto mb-2" />
+          <p className="text-slate-400 text-xs">Kein Lehrer zugewiesen</p>
+        </div>
+      )}
+
+      {/* Teacher Picker */}
+      {showPicker && availableTeachers.length > 0 && (
+        <div className="border border-primary/20 rounded-sm bg-primary/5 p-3 space-y-2" data-testid="teacher-picker">
+          <p className="text-xs font-medium text-primary">Verfügbare Lehrer:</p>
+          {availableTeachers.map(teacher => (
+            <button
+              key={teacher.id}
+              onClick={() => assignTeacher(teacher.id)}
+              disabled={actionLoading === teacher.id}
+              data-testid={`pick-teacher-${teacher.id}`}
+              className="w-full flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-sm hover:border-primary/50 hover:shadow-sm transition-all text-left disabled:opacity-50"
+            >
+              <div className="flex items-center gap-2">
+                <GraduationCap size={14} className="text-primary" />
+                <div>
+                  <p className="text-sm font-medium text-slate-700">{teacher.full_name || teacher.email}</p>
+                  <p className="text-xs text-slate-400">{teacher.email}</p>
+                </div>
+              </div>
+              {actionLoading === teacher.id
+                ? <Loader2 size={14} className="animate-spin text-primary" />
+                : <span className="text-xs text-primary font-medium">Zuweisen</span>}
+            </button>
+          ))}
+        </div>
+      )}
+      {showPicker && availableTeachers.length === 0 && (
+        <p className="text-xs text-slate-400 italic">Alle Lehrer sind bereits zugewiesen.</p>
+      )}
+    </div>
+  );
+}
 
 const DOC_STATUS = {
   uploaded: { label: 'Hochgeladen', icon: Clock, color: 'bg-primary/10 text-primary' },
@@ -394,9 +562,10 @@ export default function ApplicantDetailPage() {
           </div>
         </div>
 
-        {/* Rechte Spalte: KI-Prüfung */}
-        <div className="xl:col-span-1">
+        {/* Rechte Spalte: KI-Prüfung + Lehrer-Zuweisung */}
+        <div className="xl:col-span-1 space-y-4">
           <AIScreeningPanel appId={id} />
+          <TeacherAssignmentPanel applicantId={app.applicant_id || id} applicantName={app.applicant?.full_name} />
         </div>
       </div>
     </div>

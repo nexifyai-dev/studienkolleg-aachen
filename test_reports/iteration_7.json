@@ -1,0 +1,85 @@
+{
+  "summary": "Phase 3.7d Testing Complete - Teacher Assignment UI, Individual Pricing Disclaimers, WhatsApp Update. All 23 backend tests passed. All frontend tests passed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase37d_features.py",
+    "/app/test_reports/pytest/pytest_results_phase37d.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "GET /api/teacher/list correctly returns teacher list with id, full_name, email, active fields",
+    "POST/DELETE /api/teacher/assignments correctly requires staff/admin role (403 for teacher/applicant)",
+    "GET /api/teacher/my-students correctly consent-gated - only shows students with active teacher_data_access consent",
+    "TeacherAssignmentPanel in ApplicantDetailPage shows privacy notice about consent-gated data access",
+    "AGB §5 Zahlungsbedingungen explicitly states individual pricing: 'Die konkreten Kosten und Gebühren hängen vom jeweiligen Einzelfall ab'",
+    "FAQ section includes new pricing question: 'Was kosten die Kurse?' with individual pricing answer",
+    "Contact page WhatsApp links correctly point to wa.me/4915208496876",
+    "Cost simulator returns individual pricing disclaimers (MOCKED - COST_SIMULATOR_ENABLED=false)"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_phase37d_features.py"
+  ],
+  "success_rate": {
+    "backend": "100% (23/23 tests passed)",
+    "frontend": "100% (all UI tests passed)"
+  },
+  "test_credentials": {
+    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
+    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
+    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+  },
+  "seed_data_creation": "4 accounts seeded via seed.py",
+  "retest_needed": false,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "Phase 3.7d complete. Teacher Assignment Panel visible in /staff/applications/:id. GET /api/teacher/list returns teachers. Consent page at /portal/consents with teacher_data_access consent. WhatsApp: wa.me/4915208496876. AGB §5 has individual pricing disclaimer. FAQ has pricing question. Cost simulator is MOCKED internally.",
+  "passed_checks": [
+    "Backend: Health endpoint returns OK",
+    "Backend: Admin login (superadmin role)",
+    "Backend: Staff login (staff role)",
+    "Backend: Teacher login (teacher role)",
+    "Backend: Applicant login (applicant role)",
+    "Backend: GET /api/teacher/list - staff can list teachers with id, full_name, email",
+    "Backend: GET /api/teacher/list - teacher can also list teachers",
+    "Backend: GET /api/teacher/list - applicant denied (403)",
+    "Backend: GET /api/teacher/list - unauthenticated denied (401)",
+    "Backend: GET /api/teacher/assignments - staff can list all assignments",
+    "Backend: GET /api/teacher/assignments - teacher can list own assignments",
+    "Backend: POST /api/teacher/assignments - requires auth (401)",
+    "Backend: POST /api/teacher/assignments - teacher cannot create (403)",
+    "Backend: GET /api/teacher/my-students - teacher can access",
+    "Backend: GET /api/teacher/my-students - applicant denied (403)",
+    "Backend: GET /api/teacher/my-students - unauthenticated denied (401)",
+    "Backend: GET /api/consents/types - includes teacher_data_access with scope/excludes",
+    "Backend: POST /api/consents/grant - applicant can grant consent",
+    "Backend: GET /api/consents/my - applicant can view own consents",
+    "Backend: POST /api/consents/revoke - applicant can revoke consent",
+    "Backend: GET /api/internal/cost-simulator/config - staff can access, returns individual pricing disclaimer",
+    "Backend: GET /api/internal/cost-simulator/config - applicant denied (403)",
+    "Backend: GET /api/internal/cost-simulator/config - unauthenticated denied (401)",
+    "Frontend: Homepage DE/EN toggle works",
+    "Frontend: FAQ section has 'Was kosten die Kurse?' pricing question",
+    "Frontend: Contact page WhatsApp links point to wa.me/4915208496876 (2 links found)",
+    "Frontend: AGB page §5 Zahlungsbedingungen has individual pricing disclaimer ('Einzelfall')",
+    "Frontend: Staff login redirects to /staff",
+    "Frontend: Staff can navigate to applicant detail page",
+    "Frontend: TeacherAssignmentPanel visible in applicant detail with privacy notice",
+    "Frontend: Applicant login redirects to /portal",
+    "Frontend: Onboarding tour modal appears for applicants",
+    "Frontend: Consent page at /portal/consents loads correctly",
+    "Frontend: Consent page shows teacher_data_access consent card with scope/excludes",
+    "Frontend: Grant Consent button available"
+  ],
+  "failed_checks": [],
+  "mocked_apis": {
+    "cost_simulator": "MOCKED internally (COST_SIMULATOR_ENABLED=false) - returns individual pricing message"
+  }
+}

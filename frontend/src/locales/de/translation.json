@@ -251,7 +251,7 @@
       { "step": "01", "title": "Bewerbung einreichen", "desc": "Fülle das vollständige Formular aus und lade deine Pflichtdokumente hoch. Wir melden uns innerhalb von 24 Stunden." },
       { "step": "02", "title": "KI-gestützte Vorprüfung", "desc": "Unser System prüft automatisch die Vollständigkeit deiner Unterlagen und bereitet die Staffbewertung vor." },
       { "step": "03", "title": "Portalzugang & Statusverfolgung", "desc": "Du erhältst dein persönliches Portal mit klarem Aufgaben-Dashboard und direktem Kontakt zum Team." },
-      { "step": "04", "title": "Zulassung & Start", "desc": "Nach Prüfung und Zahlung erhältst du deinen Zulassungsbescheid und startest ins Studienkolleg." }
+      { "step": "04", "title": "Zulassung & Start", "desc": "Nach Prüfung und individuellem Angebot erhältst du deinen Zulassungsbescheid und startest ins Studienkolleg." }
     ],
     "partner_text": "Seit Jahren vertrauenswürdiger Partner für internationale Studierende auf dem Weg nach Deutschland.",
     "faq_more": "Weitere Fragen?",
@@ -276,7 +276,8 @@
       { "q": "Kann ich die FSP garantiert ablegen?", "a": "Nein. Die finale Entscheidung über die FSP-Berechtigung trifft die zuständige Bezirksregierung. Wir bereiten dich optimal vor und begleiten deinen Antrag." },
       { "q": "Was passiert nach meiner Bewerbung?", "a": "Nach Eingang deiner Bewerbung meldet sich unser Team innerhalb von 24 Stunden. Du erhältst Zugang zu deinem persönlichen Portal." },
       { "q": "Helft ihr beim Visum?", "a": "Ja. Wir unterstützen bei der Vorbereitung aller notwendigen Visa-Unterlagen und arbeiten mit verlässlichen Partnern zusammen." },
-      { "q": "Gibt es Online-Kurse?", "a": "Im ersten Semester ist ein Teilzeit-Online-Anteil möglich. Die Details hängen von deinem Programm ab." }
+      { "q": "Gibt es Online-Kurse?", "a": "Im ersten Semester ist ein Teilzeit-Online-Anteil möglich. Die Details hängen von deinem Programm ab." },
+      { "q": "Was kosten die Kurse?", "a": "Die Kosten hängen vom individuellen Fall ab: Kurswahl, Startzeitpunkt, Zusatzleistungen und persönlicher Situation. Pauschalpreise können wir nicht nennen. Nach Eingang deiner Bewerbung erhältst du ein individuelles Angebot." }
     ]
   },
   "footer": {

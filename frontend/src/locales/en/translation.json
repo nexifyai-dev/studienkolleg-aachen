@@ -324,7 +324,7 @@
       { "step": "01", "title": "Submit Application", "desc": "Complete the full form and upload your required documents. We will respond within 24 hours." },
       { "step": "02", "title": "AI-Assisted Pre-Screening", "desc": "Our system automatically checks document completeness and prepares the staff evaluation." },
       { "step": "03", "title": "Portal Access & Status Tracking", "desc": "You receive your personal portal with a clear task dashboard and direct contact with the team." },
-      { "step": "04", "title": "Admission & Start", "desc": "After review and payment, you receive your admission letter and begin at the Studienkolleg." }
+      { "step": "04", "title": "Admission & Start", "desc": "After review and a personal offer, you receive your admission letter and begin at the Studienkolleg." }
     ],
     "partner_text": "A trusted partner for international students on their way to Germany for years.",
     "faq_more": "More questions?",
@@ -376,6 +376,10 @@
       {
         "q": "Are there online courses?",
         "a": "Partial online attendance is possible in the first semester for some programs."
+      },
+      {
+        "q": "How much do the courses cost?",
+        "a": "Costs depend on your individual case: course selection, start date, additional services and personal situation. We cannot quote flat rates. After receiving your application, you will receive a personal offer."
       }
     ]
   },

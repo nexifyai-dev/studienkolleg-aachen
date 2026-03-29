@@ -3,11 +3,13 @@ Interner Staff-Kosten-Simulator
 Feature-Flag: COST_SIMULATOR_ENABLED=true (Standard: false)
 
 WICHTIG:
-- Nicht öffentlich zugänglich
-- Nur Staff/Admin
+- Nicht öffentlich zugänglich – nur Staff/Admin
 - Keine echten Preise (Preislogik ist [OFFEN])
-- Nur zur internen Kalkulation / Planung
-- Alle Preisangaben sind PLATZHALTER
+- Nur zur internen Kalkulation / Planung / Angebotsvorbereitung
+- Alle Preisangaben sind PLATZHALTER und nicht freigegeben
+- Preise/Kosten sind EINZELFALLABHÄNGIG (Kurswahl, Zeitpunkt, Zusatzleistungen, Partner-/Sub-Agentur-Kontext)
+- Keine Veröffentlichung oder Weitergabe als Standardpreise erlaubt
+- Sub-Agenturen/Partner: Konditionen ebenfalls individuell
 """
 from fastapi import APIRouter, HTTPException, Depends
 from deps import require_roles, STAFF_ROLES
@@ -25,11 +27,11 @@ async def cost_simulator_config(user: dict = Depends(require_roles(*STAFF_ROLES)
     if not COST_SIMULATOR_ENABLED:
         return {
             "enabled": False,
-            "message": "[OFFEN] Kosten-Simulator ist deaktiviert. Preislogik noch nicht final freigegeben.",
+            "message": "[OFFEN] Kosten-Simulator ist deaktiviert. Preislogik noch nicht final freigegeben. Alle Kosten und Konditionen sind einzelfallabhängig.",
         }
     return {
         "enabled": True,
-        "disclaimer": "[OFFEN] Alle Preisangaben sind vorläufige Platzhalter und nicht rechtlich freigegeben.",
+        "disclaimer": "[OFFEN] Alle Preisangaben sind vorläufige Platzhalter und nicht rechtlich freigegeben. Tatsächliche Kosten sind einzelfallabhängig (Kurswahl, Zeitpunkt, Zusatzleistungen, individuelle Vereinbarung). Für Partner/Sub-Agenturen gelten gesonderte, individuell vereinbarte Konditionen.",
         "courses": [
             {
                 "course": "T-Course (Technik)",

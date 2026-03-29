@@ -105,10 +105,12 @@ Hierzu zählen insbesondere:
   },
   {
     title: '§5 Zahlungsbedingungen',
-    content: `(1) Die Kursgebühr ist innerhalb der in der Zahlungsaufforderung genannten Frist vollständig zu entrichten.
+    content: `(1) Die Kursgebühr ist innerhalb der in der Zahlungsaufforderung genannten Frist vollständig zu entrichten. Die Höhe der Kursgebühren richtet sich nach dem individuellen Leistungsumfang und wird im jeweiligen Angebot bzw. in der Zahlungsaufforderung gesondert ausgewiesen.
 (2) Erfolgt keine fristgerechte Zahlung, ist das Studienkolleg nicht verpflichtet, den Kursplatz freizuhalten.
 (3) Bei vereinbarter Ratenzahlung wird die gesamte Restforderung sofort fällig, wenn der Teilnehmer mit zwei aufeinanderfolgenden Raten in Verzug gerät.
 (4) Das Studienkolleg ist berechtigt, Teilnehmer bei Zahlungsverzug bis zum vollständigen Ausgleich von der Teilnahme auszuschließen.
+
+Hinweis: Die konkreten Kosten und Gebühren hängen vom jeweiligen Einzelfall ab (Kurswahl, Startzeitpunkt, Zusatzleistungen, individuelle Vereinbarung) und werden nicht pauschal veröffentlicht. Verbindliche Preisangaben ergeben sich ausschließlich aus dem individuellen Angebot.
 
 [OFFEN – Preisangaben sind noch nicht final verifiziert und werden vor Go-Live aktualisiert.]`,
   },
@@ -128,14 +130,15 @@ Hierzu zählen insbesondere:
   {
     title: '§8 Stornierung vor Kursbeginn',
     content: `(1) Eine Stornierung bedarf der Textform.
-(2) Es gelten folgende pauschalierte Schadensersatzregelungen:
+(2) Es gelten folgende pauschalierte Schadensersatzregelungen, sofern nicht im Einzelfall abweichend vereinbart:
 • mehr als 8 Wochen vor Kursbeginn: 20 % der Kursgebühr, mindestens 500 €
 • 8–6 Wochen vor Kursbeginn: 60 %
 • weniger als 6 Wochen vor Kursbeginn: 100 %
 • nach Kursbeginn: 100 %
 
 (3) Maßgeblich ist der im Zulassungsbescheid genannte Kursbeginn.
-(4) Dem Kursteilnehmer bleibt der Nachweis vorbehalten, dass kein oder ein wesentlich geringerer Schaden entstanden ist.`,
+(4) Dem Kursteilnehmer bleibt der Nachweis vorbehalten, dass kein oder ein wesentlich geringerer Schaden entstanden ist.
+(5) Die tatsächlichen Stornierungskosten können je nach Einzelfall und individueller Vereinbarung abweichen.`,
   },
   {
     title: '§9 Kursabbruch nach Beginn',
@@ -157,9 +160,11 @@ Hierzu zählen insbesondere:
 • Nichterscheinen zu Terminen bei Behörden
 • fehlender Mitwirkung im Visumverfahren
 
-(4) In den Fällen des Absatzes 2 erfolgt die Erstattung abzüglich einer Verwaltungspauschale in Höhe von:
+(4) In den Fällen des Absatzes 2 erfolgt die Erstattung abzüglich einer Verwaltungspauschale. Die Regelbeträge betragen:
 • 500 € bei Schwerpunktkursen
-• 100 € je gebuchter Sprachniveaustufe`,
+• 100 € je gebuchter Sprachniveaustufe
+
+Im Einzelfall können die tatsächlichen Verwaltungskosten abweichen und werden individuell mitgeteilt.`,
   },
   {
     title: '§11 Verwaltungsgebühren',

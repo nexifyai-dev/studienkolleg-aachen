@@ -209,3 +209,29 @@ async def list_assignments(
 
     assignments = await db.teacher_assignments.find(query, {"_id": 0}).to_list(500)
     return {"assignments": assignments}
+
+
+
+@router.get("/list")
+async def list_teachers(
+    user: dict = Depends(get_current_user),
+):
+    """List all teachers with basic info (staff/admin/teacher use)."""
+    if user["role"] not in STAFF_ROLES and user["role"] not in ADMIN_ROLES and user["role"] != "teacher":
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+
+    db = get_db()
+    teachers = await db.users.find(
+        {"role": "teacher"},
+        {"_id": 1, "full_name": 1, "email": 1, "active": 1},
+    ).to_list(200)
+
+    result = []
+    for t in teachers:
+        result.append({
+            "id": str(t["_id"]),
+            "full_name": t.get("full_name", ""),
+            "email": t.get("email", ""),
+            "active": t.get("active", True),
+        })
+    return result

@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   LayoutDashboard, Users, Columns, FileText, BarChart2,
-  Settings, LogOut, Menu, X, GraduationCap, ShieldCheck
+  Settings, LogOut, Menu, X, GraduationCap, ShieldCheck, BookOpen
 } from 'lucide-react';
 
 export default function StaffLayout() {
@@ -12,7 +12,11 @@ export default function StaffLayout() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const navItems = [
+  const isTeacher = user?.role === 'teacher';
+
+  const navItems = isTeacher ? [
+    { path: '/staff', icon: LayoutDashboard, label: 'Mein Dashboard', exact: true },
+  ] : [
     { path: '/staff', icon: LayoutDashboard, label: 'Dashboard', exact: true },
     { path: '/staff/kanban', icon: Columns, label: 'Kanban Board' },
     { path: '/admin', icon: ShieldCheck, label: 'Admin', roles: ['superadmin', 'admin'] },
@@ -32,7 +36,7 @@ export default function StaffLayout() {
         <div className="p-4 flex items-center justify-between border-b border-white/10">
           <Link to="/" className="flex items-center gap-2">
             <GraduationCap size={20} className="text-white" />
-            <span className="text-white font-heading font-bold text-sm">W2G Staff</span>
+            <span className="text-white font-heading font-bold text-sm">{isTeacher ? 'W2G Lehrer' : 'W2G Staff'}</span>
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/60"><X size={18} /></button>
         </div>

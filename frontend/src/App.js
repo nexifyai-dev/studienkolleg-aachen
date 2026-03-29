@@ -25,10 +25,12 @@ import DocumentsPage from './pages/portal/DocumentsPage';
 import MessagesPage from './pages/portal/MessagesPage';
 import FinancialsPage from './pages/portal/FinancialsPage';
 import SettingsPage from './pages/portal/SettingsPage';
+import ConsentPage from './pages/portal/ConsentPage';
 
 // Staff pages
 import StaffLayout from './components/layout/StaffLayout';
 import StaffDashboard from './pages/staff/StaffDashboard';
+import TeacherDashboard from './pages/staff/TeacherDashboard';
 import KanbanPage from './pages/staff/KanbanPage';
 import ApplicantDetailPage from './pages/staff/ApplicantDetailPage';
 
@@ -55,6 +57,13 @@ function PublicRoute({ children }) {
     return <Navigate to="/portal" replace />;
   }
   return children;
+}
+
+// Dynamic staff index: Teacher sees TeacherDashboard, everyone else sees StaffDashboard
+function StaffDashboardOrTeacher() {
+  const { user } = useAuth();
+  if (user?.role === 'teacher') return <TeacherDashboard />;
+  return <StaffDashboard />;
 }
 
 export default function App() {
@@ -90,6 +99,7 @@ export default function App() {
             <Route path="messages" element={<MessagesPage />} />
             <Route path="financials" element={<FinancialsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="consents" element={<ConsentPage />} />
           </Route>
 
           {/* Staff */}
@@ -98,7 +108,7 @@ export default function App() {
               <StaffLayout />
             </ProtectedRoute>
           }>
-            <Route index element={<StaffDashboard />} />
+            <Route index element={<StaffDashboardOrTeacher />} />
             <Route path="kanban" element={<KanbanPage />} />
             <Route path="applicants/:id" element={<ApplicantDetailPage />} />
             <Route path="applications/:id" element={<ApplicantDetailPage />} />

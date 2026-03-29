@@ -118,3 +118,16 @@ async def list_ai_screenings(
             s_dict["created_at"] = s_dict["created_at"].isoformat()
         result.append(s_dict)
     return result
+
+
+@router.get("/ai/model-registry")
+async def get_ai_model_registry(
+    user: dict = Depends(require_roles(*STAFF_ROLES)),
+):
+    """Returns the current AI model registry for audit/documentation (staff only)."""
+    from services.nscale_provider import get_model_registry, is_enabled
+    return {
+        "provider": "nscale",
+        "enabled": is_enabled(),
+        "models": get_model_registry(),
+    }

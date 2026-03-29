@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   LayoutDashboard, FileText, MessageSquare, CreditCard,
-  Settings, BookOpen, LogOut, Menu, X, GraduationCap, ChevronRight
+  Settings, BookOpen, LogOut, Menu, X, GraduationCap, ChevronRight, Shield
 } from 'lucide-react';
+import OnboardingTour from '../OnboardingTour';
 
 export default function ApplicantLayout() {
   const { t } = useTranslation();
@@ -20,6 +21,7 @@ export default function ApplicantLayout() {
     { path: '/portal/documents', icon: FileText, label: t('portal.documents') },
     { path: '/portal/messages', icon: MessageSquare, label: t('portal.messages') },
     { path: '/portal/financials', icon: CreditCard, label: t('portal.financials') },
+    { path: '/portal/consents', icon: Shield, label: t('portal.settings') === 'Settings' ? 'Consents' : 'Einwilligungen' },
     { path: '/portal/settings', icon: Settings, label: t('portal.settings') },
   ];
 
@@ -101,6 +103,7 @@ export default function ApplicantLayout() {
 
         {/* Page content */}
         <main className="flex-1 p-4 lg:p-6 max-w-5xl w-full">
+          <OnboardingTour />
           <Outlet />
         </main>
       </div>

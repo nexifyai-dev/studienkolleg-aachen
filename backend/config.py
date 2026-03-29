@@ -50,9 +50,14 @@ S3_REGION: str = os.environ.get("S3_REGION", "eu-central-1")
 LOCAL_STORAGE_PATH: str = os.environ.get("LOCAL_STORAGE_PATH", "/app/storage")
 STORAGE_ENABLED: bool = bool(S3_ENDPOINT or STORAGE_BACKEND == "local")
 
-# ─── AI Screening (Emergent LLM) ─────────────────────────────────────────────
+# ─── AI / KI-Inferenz (nscale – NSCall) ───────────────────────────────────────
+# Alle produktiven KI-Funktionen laufen über die nscale API.
+# NSCALE_API_KEY muss gesetzt sein, damit AI-Features aktiv sind.
+NSCALE_API_KEY: str = os.environ.get("NSCALE_API_KEY", "")
+AI_SCREENING_ENABLED: bool = bool(NSCALE_API_KEY)
+
+# Legacy – wird nicht mehr für Produktiv-KI genutzt (Übergangscode entfernt)
 EMERGENT_LLM_KEY: str = os.environ.get("EMERGENT_LLM_KEY", "")
-AI_SCREENING_ENABLED: bool = bool(EMERGENT_LLM_KEY)
 
 # ─── Feature Flags ────────────────────────────────────────────────────────────
 COST_SIMULATOR_ENABLED: bool = os.environ.get("COST_SIMULATOR_ENABLED", "false").lower() == "true"

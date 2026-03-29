@@ -55,7 +55,7 @@ export default function ContactPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <MessageCircle size={15} className="shrink-0 opacity-70" />
-                    <a href="https://api.whatsapp.com/message/RVKVWFEKNCIRG1?autoload=1&app_absent=0"
+                    <a href="https://wa.me/4915208496876"
                       target="_blank" rel="noopener noreferrer"
                       className="hover:text-white/80 transition-colors">
                       WhatsApp
@@ -112,7 +112,7 @@ export default function ContactPage() {
                   {t('contact_page.whatsapp_desc')}
                 </p>
                 <a
-                  href="https://api.whatsapp.com/message/RVKVWFEKNCIRG1?autoload=1&app_absent=0"
+                  href="https://wa.me/4915208496876"
                   target="_blank"
                   rel="noopener noreferrer"
                   data-testid="contact-whatsapp-btn"

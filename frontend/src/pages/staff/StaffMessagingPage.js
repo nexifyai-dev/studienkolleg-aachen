@@ -204,13 +204,13 @@ export default function StaffMessagingPage() {
     : '';
 
   return (
-    <div className="animate-fade-in" data-testid="staff-messaging-page">
-      <div className="mb-4">
+    <div className="flex flex-col animate-fade-in" style={{ height: 'calc(100vh - 120px)' }} data-testid="staff-messaging-page">
+      <div className="mb-3 shrink-0">
         <h1 className="text-xl font-heading font-bold text-primary">Nachrichten</h1>
         <p className="text-slate-500 text-sm">In-App Kommunikation mit Bewerbern</p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-sm overflow-hidden flex" style={{ height: 'calc(100vh - 200px)', minHeight: '400px' }}>
+      <div className="bg-white border border-slate-200 rounded-sm overflow-hidden flex flex-1 min-h-0">
         {/* Conversation List */}
         <div className={`w-full md:w-80 border-r border-slate-200 flex flex-col shrink-0 ${!showList && activeConv ? 'hidden md:flex' : 'flex'}`}>
           <div className="p-3 border-b border-slate-100">

@@ -131,3 +131,50 @@ async def get_ai_model_registry(
         "enabled": is_enabled(),
         "models": get_model_registry(),
     }
+
+
+@router.post("/applications/{app_id}/accept-ai-suggestion")
+async def accept_ai_suggestion(
+    app_id: str,
+    body: dict,
+    user: dict = Depends(require_roles(*STAFF_ROLES)),
+):
+    """
+    Übernimmt den KI-Vorschlag: Ändert den Status der Bewerbung
+    und schreibt einen Audit-Trail-Eintrag.
+    """
+    db = get_db()
+    suggested_stage = body.get("suggested_stage")
+    if not suggested_stage:
+        raise HTTPException(status_code=400, detail="suggested_stage erforderlich")
+
+    try:
+        app = await db.applications.find_one({"_id": ObjectId(app_id)})
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungültige Bewerbungs-ID")
+    if not app:
+        raise HTTPException(status_code=404, detail="Bewerbung nicht gefunden")
+
+    old_stage = app.get("current_stage", "")
+    if old_stage == suggested_stage:
+        return {"status": "unchanged", "message": "Status stimmt bereits überein"}
+
+    await db.applications.update_one(
+        {"_id": ObjectId(app_id)},
+        {"$set": {"current_stage": suggested_stage, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+
+    await write_audit_log(
+        "stage_changed",
+        user["id"],
+        "application",
+        app_id,
+        {
+            "old_value": old_stage,
+            "new_value": suggested_stage,
+            "source": "ai_suggestion_accepted",
+            "actor_name": user.get("full_name", user.get("email", "")),
+        },
+    )
+
+    return {"status": "accepted", "old_stage": old_stage, "new_stage": suggested_stage}

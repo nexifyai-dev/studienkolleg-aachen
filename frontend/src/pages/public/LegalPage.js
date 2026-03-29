@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
+import SEOHead from '../../components/shared/SEOHead';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 /* ─── Inhalte ───────────────────────────────────────────────────────────────── */
@@ -421,8 +422,16 @@ export default function LegalPage({ type = 'legal' }) {
   const { titleKey, Component } = config;
   const isEN = i18n.language === 'en';
 
+  const seoMap = {
+    legal: { titleKey: 'seo.legal_title', descKey: 'seo.legal_desc', path: '/legal' },
+    privacy: { titleKey: 'seo.privacy_title', descKey: 'seo.privacy_desc', path: '/privacy' },
+    agb: { titleKey: 'seo.agb_title', descKey: 'seo.agb_desc', path: '/agb' },
+  };
+  const seo = seoMap[type] || seoMap.legal;
+
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead titleKey={seo.titleKey} descKey={seo.descKey} path={seo.path} />
       <PublicNav />
       <main className="pt-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">

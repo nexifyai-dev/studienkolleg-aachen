@@ -28,13 +28,13 @@ export default function JourneyPage() {
     <div className="space-y-6 animate-fade-in" data-testid="journey-page">
       <div>
         <h1 className="text-2xl font-heading font-bold text-primary">{t('portal.journey')}</h1>
-        <p className="text-slate-500 text-sm mt-1">Dein aktueller Bewerbungsfortschritt</p>
+        <p className="text-slate-500 text-sm mt-1">{t('portal.journey_progress')}</p>
       </div>
 
       {applications.length === 0 ? (
         <div className="bg-white border border-slate-200 rounded-sm p-8 text-center" data-testid="journey-empty">
           <Circle size={32} className="text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm">Noch keine aktive Bewerbung.</p>
+          <p className="text-slate-500 text-sm">{t('portal.no_active_application')}</p>
         </div>
       ) : (
         applications.map(app => (
@@ -55,7 +55,6 @@ export default function JourneyPage() {
                 const currentIdx = ALL_STAGES.indexOf(app.current_stage);
                 const isComplete = idx < currentIdx;
                 const isCurrent = idx === currentIdx;
-                const isPending = idx > currentIdx;
 
                 return (
                   <div key={stage} className="flex gap-3" data-testid={`journey-stage-${stage}`}>
@@ -77,7 +76,7 @@ export default function JourneyPage() {
                       <p className={`text-sm font-medium ${isComplete ? 'text-slate-700' : isCurrent ? 'text-primary font-semibold' : 'text-slate-400'}`}>
                         {STAGE_LABELS[stage] || stage}
                       </p>
-                      {isCurrent && <p className="text-xs text-primary mt-0.5">Aktueller Status</p>}
+                      {isCurrent && <p className="text-xs text-primary mt-0.5">{t('portal.current_stage')}</p>}
                     </div>
                   </div>
                 );

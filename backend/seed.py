@@ -125,6 +125,11 @@ async def seed_admin() -> None:
             "full_name": "Ahmed Hassan",
             "role": "applicant",
         },
+        {
+            "email": "partner@studienkolleg-aachen.de",
+            "full_name": "Global Education Agency",
+            "role": "affiliate",
+        },
     ]
 
     for acct in dev_accounts:

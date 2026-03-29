@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
+import SEOHead from '../../components/shared/SEOHead';
 import { CheckCircle, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 
 const COURSES_DE = {
@@ -110,6 +111,7 @@ export default function CoursesPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead titleKey="seo.courses_title" descKey="seo.courses_desc" path="/courses" />
       <PublicNav />
       <main className="pt-16">
 

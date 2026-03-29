@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import logging
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -41,6 +42,7 @@ from routers.consents import router as consent_router
 from routers.teacher import router as teacher_router
 from routers.followups import router as followups_router
 from routers.export import router as export_router
+from routers.partner import router as partner_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -93,6 +95,7 @@ app.include_router(teacher_router)
 app.include_router(notifications_router)
 app.include_router(followups_router)
 app.include_router(export_router)
+app.include_router(partner_router)
 
 # ─── Lifecycle ────────────────────────────────────────────────────────────────
 @app.on_event("startup")

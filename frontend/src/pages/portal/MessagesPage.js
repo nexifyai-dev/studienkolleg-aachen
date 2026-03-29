@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import apiClient from '../../lib/apiClient';
 import { MessageSquare, Send, Loader2, Paperclip, FileText, Download, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -54,6 +55,7 @@ function MessageBubble({ msg, isOwn }) {
 }
 
 export default function MessagesPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [activeConv, setActiveConv] = useState(null);
@@ -139,7 +141,7 @@ export default function MessagesPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > MAX_FILE_MB * 1024 * 1024) {
-      alert(`Datei zu groß (max. ${MAX_FILE_MB} MB)`);
+      alert(t('portal.file_too_large', { max: MAX_FILE_MB }));
       return;
     }
     setAttachFile(file);
@@ -158,24 +160,26 @@ export default function MessagesPage() {
     : 'Team Studienkolleg';
 
   return (
-    <div className="space-y-4 animate-fade-in" data-testid="messages-page">
-      <div>
-        <h1 className="text-xl font-heading font-bold text-primary">Nachrichten</h1>
-        <p className="text-slate-500 text-sm mt-1">Direkter Kontakt mit dem Team</p>
+    <div className="flex flex-col animate-fade-in" style={{ height: 'calc(100vh - 120px)' }} data-testid="messages-page">
+      <div className="mb-3">
+        <h1 className="text-xl font-heading font-bold text-primary">{t('portal.messages')}</h1>
+        <p className="text-slate-500 text-sm mt-0.5">{t('portal.direct_team_contact')}</p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-sm overflow-hidden" style={{ minHeight: '400px' }}>
-        <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
+      <div className="bg-white border border-slate-200 rounded-sm overflow-hidden flex flex-col flex-1 min-h-0">
+        {/* Chat header */}
+        <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3 shrink-0">
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
             <MessageSquare size={14} className="text-primary" />
           </div>
           <div>
             <p className="text-sm font-medium text-slate-800">{staffName}</p>
-            <p className="text-[10px] text-slate-400">Support-Kanal</p>
+            <p className="text-[10px] text-slate-400">{t('portal.support_channel')}</p>
           </div>
         </div>
 
-        <div className="p-4 overflow-y-auto space-y-3" style={{ height: '320px' }} data-testid="messages-list">
+        {/* Messages area - flex-1 to fill remaining space */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0" data-testid="messages-list">
           {loadingMsgs && messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <Loader2 size={20} className="animate-spin text-slate-400" />
@@ -183,8 +187,8 @@ export default function MessagesPage() {
           ) : messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-slate-400">
               <MessageSquare size={32} className="mb-2" />
-              <p className="text-sm">Noch keine Nachrichten</p>
-              <p className="text-xs mt-1">Schreibe deine erste Nachricht an das Team</p>
+              <p className="text-sm">{t('portal.no_messages')}</p>
+              <p className="text-xs mt-1">{t('portal.first_message_hint')}</p>
             </div>
           ) : (
             messages.map(msg => (
@@ -196,14 +200,15 @@ export default function MessagesPage() {
 
         {/* Attachment Preview */}
         {attachFile && (
-          <div className="px-3 py-2 border-t border-slate-100 flex items-center gap-2 bg-slate-50" data-testid="attachment-preview">
+          <div className="px-3 py-2 border-t border-slate-100 flex items-center gap-2 bg-slate-50 shrink-0" data-testid="attachment-preview">
             <FileText size={14} className="text-primary" />
             <span className="text-xs text-slate-700 truncate flex-1">{attachFile.name} ({(attachFile.size / 1024).toFixed(0)} KB)</span>
             <button onClick={() => setAttachFile(null)} className="text-slate-400 hover:text-red-500"><X size={14} /></button>
           </div>
         )}
 
-        <div className="border-t border-slate-100 p-3">
+        {/* Input area - anchored at bottom */}
+        <div className="border-t border-slate-100 p-3 shrink-0">
           <form onSubmit={sendMessage} className="flex gap-2" data-testid="message-form">
             <button type="button" onClick={() => fileInputRef.current?.click()}
               data-testid="message-attach-btn"
@@ -215,7 +220,7 @@ export default function MessagesPage() {
             <input
               value={newMsg}
               onChange={e => setNewMsg(e.target.value)}
-              placeholder="Nachricht schreiben..."
+              placeholder={t('portal.write_message')}
               data-testid="message-input"
               className="flex-1 border border-slate-200 rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-primary"
             />

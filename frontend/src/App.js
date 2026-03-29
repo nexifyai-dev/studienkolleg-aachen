@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import './i18n';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ScrollToTop from './components/ScrollToTop';
@@ -43,6 +44,13 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import UsersPage from './pages/admin/UsersPage';
 import AuditPage from './pages/admin/AuditPage';
 
+// Partner pages
+import PartnerLayout from './components/layout/PartnerLayout';
+import PartnerDashboardPage from './pages/partner/PartnerDashboardPage';
+import PartnerReferralsPage from './pages/partner/PartnerReferralsPage';
+import PartnerLinkPage from './pages/partner/PartnerLinkPage';
+import PartnerSettingsPage from './pages/partner/PartnerSettingsPage';
+
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
@@ -57,6 +65,7 @@ function PublicRoute({ children }) {
   if (user) {
     const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff', 'teacher'];
     if (staffRoles.includes(user.role)) return <Navigate to="/staff" replace />;
+    if (user.role === 'affiliate') return <Navigate to="/partner" replace />;
     return <Navigate to="/portal" replace />;
   }
   return children;
@@ -71,6 +80,7 @@ function StaffDashboardOrTeacher() {
 
 export default function App() {
   return (
+    <HelmetProvider>
     <AuthProvider>
       <BrowserRouter>
         <ScrollToTop />
@@ -93,7 +103,7 @@ export default function App() {
 
           {/* Applicant Portal */}
           <Route path="/portal" element={
-            <ProtectedRoute allowedRoles={['applicant', 'affiliate']}>
+            <ProtectedRoute allowedRoles={['applicant']}>
               <ApplicantLayout />
             </ProtectedRoute>
           }>
@@ -131,9 +141,22 @@ export default function App() {
             <Route path="audit" element={<AuditPage />} />
           </Route>
 
+          {/* Partner / Affiliate */}
+          <Route path="/partner" element={
+            <ProtectedRoute allowedRoles={['affiliate','superadmin','admin']}>
+              <PartnerLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<PartnerDashboardPage />} />
+            <Route path="referrals" element={<PartnerReferralsPage />} />
+            <Route path="link" element={<PartnerLinkPage />} />
+            <Route path="settings" element={<PartnerSettingsPage />} />
+          </Route>
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </HelmetProvider>
   );
 }

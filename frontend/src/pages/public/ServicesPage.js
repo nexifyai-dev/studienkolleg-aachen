@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
+import SEOHead from '../../components/shared/SEOHead';
 import { Plane, Home, Heart, FileCheck, GraduationCap, ShieldCheck, ArrowRight } from 'lucide-react';
 
 const AACHEN_GRAPHIC = "https://www.studienkollegaachen.de/images/grafik_hi_aachen_deutschkurs_german_course_a1_c1-380.webp";
@@ -39,6 +40,7 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead titleKey="seo.services_title" descKey="seo.services_desc" path="/services" />
       <PublicNav />
       <main className="pt-16">
 

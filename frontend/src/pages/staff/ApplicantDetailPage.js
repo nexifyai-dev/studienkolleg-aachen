@@ -174,9 +174,10 @@ function TeacherAssignmentPanel({ applicantId, applicantName }) {
 }
 
 /* ═══════ AI Screening Panel ═══════ */
-function AIScreeningPanel({ appId }) {
+function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
   const [screenings, setScreenings] = useState([]);
   const [running, setRunning] = useState(false);
+  const [accepting, setAccepting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
 
@@ -186,48 +187,79 @@ function AIScreeningPanel({ appId }) {
   useEffect(() => { load(); }, [load]);
 
   const run = async () => { setRunning(true); try { await apiClient.post(`/api/applications/${appId}/ai-screen`); await load(); } catch {} finally { setRunning(false); } };
+
+  const acceptSuggestion = async (suggestedStage) => {
+    setAccepting(true);
+    try {
+      await apiClient.post(`/api/applications/${appId}/accept-ai-suggestion`, { suggested_stage: suggestedStage }, { withCredentials: true });
+      if (onStageAccepted) onStageAccepted(suggestedStage);
+    } catch {} finally { setAccepting(false); }
+  };
+
   const latest = screenings[0];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-sm p-4 space-y-3" data-testid="ai-screening-panel">
-      <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-slate-700 text-xs flex items-center gap-1.5"><Brain size={14} className="text-primary" /> KI-Prüfung</h4>
-        <button onClick={run} disabled={running} data-testid="ai-screening-run-btn" className="text-[11px] font-medium text-primary hover:underline flex items-center gap-1">
-          {running ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />} {running ? 'Läuft...' : 'Starten'}
+    <div className="bg-white border border-slate-200 rounded-sm overflow-hidden" data-testid="ai-screening-panel">
+      {/* Prominent header with CTA */}
+      <div className="bg-primary/5 border-b border-primary/15 px-4 py-3 flex items-center justify-between">
+        <h4 className="font-semibold text-primary text-sm flex items-center gap-2"><Brain size={16} className="text-primary" /> KI-Prüfung</h4>
+        <button onClick={run} disabled={running} data-testid="ai-screening-run-btn"
+          className="flex items-center gap-1.5 bg-primary text-white px-4 py-2 rounded-sm text-xs font-semibold hover:bg-primary/90 disabled:opacity-60 transition-colors shadow-sm">
+          {running ? <Loader2 size={13} className="animate-spin" /> : <Brain size={13} />}
+          {running ? 'KI analysiert...' : 'KI-Prüfung starten'}
         </button>
       </div>
-      <div className="bg-slate-50 border border-slate-100 rounded-sm px-3 py-1.5"><p className="text-slate-500 text-[10px]">KI-Einschätzung – keine bindende Entscheidung.</p></div>
-      {loading && <Loader2 size={16} className="animate-spin text-slate-400 mx-auto" />}
-      {!loading && !latest && <p className="text-xs text-slate-400 text-center py-2">Noch keine KI-Prüfung</p>}
-      {latest && (
-        <>
-          <div className="grid grid-cols-3 gap-1.5">
-            <div className={`rounded-sm p-2 text-center text-[10px] ${latest.is_complete ? 'bg-primary/8 text-primary' : 'bg-slate-50 text-slate-500'}`}>
-              {latest.is_complete ? <CheckCircle size={13} className="mx-auto mb-0.5" /> : <AlertCircle size={13} className="mx-auto mb-0.5" />}
-              {latest.is_complete ? 'Vollständig' : `${latest.missing_documents?.length || 0} fehlend`}
+
+      <div className="p-4 space-y-3">
+        <div className="bg-slate-50 border border-slate-100 rounded-sm px-3 py-1.5"><p className="text-slate-500 text-[10px]">KI-Einschätzung – keine bindende Entscheidung.</p></div>
+        {loading && <Loader2 size={16} className="animate-spin text-slate-400 mx-auto" />}
+        {!loading && !latest && <p className="text-xs text-slate-400 text-center py-2">Noch keine KI-Prüfung durchgeführt</p>}
+        {latest && (
+          <>
+            <div className="grid grid-cols-3 gap-1.5">
+              <div className={`rounded-sm p-2 text-center text-[10px] ${latest.is_complete ? 'bg-primary/8 text-primary' : 'bg-slate-50 text-slate-500'}`}>
+                {latest.is_complete ? <CheckCircle size={13} className="mx-auto mb-0.5" /> : <AlertCircle size={13} className="mx-auto mb-0.5" />}
+                {latest.is_complete ? 'Vollständig' : `${latest.missing_documents?.length || 0} fehlend`}
+              </div>
+              <div className="rounded-sm p-2 text-center text-[10px] bg-slate-50">Anabin: <strong>{latest.anabin_category || '–'}</strong></div>
+              <div className={`rounded-sm p-2 text-center text-[10px] ${latest.language_level_ok ? 'bg-primary/8 text-primary' : 'bg-red-50 text-red-600'}`}>
+                Sprache: {latest.language_level_ok ? 'OK' : 'Fehlt'}
+              </div>
             </div>
-            <div className="rounded-sm p-2 text-center text-[10px] bg-slate-50">Anabin: <strong>{latest.anabin_category || '–'}</strong></div>
-            <div className={`rounded-sm p-2 text-center text-[10px] ${latest.language_level_ok ? 'bg-primary/8 text-primary' : 'bg-red-50 text-red-600'}`}>
-              Sprache: {latest.language_level_ok ? 'OK' : 'Fehlt'}
-            </div>
-          </div>
-          {latest.suggested_stage && (
-            <div className="bg-primary/5 border border-primary/15 rounded-sm px-3 py-2 flex items-center gap-2">
-              <Brain size={13} className="text-primary" />
-              <span className="text-xs text-primary font-medium">Vorschlag: {STAGE_LABELS[latest.suggested_stage] || latest.suggested_stage}</span>
-            </div>
-          )}
-          {latest.ai_report && (
-            <div>
-              <button onClick={() => setExpanded(expanded === 'report' ? null : 'report')} data-testid="ai-report-toggle"
-                className="w-full flex items-center justify-between text-[11px] text-slate-500 hover:text-primary py-1 border-t border-slate-100">
-                <span>Prüfungsbericht</span>{expanded === 'report' ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-              </button>
-              {expanded === 'report' && <pre className="text-[10px] text-slate-600 bg-slate-50 p-3 rounded-sm whitespace-pre-wrap mt-1" data-testid="ai-report-content">{latest.ai_report}</pre>}
-            </div>
-          )}
-        </>
-      )}
+            {latest.suggested_stage && (
+              <div className="bg-primary/5 border-2 border-primary/25 rounded-sm p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <Brain size={14} className="text-primary" />
+                  <span className="text-xs text-primary font-semibold">KI-Vorschlag: {STAGE_LABELS[latest.suggested_stage] || latest.suggested_stage}</span>
+                </div>
+                {latest.suggested_stage !== currentStage && (
+                  <button
+                    onClick={() => acceptSuggestion(latest.suggested_stage)}
+                    disabled={accepting}
+                    data-testid="ai-accept-suggestion-btn"
+                    className="w-full flex items-center justify-center gap-2 bg-primary text-white px-3 py-2 rounded-sm text-xs font-semibold hover:bg-primary/90 disabled:opacity-60 transition-colors"
+                  >
+                    {accepting ? <Loader2 size={13} className="animate-spin" /> : <CheckCircle size={13} />}
+                    {accepting ? 'Wird übernommen...' : 'Vorschlag übernehmen'}
+                  </button>
+                )}
+                {latest.suggested_stage === currentStage && (
+                  <p className="text-[10px] text-primary/70 text-center">Status stimmt bereits mit KI-Vorschlag überein.</p>
+                )}
+              </div>
+            )}
+            {latest.ai_report && (
+              <div>
+                <button onClick={() => setExpanded(expanded === 'report' ? null : 'report')} data-testid="ai-report-toggle"
+                  className="w-full flex items-center justify-between text-[11px] text-slate-500 hover:text-primary py-1 border-t border-slate-100">
+                  <span>Prüfungsbericht</span>{expanded === 'report' ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                </button>
+                {expanded === 'report' && <pre className="text-[10px] text-slate-600 bg-slate-50 p-3 rounded-sm whitespace-pre-wrap mt-1" data-testid="ai-report-content">{latest.ai_report}</pre>}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -613,7 +645,7 @@ export default function ApplicantDetailPage() {
           <CaseNotes appId={id} />
           <FollowupPanel appId={id} />
           <ActivityHistory appId={id} />
-          <AIScreeningPanel appId={id} />
+          <AIScreeningPanel appId={id} currentStage={app.current_stage} onStageAccepted={(newStage) => { setApp(prev => ({ ...prev, current_stage: newStage })); setRefreshKey(k => k + 1); }} />
           <TeacherAssignmentPanel applicantId={app.applicant_id || id} applicantName={app.applicant?.full_name} />
         </div>
       </div>

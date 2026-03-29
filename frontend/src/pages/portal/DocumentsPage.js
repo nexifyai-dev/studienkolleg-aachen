@@ -5,14 +5,6 @@ import { FileText, Upload, CheckCircle, XCircle, Clock, AlertCircle } from 'luci
 import { formatDate } from '../../lib/utils';
 
 
-const STATUS_CONFIG = {
-  uploaded: { label: 'Hochgeladen', icon: Clock, color: 'text-primary bg-primary/8' },
-  in_review: { label: 'In Prüfung', icon: Clock, color: 'text-slate-600 bg-slate-100' },
-  approved: { label: 'Akzeptiert', icon: CheckCircle, color: 'text-primary bg-primary/12' },
-  rejected: { label: 'Abgelehnt', icon: XCircle, color: 'text-red-600 bg-red-50' },
-  missing: { label: 'Fehlt', icon: AlertCircle, color: 'text-slate-500 bg-slate-50' },
-};
-
 export default function DocumentsPage() {
   const { t } = useTranslation();
   const [apps, setApps] = useState([]);
@@ -21,6 +13,14 @@ export default function DocumentsPage() {
   const [uploadForm, setUploadForm] = useState({ doc_type: 'passport', filename: '' });
   const [showUpload, setShowUpload] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const STATUS_CONFIG = {
+    uploaded: { label: t('portal.doc_status_uploaded'), icon: Clock, color: 'text-primary bg-primary/8' },
+    in_review: { label: t('portal.doc_status_in_review'), icon: Clock, color: 'text-slate-600 bg-slate-100' },
+    approved: { label: t('portal.doc_status_approved'), icon: CheckCircle, color: 'text-primary bg-primary/12' },
+    rejected: { label: t('portal.doc_status_rejected'), icon: XCircle, color: 'text-red-600 bg-red-50' },
+    missing: { label: t('portal.doc_status_missing'), icon: AlertCircle, color: 'text-slate-500 bg-slate-50' },
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -60,7 +60,7 @@ export default function DocumentsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-heading font-bold text-primary">{t('portal.documents')}</h1>
-          <p className="text-slate-500 text-sm mt-1">Sichere Dokumentenverwaltung</p>
+          <p className="text-slate-500 text-sm mt-1">{t('portal.docs_management')}</p>
         </div>
         {apps[0] && (
           <button onClick={() => setShowUpload(!showUpload)} data-testid="docs-upload-toggle"
@@ -74,35 +74,35 @@ export default function DocumentsPage() {
       {/* Upload form */}
       {showUpload && (
         <div className="bg-white border border-slate-200 rounded-sm p-5" data-testid="docs-upload-form">
-          <h3 className="font-semibold text-slate-800 mb-4">Dokument hochladen</h3>
+          <h3 className="font-semibold text-slate-800 mb-4">{t('portal.doc_upload_title')}</h3>
           <form onSubmit={handleUpload} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Dokumenttyp</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t('portal.doc_type_label')}</label>
               <select value={uploadForm.doc_type} onChange={e => setUploadForm(p => ({...p, doc_type: e.target.value}))}
                 data-testid="docs-type-select"
                 className="w-full border border-slate-200 rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-primary">
-                <option value="passport">Reisepass / Ausweis</option>
-                <option value="school_certificate">Schulzeugnis / Abschluss</option>
-                <option value="language_certificate">Sprachzertifikat</option>
-                <option value="photo">Lichtbild</option>
-                <option value="birth_certificate">Geburtsurkunde</option>
-                <option value="other">Sonstiges</option>
+                <option value="passport">{t('portal.doc_type_passport')}</option>
+                <option value="school_certificate">{t('portal.doc_type_school')}</option>
+                <option value="language_certificate">{t('portal.doc_type_language')}</option>
+                <option value="photo">{t('portal.doc_type_photo')}</option>
+                <option value="birth_certificate">{t('portal.doc_type_birth')}</option>
+                <option value="other">{t('portal.doc_type_other')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Dateiname</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t('portal.doc_filename_label')}</label>
               <input value={uploadForm.filename} onChange={e => setUploadForm(p => ({...p, filename: e.target.value}))}
-                placeholder="z.B. reisepass_max_mustermann.pdf" data-testid="docs-filename-input"
+                placeholder={t('portal.doc_filename_placeholder')} data-testid="docs-filename-input"
                 className="w-full border border-slate-200 rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-primary" />
             </div>
             <div className="flex gap-3">
               <button type="submit" disabled={uploading} data-testid="docs-upload-submit"
                 className="bg-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-primary-hover disabled:opacity-60">
-                {uploading ? 'Wird hochgeladen…' : 'Hochladen'}
+                {uploading ? t('portal.doc_uploading') : t('portal.doc_upload_btn')}
               </button>
               <button type="button" onClick={() => setShowUpload(false)}
                 className="border border-slate-200 text-slate-600 px-4 py-2 rounded-sm text-sm hover:bg-slate-50">
-                Abbrechen
+                {t('portal.doc_cancel')}
               </button>
             </div>
           </form>
@@ -115,12 +115,12 @@ export default function DocumentsPage() {
           <FileText size={32} className="text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500 text-sm">{t('portal.no_docs')}</p>
           {apps[0] ? (
-            <p className="text-xs text-slate-400 mt-2">Klicke auf „Dokument hochladen" um zu beginnen.</p>
+            <p className="text-xs text-slate-400 mt-2">{t('portal.doc_click_upload')}</p>
           ) : (
             <div className="mt-4">
-              <p className="text-xs text-slate-500 mb-3">Um Dokumente hochzuladen, starte zunächst deine Bewerbung.</p>
+              <p className="text-xs text-slate-500 mb-3">{t('portal.doc_start_application')}</p>
               <a href="/apply" className="bg-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-primary-hover transition-colors inline-block"
-                data-testid="docs-apply-link">Jetzt bewerben →</a>
+                data-testid="docs-apply-link">{t('portal.doc_apply_link')}</a>
             </div>
           )}
         </div>
@@ -140,7 +140,7 @@ export default function DocumentsPage() {
                     <p className="font-medium text-slate-800 text-sm">{doc.filename || doc.document_type}</p>
                     <p className="text-xs text-slate-500">{doc.document_type} · {formatDate(doc.uploaded_at)}</p>
                     {doc.rejection_reason && (
-                      <p className="text-xs text-red-600 mt-0.5">Ablehnungsgrund: {doc.rejection_reason}</p>
+                      <p className="text-xs text-red-600 mt-0.5">{t('portal.doc_rejection_reason')}: {doc.rejection_reason}</p>
                     )}
                   </div>
                 </div>

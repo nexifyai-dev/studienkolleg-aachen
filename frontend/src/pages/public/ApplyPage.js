@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
+import SEOHead from '../../components/shared/SEOHead';
 import { CheckCircle, Loader2, AlertCircle, Upload, X, FileText, Eye, EyeOff } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
@@ -217,6 +218,7 @@ export default function ApplyPage() {
   if (success) {
     return (
       <div className="min-h-screen bg-white">
+        <SEOHead titleKey="seo.apply_title" descKey="seo.apply_desc" path="/apply" />
         <PublicNav />
         <main className="pt-16">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
@@ -238,6 +240,7 @@ export default function ApplyPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead titleKey="seo.apply_title" descKey="seo.apply_desc" path="/apply" />
       <PublicNav />
       <main className="pt-16">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">

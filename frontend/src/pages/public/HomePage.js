@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
+import SEOHead from '../../components/shared/SEOHead';
 import {
   CheckCircle, Star, ChevronDown, ChevronUp, MapPin,
   Phone, ArrowRight, Shield, Users, BookOpen, Award, Play
@@ -85,9 +86,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead titleKey="seo.home_title" descKey="seo.home_desc" path="/" />
       <PublicNav />
-
-      {/* Hero */}
       <section className="pt-16 bg-white" data-testid="hero-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-16 lg:py-24">

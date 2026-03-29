@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
+import SEOHead from '../../components/shared/SEOHead';
 import { Phone, Mail, MessageCircle, MapPin, Clock } from 'lucide-react';
 
 export default function ContactPage() {
@@ -10,6 +11,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead titleKey="seo.contact_title" descKey="seo.contact_desc" path="/contact" />
       <PublicNav />
       <main className="pt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">

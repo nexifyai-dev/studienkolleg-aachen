@@ -8,11 +8,12 @@ import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 
 
 export default function DashboardPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const locale = i18n.language === 'en' ? 'en-GB' : 'de-DE';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,20 +50,20 @@ export default function DashboardPage() {
           {t('portal.welcome')}, {user?.full_name?.split(' ')[0] || user?.email}
         </h1>
         <p className="text-slate-500 text-sm mt-1">
-          {new Date().toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          {new Date().toLocaleDateString(locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </p>
       </div>
 
       {/* Status card */}
       {activeApp && (
         <div className="bg-primary rounded-sm p-6 text-white" data-testid="dashboard-status-card">
-        <p className="text-white/70 text-sm mb-1">Dein aktueller Status</p>
+          <p className="text-white/70 text-sm mb-1">{t('portal.current_status')}</p>
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-heading font-bold">{STAGE_LABELS[stage] || stage}</h2>
-              <p className="text-white/70 text-sm mt-1">Bewerbung #{activeApp.id?.slice(-6).toUpperCase()}</p>
+              <p className="text-white/70 text-sm mt-1">{t('portal.application_id')} #{activeApp.id?.slice(-6).toUpperCase()}</p>
             </div>
-            <span className={`text-xs font-semibold px-3 py-1.5 rounded-sm bg-white/20 text-white`}>
+            <span className="text-xs font-semibold px-3 py-1.5 rounded-sm bg-white/20 text-white">
               {STAGE_LABELS[stage] || stage}
             </span>
           </div>
@@ -73,10 +74,10 @@ export default function DashboardPage() {
       {!activeApp && (
         <div className="bg-slate-50 border border-slate-100 rounded-sm p-6 text-center" data-testid="dashboard-no-app">
           <BookOpen size={32} className="text-primary mx-auto mb-3" />
-          <h3 className="font-semibold text-primary mb-2">Noch keine Bewerbung</h3>
-          <p className="text-slate-600 text-sm mb-4">Starte jetzt deinen Bewerbungsprozess.</p>
-          <Link to="/apply" className="bg-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-primary-hover transition-colors">
-            Jetzt bewerben
+          <h3 className="font-semibold text-primary mb-2">{t('portal.no_application_title')}</h3>
+          <p className="text-slate-600 text-sm mb-4">{t('portal.no_application_desc')}</p>
+          <Link to="/apply" className="bg-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-primary-hover transition-colors" data-testid="dashboard-apply-btn">
+            {t('portal.apply_now')}
           </Link>
         </div>
       )}
@@ -84,14 +85,14 @@ export default function DashboardPage() {
       {/* Quick stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { icon: FileText, label: 'Dokumente', value: '–', path: '/portal/documents', testid: 'dash-docs' },
-          { icon: MessageSquare, label: 'Nachrichten', value: '–', path: '/portal/messages', testid: 'dash-messages' },
-          { icon: CreditCard, label: 'Rechnungen', value: '–', path: '/portal/financials', testid: 'dash-financials' },
-          { icon: CheckCircle, label: 'Aufgaben', value: stats?.open_tasks || '0', path: '/portal/journey', testid: 'dash-tasks' },
+          { icon: FileText, label: t('portal.docs_label'), value: '–', path: '/portal/documents', testid: 'dash-docs' },
+          { icon: MessageSquare, label: t('portal.messages_label'), value: '–', path: '/portal/messages', testid: 'dash-messages' },
+          { icon: CreditCard, label: t('portal.invoices_label'), value: '–', path: '/portal/financials', testid: 'dash-financials' },
+          { icon: CheckCircle, label: t('portal.tasks_label'), value: stats?.open_tasks || '0', path: '/portal/journey', testid: 'dash-tasks' },
         ].map(item => {
           const Icon = item.icon;
           return (
-            <Link key={item.label} to={item.path} data-testid={item.testid}
+            <Link key={item.testid} to={item.path} data-testid={item.testid}
               className="bg-white border border-slate-200 rounded-sm p-4 hover:border-primary/30 hover:-translate-y-0.5 transition-all">
               <div className="flex items-center gap-2 mb-2">
                 <Icon size={16} className="text-primary" />
@@ -111,7 +112,7 @@ export default function DashboardPage() {
         </h3>
         {stage ? (
           <div className="space-y-2">
-            <NextStepItem stage={stage} />
+            <NextStepItem stage={stage} t={t} />
           </div>
         ) : (
           <p className="text-slate-500 text-sm">{t('portal.no_tasks')}</p>
@@ -127,8 +128,8 @@ export default function DashboardPage() {
             <FileText size={18} className="text-primary" />
           </div>
           <div>
-            <p className="font-medium text-slate-800 text-sm">Dokument hochladen</p>
-            <p className="text-slate-500 text-xs">Lade deine Unterlagen sicher hoch</p>
+            <p className="font-medium text-slate-800 text-sm">{t('portal.upload_action')}</p>
+            <p className="text-slate-500 text-xs">{t('portal.upload_action_desc')}</p>
           </div>
         </Link>
         <Link to="/portal/messages"
@@ -138,8 +139,8 @@ export default function DashboardPage() {
             <MessageSquare size={18} className="text-primary" />
           </div>
           <div>
-            <p className="font-medium text-slate-800 text-sm">Nachricht senden</p>
-            <p className="text-slate-500 text-xs">Direkt mit dem Team kommunizieren</p>
+            <p className="font-medium text-slate-800 text-sm">{t('portal.send_message')}</p>
+            <p className="text-slate-500 text-xs">{t('portal.send_message_desc')}</p>
           </div>
         </Link>
       </div>
@@ -147,19 +148,8 @@ export default function DashboardPage() {
   );
 }
 
-function NextStepItem({ stage }) {
-  const steps = {
-    lead_new: 'Deine Bewerbung ist eingegangen. Wir melden uns in Kürze.',
-    contacted: 'Wir haben dich kontaktiert. Bitte antworte auf unsere Nachrichten.',
-    docs_requested: 'Bitte lade die angeforderten Dokumente hoch.',
-    docs_received: 'Deine Dokumente sind eingegangen. Wir prüfen sie.',
-    docs_review: 'Deine Dokumente werden aktuell geprüft. Bitte habe etwas Geduld.',
-    invoice_open: 'Du hast eine offene Rechnung. Bitte prüfe deine Zahlungen.',
-    payment_received: 'Deine Zahlung ist bestätigt. Nächste Schritte folgen.',
-    process_next: 'Wir begleiten dich zu den nächsten Schritten (Visum, Kurs, Bewerbung).',
-    completed: 'Dein Prozess ist abgeschlossen. Herzlichen Glückwunsch!',
-  };
-  const text = steps[stage] || 'Warte auf die nächste Information von uns.';
+function NextStepItem({ stage, t }) {
+  const text = t(`portal.steps.${stage}`, { defaultValue: t('portal.steps.default') });
   return (
     <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-sm border border-slate-200">
       <AlertCircle size={16} className="text-primary mt-0.5 shrink-0" />

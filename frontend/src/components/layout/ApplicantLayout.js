@@ -24,7 +24,7 @@ export default function ApplicantLayout() {
     { path: '/portal/documents', icon: FileText, label: t('portal.documents') },
     { path: '/portal/messages', icon: MessageSquare, label: t('portal.messages') },
     { path: '/portal/financials', icon: CreditCard, label: t('portal.financials') },
-    { path: '/portal/consents', icon: Shield, label: t('portal.settings') === 'Settings' ? 'Consents' : 'Einwilligungen' },
+    { path: '/portal/consents', icon: Shield, label: t('portal.consents') },
     { path: '/portal/settings', icon: Settings, label: t('portal.settings') },
   ];
 
@@ -93,7 +93,7 @@ export default function ApplicantLayout() {
                   <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-sm shadow-lg z-50 min-w-[180px]" data-testid="portal-user-dropdown">
                     <div className="px-4 py-3 border-b border-slate-100">
                       <p className="text-sm font-medium text-slate-800 truncate">{user?.full_name || user?.email}</p>
-                      <p className="text-xs text-slate-400">{user?.role === 'applicant' ? 'Bewerber' : user?.role}</p>
+                      <p className="text-xs text-slate-400">{user?.role === 'applicant' ? t('portal.role_applicant') : user?.role}</p>
                     </div>
                     <button
                       onClick={handleLogout}

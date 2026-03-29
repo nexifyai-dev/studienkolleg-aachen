@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
+import NotificationBell from '../shared/NotificationBell';
 import {
   LayoutDashboard, FileText, MessageSquare, CreditCard,
   Settings, BookOpen, LogOut, Menu, X, GraduationCap, ChevronRight, Shield
@@ -98,11 +99,14 @@ export default function ApplicantLayout() {
             <Menu size={20} />
           </button>
           <span className="font-heading font-bold text-primary text-sm">Studienkolleg Aachen</span>
-          <div className="w-8" />
+          <NotificationBell />
         </header>
 
         {/* Page content */}
         <main className="flex-1 p-4 lg:p-6 max-w-5xl w-full">
+          <div className="hidden lg:flex justify-end mb-4">
+            <NotificationBell />
+          </div>
           <OnboardingTour />
           <Outlet />
         </main>

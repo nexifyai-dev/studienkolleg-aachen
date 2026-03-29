@@ -101,6 +101,20 @@ async def upload_document(app_id: str, request: Request, user: dict = Depends(ge
         {"$set": {"last_activity_at": datetime.now(timezone.utc)}},
     )
 
+    # Notify staff about new document upload (applicants only)
+    if user["role"] == "applicant":
+        try:
+            from services.automation import trigger_document_uploaded
+            await trigger_document_uploaded(
+                application_id=app_id,
+                applicant_id=user["id"],
+                applicant_name=user.get("full_name", user.get("email", "")),
+                doc_type=doc_type,
+                filename=filename,
+            )
+        except Exception:
+            pass
+
     # Return without storage_key
     return {
         "id": doc_id, "application_id": app_id,

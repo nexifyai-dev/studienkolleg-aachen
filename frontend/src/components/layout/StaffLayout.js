@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import NotificationBell from '../shared/NotificationBell';
 import {
   LayoutDashboard, Users, Columns, FileText, BarChart2,
   Settings, LogOut, Menu, X, GraduationCap, ShieldCheck, BookOpen
@@ -77,9 +78,12 @@ export default function StaffLayout() {
         <header className="lg:hidden bg-white border-b border-slate-200 px-4 h-14 flex items-center justify-between">
           <button onClick={() => setSidebarOpen(true)} className="text-slate-600"><Menu size={20} /></button>
           <span className="font-heading font-bold text-primary text-sm">W2G Staff</span>
-          <div className="w-8" />
+          <NotificationBell />
         </header>
         <main className="flex-1 p-4 lg:p-6">
+          <div className="hidden lg:flex justify-end mb-4">
+            <NotificationBell />
+          </div>
           <Outlet />
         </main>
       </div>

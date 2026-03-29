@@ -164,6 +164,19 @@ async def create_assignment(
         {"applicant_id": applicant_id},
     )
 
+    # Trigger E-Mail + Notification (DE/EN)
+    try:
+        from services.automation import trigger_teacher_assigned
+        await trigger_teacher_assigned(
+            applicant_id=applicant_id,
+            teacher_id=teacher_id,
+            applicant_email=applicant.get("email", ""),
+            applicant_name=applicant.get("full_name", ""),
+            teacher_name=teacher.get("full_name", ""),
+        )
+    except Exception:
+        pass
+
     return {"status": "assigned", "teacher_id": teacher_id, "applicant_id": applicant_id}
 
 

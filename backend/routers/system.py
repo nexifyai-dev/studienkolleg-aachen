@@ -56,15 +56,8 @@ async def dashboard_stats(user: dict = Depends(get_current_user)):
         }
 
 
-# ─── Notifications Router ─────────────────────────────────────────────────────
-notif_router = APIRouter(prefix="/api", tags=["notifications"])
-
-
-@notif_router.get("/notifications")
-async def list_notifications(user: dict = Depends(get_current_user)):
-    db = get_db()
-    notifs = await db.notifications.find({"user_id": user["id"]}).sort("created_at", -1).to_list(50)
-    return [to_str_id(n) for n in notifs]
+# ─── Notifications Router (legacy – kept for backward compat, new router handles /api/notifications) ─
+notif_router = APIRouter(prefix="/api", tags=["notifications-legacy"])
 
 
 @notif_router.post("/consent")

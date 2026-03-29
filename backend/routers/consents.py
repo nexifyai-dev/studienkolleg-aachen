@@ -67,6 +67,30 @@ async def grant_consent(data: ConsentCapture, user: dict = Depends(get_current_u
         {"consent_type": data.consent_type, "version": data.version},
     )
 
+    # Notify assigned teachers about consent change
+    if data.consent_type == "teacher_data_access":
+        try:
+            from services.notifications import notify_teacher_consent_change
+            assignments = await db.teacher_assignments.find(
+                {"applicant_id": user["id"], "active": True},
+            ).to_list(50)
+            applicant_name = user.get("full_name", user.get("email", ""))
+            for assignment in assignments:
+                tid = assignment["teacher_id"]
+                t_user = await db.users.find_one(
+                    {"_id": __import__("bson").ObjectId(tid)},
+                    {"language_pref": 1},
+                )
+                t_lang = (t_user or {}).get("language_pref", "de")
+                await notify_teacher_consent_change(
+                    teacher_id=tid,
+                    applicant_name=applicant_name,
+                    granted=data.granted,
+                    lang=t_lang,
+                )
+        except Exception:
+            pass
+
     return {"status": "ok", "consent_type": data.consent_type, "granted": data.granted}
 
 
@@ -82,6 +106,31 @@ async def revoke_consent(consent_type: str, user: dict = Depends(get_current_use
         raise HTTPException(status_code=404, detail="No active consent found to revoke")
 
     await write_audit_log("consent_revoked", user["id"], "consent", consent_type)
+
+    # Notify assigned teachers about consent revocation
+    if consent_type == "teacher_data_access":
+        try:
+            from services.notifications import notify_teacher_consent_change
+            assignments = await db.teacher_assignments.find(
+                {"applicant_id": user["id"], "active": True},
+            ).to_list(50)
+            applicant_name = user.get("full_name", user.get("email", ""))
+            for assignment in assignments:
+                tid = assignment["teacher_id"]
+                t_user = await db.users.find_one(
+                    {"_id": __import__("bson").ObjectId(tid)},
+                    {"language_pref": 1},
+                )
+                t_lang = (t_user or {}).get("language_pref", "de")
+                await notify_teacher_consent_change(
+                    teacher_id=tid,
+                    applicant_name=applicant_name,
+                    granted=False,
+                    lang=t_lang,
+                )
+        except Exception:
+            pass
+
     return {"status": "revoked", "consent_type": consent_type}
 
 

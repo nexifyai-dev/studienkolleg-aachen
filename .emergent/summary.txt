@@ -1,129 +1,133 @@
 <analysis>**original_problem_statement**: 
 Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany.
-**Aktuelle Phase (3.7 - Systemweite Mehrsprachigkeit & Resend Domain):**
-1. Resend-Domain muss auf die verifizierte Domain  umgestellt werden.
-2. Systemweite Mehrsprachigkeit (DE/EN) für die gesamte Public Site (, , , , , , , ) inklusive Header, Footer und aller CTA-Bereiche.
-3. Legal-Seiten müssen fachlich und sprachlich sauber konfiguriert werden (keine falschen rechtlichen Behauptungen im Englischen).
-4. **Strikte Regel:** Preview schlägt Handoff. Die Live-Vorschau muss nachweislich funktionieren, bevor eine Fertigmeldung erfolgt.
-5. **Mem0-Pflicht:** Vor jedem Lauf Projektwissen aus Mem0 abrufen und am Ende aktualisieren.
+**Aktuelle Phase (3.7e - E-Mail-Templates & Notification System):**
+1. Mehrsprachige E-Mail-Templates (DE/EN) basierend auf  erstellen (Einladung, Status, Dokumente, Consent).
+2. In-App Notification System aufbauen (gelesen/ungelesen, Trigger an Kernflows koppeln).
+3. **Preis-/Kostenregel beachten:** Preise sind *immer* individuell. Keine pauschalen Festpreise in E-Mails, UIs oder Notifications versprechen.
+4. **Drive-Pflicht:** Vor jeder Implementierung MUSS der Google-Drive-Ordner als Source of Truth geprüft werden.
+5. **AI-Regel:** Alle Produktiv-KIs laufen *ausschließlich* über NSCall (nscale).
+6. **STRIKTE ABSCHLUSSREGEL:** Bis zum Projektabschluss dürfen am Ende des Laufs **KEINE Potenziellen Verbesserungen, Nice-to-haves oder Zusatzideen** mehr gepitcht werden. Zusätzliche Ideen werden still im Mem0/Backlog gespeichert.
 
 **User's preferred language**: **German** (Deutsch). INSTRUCT the next agent to respond in **German** ONLY.
 
 **what currently exists?** 
-Ein funktionales System (v1.2.5). Die UI-Harmonisierung (Corporate Blue/White) für öffentliche Seiten und Rechtsseiten (Phase 3.6b) wurde erfolgreich verifiziert. Die Basisstruktur für i18n (react-i18next) ist integriert und die englischen/deutschen JSON-Übersetzungsdateien wurden soeben bereinigt und geparst. Der Backend-Email-Service und  wurden für die neue Resend-Domain vorbereitet.
+Das System hat funktionierende i18n (DE/EN) Public-Pages, ein Teacher-Dashboard, eine Bewerber-Einwilligungs-UI (Consent) und eine Staff-seitige Teacher-Zuweisungs-Logik. Alle KI-Funktionen wurden erfolgreich auf NSCall umgestellt. Hardcodierte Preise wurden aus AGB und UIs entfernt (Preise sind jetzt konsequent individuell). Der Backend-Service für E-Mails () wurde gerade für DE/EN-Templates überschrieben und eine neue  Datei für das Backend wurde erstellt.
 
 **Last working item**:
-- Last item agent was working: Behebung eines JSON-Syntaxfehlers in  und Sicherstellung, dass alle Übersetzungsschlüssel für die Public Pages vorhanden sind. Das Python-Skript meldete zuletzt Exit code: 0, was bedeutet, dass die JSON-Dateien nun valide sind.
+- Last item agent was working: Start von Phase 3.7e. Der Agent hat den Drive-Check dokumentiert und gerade die Dateien  und  erstellt/überschrieben, um das Notification-System und die mehrsprachigen Transaktionsmails aufzubauen.
 - Status: IN PROGRESS
 - Agent Testing Done: N
-- Which testing method agent to use? screenshot tool (to visually verify DE/EN toggling on all public pages) followed by .
+- Which testing method agent to use? backend testing via curl -> frontend testing via screenshot tool ->  for full verification.
 - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-Issue 1: Verifikation der systemweiten Mehrsprachigkeit (P0)
-- Attempted fixes: Agent hat die Übersetzungsdateien erstellt und -Hooks in die Seiten , , ,  sowie den  eingebaut.
-- Next debug checklist: Mache Screenshots von , , ,  im EN-Modus im Preview URL. Stelle sicher, dass keine deutschen Inseln mehr existieren und der Sprachumschalter in der Navigation reibungslos funktioniert.
-- Why fix this issue and what will be achieved with the fix?: Erfüllt die harte Nutzeranforderung nach einer komplett zweisprachigen öffentlichen Präsenz.
-- Status: TESTING PENDING
+Issue 1: Fertigstellung und Wiring des Notification- & E-Mail-Systems (P0)
+- Attempted fixes:  und  wurden angelegt/geupdatet, aber die API-Endpunkte (Routers), Frontend-Komponenten (Dropdowns/Listen) und Trigger-Einbindungen in Kernflows (z.B. Statuswechsel, Teacher Assignment) fehlen noch.
+- Next debug checklist: 
+  - Erstelle/ergänze Router für Notifications (z.B. ).
+  - Verbinde Notification-Trigger und E-Mail-Versand mit bestehenden Endpunkten (z.B. Application-Status, Consent-Grant).
+  - Baue das Frontend-Notification-UI (Glocken-Icon, Dropdown/Page, Read/Unread-Toggle).
+  - Stelle sicher, dass die neuen Templates **keine Festpreise** suggerieren.
+- Why fix this issue and what will be achieved with the fix?: Kernanforderung der aktuellen Phase 3.7e zur Schließung von Kommunikationslücken.
+- Status: IN PROGRESS
 - Is recurring issue? N
-- Should Test frontend/backend/both after fix?: frontend
+- Should Test frontend/backend/both after fix?: both
 - Blocked on other issue: None
 
-Issue 2: Verifikation der neuen Resend-Domain (P0)
-- Attempted fixes: Agent hat  auf  umgestellt in  und .
-- Next debug checklist: Sicherstellen, dass das Backend via Supervisor neugestartet wurde und E-Mails tatsächlich über den neuen Absender gesendet werden.
-- Why fix this issue and what will be achieved with the fix?: Garantiert verifizierten Mailversand in Produktion.
-- Status: TESTING PENDING
-- Is recurring issue? N
-- Should Test frontend/backend/both after fix?: backend
-
 **In progress Task List**:
-Task 1: Legal-Seiten in die Sprachlogik einbinden (P0)
-- Where to resume: Überprüfe, wie ,  und  in Englisch dargestellt werden. Der Nutzer wies darauf hin, dass rechtlich bindende Texte (oft DE) im Englischen sauber deklariert werden müssen (z.B. als reine Orientierungshilfe), ohne juristisch falsche Parallelbehauptungen aufzustellen.
-- What will be achieved with this?: Rechtliche Absicherung der i18n-Implementierung.
+Task 1: Phase 3.7e Kommunikationslogik (P0)
+- Where to resume: Überprüfe die gerade erstellte  und . Ergänze Frontend-Implementierung und API-Routes. 
+- What will be achieved with this?: Echtes systemisches Feedback für Bewerber, Staff und Lehrer in DE/EN.
 - Status: IN PROGRESS
-- Should Test frontend/backend/both after fix?: frontend
-- Blocked on something: None
-
-Task 2: Mem0 Sync & Documentation für Phase 3.7 (P0)
-- Where to resume: Ganz am Ende des Laufs.
-- What will be achieved with this?: Erhält den externen Projektstatus für kommende Agenten.
-- Status: NOT STARTED
-- Should Test frontend/backend/both after fix?: NA
-- Blocked on something: Abschluss des i18n Rollouts.
+- Should Test frontend/backend/both after fix?: both
+- Blocked on something: API & Frontend-Wiring.
 
 **Upcoming and Future Tasks**
-Upcoming Tasks:
-- Task 1 (P1): Implementierung der WhatsApp Business QR-Kopplung auf der Kontaktseite (ausstehend, bis UI/i18n zu 100% stabil ist).
+Future Tasks:
+- Payment-Freischaltung (P1)
+- Partner-/Sub-Agentur-Portal (P2 - Preislogik wurde aber schon darauf vorbereitet)
+- Exportfunktionen (P2)
+- PWA-Fähigkeit (P3)
 
 **Completed work in this session**
-- Phase 3.6b: Umbau und Harmonisierung der Legal-Seiten (Impressum, AGB, Datenschutz) – Entfernung von Staging-Hinweisen und Einbindung der korrekten Adresslogik (DONE)
-- Grundlegende i18n Implementierung der Public Pages (, , , ) inkl. korrigierter JSON-Struktur (DONE)
+- Phase 3.7b: DE/EN Public Site systemweit verifiziert (DONE)
+- Phase 3.7b: Resend-Domain auf  umgestellt inkl. Reply-To Logik (DONE)
+- Phase 3.7b: 4 funktionale Test-Accounts als Idempotent Seed bereitgestellt (Admin, Staff, Applicant, Teacher) (DONE)
+- Phase 3.7c: KI-Logik komplett auf **NSCall** (nscale) Provider migriert (Qwen/Llama Modelle) (DONE)
+- Phase 3.7c: Teacher Dashboard und Bewerber-Consent-UI gebaut (DONE)
+- Phase 3.7d: Staff-seitige Teacher-Assignment-UI gebaut inkl. Privacy-Checks (DONE)
+- Phase 3.7d: Preislogik individualisiert (Alle pauschalen Festpreise aus AGB, UI und Staff-Tools entfernt) (DONE)
 
 **Earlier issues found/mentioned but not fixed**
-- Issue 1: Preview Verifikation schlägt Code
-  - Debug checklist: Niemals einen Task abschließen, ohne das Rendering im Live-Preview über Screenshots überprüft zu haben. Der Nutzer hat den Agenten hart korrigiert, da Änderungen im Code oft nicht korrekt gerendert oder deployed wurden.
-  - Why to solve this issue and what will be achieved with this?: Verhindert verfrühte Fertigmeldungen und Unmut des Nutzers.
-  - Should Test frontend/backend/both after fix: frontend
-  - Is recurring issue? Y
+- Keine technischen Fehler, aber ein kritisches Verhaltensproblem des Agenten (siehe unten).
 
 **Known issue recurrence from previous fork**
-- Issue recurrence in previous fork: Agent hat Tasks (Harmonisierung Legal-Seiten) als abgeschlossen gemeldet, obwohl im Live-System noch alte Staging-Notes sichtbar waren.
-- Recurrence count: 1
-- Status: RESOLVED (für Phase 3.6b), aber als Regel für 3.7 extrem wichtig (Preview schlägt Handoff).
+- Issue recurrence in previous fork: Der Agent hat am Ende jedes Tasks Potenzielle Verbesserungen gepitcht und damit den Projekt-Scope aufgebläht. Der User hat dies strengstens verboten.
+- Recurrence count: Mehrfach im Vorfeld
+- Status: RESOLVED via strict system rule
+- **CRITICAL NOTE FOR NEXT AGENT**: Unter keinen Umständen darfst du im -Tool oder in Chat-Antworten Potenzielle Verbesserungen, Nice to haves oder Feature-Vorschläge machen, die nicht zum aktuellen Scope gehören. Speichere neue Ideen **stumm** im Mem0 ab und berichte am Ende NUR: 1. Was wurde umgesetzt, 2. Was ist offen/blockiert, 3. Nächster Schritt, 4. Welche Punkte für Folgeprojekte ins Mem0 gespeichert wurden.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-React, Tailwind CSS, FastAPI, MongoDB, React-i18next (für Mehrsprachigkeit), Resend (E-Mails), Mem0 (Agenten-Gedächtnis).
+React, Tailwind CSS, FastAPI, MongoDB, React-i18next (DE/EN i18n), NSCall / nscale API (für LLM-Inferenz statt Emergent/Claude), Resend (Transactional E-Mails), Mem0.
 
 **key DB schema**
-- Unverändert in dieser Session.
+- : enthält  (admin, staff, applicant, teacher), ,  (Array für Einwilligungen).
+- *(Neu benötigt für Phase 3.7e)*: Vermutlich eine  Collection oder ein embedded Array pro User.
 
 **changes in tech stack**
-- Neue E-Mail Versand-Domain:  (ersetzt alte Platzhalter).
+- **KI-Inferenz**: Keine Emergent LLM Keys oder Claude API mehr erlaubt. ALLES läuft zwingend über NSCall ().
+- **Preismodell**: Keine pauschalen Preise mehr im Code.
 
 **All files of reference**
--  &  (Kern der i18n)
--  (Ausgerollt mit i18n Hooks)
--  &  (Resend Updates)
+-  &  (Fokus-Dateien dieser Phase)
+-  &  (Immer up-to-date halten)
+- Google Drive Ordner: Verbindliche Source of Truth für Anforderungen.
 
 **Areas that need refactoring**:
-- Frontend Tests: Die Public-Seiten benötigen nun dringend visuelle und systemische Tests durch Screenshots und den Testing Agent, da extrem viele Übersetzungsschlüssel auf einen Schlag injiziert wurden.
+- Frontend muss mit einer In-App-Notification-Komponente erweitert werden (z.B. Navbar-Icon mit Dropdown).
 
 **key api endpoints**
-- E-Mail-Service nutzt intern Resend API via config.
+-  (Assignment)
+-  (Datenschutz/Einwilligungen)
+- *(Neu zu bauen)*: 
 
 **Critical Info for New Agent**
-- **PREVIEW WAHRHEIT IST PFLICHT:** Glaube niemals blind dem Handoff oder dem Code. Verifiziere alle UI-Änderungen und den englischen Sprachwechsel im **Live-Preview** (Screenshot Tool).
-- **MEM0 IST PFLICHT:** Zu Beginn Mem0 per cURL abrufen. Am Ende die Änderungen hineinspeichern.
-- **SPRACHE:** Antworte dem Nutzer ausschließlich auf **Deutsch**.
+1. **SPRACHE**: Antworte ausschließlich auf **Deutsch**.
+2. **GOOGLE DRIVE PFLICHT**: Immer den Drive gegenprüfen und Deltas in der Antwort dokumentieren.
+3. **NO-PITCH RULE**: Keine Ausbauideen im Abschluss-Summary vorschlagen! Streng verboten.
+4. **INDIVIDUELLE PREISE**: Schreibe niemals feste Euro-Beträge oder pauschale Preisangaben in die E-Mail-Templates oder Notifications. Alles ist individuell/einzelfallabhängig.
+5. **KI ONLY NSCALL**: Falls du neue AI-Features einbindest, nutze ausschließlich den existierenden .
 
 **documents and test reports created in this job**
--  (Erfolgreicher Testlauf für Phase 3.6b Legal Pages)
+-  (100% Pass)
+-  (100% Pass)
+-  (100% Pass)
+- 
 
 **Last 10 User Messages and any pending HUMAN messages**
-1. User lehnt den Abschluss von Phase 3.6 ab. Die Legal-Seiten im Preview zeigten noch interne Entwickler-Hinweise. Fordert Phase 3.6b: Sofortige Reparatur der Live-Vorschau. (COMPLETED)
-2. User initiiert Phase 3.7: Fordert systemweite Mehrsprachigkeit (DE+EN) für alle öffentlichen Seiten, Umstellung der Resend-Domain auf  und Erinnerung an die eiserne Regel Preview schlägt Handoff. (IN PROGRESS - Agent war zuletzt dabei, defektes EN-JSON-File zu fixen).
+1. User verbietet strikt das Anbieten von Potenziellen Verbesserungen in der Abschlussmeldung. Feature-Ideen sollen still im Mem0 dokumentiert werden. (ACKNOWLEDGED)
+2. User initiiert Phase 3.7e: Fokus auf mehrsprachige E-Mail-Templates (DE/EN via ) und ein In-App Notification System. Drive-Gegenprüfung und Preis-/Kostenregel (individuell!) bleiben aktiv. Keine Scope-Aufblähung. (IN PROGRESS - Agent hat Drive geprüft und Backend Services angelegt).
 
 **Project Health Check:**
-- Broken: None. JSON-Parsing-Fehler wurde am Ende der Session gelöst.
-- Mocked: Preiskalkulator (intern).
+- Broken: None.
+- Mocked: Preiskalkulator (intern, bewusst geflaggt und als individuell in der UI deklariert).
 
 **3rd Party Integrations**
-- Mem0 (Agent Memory) — requires User API Key
+- Mem0 (Project Memory) — requires User API Key
 - Resend (Emails) — requires User API Key
-- Emergent LLM Key (AI Screening) — uses Emergent LLM Key
+- NSCall / nscale (AI Inference) — requires User API Key (Ersetzt Emergent/Claude/OpenAI für dieses Projekt!)
 
 **Testing status**
-- Testing agent used after significant changes: YES (für 3.6b) / NO (für 3.7, noch ausstehend)
+- Testing agent used after significant changes: YES (für Phases 3.7b-d) / NO (für 3.7e noch ausstehend)
 - Troubleshoot agent used after agent stuck in loop: NO
 - Test files created: None
-- Known regressions: Keine aktuell bekannt, jedoch hohes Risiko für UI-Bugs durch massiven i18n-Rollout.
+- Known regressions: Keine.
 
 **Credentials to test flow:**
-Siehe . Default Admin:  / .
+Siehe . (admin, staff, applicant, teacher - Passwort für Dev/Test Accounts ist einheitlich ).
 
 **What agent forgot to execute**
-Der Agent hat die englischen JSON-Dateien erfolgreich geparst, aber die Session wurde beendet, bevor er durch Screenshots im Preview verifizieren konnte, ob der DE/EN-Toggle auf den Unterseiten nun tatsächlich reibungslos und ohne Fehler im Browser rendert. Der Aufruf des Testing-Agents für Phase 3.7 fehlt noch komplett. Ebenso fehlt der Mem0 Sync für Phase 3.7.</analysis>
+Der Agent hat die Backend-Services  und  erstellt, die Session endete jedoch vor der Implementierung der API-Routers, der Frontend-UI und der Verkabelung der Trigger mit den tatsächlichen Workflow-Ereignissen (Statuswechsel etc.). Testing steht für 3.7e komplett aus.</analysis>

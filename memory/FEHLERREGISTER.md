@@ -110,6 +110,35 @@ Vor jedem Run gegen dieses Register prüfen.
 - **Behebung**: Auto-Support-Conversation via GET /api/conversations/support; Auto-Staff-Zuweisung als Gesprächspartner
 - **Vermeidungsregel**: Messaging-Systeme IMMER mit einem Default-Kanal bauen. Nie darauf vertrauen, dass eine Konversation bereits existiert.
 
+## Fehler 14: Portalnavigation inkonsistent (Sidebar vs. Top-Header)
+- **Fehlerbild**: Staff hatte Top-Header, Applicant noch linke Sidebar
+- **Ursache**: Nur StaffLayout wurde in 3.7i umgebaut, ApplicantLayout nicht
+- **Bereich**: Frontend / ApplicantLayout.js
+- **Erkennung**: User-Feedback Phase 3.7j
+- **Behebung**: ApplicantLayout komplett auf Top-Header umgebaut (identisches Prinzip wie StaffLayout)
+- **Vermeidungsregel**: Strukturelle Änderungen IMMER portalweit denken. Wenn ein Layout-Konzept wechselt, ALLE Portal-Layouts prüfen.
+
+## Fehler 15: Bewerbungsformular ohne Account-Erstellung
+- **Fehlerbild**: Bewerber konnten Bewerbung einreichen, aber hatten keinen Portalzugang
+- **Ursache**: leads/ingest erstellte User ohne Passwort; separater Registrierungsschritt nötig
+- **Bereich**: Backend leads.py + Frontend ApplyPage.js
+- **Erkennung**: Fachliche Anforderung Phase 3.7j
+- **Behebung**: Passwort-Felder im Formular, Backend erstellt Account + setzt Auth-Cookies → Auto-Redirect
+- **Vermeidungsregel**: Bewerbungsflows IMMER mit Account-Erstellung koppeln (Portal-first-Funnel)
+
+## Fehler 16: i18n-Keys nicht übersetzt angezeigt
+- **Fehlerbild**: Neue Formular-Felder zeigten Rohtext statt Übersetzung (z.B. "apply.account_title")
+- **Ursache**: Neue t()-Aufrufe ohne korrespondierende JSON-Einträge
+- **Bereich**: Frontend / locales
+- **Erkennung**: Screenshot-Prüfung in Phase 3.7j
+- **Behebung**: DE und EN Translations ergänzt
+- **Vermeidungsregel**: Bei JEDEM neuen t()-Aufruf sofort BEIDE Sprachdateien prüfen und ergänzen
+
+## Arbeitsprinzip: "Sichtbar reicht nicht – operativ bearbeitbar ist Pflicht"
+- Dieses Prinzip gilt als Dauerregelung für alle zukünftigen Runs
+- Jede UI-Komponente muss nicht nur angezeigt werden, sondern real operativ funktionieren
+- Gilt für: Aufgaben, Nachrichten, Dokumente, Status, Wiedervorlagen, Export
+
 ---
 
 ## Prüfcheckliste vor jedem Run

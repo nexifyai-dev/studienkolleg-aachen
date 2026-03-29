@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './i18n';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ScrollToTop from './components/ScrollToTop';
+import CookieBanner from './components/shared/CookieBanner';
 
 // Public pages
 import HomePage from './pages/public/HomePage';
@@ -71,6 +72,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <ScrollToTop />
+        <CookieBanner />
         <Routes>
           {/* Public */}
           <Route path="/" element={<HomePage />} />

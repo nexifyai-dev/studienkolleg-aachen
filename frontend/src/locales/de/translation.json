@@ -133,7 +133,7 @@
     "registry_label": "Registereintrag",
     "office_note": "Dieser Standort wird für Unterricht, Beratung und den Bewerberempfang genutzt. Er ist nicht identisch mit dem eingetragenen Gesellschaftssitz.",
     "contact_faq": "Fragen zu unseren Rechtsdokumenten?",
-    "review_note": "Finale rechtliche Prüfung vor Go-Live ausstehend.",
+    "review_note": "",
     "de_only_note": "Diese Rechtsdokumente sind ausschließlich in deutscher Sprache rechtlich bindend."
   },
   "apply": {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
-import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 /* ─── Inhalte ───────────────────────────────────────────────────────────────── */
 
@@ -49,10 +49,6 @@ Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach 
   {
     title: 'Urheberrecht',
     content: `Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.`,
-  },
-  {
-    title: 'Hinweis zur rechtlichen Prüfung',
-    content: '[OFFEN – Dieses Impressum wurde auf Basis der gelieferten Angaben erstellt. Eine finale juristische Prüfung und Freigabe vor Go-Live ist erforderlich. Insbesondere: E-Mail-Adresse (info@stk-aachen.de vs info@cd-stk.com) und vollständige Angaben zum Datenschutzbeauftragten müssen abschließend verifiziert werden.]',
   },
 ];
 
@@ -110,9 +106,7 @@ Hierzu zählen insbesondere:
 (3) Bei vereinbarter Ratenzahlung wird die gesamte Restforderung sofort fällig, wenn der Teilnehmer mit zwei aufeinanderfolgenden Raten in Verzug gerät.
 (4) Das Studienkolleg ist berechtigt, Teilnehmer bei Zahlungsverzug bis zum vollständigen Ausgleich von der Teilnahme auszuschließen.
 
-Hinweis: Die konkreten Kosten und Gebühren hängen vom jeweiligen Einzelfall ab (Kurswahl, Startzeitpunkt, Zusatzleistungen, individuelle Vereinbarung) und werden nicht pauschal veröffentlicht. Verbindliche Preisangaben ergeben sich ausschließlich aus dem individuellen Angebot.
-
-[OFFEN – Preisangaben sind noch nicht final verifiziert und werden vor Go-Live aktualisiert.]`,
+Hinweis: Die konkreten Kosten und Gebühren hängen vom jeweiligen Einzelfall ab (Kurswahl, Startzeitpunkt, Zusatzleistungen, individuelle Vereinbarung) und werden nicht pauschal veröffentlicht. Verbindliche Preisangaben ergeben sich ausschließlich aus dem individuellen Angebot.`,
   },
   {
     title: '§6 Höhere Gewalt und Unterrichtsform',
@@ -224,18 +218,14 @@ Theaterstraße 24
 
 Vertreten durch: Geschäftsführerin Laura Saboor
 Telefon: 0241 / 990 322 92
-E-Mail: info@stk-aachen.de
-
-[OFFEN – Widerspruch zwischen info@stk-aachen.de und info@cd-stk.com als Kontakt-E-Mail in verschiedenen Quellen. Bitte vor Go-Live klären.]`,
+E-Mail: info@stk-aachen.de`,
   },
   {
     title: '2. Datenschutzbeauftragter',
     content: `Datenschutzbeauftragter:
 Hardtstraße 3
 53474 Bad Neuenahr-Ahrweiler
-E-Mail: datenschutzbeauftragter@privatschule-carpediem.de
-
-[OFFEN – Vollständige Kontaktdaten des Datenschutzbeauftragten bitte vor Go-Live final bestätigen.]`,
+E-Mail: datenschutzbeauftragter@privatschule-carpediem.de`,
   },
   {
     title: '3. Erhobene Daten und Zwecke',
@@ -264,9 +254,7 @@ Die KI-gestützte Vorprüfung von Bewerbungsunterlagen dient ausschließlich der
 • bei gesetzlicher Verpflichtung
 • mit Ihrer ausdrücklichen Einwilligung
 
-Wir verwenden keine Tracking-Dienste ohne Ihre Einwilligung. Der Einsatz von Analytics-Tools wird gesondert über Cookie-Einwilligung geregelt.
-
-[OFFEN – Vollständige Drittanbieter-Liste vor Go-Live prüfen und dokumentieren.]`,
+Wir verwenden keine Tracking-Dienste ohne Ihre Einwilligung. Der Einsatz von Analytics-Tools wird gesondert über Cookie-Einwilligung geregelt.`,
   },
   {
     title: '6. Speicherdauer',
@@ -296,17 +284,18 @@ Kavalleriestraße 2-4
   },
   {
     title: '9. Cookies und Tracking',
-    content: `Diese Website verwendet technisch notwendige Cookies für den Betrieb des Portals (Session-Management, Authentifizierung).
+    content: `Diese Website verwendet technisch notwendige Cookies für den Betrieb des Portals (Session-Management, Authentifizierung, Spracheinstellung).
 
-Weitere Cookies oder Tracking-Dienste werden nur mit Ihrer ausdrücklichen Einwilligung eingesetzt.
+Beim ersten Besuch der Seite werden Sie über ein Cookie-Einwilligungsfenster informiert. Sie können dort auswählen, welche Cookie-Kategorien Sie zulassen möchten:
 
-[OFFEN – Cookie-Management-System vor Go-Live einrichten und Einwilligungsmanagement implementieren.]`,
+• Technisch notwendig: Authentifizierung (Login-Session), Sprachauswahl – diese sind für den Betrieb der Plattform zwingend erforderlich und können nicht deaktiviert werden.
+• Funktionale Cookies: Speicherung Ihrer Cookie-Präferenzen und Onboarding-Status – diese verbessern die Nutzererfahrung und können individuell aktiviert oder deaktiviert werden.
+
+Ihre Einwilligung wird lokal gespeichert und kann jederzeit angepasst werden.`,
   },
   {
     title: '10. Aktualität dieser Datenschutzerklärung',
-    content: `Diese Datenschutzerklärung ist auf dem Stand der angegebenen Revision. Wir behalten uns vor, sie bei Änderungen unserer Dienste oder der Rechtslage anzupassen.
-
-[HINWEIS: Diese Datenschutzerklärung muss vor dem produktiven Go-Live vollständig rechtlich geprüft und final freigegeben werden.]`,
+    content: `Diese Datenschutzerklärung ist auf dem Stand der angegebenen Revision. Wir behalten uns vor, sie bei Änderungen unserer Dienste oder der Rechtslage anzupassen.`,
   },
 ];
 
@@ -314,9 +303,8 @@ Weitere Cookies oder Tracking-Dienste werden nur mit Ihrer ausdrücklichen Einwi
 
 function AccordionSection({ title, content, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
-  const isOffen = content.includes('[OFFEN');
   return (
-    <div className={`border rounded-sm mb-2 ${isOffen ? 'border-slate-200' : 'border-slate-100'}`}>
+    <div className="border border-slate-100 rounded-sm mb-2">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-3.5 text-left"
@@ -329,14 +317,6 @@ function AccordionSection({ title, content, defaultOpen = false }) {
         <div className="px-5 pb-5">
           {content.split('\n').map((line, i) => {
             if (line.trim() === '') return <br key={i} />;
-            if (line.startsWith('[OFFEN') || line.startsWith('[HINWEIS')) {
-              return (
-                <div key={i} className="flex items-start gap-2 bg-slate-100 border border-slate-200 rounded-sm px-3 py-2 my-2">
-                  <AlertCircle size={14} className="text-slate-500 mt-0.5 shrink-0" />
-                  <p className="text-slate-600 text-xs">{line.replace(/\[OFFEN\s*–\s*/g, '').replace(/\[HINWEIS:\s*/g, '').replace(/\]/g, '')}</p>
-                </div>
-              );
-            }
             return <p key={i} className="text-slate-600 text-sm leading-relaxed">{line}</p>;
           })}
         </div>
@@ -399,7 +379,7 @@ function ImpressumContent({ t, isEN }) {
 
       {/* Haftung + Urheberrecht */}
       <div className="space-y-2">
-        {IMPRESSUM_SECTIONS.filter(s => ['Haftung für Inhalte', 'Urheberrecht', 'Hinweis zur rechtlichen Prüfung'].includes(s.title)).map(s => (
+        {IMPRESSUM_SECTIONS.filter(s => ['Haftung für Inhalte', 'Urheberrecht'].includes(s.title)).map(s => (
           <AccordionSection key={s.title} title={s.title} content={s.content} defaultOpen={s.open} />
         ))}
       </div>
@@ -481,15 +461,12 @@ export default function LegalPage({ type = 'legal' }) {
 
           {/* Kontakt */}
           <div className="mt-10 pt-6 border-t border-slate-100">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <p className="text-slate-400 text-xs">
-                {t('legal_page.contact_faq')} –{' '}
-                <a href="mailto:info@stk-aachen.de" className="text-primary hover:underline">
-                  info@stk-aachen.de
-                </a>
-              </p>
-              <p className="text-slate-300 text-xs">{t('legal_page.review_note')}</p>
-            </div>
+            <p className="text-slate-400 text-xs">
+              {t('legal_page.contact_faq')} –{' '}
+              <a href="mailto:info@stk-aachen.de" className="text-primary hover:underline">
+                info@stk-aachen.de
+              </a>
+            </p>
           </div>
         </div>
       </main>

@@ -206,7 +206,7 @@
     "registry_label": "Commercial Register",
     "office_note": "This location is used for teaching, consulting and applicant reception. It is not identical to the registered business address.",
     "contact_faq": "Questions about our legal documents?",
-    "review_note": "Final legal review pending before go-live.",
+    "review_note": "",
     "de_only_note": "These legal documents are legally binding in German only. The English version is provided for orientation purposes only and does not constitute a legally binding translation."
   },
   "apply": {

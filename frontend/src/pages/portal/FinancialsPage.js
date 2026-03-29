@@ -12,8 +12,8 @@ export default function FinancialsPage() {
       <div className="bg-slate-50 border border-slate-200 rounded-sm p-4 flex items-start gap-3" data-testid="financials-gate-notice">
         <AlertCircle size={16} className="text-slate-500 mt-0.5 shrink-0" />
         <div className="text-sm text-slate-700">
-          <p className="font-medium mb-1">[OFFEN] Zahlungsmodul noch nicht aktiv</p>
-          <p>Das Zahlungsmodul wird erst nach Klärung der Steuer-/Refund-Logik aktiviert (Gate 1 gemäß Projektdokumentation). Für Zahlungsfragen wende dich direkt an info@stk-aachen.de.</p>
+          <p className="font-medium mb-1">Zahlungsmodul in Vorbereitung</p>
+          <p>Das Zahlungsmodul wird in Kürze freigeschaltet. Für Zahlungsfragen wende dich direkt an info@stk-aachen.de.</p>
         </div>
       </div>
 

@@ -26,7 +26,7 @@
 ## API Testing
 
 ```bash
-API_URL=https://flow-messages.preview.emergentagent.com
+API_URL=https://email-finalize.preview.emergentagent.com
 
 # Admin Login
 curl -s -c /tmp/admin.cookies -X POST "$API_URL/api/auth/login" \

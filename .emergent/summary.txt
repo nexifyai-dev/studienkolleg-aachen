@@ -1,133 +1,150 @@
 <analysis>**original_problem_statement**: 
-Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany.
-**Aktuelle Phase (3.7e - E-Mail-Templates & Notification System):**
-1. Mehrsprachige E-Mail-Templates (DE/EN) basierend auf  erstellen (Einladung, Status, Dokumente, Consent).
-2. In-App Notification System aufbauen (gelesen/ungelesen, Trigger an Kernflows koppeln).
-3. **Preis-/Kostenregel beachten:** Preise sind *immer* individuell. Keine pauschalen Festpreise in E-Mails, UIs oder Notifications versprechen.
-4. **Drive-Pflicht:** Vor jeder Implementierung MUSS der Google-Drive-Ordner als Source of Truth geprüft werden.
-5. **AI-Regel:** Alle Produktiv-KIs laufen *ausschließlich* über NSCall (nscale).
-6. **STRIKTE ABSCHLUSSREGEL:** Bis zum Projektabschluss dürfen am Ende des Laufs **KEINE Potenziellen Verbesserungen, Nice-to-haves oder Zusatzideen** mehr gepitcht werden. Zusätzliche Ideen werden still im Mem0/Backlog gespeichert.
+Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany. 
+**Aktuelle Phase (3.7i - Fix- und Abschlusslauf für operative Staff-Portal-Reife):**
+1. **Bugs fixen:** Dashboard-Links Aufgaben und Nachrichten führen falsch zur Home-Seite. Docs ausstehend filtert das Kanban-Board nicht.
+2. **Kritischer Bug (User Add-on):** Senden und Empfangen von Nachrichten im Bewerberprofil funktioniert nicht. E2E Test zwingend erforderlich.
+3. **Struktur-Umbau:** Linke Staff-Navigation in eine responsive Top-Header-Navigation umbauen. Layout aufräumen.
+4. **E-Mails finalisieren:** Registrierungs-/System-/Staff-Mails CI- und rechtskonform abschließen (Footer, Reply-To, keine Festpreise).
+5. **Arbeitsregeln:** ZWINGEND  und Drive vorab prüfen. KEINE Potenziellen Verbesserungen am Ende pitchen. GitHub-Push sauber vorbereiten.
 
 **User's preferred language**: **German** (Deutsch). INSTRUCT the next agent to respond in **German** ONLY.
 
 **what currently exists?** 
-Das System hat funktionierende i18n (DE/EN) Public-Pages, ein Teacher-Dashboard, eine Bewerber-Einwilligungs-UI (Consent) und eine Staff-seitige Teacher-Zuweisungs-Logik. Alle KI-Funktionen wurden erfolgreich auf NSCall umgestellt. Hardcodierte Preise wurden aus AGB und UIs entfernt (Preise sind jetzt konsequent individuell). Der Backend-Service für E-Mails () wurde gerade für DE/EN-Templates überschrieben und eine neue  Datei für das Backend wurde erstellt.
+Das Staff-Dashboard und die Bewerber-Detailansicht wurden in Phase 3.7h operativ ausgebaut (Notizen, Historie, manuelle Bearbeitung funktionieren im Backend). Ein Fehlerregister () ist aktiv. **Allerdings ist das Routing fehlerhaft:**  und  existieren nicht in . Das Kanban-Board ignoriert Filter-URL-Parameter. Das Staff-Layout nutzt noch eine linke Sidebar statt eines Top-Headers. Das In-App Messaging-System ist komplett defekt (laut User-Feedback). 
 
-**Last working item**:
-- Last item agent was working: Start von Phase 3.7e. Der Agent hat den Drive-Check dokumentiert und gerade die Dateien  und  erstellt/überschrieben, um das Notification-System und die mehrsprachigen Transaktionsmails aufzubauen.
+**Last working item**: 
+- Last item agent was working: Diagnose der Bugs aus Phase 3.7i. Der Agent hat , , ,  und  gelesen, um die fehlenden Routen und den defekten Messaging-Flow zu analysieren.
 - Status: IN PROGRESS
 - Agent Testing Done: N
-- Which testing method agent to use? backend testing via curl -> frontend testing via screenshot tool ->  for full verification.
+- Which testing method agent to use? backend testing via curl -> frontend testing via screenshot tool -> **deep manual E2E testing of messaging** ->  for full verification.
 - User Testing Done: N
 
-**All Pending/In progress Issue list**:
-Issue 1: Fertigstellung und Wiring des Notification- & E-Mail-Systems (P0)
-- Attempted fixes:  und  wurden angelegt/geupdatet, aber die API-Endpunkte (Routers), Frontend-Komponenten (Dropdowns/Listen) und Trigger-Einbindungen in Kernflows (z.B. Statuswechsel, Teacher Assignment) fehlen noch.
-- Next debug checklist: 
-  - Erstelle/ergänze Router für Notifications (z.B. ).
-  - Verbinde Notification-Trigger und E-Mail-Versand mit bestehenden Endpunkten (z.B. Application-Status, Consent-Grant).
-  - Baue das Frontend-Notification-UI (Glocken-Icon, Dropdown/Page, Read/Unread-Toggle).
-  - Stelle sicher, dass die neuen Templates **keine Festpreise** suggerieren.
-- Why fix this issue and what will be achieved with the fix?: Kernanforderung der aktuellen Phase 3.7e zur Schließung von Kommunikationslücken.
-- Status: IN PROGRESS
-- Is recurring issue? N
-- Should Test frontend/backend/both after fix?: both
-- Blocked on other issue: None
+**All Pending/In progress Issue list**: 
+  Issue 1: Messaging-System im Bewerberprofil komplett defekt (P0 - *Vom User explizit eskaliert*)
+     - Attempted fixes: Agent hat  und  eingelesen, aber noch nichts geändert.
+     - Next debug checklist: Prüfen, warum Nachrichten nicht gesendet/empfangen werden (API-Endpunkte, WebSocket/Polling, DB-Schema, Frontend-State in  und ). 
+     - Why fix this issue and what will be achieved with the fix?: Kernfunktion der Kommunikation; Blocker für produktiven Betrieb.
+     - Status: NOT STARTED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix?: Both (Deep E2E required)
+     - Blocked on other issue: None
 
-**In progress Task List**:
-Task 1: Phase 3.7e Kommunikationslogik (P0)
-- Where to resume: Überprüfe die gerade erstellte  und . Ergänze Frontend-Implementierung und API-Routes. 
-- What will be achieved with this?: Echtes systemisches Feedback für Bewerber, Staff und Lehrer in DE/EN.
-- Status: IN PROGRESS
-- Should Test frontend/backend/both after fix?: both
-- Blocked on something: API & Frontend-Wiring.
+  Issue 2: Fehlendes Routing für Staff Dashboard Quick-Links (P0)
+     - Attempted fixes: Agent hat erkannt, dass  und  in  fehlen.
+     - Next debug checklist: Routen in  unter dem Staff-Bereich anlegen und entsprechende Dummy/Live-Pages verknüpfen.
+     - Why fix this issue and what will be achieved with the fix?: Behebt fehlerhafte Redirects zur Home-Page.
+     - Status: IN PROGRESS
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix?: Frontend
+
+  Issue 3: Kanban-Board Docs ausstehend Filter funktioniert nicht (P1)
+     - Attempted fixes: Diagnose, dass  URL-Query-Parameter () nicht auswertet.
+     - Next debug checklist:  anpassen, um initiale Filter aus der URL zu lesen.  anpassen, um korrekte Parameter mitzugeben.
+     - Status: NOT STARTED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix?: Frontend
+
+**In progress Task List**: 
+  Task 1: Umbau Staff-Navigation auf Top-Header (P0)
+     - Where to resume: . Linke Sidebar entfernen und in ein responsives (Mobile/Tablet/Desktop) Top-Header-Menü umbauen.
+     - What will be achieved with this?: Bessere Informationsarchitektur und Platznutzung laut User-Feedback.
+     - Status: NOT STARTED
+     - Should Test frontend/backend/both after fix?: Frontend (Screenshots mobile + desktop)
+     - Blocked on something: None
+
+  Task 2: Finalisierung E-Mail-Templates (P1)
+     - Where to resume: . 
+     - What will be achieved with this?: CI/CD-konforme, rechtskonforme Templates (Footer, Signatur, keine Festpreise).
+     - Status: NOT STARTED
+     - Should Test frontend/backend/both after fix?: Backend (Review generated HTML)
+     - Blocked on something: None
 
 **Upcoming and Future Tasks**
-Future Tasks:
-- Payment-Freischaltung (P1)
-- Partner-/Sub-Agentur-Portal (P2 - Preislogik wurde aber schon darauf vorbereitet)
-- Exportfunktionen (P2)
-- PWA-Fähigkeit (P3)
+  Future Tasks:
+  - Payment-Freischaltung (P2)
+  - Partner-/Sub-Agentur-Portal (P2)
+  - Exportfunktionen (P2)
+  - PWA-Fähigkeit (P3)
+  - Wiedervorlage-System für Bewerber (P2)
 
 **Completed work in this session**
-- Phase 3.7b: DE/EN Public Site systemweit verifiziert (DONE)
-- Phase 3.7b: Resend-Domain auf  umgestellt inkl. Reply-To Logik (DONE)
-- Phase 3.7b: 4 funktionale Test-Accounts als Idempotent Seed bereitgestellt (Admin, Staff, Applicant, Teacher) (DONE)
-- Phase 3.7c: KI-Logik komplett auf **NSCall** (nscale) Provider migriert (Qwen/Llama Modelle) (DONE)
-- Phase 3.7c: Teacher Dashboard und Bewerber-Consent-UI gebaut (DONE)
-- Phase 3.7d: Staff-seitige Teacher-Assignment-UI gebaut inkl. Privacy-Checks (DONE)
-- Phase 3.7d: Preislogik individualisiert (Alle pauschalen Festpreise aus AGB, UI und Staff-Tools entfernt) (DONE)
+- Phase 3.7g: Cookie-Einstellungen nachträglich bearbeitbar gemacht (Footer-Link) (DONE)
+- Phase 3.7h: Staff Dashboard überarbeitet (KPIs, klickbare Zeilen) (DONE)
+- Phase 3.7h: Applicant Detail Page überarbeitet (Notizen, Manuelle Bearbeitung, Historie) (DONE)
+- FEHLERREGISTER in  angelegt. (DONE)
 
 **Earlier issues found/mentioned but not fixed**
-- Keine technischen Fehler, aber ein kritisches Verhaltensproblem des Agenten (siehe unten).
+   - Issue 1: Senden und empfangen von Nachrichten funktioniert nicht.
+   - Debug checklist: Frontend-API-Aufrufe ( / Bewerberprofil) und Backend-Router () tiefgreifend debuggen. User verlangt explizit E2E-Test dieser Funktion!
 
 **Known issue recurrence from previous fork**
-- Issue recurrence in previous fork: Der Agent hat am Ende jedes Tasks Potenzielle Verbesserungen gepitcht und damit den Projekt-Scope aufgebläht. Der User hat dies strengstens verboten.
-- Recurrence count: Mehrfach im Vorfeld
-- Status: RESOLVED via strict system rule
-- **CRITICAL NOTE FOR NEXT AGENT**: Unter keinen Umständen darfst du im -Tool oder in Chat-Antworten Potenzielle Verbesserungen, Nice to haves oder Feature-Vorschläge machen, die nicht zum aktuellen Scope gehören. Speichere neue Ideen **stumm** im Mem0 ab und berichte am Ende NUR: 1. Was wurde umgesetzt, 2. Was ist offen/blockiert, 3. Nächster Schritt, 4. Welche Punkte für Folgeprojekte ins Mem0 gespeichert wurden.
+  - Issue recurrence in previous fork: Agent hat wiederholt Nice-to-haves am Ende gepitcht und Frontend-Ansichten nicht via Screenshot gegen Code-Annahmen validiert (Preview schlägt Handoff).
+  - Recurrence count: Mehrfach
+  - Status: IN PROGRESS (Fehlerregister wurde genau dafür erstellt. Muss vor jedem Run gelesen werden).
+  - *Note:* Lese zwingend  bevor du anfängst.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-React, Tailwind CSS, FastAPI, MongoDB, React-i18next (DE/EN i18n), NSCall / nscale API (für LLM-Inferenz statt Emergent/Claude), Resend (Transactional E-Mails), Mem0.
+React, Tailwind CSS, FastAPI, MongoDB, NSCall (AI Provider - exclusively), Resend (Emails). 
 
 **key DB schema**
-- : enthält  (admin, staff, applicant, teacher), ,  (Array für Einwilligungen).
-- *(Neu benötigt für Phase 3.7e)*: Vermutlich eine  Collection oder ein embedded Array pro User.
+- : Bewerberfälle (Enthält Status, Notizen, Historie).
+- : In-App Kommunikation (Muss dringend gedebuggt werden).
 
 **changes in tech stack**
-- **KI-Inferenz**: Keine Emergent LLM Keys oder Claude API mehr erlaubt. ALLES läuft zwingend über NSCall ().
-- **Preismodell**: Keine pauschalen Preise mehr im Code.
+- KI **ausschließlich** über NSCall.
+- Preise sind individuell (keine Hardcodes).
 
 **All files of reference**
--  &  (Fokus-Dateien dieser Phase)
--  &  (Immer up-to-date halten)
-- Google Drive Ordner: Verbindliche Source of Truth für Anforderungen.
+-  (PFLICHT-LEKTÜRE)
+- 
+- 
+- 
+-  & 
+- 
 
 **Areas that need refactoring**:
-- Frontend muss mit einer In-App-Notification-Komponente erweitert werden (z.B. Navbar-Icon mit Dropdown).
-
-**key api endpoints**
--  (Assignment)
--  (Datenschutz/Einwilligungen)
-- *(Neu zu bauen)*: 
+-  muss von Sidebar auf Top-Nav umgebaut werden.
+-  Routing für Staff-Bereich muss bereinigt werden.
 
 **Critical Info for New Agent**
-1. **SPRACHE**: Antworte ausschließlich auf **Deutsch**.
-2. **GOOGLE DRIVE PFLICHT**: Immer den Drive gegenprüfen und Deltas in der Antwort dokumentieren.
-3. **NO-PITCH RULE**: Keine Ausbauideen im Abschluss-Summary vorschlagen! Streng verboten.
-4. **INDIVIDUELLE PREISE**: Schreibe niemals feste Euro-Beträge oder pauschale Preisangaben in die E-Mail-Templates oder Notifications. Alles ist individuell/einzelfallabhängig.
-5. **KI ONLY NSCALL**: Falls du neue AI-Features einbindest, nutze ausschließlich den existierenden .
+1. **SPRACHE:** Ausschließlich **Deutsch**.
+2. **NO PITCH RULE:** Keine Ausbauideen im Finish-Summary. Halte dich exakt an die Definition of Done!
+3. **MESSAGING BUG:** Der User ist frustriert, dass Nachrichten nicht funktionieren. Fixe dies als erstes und teste es E2E (Applicant sendet, Staff empfängt/antwortet).
+4. **GITHUB PUSH:** Du kannst nicht direkt pushen. Bereite das Repo vor und instruiere den User in der Abschlussmeldung *konkret*, die Save to Github-Funktion in der Chat-Eingabe zu nutzen. Verweise auf Branch/Commits.
+5. **PFLICHT:** Rufe  (PRD + FEHLERREGISTER) und Drive vor Beginn ab.
 
 **documents and test reports created in this job**
--  (100% Pass)
--  (100% Pass)
--  (100% Pass)
+- 
+-  (Phase 3.7h Test - 100% Pass)
 - 
 
 **Last 10 User Messages and any pending HUMAN messages**
-1. User verbietet strikt das Anbieten von Potenziellen Verbesserungen in der Abschlussmeldung. Feature-Ideen sollen still im Mem0 dokumentiert werden. (ACKNOWLEDGED)
-2. User initiiert Phase 3.7e: Fokus auf mehrsprachige E-Mail-Templates (DE/EN via ) und ein In-App Notification System. Drive-Gegenprüfung und Preis-/Kostenregel (individuell!) bleiben aktiv. Keine Scope-Aufblähung. (IN PROGRESS - Agent hat Drive geprüft und Backend Services angelegt).
+1. User fordert Phase 3.7i (Abschlusslauf operative Portal-Reife).
+2. Bug-Fixes für Dashboard-Links gefordert.
+3. Staff-Layout: Linke Leiste muss zum Top-Header werden.
+4. E-Mail-Templates finalisieren (Design, Rechtsangaben).
+5. User verlangt verifizierten Github-Push.
+6. **Zusatzhinweis (WICHTIG):** User meldet, dass In-App-Messaging komplett defekt ist. Fordert vollumfängliche E2E-Tests und keine oberflächlichen Prüfungen mehr.
 
 **Project Health Check:**
-- Broken: None.
-- Mocked: Preiskalkulator (intern, bewusst geflaggt und als individuell in der UI deklariert).
+- Broken: Messaging-System (Applicant <-> Staff Kommunikation). Staff-Dashboard Routen (, ).
+- Mocked: Preiskalkulator, Payment-Modul.
 
 **3rd Party Integrations**
-- Mem0 (Project Memory) — requires User API Key
+- NSCall / nscale (AI Inference) — requires User API Key
 - Resend (Emails) — requires User API Key
-- NSCall / nscale (AI Inference) — requires User API Key (Ersetzt Emergent/Claude/OpenAI für dieses Projekt!)
 
 **Testing status**
-- Testing agent used after significant changes: YES (für Phases 3.7b-d) / NO (für 3.7e noch ausstehend)
-- Troubleshoot agent used after agent stuck in loop: NO
-- Test files created: None
-- Known regressions: Keine.
+- Testing agent used after significant changes: NO (für 3.7i noch ausstehend).
+- Test files created: None neu.
+- Known regressions: Messaging ist kaputt.
 
 **Credentials to test flow:**
-Siehe . (admin, staff, applicant, teacher - Passwort für Dev/Test Accounts ist einheitlich ).
+Siehe . 
+Rollen: , , ,  (Passwort: ).
 
 **What agent forgot to execute**
-Der Agent hat die Backend-Services  und  erstellt, die Session endete jedoch vor der Implementierung der API-Routers, der Frontend-UI und der Verkabelung der Trigger mit den tatsächlichen Workflow-Ereignissen (Statuswechsel etc.). Testing steht für 3.7e komplett aus.</analysis>
+Der Agent hat die Fehleranalyse für Phase 3.7i gestartet, wurde aber unterbrochen, bevor Code geschrieben wurde. Der Messaging-Bug aus dem Zusatzhinweis des Users ist noch völlig unberührt.</analysis>

@@ -9,6 +9,7 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 3. **Preise individuell** – keine pauschalen Festpreise, einzelfallabhängig (auch für Sub-Agenturen/Partner)
 4. **Drive + Mem0** als Projektquellen-of-Truth pro Lauf
 5. **Keine "Potenzielle Verbesserungen"** am Ende jedes Laufs
+6. **Cookie-Consent** vor Go-Live eingerichtet
 
 ## Tech Stack
 - **Frontend**: React 18, Tailwind CSS, Shadcn/UI, react-i18next
@@ -16,10 +17,6 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 - **Database**: MongoDB
 - **Email**: Resend (Domain: send.nexify-automate.com, Reply-To: info@stk-aachen.de)
 - **AI Provider**: nscale (NSCall) – OpenAI-kompatible API
-  - Screening: Qwen/Qwen3-235B-A22B-Instruct-2507
-  - Klassifikation: meta-llama/Llama-3.3-70B-Instruct
-  - Zusammenfassung: Qwen/Qwen3-32B
-  - Empfehlung: Qwen/Qwen3-235B-A22B-Instruct-2507
 - **i18n**: react-i18next mit localStorage-Persistenz
 - **WhatsApp**: +49 1520 8496876
 
@@ -30,7 +27,7 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 │   ├── config.py             # Zentrale Konfiguration
 │   ├── server.py             # FastAPI App
 │   ├── seed.py               # 4 Rollen-Seeds (Admin, Staff, Teacher, Applicant)
-│   ├── deps.py               # Auth + Rollengruppen (TEACHING_ROLES, TEACHER_ROLES)
+│   ├── deps.py               # Auth + Rollengruppen
 │   ├── routers/
 │   │   ├── auth.py           # Login, Register, Invite, Password Reset
 │   │   ├── leads.py          # Lead-Ingest, Pipeline
@@ -40,34 +37,34 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 │   │   ├── messaging.py      # Nachrichten-System
 │   │   ├── consents.py       # DSGVO-Consent + Consent-Change-Trigger
 │   │   ├── teacher.py        # Lehrer-Zuweisungen + Assignment-Trigger
-│   │   ├── notifications.py  # In-App Notification CRUD (NEU Phase 3.7e)
+│   │   ├── notifications.py  # In-App Notification CRUD
 │   │   ├── ai_screening.py   # AI-Analyse + /ai/model-registry
-│   │   └── cost_simulator.py # MOCKED, intern, individuelle Preise
+│   │   └── cost_simulator.py # MOCKED
 │   └── services/
-│       ├── nscale_provider.py # NSCall AI-Provider (4 Task-Modelle)
-│       ├── ai_screening.py   # AI-Screening-Logik (nscale)
+│       ├── nscale_provider.py # NSCall AI-Provider
+│       ├── ai_screening.py   # AI-Screening-Logik
 │       ├── email.py          # Resend – 7 DE/EN Templates
 │       ├── notifications.py  # Notification-Service (8 Typen, DE/EN)
 │       ├── automation.py     # Workflow-Trigger (E-Mail + Notification)
 │       └── audit.py          # Audit-Logging
 ├── frontend/
 │   ├── src/
-│   │   ├── locales/          # DE/EN (inkl. Pricing-FAQ)
+│   │   ├── locales/          # DE/EN
 │   │   ├── components/
-│   │   │   ├── OnboardingTour.js    # 5-Schritt Bewerber-Onboarding
 │   │   │   ├── shared/
-│   │   │   │   └── NotificationBell.js  # Glocke + Dropdown (NEU Phase 3.7e)
+│   │   │   │   ├── CookieBanner.js    # Cookie-Consent (NEU Phase 3.7f)
+│   │   │   │   └── NotificationBell.js
 │   │   │   └── layout/
-│   │   │       ├── ApplicantLayout.js  # Portal + Consent-Nav + Onboarding + Bell
-│   │   │       └── StaffLayout.js      # Staff + Teacher-Modus + Bell
+│   │   │       ├── PublicNav.js        # Mobile-optimiert (NEU Phase 3.7f)
+│   │   │       ├── ApplicantLayout.js
+│   │   │       └── StaffLayout.js
 │   │   └── pages/
-│   │       ├── public/        # 8 Seiten (DE/EN, individuelle Preise)
-│   │       ├── portal/        # Bewerber (+ ConsentPage)
-│   │       └── staff/         # Staff + TeacherDashboard + ApplicantDetail
+│   │       ├── public/        # 8 Seiten + Legal (bereinigt, keine Staging-Hinweise)
+│   │       ├── portal/        # Bewerber
+│   │       └── staff/         # Staff + Teacher
 │   └── .env
 └── memory/
     ├── PRD.md
-    ├── ROLES_MATRIX.md
     └── test_credentials.md
 ```
 
@@ -83,33 +80,54 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 - Systemweite DE/EN, Resend-Domain, 4 Test-Accounts, Teacher-Rolle Backend, Consent Backend
 
 ### Phase 3.7c: NSCall-AI + Teacher-Frontend + Consent-UI (DONE)
-- NSCall-only AI, Teacher-Dashboard, Consent-UI, Onboarding-Tour, WhatsApp +49 1520 8496876
+- NSCall-only AI, Teacher-Dashboard, Consent-UI, Onboarding-Tour
 
-### Phase 3.7d: Individuelle Preisregel + Lehrer-Zuweisungs-UI (DONE - 2026-03-29)
-- Individuelle Preisregel systemweit verankert (AGB, FAQ, Prozess, Cost Simulator)
-- Sub-Agenturen/Partner: Textlich und architektonisch vorbereitet
-- Lehrer-Zuweisungs-UI (TeacherAssignmentPanel)
+### Phase 3.7d: Individuelle Preisregel + Lehrer-Zuweisungs-UI (DONE)
+- Individuelle Preisregel systemweit, Lehrer-Zuweisungs-UI (TeacherAssignmentPanel)
 
-### Phase 3.7e: E-Mail-Templates DE/EN + Notification-System (DONE - 2026-03-29)
-- **7 mehrsprachige E-Mail-Templates (DE/EN)**:
-  - send_welcome, send_application_received, send_document_requested,
-  - send_status_changed, send_password_reset, send_invite, send_teacher_assigned
-  - Alle ohne Festpreise, professionelle D/A/CH-konforme Sprache
-  - W2G Academy GmbH korrekt referenziert, Reply-To: info@stk-aachen.de
-- **In-App Notification-System**:
-  - 8 Notification-Typen mit DE/EN-Templates
-  - 4 API-Endpunkte: GET list, GET unread-count, PATCH read, PATCH read-all
-  - NotificationBell-Komponente in Staff- und Applicant-Layout
-  - Unread-Badge, Dropdown, Mark-as-Read, Mark-All-Read
-  - Auto-Polling alle 30 Sekunden
-- **Trigger-Verkabelung an Kernflows**:
-  - Statuswechsel → E-Mail + Notification an Bewerber
-  - Teacher-Zuweisung → E-Mail + Notification an Bewerber + Lehrer
-  - Consent Grant/Revoke → Notification an zugewiesenen Lehrer
-  - Dokument-Upload → Notification an Staff/Admin
-- **100% Tests**: 23/23 Backend + alle Frontend (iteration_8.json)
+### Phase 3.7e: E-Mail-Templates DE/EN + Notification-System (DONE)
+- 7 mehrsprachige E-Mail-Templates, In-App Notification-System, Trigger-Verkabelung
 
-## Pending / Backlog
+### Phase 3.7f: Cookie-Management + Staging-Bereinigung + Mobile-Header (DONE - 2026-03-29)
+- **Cookie-Management-System**:
+  - CookieBanner-Komponente mit DE/EN-Texten
+  - 2 Kategorien: Technisch notwendig (immer aktiv) + Funktional (Toggle)
+  - 3 Aktionsoptionen: Alle akzeptieren, Auswahl bestätigen, Nur notwendige
+  - Consent in localStorage (w2g_cookie_consent) mit Zeitstempel + Version
+  - Details-Panel mit aufgelisteten Cookies pro Kategorie
+  - W2G Academy GmbH-Hinweis + Link zur Datenschutzerklärung
+- **Staging-Hinweise entfernt**:
+  - 7 [OFFEN]-Blöcke aus Impressum/AGB/Datenschutz entfernt
+  - 1 [HINWEIS]-Block aus Datenschutz entfernt
+  - AccordionSection rendert keine Warn-Boxen mehr
+  - review_note aus DE/EN-Locale geleert
+  - [OFFEN] aus FinancialsPage durch "in Vorbereitung" ersetzt
+- **Datenschutz Sektion 9** aktualisiert: beschreibt jetzt das echte Cookie-Management-System
+- **Mobile-Header optimiert**:
+  - h-14 statt h-16, kompaktere Abstände (px-3)
+  - DE/EN-Switcher im Header sichtbar (nicht mehr im Burger-Menü versteckt)
+  - min-w-[40px] min-h-[40px] Touch-Targets für Burger
+  - Logo-Text ab min-[420px] sichtbar (vorher sm:block = 640px)
+  - Mobile-Menü: größere Tap-Targets (py-2.5), aktive Seite hervorgehoben
+  - Apply-CTA als volle Breite im Mobile-Menü
+- **Test-Logins verifiziert**: Alle 4 Rollen funktionieren
+- **100% Tests**: 13/13 Backend + alle Frontend (iteration_9.json)
+
+## Drive-Gegenprüfung (Phase 3.7f)
+- Ordnerstruktur geprüft: 22+ Dokumente + Projektdaten
+- Verifiziert: Statuslogik, Rollen, Docs, Consent, Notification, Cookie/DSGVO
+- Anfrage-/Bearbeitungslogik: CRUD, Statuswechsel, Suche, Filter, Zuweisung, Historie vorhanden
+- Offene Punkte intern dokumentiert (siehe Backlog)
+
+## Intern dokumentierte Go-Live-Blocker
+(Aus den entfernten sichtbaren Hinweisen – intern weitergeführt)
+- Widerspruch info@stk-aachen.de vs info@cd-stk.com als Kontakt-E-Mail klären
+- Vollständige Kontaktdaten des Datenschutzbeauftragten final bestätigen
+- Vollständige Drittanbieter-Liste prüfen und dokumentieren
+- Preisangaben final verifizieren
+- Finale juristische Prüfung aller Rechtstexte
+
+## Backlog
 
 ### P1 (Nächste Priorität)
 - Erweiterte Bewerber-Detail-Ansicht für Lehrer
@@ -117,18 +135,10 @@ Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für "St
 
 ### P2 (Zukunft)
 - Payment-Freischaltung
-- Preiskalkulator entmocken (erst nach freigegebener Preislogik)
-- Partner-/Sub-Agentur-Portal (individuelle Konditionen)
-- Pflegefachschule & Arbeit/Ausbildung Workspaces
-- Export-Funktionalität
+- Partner-/Sub-Agentur-Portal
+- Exportfunktionen
 - PWA
 
-### Offene rechtliche Punkte
-- Finale juristische Prüfung vor Go-Live
-- Aufbewahrungsfristen / Löschkonzept
-- Lehrzugriff als Auftragsverarbeitung?
-- Preislogik finale Freigabe
-- Sub-Agentur-Vertragsmuster
-
 ## MOCKED
-- Preiskalkulator: intern, feature-flagged, individuelle Preise, NICHT entmocken ohne Freigabe
+- Preiskalkulator: intern, feature-flagged, NICHT entmocken ohne Freigabe
+- Zahlungsmodul: "in Vorbereitung", erst nach Steuer-/Refund-Logik-Klärung

@@ -52,7 +52,6 @@ Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach 
   {
     title: 'Hinweis zur rechtlichen Prüfung',
     content: '[OFFEN – Dieses Impressum wurde auf Basis der gelieferten Angaben erstellt. Eine finale juristische Prüfung und Freigabe vor Go-Live ist erforderlich. Insbesondere: E-Mail-Adresse (info@stk-aachen.de vs info@cd-stk.com) und vollständige Angaben zum Datenschutzbeauftragten müssen abschließend verifiziert werden.]',
-    open: true,
   },
 ];
 
@@ -307,28 +306,28 @@ Weitere Cookies oder Tracking-Dienste werden nur mit Ihrer ausdrücklichen Einwi
 
 /* ─── Subkomponenten ────────────────────────────────────────────────────────── */
 
-function AccordionSection({ title, content, defaultOpen = false, hasWarning = false }) {
+function AccordionSection({ title, content, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
   const isOffen = content.includes('[OFFEN');
   return (
-    <div className={`border rounded-sm mb-2 ${isOffen ? 'border-slate-200 bg-slate-50/50' : 'border-slate-100'}`}>
+    <div className={`border rounded-sm mb-2 ${isOffen ? 'border-slate-200' : 'border-slate-100'}`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-3.5 text-left"
         data-testid={`legal-section-${title.replace(/\s+/g, '-').toLowerCase()}`}
       >
-        <span className={`font-semibold text-sm ${isOffen ? 'text-slate-700' : 'text-slate-800'}`}>{title}</span>
+        <span className="font-semibold text-sm text-slate-800">{title}</span>
         {open ? <ChevronUp size={16} className="text-slate-400 shrink-0" /> : <ChevronDown size={16} className="text-slate-400 shrink-0" />}
       </button>
       {open && (
         <div className="px-5 pb-5">
           {content.split('\n').map((line, i) => {
             if (line.trim() === '') return <br key={i} />;
-            if (line.startsWith('[OFFEN')) {
+            if (line.startsWith('[OFFEN') || line.startsWith('[HINWEIS')) {
               return (
                 <div key={i} className="flex items-start gap-2 bg-slate-100 border border-slate-200 rounded-sm px-3 py-2 my-2">
                   <AlertCircle size={14} className="text-slate-500 mt-0.5 shrink-0" />
-                  <p className="text-slate-700 text-xs">{line.replace(/\[|\]/g, '')}</p>
+                  <p className="text-slate-600 text-xs">{line.replace(/\[OFFEN\s*–\s*/g, '').replace(/\[HINWEIS:\s*/g, '').replace(/\]/g, '')}</p>
                 </div>
               );
             }
@@ -344,14 +343,61 @@ function AccordionSection({ title, content, defaultOpen = false, hasWarning = fa
 
 function ImpressumContent() {
   return (
-    <div data-testid="legal-content-impressum">
-      <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-sm text-slate-700 text-sm">
-        <strong>Neue Kontaktbasis (Feb 2026)</strong> – Diese Angaben basieren auf den vom Auftraggeber gelieferten Daten.
-        Vor dem Go-Live ist eine finale rechtliche Prüfung und Freigabe erforderlich.
+    <div data-testid="legal-content-impressum" className="space-y-8">
+
+      {/* Gesellschaftssitz */}
+      <div className="border border-slate-100 rounded-sm overflow-hidden">
+        <div className="bg-primary px-5 py-3">
+          <h2 className="text-sm font-semibold text-white">Angaben gemäß § 5 TMG</h2>
+        </div>
+        <div className="px-5 py-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Unternehmen</p>
+            <p className="text-slate-800 font-semibold">W2G Academy GmbH</p>
+            <p className="text-slate-600 text-sm mt-1">Theaterstraße 24</p>
+            <p className="text-slate-600 text-sm">52062 Aachen</p>
+            <p className="text-xs text-slate-400 mt-1.5">Eingetragener Gesellschaftssitz</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Vertretung</p>
+            <p className="text-slate-600 text-sm">Geschäftsführerin</p>
+            <p className="text-slate-800 font-semibold">Laura Saboor</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Kontakt</p>
+            <p className="text-slate-600 text-sm">Tel: <a href="tel:+4924199032292" className="text-primary hover:underline">+49 (0) 241 990 322 92</a></p>
+            <p className="text-slate-600 text-sm">E-Mail: <a href="mailto:info@stk-aachen.de" className="text-primary hover:underline">info@stk-aachen.de</a></p>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Registereintrag</p>
+            <p className="text-slate-600 text-sm">Amtsgericht Aachen</p>
+            <p className="text-slate-600 text-sm">HRB 23610</p>
+          </div>
+        </div>
       </div>
-      {IMPRESSUM_SECTIONS.map(s => (
-        <AccordionSection key={s.title} title={s.title} content={s.content} defaultOpen={s.open} />
-      ))}
+
+      {/* Unterrichtsstandort */}
+      <div className="border border-slate-100 rounded-sm overflow-hidden">
+        <div className="bg-slate-800 px-5 py-3">
+          <h2 className="text-sm font-semibold text-white">Unterrichts- und Beratungsstandort</h2>
+        </div>
+        <div className="px-5 py-5">
+          <p className="text-slate-800 font-semibold">Studienkolleg Aachen / Way2Germany</p>
+          <p className="text-slate-600 text-sm mt-1">Theaterstraße 30–32</p>
+          <p className="text-slate-600 text-sm">52062 Aachen</p>
+          <p className="text-xs text-slate-400 mt-3 border-t border-slate-100 pt-3">
+            Dieser Standort wird für Unterricht, Beratung und den Bewerberempfang genutzt.
+            Er ist nicht identisch mit dem eingetragenen Gesellschaftssitz.
+          </p>
+        </div>
+      </div>
+
+      {/* Haftung + Urheberrecht */}
+      <div className="space-y-2">
+        {IMPRESSUM_SECTIONS.filter(s => ['Haftung für Inhalte', 'Urheberrecht', 'Hinweis zur rechtlichen Prüfung'].includes(s.title)).map(s => (
+          <AccordionSection key={s.title} title={s.title} content={s.content} defaultOpen={s.open} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -359,14 +405,10 @@ function ImpressumContent() {
 function AGBContent() {
   return (
     <div data-testid="legal-content-agb">
-      <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-sm text-slate-700 text-sm">
-        <strong>Quelle:</strong> AGB der W2G Academy GmbH, Stand 06.02.2026.
-        Übernommen und an das neue System angepasst. Offene Punkte (Preise, Adresse) sind markiert.
-        Finale juristische Freigabe vor Go-Live erforderlich.
-      </div>
       {AGB_PARAGRAPHS.map(p => (
         <AccordionSection key={p.title} title={p.title} content={p.content} />
       ))}
+      <p className="text-xs text-slate-400 mt-6 text-right">Stand: 06.02.2026</p>
     </div>
   );
 }
@@ -374,14 +416,10 @@ function AGBContent() {
 function DatenschutzContent() {
   return (
     <div data-testid="legal-content-datenschutz">
-      <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-sm text-slate-700 text-sm">
-        <strong>Basis:</strong> Datenschutzerklärung für W2G Academy GmbH.
-        Angepasst an das neue System (Portal, Dokumentenverwaltung, KI-Screening).
-        Finale juristische Prüfung vor Go-Live erforderlich.
-      </div>
       {DATENSCHUTZ_SECTIONS.map(s => (
         <AccordionSection key={s.title} title={s.title} content={s.content} />
       ))}
+      <p className="text-xs text-slate-400 mt-6 text-right">Stand: Februar 2026</p>
     </div>
   );
 }
@@ -400,10 +438,10 @@ export default function LegalPage({ type = 'legal' }) {
     <div className="min-h-screen bg-white">
       <PublicNav />
       <main className="pt-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
 
           {/* Nav zwischen Legal-Seiten */}
-          <nav className="flex gap-2 mb-8" data-testid="legal-tabs">
+          <nav className="flex flex-wrap gap-2 mb-8" data-testid="legal-tabs">
             {Object.entries(TYPES).map(([key, val]) => (
               <Link
                 key={key}
@@ -420,27 +458,23 @@ export default function LegalPage({ type = 'legal' }) {
             ))}
           </nav>
 
-          {/* Allgemeiner Hinweis */}
-          <div className="bg-slate-50 border border-slate-200 rounded-sm p-4 mb-8 flex items-start gap-3">
-            <AlertCircle size={16} className="text-slate-500 mt-0.5 shrink-0" />
-            <p className="text-slate-700 text-sm">
-              <strong>Rechtlicher Hinweis:</strong> Diese Seite ist noch nicht abschließend rechtlich geprüft.
-              Offene Punkte sind mit [OFFEN] markiert. Finale Freigabe vor Go-Live erforderlich.
-            </p>
-          </div>
-
-          <h1 className="text-3xl font-heading font-bold text-primary mb-8" data-testid="legal-page-title">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-8" data-testid="legal-page-title">
             {title}
           </h1>
 
           <Component />
 
           {/* Kontakt */}
-          <div className="mt-12 pt-8 border-t border-slate-100 text-center">
-            <p className="text-slate-500 text-sm mb-2">Fragen zu unseren Rechtsdokumenten?</p>
-            <a href="mailto:info@stk-aachen.de" className="text-primary font-medium hover:underline text-sm">
-              info@stk-aachen.de
-            </a>
+          <div className="mt-10 pt-6 border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <p className="text-slate-400 text-xs">
+                Fragen zu unseren Rechtsdokumenten? –{' '}
+                <a href="mailto:info@stk-aachen.de" className="text-primary hover:underline">
+                  info@stk-aachen.de
+                </a>
+              </p>
+              <p className="text-slate-300 text-xs">Finale rechtliche Prüfung vor Go-Live ausstehend.</p>
+            </div>
           </div>
         </div>
       </main>

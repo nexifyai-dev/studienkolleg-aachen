@@ -61,8 +61,10 @@ app = FastAPI(
 )
 
 # ─── CORS ─────────────────────────────────────────────────────────────────────
+# Handled by Kubernetes ingress in production (same-origin).
+# Fallback for local dev only.
 _cors_origins = os.environ.get("CORS_ORIGINS", "")
-if _cors_origins:
+if _cors_origins and _cors_origins != "*":
     _allowed_origins = [o.strip() for o in _cors_origins.split(",") if o.strip()]
 else:
     _allowed_origins = [FRONTEND_URL, "http://localhost:3000"]

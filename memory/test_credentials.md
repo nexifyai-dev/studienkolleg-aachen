@@ -1,49 +1,45 @@
-# Test Credentials – W2G Platform
+# Test Credentials
 
-## Kernrollen (Dev/Preview)
+## Admin
+- **Email:** admin@studienkolleg-aachen.de
+- **Password:** DevSeed@2026!
+- **Role:** superadmin
 
-| Rolle | E-Mail | Passwort | Systemrolle |
-|-------|--------|----------|-------------|
-| Admin | admin@studienkolleg-aachen.de | Admin@2026! | superadmin |
-| Staff | staff@studienkolleg-aachen.de | DevSeed@2026! | staff |
-| Lehrer | teacher@studienkolleg-aachen.de | DevSeed@2026! | teacher |
-| Bewerber | applicant@studienkolleg-aachen.de | DevSeed@2026! | applicant |
+## Staff
+- **Email:** staff@studienkolleg-aachen.de
+- **Password:** DevSeed@2026!
+- **Role:** staff
 
-## Wie Accounts erzeugt werden
+## Teacher
+- **Email:** teacher@studienkolleg-aachen.de
+- **Password:** DevSeed@2026!
+- **Role:** teacher
 
-- **Admin**: via `ADMIN_EMAIL` + `ADMIN_PASSWORD` in `backend/.env` (seed.py)
-- **Staff/Teacher/Applicant**: via `SEED_DEV_PASSWORD` in `backend/.env` (seed.py)
-- Alle Accounts werden idempotent beim Backend-Start geseeded
-- Passwort-Rotation: Ändern der ENV-Variable → nächster Start aktualisiert den Hash
+## Applicant
+- **Email:** applicant@studienkolleg-aachen.de
+- **Password:** DevSeed@2026!
+- **Role:** applicant
 
-## Portal-Zugänge
+## Partner / Affiliate
+- **Email:** partner@studienkolleg-aachen.de
+- **Password:** DevSeed@2026!
+- **Role:** affiliate
 
-- **Admin**: /auth/login → /staff → /admin
-- **Staff**: /auth/login → /staff (Dashboard + Kanban)
-- **Teacher**: /auth/login → /staff (nur Lehrer-Dashboard, kein Kanban)
-- **Applicant**: /auth/login → /portal (Dashboard + Onboarding-Tour + Consent-Management)
+## Admin Password (Backend Seed)
+- **ADMIN_PASSWORD:** Admin@2026!
 
-## API Testing
-
+## Quick Login Test Commands
 ```bash
-API_URL=https://ai-screening-staff.preview.emergentagent.com
+API_URL="https://ai-screening-staff.preview.emergentagent.com"
 
-# Admin Login
-curl -s -c /tmp/admin.cookies -X POST "$API_URL/api/auth/login" \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@studienkolleg-aachen.de","password":"Admin@2026!"}'
+# Staff login
+curl -s -c /tmp/staff.cookies -X POST "$API_URL/api/auth/login" -H "Content-Type: application/json" -d '{"email":"staff@studienkolleg-aachen.de","password":"DevSeed@2026!"}'
 
-# Teacher Login
-curl -s -c /tmp/teacher.cookies -X POST "$API_URL/api/auth/login" \
-  -H "Content-Type: application/json" \
-  -d '{"email":"teacher@studienkolleg-aachen.de","password":"DevSeed@2026!"}'
+# Applicant login
+curl -s -c /tmp/applicant.cookies -X POST "$API_URL/api/auth/login" -H "Content-Type: application/json" -d '{"email":"applicant@studienkolleg-aachen.de","password":"DevSeed@2026!"}'
 
-# Teacher: My Students
-curl -s -b /tmp/teacher.cookies "$API_URL/api/teacher/my-students"
+# Partner login
+curl -s -c /tmp/partner.cookies -X POST "$API_URL/api/auth/login" -H "Content-Type: application/json" -d '{"email":"partner@studienkolleg-aachen.de","password":"DevSeed@2026!"}'
 
-# Applicant: Consent Types
-curl -s -b /tmp/applicant.cookies "$API_URL/api/consents/types"
-
-# Staff: AI Model Registry
-curl -s -b /tmp/staff.cookies "$API_URL/api/ai/model-registry"
+# Use cookies: curl -s -b /tmp/staff.cookies "$API_URL/api/auth/me"
 ```

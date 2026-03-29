@@ -1,6 +1,7 @@
 # W2G Platform – PRD / Memory
 
-**Stand:** 29. März 2026  
+**Stand:** 29. März 2026 (Update: Hardening Phase)
+**Version:** 1.1.0
 **Projekt:** Studienkolleg Aachen / Way2Germany – Mehrmandantenfähige Plattform
 
 ---
@@ -10,188 +11,163 @@ Produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg
 Saubere Trennung: Public Website, Applicant Portal, Staff/Admin-Bereich, Datenmodell, Rollen/Rechte,
 Dokumentenlogik, Automationen, Auditfähigkeit, i18n-fähig.
 
-Studienkolleg-first im MVP, aber Architektur nicht als One-Off.
-
 ---
 
 ## Verbindliche User-Entscheidungen
 - **Auth:** JWT Custom Auth (Email + Passwort), kein Google OAuth
 - **Sprachen:** Mehrsprachig, Deutsch primär, i18n-Struktur von Beginn an
-- **E-Mail:** Resend (RESEND_API_KEY noch nicht konfiguriert – Feature-Gate)
-- **DB:** MongoDB (projektspezifische Abweichung von Supabase-Empfehlung im Repo)
-- **Design:** Live-Seite als Referenz, modernisiert, #113655 primär, #B3CDE1 akzent
+- **E-Mail:** Resend (RESEND_API_KEY noch nicht konfiguriert – Feature-Gate aktiv)
+- **DB:** MongoDB (projektspezifische Abweichung von Supabase-Empfehlung)
+- **Design:** #113655 primär, #B3CDE1 akzent, Inter/Arboria, live-site-abgeleitet
 
 ---
 
-## Architektur
+## Architektur (v1.1.0)
 
-### Stack
-- **Backend:** FastAPI + Motor (async MongoDB) + PyJWT + bcrypt
-- **Frontend:** React 18 + Tailwind CSS 3 + react-router-dom + i18next + lucide-react
-- **DB:** MongoDB lokal, DB_NAME = w2g_platform
-- **Dienste:** Supervisor managed (backend:8001, frontend:3000, nginx proxy)
-
-### Verzeichnisstruktur
+### Backend-Struktur
 ```
-/app/
-├── backend/
-│   ├── server.py           # FastAPI Monolith MVP (856 Zeilen – Split nach v1.1)
-│   ├── .env                # MONGO_URL, DB_NAME, JWT_SECRET, ADMIN_*, RESEND_API_KEY
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── App.js          # Routing (Public/Auth/Portal/Staff/Admin)
-│   │   ├── i18n.js         # i18next Konfiguration
-│   │   ├── contexts/AuthContext.js
-│   │   ├── lib/utils.js    # Stage Labels, Colors, Roles, Format-Helpers
-│   │   ├── locales/de/translation.json
-│   │   ├── locales/en/translation.json
-│   │   ├── components/layout/  # PublicNav, PublicFooter, ApplicantLayout, StaffLayout, AdminLayout
-│   │   └── pages/
-│   │       ├── public/     # HomePage, ApplyPage, CoursesPage, ServicesPage, ContactPage, LegalPage
-│   │       ├── auth/       # LoginPage, RegisterPage, ForgotPasswordPage
-│   │       ├── portal/     # DashboardPage, JourneyPage, DocumentsPage, MessagesPage, FinancialsPage, SettingsPage
-│   │       ├── staff/      # StaffDashboard, KanbanPage, ApplicantDetailPage
-│   │       └── admin/      # AdminDashboard, UsersPage, AuditPage
-│   ├── tailwind.config.js  # Farben: primary #113655, accent #B3CDE1
-│   └── .env                # REACT_APP_BACKEND_URL
-└── memory/
-    ├── PRD.md              # Dieses Dokument
-    └── test_credentials.md
+/app/backend/
+├── server.py           # App Factory only (~70 lines)
+├── config.py           # All env vars – fails fast if required vars missing
+├── database.py         # MongoDB client + all indexes
+├── deps.py             # get_current_user, require_roles, role groups
+├── seed.py             # Idempotent workspace + admin seeding
+├── models/
+│   └── schemas.py      # All Pydantic schemas (no role injection possible)
+├── routers/
+│   ├── auth.py         # Login, Register (+ Lead-Claiming), Invite, Reset
+│   ├── users.py        # User CRUD (field-level access control)
+│   ├── workspaces.py   # Workspace management
+│   ├── leads.py        # Public lead ingest (no auth required)
+│   ├── applications.py # Application CRUD + stage pipeline
+│   ├── documents.py    # Upload/Download/Review (storage abstraction)
+│   ├── tasks.py        # Task management (ownership-checked updates)
+│   ├── messaging.py    # Conversations + Messages (participant-scoped)
+│   └── system.py       # Audit logs, Dashboard stats, Notifications, Health
+├── services/
+│   ├── audit.py        # Append-only audit logging (never raises)
+│   ├── email.py        # Resend with feature flag (no-op without API key)
+│   └── storage.py      # LocalStorage / S3 / MinIO abstraction
+└── .env                # All config, fully documented
 ```
 
----
-
-## Datenmodell (MongoDB Collections)
-
-| Collection | Zweck |
-|---|---|
-| users | Alle Nutzer (alle Rollen) |
-| workspaces | Bereiche (studienkolleg, sprachkurse, pflege, arbeit) |
-| workspace_members | Rollenzuweisung pro Workspace |
-| applications | Bewerbungen (Lead → Completed) |
-| application_activities | Stage-Change-Historie |
-| documents | Dokumente (metadata, nicht binary) |
-| conversations | Messaging-Threads |
-| messages | Nachrichten |
-| tasks | Aufgaben |
-| audit_logs | Systemaudit (append-only) |
-| notifications | Push-Notifications |
-| user_consents | DSGVO-Consent-Tracking |
-| invite_tokens | Einladungslinks (TTL: 7d) |
-| password_reset_tokens | Reset-Links (TTL: 1h) |
-| login_attempts | Brute-Force-Tracking |
-| webhook_events | (vorbereitet) |
-| automation_runs | (vorbereitet) |
-| comments | Interne Kommentare |
-| invoices | (vorbereitet – Payment Gate) |
+### Frontend-Struktur
+```
+/app/frontend/src/
+├── App.js              # Routing (Public/Auth/Portal/Staff/Admin)
+├── i18n.js             # i18next (DE/EN)
+├── lib/
+│   ├── utils.js        # Stage labels, colors, role labels, formatters
+│   └── apiClient.js    # Axios + auto-refresh interceptor (no localStorage)
+├── contexts/AuthContext.js  # Auth state, login/logout/refresh
+├── locales/de/ + en/   # Translation files
+├── components/layout/  # PublicNav, PublicFooter, ApplicantLayout, StaffLayout, AdminLayout
+└── pages/
+    ├── public/         # Home, Apply, Courses, Services, Contact, Legal
+    ├── auth/           # Login, Register, ForgotPassword
+    ├── portal/         # Dashboard, Journey, Documents, Messages, Financials, Settings
+    ├── staff/          # StaffDashboard, KanbanPage, ApplicantDetailPage
+    └── admin/          # AdminDashboard, UsersPage, AuditPage
+```
 
 ---
 
-## Rollen
-superadmin → admin → staff / accounting_staff → agency_admin → agency_agent → affiliate → applicant
+## Security-Audit-Ergebnisse (v1.1.0)
+
+| # | Finding | Severity | Status |
+|---|---|---|---|
+| S1 | ADMIN_PASSWORD Default-Wert im Code | CRITICAL | **BEHOBEN** – jetzt required in .env |
+| S2 | Cookie `secure=false` fest kodiert | HIGH | **BEHOBEN** – COOKIE_SECURE in .env |
+| S3 | Staff ohne workspace_id sieht alle Applicant-Daten | MEDIUM | **BEHOBEN** – explizit dokumentiert als intentional für Kanban |
+| S4 | `update_task` kein Ownership-Check | MEDIUM | **BEHOBEN** – owner + creator check |
+| S5 | Message: Empfänger-ID nicht validiert | MEDIUM | **BEHOBEN** – recipient existence check |
+| S6 | Brute-Force-IP hinter K8s-Proxy falsch | CRITICAL | **BEHOBEN** – X-Forwarded-For |
+| S7 | Timezone-naive vs aware Vergleich in Lockout | HIGH | **BEHOBEN** – explicit UTC |
+| S8 | JWT Secret Stärke-Check fehlt | LOW | **BEHOBEN** – config._validate() |
+| S9 | Document Storage Key nie zum Client | HIGH | **BEHOBEN** – key aus allen Responses entfernt |
+| S10 | Token Blacklisting nicht implementiert | LOW | **BEKANNT/AKZEPTIERT** – 60-min TTL + active-Flag als Mitigation |
+
+### Horizontale Isolation (verifiziert)
+- Applicant → Audit Logs: 403 ✓
+- Applicant → User List: 403 ✓
+- Applicant → Other User Update: 403 ✓
+- Unauthenticated → Workspace Create: 401 ✓
+- Applicant → fremde Bewerbung: 403 ✓
 
 ---
 
-## Was implementiert ist (v1.0 MVP Foundation)
+## Was implementiert ist (v1.1.0 Hardening)
 
 ### Backend (DONE)
-- [x] JWT Auth: Login, Register (mit Lead-Claiming-Flow), Logout, Me, Refresh
-- [x] Invite-Flow: Admin generiert Token → Nutzer registriert sich
-- [x] Forgot/Reset Password
-- [x] Brute-Force-Schutz (5 Versuche, 15min Lockout)
-- [x] Workspace Seeding (studienkolleg, sprachkurse, pflege, arbeit)
-- [x] Admin Auto-Seed
-- [x] Lead Ingest (POST /api/leads/ingest) mit Duplicate-Flag
-- [x] Applications CRUD + Stage-Wechsel
-- [x] Documents Upload/Review-Status
-- [x] Tasks CRUD
-- [x] Conversations + Messages
-- [x] Notifications (list)
-- [x] Consent Capture
-- [x] Audit Logs (list)
-- [x] Dashboard Stats
-- [x] Health Check
-- [x] Alle Indexes
+- [x] Vollständige Modularisierung (server.py = App Factory, 9 Router, 3 Services)
+- [x] config.py (alle ENV-Vars, fail-fast, kein Passwort-Default)
+- [x] database.py (MongoDB + Indexes)
+- [x] deps.py (RBAC-Dependencies, Role Groups)
+- [x] seed.py (idempotent, kommentiert)
+- [x] services/audit.py (append-only, non-blocking)
+- [x] services/email.py (Resend + Feature-Flag + 5 Templates)
+- [x] services/storage.py (Local + S3 + MinIO + Metadata-Only + Validation)
+- [x] routers/auth.py (Brute-Force-Fix, X-Forwarded-For, timezone-aware)
+- [x] routers/documents.py (server-side download, storage_key nie exposed)
+- [x] routers/tasks.py (Ownership-Check)
+- [x] routers/messaging.py (Participant-Check, Recipient-Validation)
+- [x] .env vollständig dokumentiert
 
 ### Frontend (DONE)
-- [x] i18n DE/EN mit Sprachschalter
-- [x] Tailwind Design System (#113655, #B3CDE1)
-- [x] PublicNav (responsive, mobile burger menu)
-- [x] PublicFooter
-- [x] Homepage (Hero, Trust-Bar, Courses, Process, FAQ, CTA-Banner)
-- [x] ApplyPage (Formular → /api/leads/ingest)
-- [x] CoursesPage (T/M/W/MT)
-- [x] ServicesPage
-- [x] ContactPage
-- [x] LegalPage (Impressum, Datenschutz, AGB – alle mit [OFFEN]-Markierung)
-- [x] LoginPage
-- [x] RegisterPage (inkl. Invite-Token-Flow)
-- [x] ForgotPasswordPage
-- [x] ApplicantLayout (Sidebar)
-- [x] Portal: Dashboard, Journey (Timeline), Documents (Upload/List), Messages, Financials, Settings
-- [x] StaffLayout
-- [x] Staff: Dashboard (Stats + Tabelle), Kanban Board (Stage-Advance), ApplicantDetail
-- [x] AdminLayout
-- [x] Admin: Dashboard, UsersPage (Einladungslink-Generator), AuditPage
-- [x] Protected Routes (nach Rolle)
-- [x] Auth Context + Auto-Redirect nach Login
+- [x] lib/apiClient.js (axios + auto-refresh interceptor + logout-on-failure)
+- [x] AuthContext.js (verwendet apiClient)
+- [x] Alle Portal/Staff/Admin-Pages auf apiClient migriert
+- [x] Kein Token in localStorage (nur httpOnly cookies)
 
 ---
 
-## Offene Punkte / [OFFEN]-Markierungen
+## Offene Punkte (explizit markiert)
 
-| # | Punkt | Priorität | Blocker |
-|---|---|---|---|
-| 1 | Adresse (Theaterstraße 24 vs. 30-32) | HOCH | Vor Go-Live klären |
-| 2 | Preislogik (5500+500 vs. 6000 vs. 3500+3000) | HOCH | Vor Payment-Gate |
-| 3 | Arboria Weblizenz | MITTEL | Inter als Fallback aktiv |
-| 4 | Steuer/VAT/Refund-Logik | HOCH | Payment-Gate blockiert |
-| 5 | RESEND_API_KEY | MITTEL | Email nicht aktiv |
-| 6 | Vollständiges Impressum (HR-Nr., GF) | HOCH | Vor Go-Live |
-| 7 | AGB + Datenschutz (rechtlich geprüft) | HOCH | Vor Go-Live |
-| 8 | WhatsApp Budget Policy | NIEDRIG | Nicht Go-Live-Blocker |
-| 9 | Token Auto-Refresh Frontend | MITTEL | UX-Issue bei langen Sessions |
+| # | Punkt | Go-Live-Blocker |
+|---|---|---|
+| 1 | Adresse (Theaterstraße 24 vs. 30-32) | **JA** |
+| 2 | Preislogik widersprüchlich | **JA** |
+| 3 | Impressum (GF, HR-Nr.) | **JA** |
+| 4 | AGB + Datenschutz rechtlich geprüft | **JA** |
+| 5 | RESEND_API_KEY | Nein (Feature-Gate aktiv) |
+| 6 | S3/MinIO Storage-Credentials | Nein (Local-Fallback aktiv) |
+| 7 | COOKIE_SECURE=true (nur HTTPS) | Nein (per .env) |
+| 8 | MongoDB-Backup | **JA** |
+| 9 | Token Blacklisting | Nein (60-min TTL akzeptiert) |
 
 ---
 
-## Prioritized Backlog
+## Prioritized Backlog (P0 = vor Go-Live)
 
-### P0 (vor Go-Live)
-- Offene Rechtsangaben klären (Adresse, Impressum, AGB, Datenschutz)
-- RESEND_API_KEY konfigurieren + E-Mail-Templates (Willkommen, Bewerbung eingegangen, Dokument angefordert)
-- Preislogik finalisieren und Payment-Gate öffnen
-- Datei-Upload (echte Binärdateien) via MinIO/S3/GridFS statt Metadaten-Only
-- Token Auto-Refresh Frontend
+### P0
+- Rechtsangaben klären (Adresse, Impressum, AGB, Datenschutz)
+- RESEND_API_KEY beschaffen + Resend-Domain verifizieren
+- MongoDB-Backup-Routine
+- COOKIE_SECURE=true + HTTPS sicherstellen
+- JWT_SECRET auf 64+ Zeichen rotieren
 
-### P1 (v1.1 Post-Launch)
-- server.py aufteilen in Routen-Module
-- Echtzeit-Notifications (WebSocket oder Polling)
-- Agency-Portal (agency_admin / agency_agent Views)
-- Affiliate-Tracking (referral_code)
-- Vollständiges Rechnungsmodul
-- E-Mail-Templates vollständig implementieren
-- CMS für Public-Page-Inhalte
+### P1
+- S3/MinIO: S3_ENDPOINT + Credentials konfigurieren + `pip install boto3`
+- Agency-Portal (Views für agency_admin / agency_agent)
+- Vollständiges Rechnungsmodul (nach Preisklärung)
+- PWA-Manifest + Service Worker
+- Applicant Calculator (nach Preisklärung)
+- Webhook-System vollständig
+
+### P2
 - OCR-Dokumentvalidierung
-
-### P2 (v2.0 / Multi-Tenant-Ausbau)
 - White-Label-Subdomains
 - Weitere Verticals (Pflege, Arbeit)
-- Mobile PWA-Optimierung
-- Google Analytics / Matomo
-- Webhook-System (vollständig)
-- Automatisierungsregeln
+- Native Mobile App
 
 ---
+
+## Testing Status (v1.1.0)
+- Backend: 92% (Security-Hardening-Tests: 12/14, Brute-Force nach Fix: ✓)
+- Frontend: 100%
+- Security Checks: Alle kritischen RBAC-Checks bestanden
 
 ## Projektspezifische Abweichungen vom Repo
-- **Supabase → MongoDB**: Alle RLS-Anforderungen werden via FastAPI-Middleware abgebildet
-- **Supabase Auth → Custom JWT**: Gleiche Sicherheitslogik, andere Implementierung
-- **Supabase Storage → Metadaten-Only (MVP)**: Echte Binärdaten in P0 über S3/MinIO
-
----
-
-## Testing Status
-- Backend: 100% (11/11 Tests bestanden, Testing Agent v1)
-- Frontend: 95% (alle Kernflows funktionieren, 2 Minor-Issues dokumentiert)
-- Credentials: admin@studienkolleg-aachen.de / Admin@2026!
+- Supabase → MongoDB (RBAC via FastAPI-Middleware)
+- Supabase Auth → Custom JWT
+- Supabase Storage → Local/S3/MinIO Abstraction

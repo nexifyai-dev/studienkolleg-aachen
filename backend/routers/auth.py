@@ -69,15 +69,26 @@ JsonResponseType = JSONResponse
 async def login(data: LoginRequest, request: Request):
     db = get_db()
     email = data.email.lower().strip()
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip = request.headers.get("X-Forwarded-For", "")
+    if client_ip:
+        client_ip = client_ip.split(",")[0].strip()
+    elif request.client:
+        client_ip = request.client.host
+    else:
+        client_ip = "unknown"
     identifier = f"{client_ip}:{email}"
 
     # Brute force check
     attempts = await db.login_attempts.find_one({"identifier": identifier})
     if attempts and attempts.get("count", 0) >= 5:
         lockout = attempts.get("locked_until")
-        if lockout and lockout > datetime.now(timezone.utc):
-            raise HTTPException(status_code=429, detail="Zu viele Versuche. Bitte in 15 Minuten erneut versuchen.")
+        if lockout:
+            # Ensure timezone-aware comparison
+            if lockout.tzinfo is None:
+                from datetime import timezone as tz
+                lockout = lockout.replace(tzinfo=tz.utc)
+            if lockout > datetime.now(timezone.utc):
+                raise HTTPException(status_code=429, detail="Zu viele Versuche. Bitte in 15 Minuten erneut versuchen.")
 
     user = await db.users.find_one({"email": email})
     if not user or not user.get("password_hash") or not _verify(data.password, user["password_hash"]):

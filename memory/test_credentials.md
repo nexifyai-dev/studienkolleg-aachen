@@ -17,8 +17,8 @@
 - Application ID: 69c8b08ac3ab59729d52e226
 
 ## URLs
-- Frontend: https://w2g-academy-portal.preview.emergentagent.com
-- Backend: https://w2g-academy-portal.preview.emergentagent.com/api
+- Frontend: https://ui-polish-phase-3.preview.emergentagent.com
+- Backend: https://ui-polish-phase-3.preview.emergentagent.com/api
 - Backend (lokal): http://localhost:8001
 
 ## Testrouten

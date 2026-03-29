@@ -91,7 +91,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-16 lg:py-24">
             <div className="animate-slide-up">
-              <div className="inline-flex items-center gap-2 bg-accent/30 text-primary px-3 py-1.5 rounded-sm text-xs font-semibold mb-6 border border-accent">
+              <div className="inline-flex items-center gap-2 bg-primary/8 text-primary px-3 py-1.5 rounded-sm text-xs font-semibold mb-6 border border-primary/20">
                 <GraduationCap16 />
                 Studienkolleg Aachen / Way2Germany
               </div>

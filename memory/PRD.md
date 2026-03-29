@@ -246,9 +246,19 @@ COST_SIMULATOR_ENABLED=false (intern, nicht öffentlich)
 - E-Mail-Templates (Willkommen, Bewerbung, Dokument, Reset, Invite)
 - Go-Live-Blocker-Dokumentation
 
+### v1.3.0 – Phase 3.6 – Systemweite UI-Harmonisierung (29. März 2026)
+- **Farb-Vollbereinigung**: Kein Pastell, kein helles Blau, kein Grün mehr in der gesamten Plattform (public/staff/portal/admin/auth)
+- **Designregel systemweit**: NUR Corporate Blau (#113655) + Weiß + neutrale Grautöne; `text-blue-*` → `text-white/*` in dunklen Bereichen; `bg-green-*` → `bg-primary/*` oder `bg-slate-*`
+- **Öffentliche Seiten vollständig harmonisiert**: CoursesPage, ServicesPage, ContactPage, ApplyPage, LegalPage, HomePage, Footer
+- **Staff/Portal/Admin**: DOC_STATUS, ANABIN_COLORS, ANABIN_BADGE, StatsCards, DashboardPage, UsersPage, KanbanPage, ApplicantDetailPage, FinancialsPage, SettingsPage, DocumentsPage, MessagesPage
+- **Auth-Seiten**: ForgotPasswordPage, RegisterPage bereinigt
+- **Spacing für 320/360/390px/Desktop**: Hero-Sektionen `py-10 sm:py-16 lg:py-20`, CTAs `py-10 sm:py-14 lg:py-16`, alle Grids bereits `grid-cols-1` auf Mobilgeräten
+- **WhatsApp-Button**: `bg-green-600` → `bg-slate-800` (Kontaktseite)
+- **ScrollToTop**: Korrekt implementiert und getestet (24/24 Tests bestanden)
+- **Adresstrennung**: Konsistent auf allen Seiten (Theaterstr. 24 = Gesellschaftssitz, 30–32 = Bewerberbereich)
+- **Mem0 synchronisiert**: Projektstatus und offene Aufgaben gespeichert
 ### v1.2.5 – Phase 3.5 (29. März 2026)
 - **Mem0-Projektgedächtnis**: 6 Wissensblöcke eingerichtet, MEM0_API_KEY in .env
-- **Scroll-to-Top**: ScrollToTop-Komponente, jeder Routenwechsel startet oben
 - **Adresstrennung**: Gesellschaftssitz (Theaterstr. 24) klar getrennt von Bewerberbereich (Theaterstr. 30-32) in Footer, ContactPage, LegalPage
 - **Design-Veredelung**: Kurskarten einheitlich neutral (border-l-4 statt bunt), W2G-Logo auf primärem Hintergrund mit Kontrast
 - **KanbanPage**: AI-Schnellbadges (Anabin H+/H/D, Vollständigkeit, Sprachniveau), Archiv-Sektion, Kurs-Filter, Link zu Detailseite

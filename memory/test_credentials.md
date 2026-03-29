@@ -16,7 +16,7 @@
 - E-Mail: test-phase3-2026@example.com (bereits in DB)
 - Application ID: 69c8b08ac3ab59729d52e226
 
-## URLs
+## URLs (aktuell)
 - Frontend: https://ui-polish-phase-3.preview.emergentagent.com
 - Backend: https://ui-polish-phase-3.preview.emergentagent.com/api
 - Backend (lokal): http://localhost:8001

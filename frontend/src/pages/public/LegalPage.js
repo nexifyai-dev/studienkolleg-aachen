@@ -311,13 +311,13 @@ function AccordionSection({ title, content, defaultOpen = false, hasWarning = fa
   const [open, setOpen] = useState(defaultOpen);
   const isOffen = content.includes('[OFFEN');
   return (
-    <div className={`border rounded-sm mb-2 ${isOffen ? 'border-amber-200 bg-amber-50/30' : 'border-slate-100'}`}>
+    <div className={`border rounded-sm mb-2 ${isOffen ? 'border-slate-200 bg-slate-50/50' : 'border-slate-100'}`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-3.5 text-left"
         data-testid={`legal-section-${title.replace(/\s+/g, '-').toLowerCase()}`}
       >
-        <span className={`font-semibold text-sm ${isOffen ? 'text-amber-800' : 'text-slate-800'}`}>{title}</span>
+        <span className={`font-semibold text-sm ${isOffen ? 'text-slate-700' : 'text-slate-800'}`}>{title}</span>
         {open ? <ChevronUp size={16} className="text-slate-400 shrink-0" /> : <ChevronDown size={16} className="text-slate-400 shrink-0" />}
       </button>
       {open && (

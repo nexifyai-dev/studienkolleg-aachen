@@ -326,9 +326,9 @@ function AccordionSection({ title, content, defaultOpen = false, hasWarning = fa
             if (line.trim() === '') return <br key={i} />;
             if (line.startsWith('[OFFEN')) {
               return (
-                <div key={i} className="flex items-start gap-2 bg-amber-100 border border-amber-200 rounded-sm px-3 py-2 my-2">
-                  <AlertCircle size={14} className="text-amber-600 mt-0.5 shrink-0" />
-                  <p className="text-amber-800 text-xs">{line.replace(/\[|\]/g, '')}</p>
+                <div key={i} className="flex items-start gap-2 bg-slate-100 border border-slate-200 rounded-sm px-3 py-2 my-2">
+                  <AlertCircle size={14} className="text-slate-500 mt-0.5 shrink-0" />
+                  <p className="text-slate-700 text-xs">{line.replace(/\[|\]/g, '')}</p>
                 </div>
               );
             }
@@ -345,7 +345,7 @@ function AccordionSection({ title, content, defaultOpen = false, hasWarning = fa
 function ImpressumContent() {
   return (
     <div data-testid="legal-content-impressum">
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-sm text-blue-800 text-sm">
+      <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-sm text-slate-700 text-sm">
         <strong>Neue Kontaktbasis (Feb 2026)</strong> – Diese Angaben basieren auf den vom Auftraggeber gelieferten Daten.
         Vor dem Go-Live ist eine finale rechtliche Prüfung und Freigabe erforderlich.
       </div>
@@ -359,7 +359,7 @@ function ImpressumContent() {
 function AGBContent() {
   return (
     <div data-testid="legal-content-agb">
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-sm text-blue-800 text-sm">
+      <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-sm text-slate-700 text-sm">
         <strong>Quelle:</strong> AGB der W2G Academy GmbH, Stand 06.02.2026.
         Übernommen und an das neue System angepasst. Offene Punkte (Preise, Adresse) sind markiert.
         Finale juristische Freigabe vor Go-Live erforderlich.
@@ -374,7 +374,7 @@ function AGBContent() {
 function DatenschutzContent() {
   return (
     <div data-testid="legal-content-datenschutz">
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-sm text-blue-800 text-sm">
+      <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-sm text-slate-700 text-sm">
         <strong>Basis:</strong> Datenschutzerklärung für W2G Academy GmbH.
         Angepasst an das neue System (Portal, Dokumentenverwaltung, KI-Screening).
         Finale juristische Prüfung vor Go-Live erforderlich.
@@ -421,9 +421,9 @@ export default function LegalPage({ type = 'legal' }) {
           </nav>
 
           {/* Allgemeiner Hinweis */}
-          <div className="bg-amber-50 border border-amber-200 rounded-sm p-4 mb-8 flex items-start gap-3">
-            <AlertCircle size={16} className="text-amber-600 mt-0.5 shrink-0" />
-            <p className="text-amber-700 text-sm">
+          <div className="bg-slate-50 border border-slate-200 rounded-sm p-4 mb-8 flex items-start gap-3">
+            <AlertCircle size={16} className="text-slate-500 mt-0.5 shrink-0" />
+            <p className="text-slate-700 text-sm">
               <strong>Rechtlicher Hinweis:</strong> Diese Seite ist noch nicht abschließend rechtlich geprüft.
               Offene Punkte sind mit [OFFEN] markiert. Finale Freigabe vor Go-Live erforderlich.
             </p>

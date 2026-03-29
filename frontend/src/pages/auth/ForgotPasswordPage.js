@@ -40,8 +40,8 @@ export default function ForgotPasswordPage() {
         <div className="bg-white border border-slate-200 rounded-sm shadow-card p-6">
           {success ? (
             <div className="text-center" data-testid="forgot-success">
-              <CheckCircle size={36} className="text-green-500 mx-auto mb-3" />
-              <p className="text-green-700 text-sm">Wenn diese E-Mail existiert, wurde ein Reset-Link gesendet.</p>
+              <CheckCircle size={36} className="text-primary mx-auto mb-3" />
+              <p className="text-slate-700 text-sm">Wenn diese E-Mail existiert, wurde ein Reset-Link gesendet.</p>
               <Link to="/auth/login" className="mt-4 inline-block text-primary font-medium hover:underline text-sm">← Zurück zur Anmeldung</Link>
             </div>
           ) : (

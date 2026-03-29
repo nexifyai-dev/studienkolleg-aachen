@@ -9,18 +9,18 @@ import {
 } from 'lucide-react';
 
 const DOC_STATUS = {
-  uploaded: { label: 'Hochgeladen', icon: Clock, color: 'bg-blue-100 text-blue-700' },
-  in_review: { label: 'In Prüfung', icon: Clock, color: 'bg-yellow-100 text-yellow-700' },
-  approved: { label: 'Akzeptiert', icon: CheckCircle, color: 'bg-green-100 text-green-700' },
+  uploaded: { label: 'Hochgeladen', icon: Clock, color: 'bg-primary/10 text-primary' },
+  in_review: { label: 'In Prüfung', icon: Clock, color: 'bg-slate-100 text-slate-600' },
+  approved: { label: 'Akzeptiert', icon: CheckCircle, color: 'bg-primary/15 text-primary' },
   rejected: { label: 'Abgelehnt', icon: XCircle, color: 'bg-red-100 text-red-700' },
 };
 
 const ANABIN_COLORS = {
-  'H+': 'bg-green-100 text-green-700',
-  'H': 'bg-blue-100 text-blue-700',
+  'H+': 'bg-primary/15 text-primary',
+  'H': 'bg-slate-100 text-slate-700',
   'D': 'bg-red-100 text-red-700',
-  'prüfen': 'bg-amber-100 text-amber-700',
-  'unbekannt': 'bg-slate-100 text-slate-600',
+  'prüfen': 'bg-slate-100 text-slate-600',
+  'unbekannt': 'bg-slate-50 text-slate-500',
 };
 
 function AIScreeningPanel({ appId }) {
@@ -70,9 +70,9 @@ function AIScreeningPanel({ appId }) {
       </div>
 
       {/* Disclaimer */}
-      <div className="bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 flex items-start gap-2">
-        <AlertCircle size={13} className="text-amber-600 mt-0.5 shrink-0" />
-        <p className="text-amber-700 text-xs">
+      <div className="bg-slate-50 border border-slate-200 rounded-sm px-3 py-2 flex items-start gap-2">
+        <AlertCircle size={13} className="text-slate-500 mt-0.5 shrink-0" />
+        <p className="text-slate-600 text-xs">
           <strong>KI-Einschätzung – keine bindende Entscheidung.</strong> Alle Vorschläge müssen vom Staff-Team überprüft und bestätigt werden.
         </p>
       </div>
@@ -95,12 +95,12 @@ function AIScreeningPanel({ appId }) {
         <div className="space-y-3" data-testid="ai-screening-latest">
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-2">
-            <div className={`rounded-sm p-3 text-center ${latest.is_complete ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'}`}>
+            <div className={`rounded-sm p-3 text-center ${latest.is_complete ? 'bg-primary/8 border border-primary/25' : 'bg-slate-50 border border-slate-200'}`}>
               {latest.is_complete
-                ? <CheckCircle size={16} className="text-green-500 mx-auto mb-1" />
-                : <AlertCircle size={16} className="text-amber-500 mx-auto mb-1" />}
+                ? <CheckCircle size={16} className="text-primary mx-auto mb-1" />
+                : <AlertCircle size={16} className="text-slate-400 mx-auto mb-1" />}
               <p className="text-xs font-medium text-slate-700">Vollständigkeit</p>
-              <p className={`text-xs ${latest.is_complete ? 'text-green-700' : 'text-amber-700'}`}>
+              <p className={`text-xs ${latest.is_complete ? 'text-primary' : 'text-slate-500'}`}>
                 {latest.is_complete ? 'Vollständig' : `${latest.missing_documents?.length || 0} fehlend`}
               </p>
             </div>
@@ -108,12 +108,12 @@ function AIScreeningPanel({ appId }) {
               <p className="text-xs font-medium text-slate-700 mb-0.5">Anabin</p>
               <p className="text-sm font-bold">{latest.anabin_category || '–'}</p>
             </div>
-            <div className={`rounded-sm p-3 text-center border ${latest.language_level_ok ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+            <div className={`rounded-sm p-3 text-center border ${latest.language_level_ok ? 'bg-primary/8 border-primary/25' : 'bg-red-50 border-red-200'}`}>
               {latest.language_level_ok
-                ? <CheckCircle size={16} className="text-green-500 mx-auto mb-1" />
+                ? <CheckCircle size={16} className="text-primary mx-auto mb-1" />
                 : <XCircle size={16} className="text-red-500 mx-auto mb-1" />}
               <p className="text-xs font-medium text-slate-700">Sprachniveau</p>
-              <p className={`text-xs ${latest.language_level_ok ? 'text-green-700' : 'text-red-700'}`}>
+              <p className={`text-xs ${latest.language_level_ok ? 'text-primary' : 'text-red-700'}`}>
                 {latest.language_level_ok ? 'Ausreichend' : 'Nicht ausreichend'}
               </p>
             </div>
@@ -292,14 +292,14 @@ export default function ApplicantDetailPage() {
               {app.applicant?.phone && (
                 <a href={`tel:${app.applicant.phone.replace(/\s/g,'')}`}
                   data-testid="detail-click-to-dial"
-                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-green-50 text-green-700 border border-green-200 rounded-sm hover:bg-green-100 transition-colors">
+                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-sm hover:bg-primary/10 transition-colors">
                   <Phone size={13} /> Anrufen
                 </a>
               )}
               {app.applicant?.email && (
                 <a href={`mailto:${app.applicant.email}?subject=Ihre Bewerbung beim Studienkolleg Aachen`}
                   data-testid="detail-email-link"
-                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-sm hover:bg-blue-100 transition-colors">
+                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-slate-50 text-slate-700 border border-slate-200 rounded-sm hover:bg-slate-100 transition-colors">
                   <Mail size={13} /> E-Mail schreiben
                 </a>
               )}
@@ -307,7 +307,7 @@ export default function ApplicantDetailPage() {
                 <a href={`https://wa.me/${app.applicant.phone.replace(/[^0-9+]/g,'').replace('+','')}`}
                   target="_blank" rel="noopener noreferrer"
                   data-testid="detail-whatsapp-link"
-                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-sm hover:bg-emerald-100 transition-colors">
+                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-slate-50 text-slate-700 border border-slate-200 rounded-sm hover:bg-slate-100 transition-colors">
                   <MessageCircle size={13} /> WhatsApp
                 </a>
               )}

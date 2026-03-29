@@ -9,9 +9,9 @@ export default function FinancialsPage() {
         <p className="text-slate-500 text-sm mt-1">Übersicht deiner Zahlungen</p>
       </div>
 
-      <div className="bg-amber-50 border border-amber-200 rounded-sm p-4 flex items-start gap-3" data-testid="financials-gate-notice">
-        <AlertCircle size={16} className="text-amber-600 mt-0.5 shrink-0" />
-        <div className="text-sm text-amber-700">
+      <div className="bg-slate-50 border border-slate-200 rounded-sm p-4 flex items-start gap-3" data-testid="financials-gate-notice">
+        <AlertCircle size={16} className="text-slate-500 mt-0.5 shrink-0" />
+        <div className="text-sm text-slate-700">
           <p className="font-medium mb-1">[OFFEN] Zahlungsmodul noch nicht aktiv</p>
           <p>Das Zahlungsmodul wird erst nach Klärung der Steuer-/Refund-Logik aktiviert (Gate 1 gemäß Projektdokumentation). Für Zahlungsfragen wende dich direkt an info@stk-aachen.de.</p>
         </div>

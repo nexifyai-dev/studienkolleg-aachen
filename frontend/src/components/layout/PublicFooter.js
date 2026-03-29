@@ -19,43 +19,43 @@ export default function PublicFooter() {
               </div>
               <span className="font-heading font-bold text-lg text-white">Studienkolleg Aachen</span>
             </div>
-            <p className="text-sm text-blue-200 max-w-xs leading-relaxed mb-3">
+            <p className="text-sm text-white/70 max-w-xs leading-relaxed mb-3">
               Strukturierter, digital begleiteter Weg ins Studium in Deutschland –
               von der Bewerbung bis zur Feststellungsprüfung.
             </p>
-            <p className="text-xs text-blue-300">
+            <p className="text-xs text-white/50">
               Way2Germany / W2G Academy GmbH · Amtsgericht Aachen HRB 23610
             </p>
           </div>
 
           {/* Bewerberbereich Kontakt */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-accent tracking-wide uppercase text-xs">
+            <h3 className="font-semibold text-sm mb-4 text-white/80 tracking-wide uppercase text-xs">
               Standort & Kontakt
             </h3>
-            <div className="space-y-2.5 text-sm text-blue-200">
+            <div className="space-y-2.5 text-sm text-white/70">
               <div className="flex items-start gap-2">
-                <MapPin size={13} className="mt-0.5 shrink-0 opacity-70" />
+                <MapPin size={13} className="mt-0.5 shrink-0 opacity-60" />
                 <div>
                   <p>Theaterstraße 30–32</p>
                   <p>52062 Aachen</p>
-                  <p className="text-xs text-blue-300 mt-0.5">Unterricht / Beratung / Way2Germany</p>
+                  <p className="text-xs text-white/45 mt-0.5">Unterricht / Beratung / Way2Germany</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Phone size={13} className="shrink-0 opacity-70" />
+                <Phone size={13} className="shrink-0 opacity-60" />
                 <a href="tel:+4924199032292" className="hover:text-white transition-colors">
                   +49 241 990 322 92
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <Mail size={13} className="shrink-0 opacity-70" />
+                <Mail size={13} className="shrink-0 opacity-60" />
                 <a href="mailto:info@stk-aachen.de" className="hover:text-white transition-colors">
                   info@stk-aachen.de
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <MessageCircle size={13} className="shrink-0 opacity-70" />
+                <MessageCircle size={13} className="shrink-0 opacity-60" />
                 <a href="https://api.whatsapp.com/message/RVKVWFEKNCIRG1?autoload=1&app_absent=0"
                   target="_blank" rel="noopener noreferrer"
                   className="hover:text-white transition-colors">
@@ -67,23 +67,23 @@ export default function PublicFooter() {
 
           {/* Rechtliches + Gesellschaftssitz */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-accent tracking-wide uppercase text-xs">
+            <h3 className="font-semibold text-sm mb-4 text-white/80 tracking-wide uppercase text-xs">
               Rechtliches
             </h3>
-            <ul className="space-y-2 text-sm text-blue-200 mb-5">
+            <ul className="space-y-2 text-sm text-white/70 mb-5">
               <li><Link to="/legal" className="hover:text-white transition-colors">Impressum</Link></li>
               <li><Link to="/privacy" className="hover:text-white transition-colors">Datenschutz</Link></li>
               <li><Link to="/agb" className="hover:text-white transition-colors">AGB</Link></li>
               <li><Link to="/apply" className="hover:text-white transition-colors">Bewerben</Link></li>
             </ul>
-            <div className="text-xs text-blue-400 space-y-0.5">
-              <p className="font-medium text-blue-300">Gesellschaftssitz:</p>
+            <div className="text-xs text-white/40 space-y-0.5">
+              <p className="font-medium text-white/55">Gesellschaftssitz:</p>
               <p>Theaterstraße 24 · 52062 Aachen</p>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-blue-400">
+        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
           <span>© {new Date().getFullYear()} W2G Academy GmbH / Studienkolleg Aachen</span>
           <span>Plattform v1.2.0</span>
         </div>

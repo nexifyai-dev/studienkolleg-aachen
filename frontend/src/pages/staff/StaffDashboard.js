@@ -39,10 +39,10 @@ export default function StaffDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Gesamt Leads', value: stats?.total_leads ?? '–', icon: Users, color: 'text-blue-600 bg-blue-50' },
-          { label: 'Aktive Leads', value: stats?.open_leads ?? '–', icon: TrendingUp, color: 'text-primary bg-accent/20' },
-          { label: 'Offene Aufgaben', value: stats?.open_tasks ?? '–', icon: CheckSquare, color: 'text-orange-600 bg-orange-50' },
-          { label: 'Dokumente offen', value: stats?.pending_documents ?? '–', icon: FileText, color: 'text-purple-600 bg-purple-50' },
+          { label: 'Gesamt Leads', value: stats?.total_leads ?? '–', icon: Users, color: 'text-primary bg-primary/8' },
+          { label: 'Aktive Leads', value: stats?.open_leads ?? '–', icon: TrendingUp, color: 'text-primary bg-primary/10' },
+          { label: 'Offene Aufgaben', value: stats?.open_tasks ?? '–', icon: CheckSquare, color: 'text-slate-600 bg-slate-100' },
+          { label: 'Dokumente offen', value: stats?.pending_documents ?? '–', icon: FileText, color: 'text-slate-600 bg-slate-50 border border-slate-200' },
         ].map(item => {
           const Icon = item.icon;
           return (
@@ -85,7 +85,7 @@ export default function StaffDashboard() {
                       {app.applicant?.full_name || app.applicant?.email || app.applicant_id?.slice(-8)}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-sm">
+                      <span className="text-xs bg-primary/8 text-primary px-2 py-0.5 rounded-sm">
                         {STAGE_LABELS[app.current_stage] || app.current_stage}
                       </span>
                     </td>

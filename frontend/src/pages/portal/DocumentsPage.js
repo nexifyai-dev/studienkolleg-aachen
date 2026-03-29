@@ -6,9 +6,9 @@ import { formatDate } from '../../lib/utils';
 
 
 const STATUS_CONFIG = {
-  uploaded: { label: 'Hochgeladen', icon: Clock, color: 'text-blue-600 bg-blue-50' },
-  in_review: { label: 'In Prüfung', icon: Clock, color: 'text-yellow-600 bg-yellow-50' },
-  approved: { label: 'Akzeptiert', icon: CheckCircle, color: 'text-green-600 bg-green-50' },
+  uploaded: { label: 'Hochgeladen', icon: Clock, color: 'text-primary bg-primary/8' },
+  in_review: { label: 'In Prüfung', icon: Clock, color: 'text-slate-600 bg-slate-100' },
+  approved: { label: 'Akzeptiert', icon: CheckCircle, color: 'text-primary bg-primary/12' },
   rejected: { label: 'Abgelehnt', icon: XCircle, color: 'text-red-600 bg-red-50' },
   missing: { label: 'Fehlt', icon: AlertCircle, color: 'text-slate-500 bg-slate-50' },
 };

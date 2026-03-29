@@ -46,7 +46,7 @@ export default function RegisterPage() {
             <span className="font-heading font-bold text-primary text-lg">Studienkolleg Aachen</span>
           </Link>
           <h1 className="text-2xl font-heading font-bold text-primary">{t('auth.register_title')}</h1>
-          {inviteToken && <p className="text-xs text-green-600 mt-1 bg-green-50 px-2 py-1 rounded-sm">Einladungstoken aktiv</p>}
+          {inviteToken && <p className="text-xs text-primary mt-1 bg-primary/8 px-2 py-1 rounded-sm">Einladungstoken aktiv</p>}
         </div>
 
         <div className="bg-white border border-slate-200 rounded-sm shadow-card p-6">

@@ -96,10 +96,10 @@ export default function UsersPage() {
           </p>
           {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
           {inviteResult ? (
-            <div className="bg-green-50 border border-green-200 rounded-sm p-4 text-sm" data-testid="invite-result">
-              <p className="font-medium text-green-800 mb-1">Einladungslink erstellt:</p>
-              <code className="block text-green-700 break-all text-xs bg-green-100 p-2 rounded-sm">{inviteResult.invite_url}</code>
-              <p className="text-green-600 text-xs mt-2">Bitte diesen Link sicher an den Mitarbeiter senden (nicht per unverschlüsselter E-Mail).</p>
+            <div className="bg-slate-50 border border-slate-200 rounded-sm p-4 text-sm" data-testid="invite-result">
+              <p className="font-medium text-slate-800 mb-1">Einladungslink erstellt:</p>
+              <code className="block text-slate-700 break-all text-xs bg-slate-100 p-2 rounded-sm">{inviteResult.invite_url}</code>
+              <p className="text-slate-600 text-xs mt-2">Bitte diesen Link sicher an den Mitarbeiter senden (nicht per unverschlüsselter E-Mail).</p>
               <button onClick={() => setInviteResult(null)} className="mt-2 text-xs text-primary hover:underline">
                 Weiteren Mitarbeiter einladen
               </button>
@@ -184,7 +184,7 @@ export default function UsersPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-sm ${u.active !== false ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-sm ${u.active !== false ? 'bg-primary/10 text-primary' : 'bg-red-50 text-red-600'}`}>
                       {u.active !== false ? 'Aktiv' : 'Deaktiviert'}
                     </span>
                   </td>
@@ -198,7 +198,7 @@ export default function UsersPage() {
                         className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-sm border transition-colors disabled:opacity-50 ${
                           u.active !== false
                             ? 'border-red-200 text-red-600 hover:bg-red-50'
-                            : 'border-green-200 text-green-700 hover:bg-green-50'
+                            : 'border-primary/30 text-primary hover:bg-primary/5'
                         }`}>
                         {u.active !== false
                           ? <><UserX size={12} /> Deaktivieren</>

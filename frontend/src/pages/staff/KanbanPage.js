@@ -18,10 +18,10 @@ const ARCHIVED_STAGES = ['declined', 'on_hold', 'archived', 'dormant'];
 
 // Anabin-Badge Farben
 const ANABIN_BADGE = {
-  'H+': { cls: 'bg-green-50 text-green-700 border-green-200', label: 'H+' },
-  'H':  { cls: 'bg-blue-50 text-blue-700 border-blue-200',  label: 'H'  },
+  'H+': { cls: 'bg-primary/12 text-primary border-primary/25', label: 'H+' },
+  'H':  { cls: 'bg-slate-100 text-slate-700 border-slate-200',  label: 'H'  },
   'D':  { cls: 'bg-red-50 text-red-700 border-red-200',     label: 'D'  },
-  'prüfen': { cls: 'bg-amber-50 text-amber-700 border-amber-200', label: '?' },
+  'prüfen': { cls: 'bg-slate-50 text-slate-500 border-slate-200', label: '?' },
   'unbekannt': { cls: 'bg-slate-50 text-slate-500 border-slate-200', label: '–' },
 };
 
@@ -32,7 +32,7 @@ function AIBadge({ screening }) {
     <div className="mt-2 flex items-center gap-1.5 flex-wrap" data-testid="kanban-ai-badge">
       {/* Vollständigkeit */}
       <span className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-sm border ${
-        screening.is_complete ? 'bg-green-50 text-green-700 border-green-200' : 'bg-amber-50 text-amber-700 border-amber-200'
+        screening.is_complete ? 'bg-primary/10 text-primary border-primary/25' : 'bg-slate-100 text-slate-600 border-slate-200'
       }`}>
         {screening.is_complete
           ? <CheckCircle size={10} />
@@ -262,8 +262,8 @@ export default function KanbanPage() {
           <span key={k} className={`px-1.5 py-0.5 rounded-sm border text-xs ${v.cls}`}>{v.label} = {k}</span>
         ))}
         <span className="flex items-center gap-1 ml-2">
-          <CheckCircle size={12} className="text-green-600" /> = vollständig
-          <FileX size={12} className="text-amber-600 ml-2" /> = Docs fehlen
+          <CheckCircle size={12} className="text-primary" /> = vollständig
+          <FileX size={12} className="text-slate-400 ml-2" /> = Docs fehlen
         </span>
       </div>
 

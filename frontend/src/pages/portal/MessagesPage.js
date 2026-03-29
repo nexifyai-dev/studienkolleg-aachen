@@ -75,7 +75,7 @@ export default function MessagesPage() {
                     isOwn ? 'bg-primary text-white' : 'bg-slate-100 text-slate-800'
                   }`}>
                     <p>{msg.content}</p>
-                    <p className={`text-xs mt-1 ${isOwn ? 'text-blue-200' : 'text-slate-400'}`}>
+                    <p className={`text-xs mt-1 ${isOwn ? 'text-white/60' : 'text-slate-400'}`}>
                       {formatDate(msg.sent_at)}
                     </p>
                   </div>

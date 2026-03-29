@@ -129,12 +129,12 @@ export default function CoursesPage() {
       <main className="pt-16">
 
         {/* Hero */}
-        <section className="bg-primary py-16 sm:py-20">
+        <section className="bg-primary py-10 sm:py-16 lg:py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-3 sm:mb-4">
               Unsere Kurse
             </h1>
-            <p className="text-blue-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            <p className="text-white/70 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
               Strukturierte Vorbereitung auf die Feststellungsprüfung (FSP) –
               die offizielle Hochschulzugangsvoraussetzung für internationale Studierende in Deutschland.
             </p>
@@ -157,10 +157,10 @@ export default function CoursesPage() {
         </section>
 
         {/* Hauptkurse */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16 lg:py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="mb-10">
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-3">
+            <div className="mb-8 sm:mb-10">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold text-primary mb-3">
                 Studienvorbereitende Schwerpunktkurse
               </h2>
               <p className="text-slate-600 max-w-2xl">
@@ -175,9 +175,9 @@ export default function CoursesPage() {
         </section>
 
         {/* Sprachkurse */}
-        <section className="py-16 sm:py-20 bg-slate-50 border-t border-slate-100">
+        <section className="py-10 sm:py-16 lg:py-20 bg-slate-50 border-t border-slate-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
               <div>
                 <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-sm bg-primary/8 text-primary border border-primary/20 mb-4">
                   Sprachkurs
@@ -214,9 +214,9 @@ export default function CoursesPage() {
         </section>
 
         {/* Kursstart-Übersicht */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16 lg:py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl font-heading font-bold text-primary mb-6">
+            <h2 className="text-xl sm:text-2xl font-heading font-bold text-primary mb-5 sm:mb-6">
               Verfügbare Startzeitpunkte
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -246,23 +246,23 @@ export default function CoursesPage() {
         </section>
 
         {/* CTA */}
-        <section className="bg-primary py-16">
+        <section className="bg-primary py-10 sm:py-14 lg:py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white mb-4">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold text-white mb-3 sm:mb-4">
               Welcher Kurs passt zu dir?
             </h2>
-            <p className="text-blue-200 mb-8 max-w-xl mx-auto">
+            <p className="text-white/70 mb-6 sm:mb-8 max-w-xl mx-auto">
               Wir helfen dir bei der Kursauswahl und begleiten dich von der ersten Anfrage bis zur Zulassung.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/apply"
                 data-testid="courses-cta-apply"
-                className="bg-white text-primary font-semibold px-8 py-3.5 rounded-sm hover:bg-slate-50 transition-all inline-flex items-center justify-center gap-2">
+                className="bg-white text-primary font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-sm hover:bg-slate-50 transition-all inline-flex items-center justify-center gap-2 text-sm sm:text-base">
                 Jetzt bewerben <ArrowRight size={16} />
               </Link>
               <Link to="/contact"
                 data-testid="courses-cta-contact"
-                className="border-2 border-white/40 text-white font-semibold px-8 py-3.5 rounded-sm hover:border-white/70 transition-all inline-flex items-center justify-center">
+                className="border-2 border-white/40 text-white font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-sm hover:border-white/70 transition-all inline-flex items-center justify-center text-sm sm:text-base">
                 Beratungsgespräch anfragen
               </Link>
             </div>

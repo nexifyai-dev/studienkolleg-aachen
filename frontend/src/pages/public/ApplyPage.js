@@ -86,9 +86,9 @@ function FileDropZone({ docConfig, file, onFileChange, onClear }) {
         <span className="ml-1 text-xs text-slate-400 font-normal">({docConfig.desc})</span>
       </label>
       {file ? (
-        <div className={`flex items-center gap-3 border rounded-sm px-4 py-3 ${sizeOk ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}
+        <div className={`flex items-center gap-3 border rounded-sm px-4 py-3 ${sizeOk ? 'border-primary/30 bg-primary/5' : 'border-red-200 bg-red-50'}`}
           data-testid={`file-selected-${docConfig.key}`}>
-          <FileText size={18} className={sizeOk ? 'text-green-600' : 'text-red-500'} />
+          <FileText size={18} className={sizeOk ? 'text-primary' : 'text-red-500'} />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-slate-800 truncate">{file.name}</p>
             <p className={`text-xs ${sizeOk ? 'text-slate-500' : 'text-red-600'}`}>
@@ -233,12 +233,12 @@ export default function ApplyPage() {
       <div className="min-h-screen bg-white">
         <PublicNav />
         <main className="pt-16">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
-            <div className="bg-green-50 border border-green-200 rounded-sm p-10 text-center" data-testid="apply-success">
-              <CheckCircle size={48} className="text-green-500 mx-auto mb-5" />
-              <h2 className="text-2xl font-heading font-bold text-green-800 mb-3">Bewerbung eingegangen!</h2>
-              <p className="text-green-700 text-sm mb-2">Deine Bewerbung und Dokumente wurden erfolgreich übermittelt.</p>
-              <p className="text-green-700 text-sm mb-6">Wir prüfen deine Unterlagen und melden uns innerhalb von 24 Stunden bei dir.</p>
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+            <div className="bg-slate-50 border border-slate-200 rounded-sm p-8 sm:p-10 text-center" data-testid="apply-success">
+              <CheckCircle size={48} className="text-primary mx-auto mb-5" />
+              <h2 className="text-2xl font-heading font-bold text-slate-800 mb-3">Bewerbung eingegangen!</h2>
+              <p className="text-slate-600 text-sm mb-2">Deine Bewerbung und Dokumente wurden erfolgreich übermittelt.</p>
+              <p className="text-slate-600 text-sm mb-6">Wir prüfen deine Unterlagen und melden uns innerhalb von 24 Stunden bei dir.</p>
               <Link to="/" className="inline-block bg-primary text-white font-semibold px-6 py-3 rounded-sm hover:bg-primary-hover transition-all text-sm">
                 Zurück zur Startseite
               </Link>
@@ -254,8 +254,8 @@ export default function ApplyPage() {
     <div className="min-h-screen bg-white">
       <PublicNav />
       <main className="pt-16">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-          <div className="text-center mb-10">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+          <div className="text-center mb-8 sm:mb-10">
             <h1 className="text-3xl sm:text-4xl font-heading font-bold text-primary mb-3">Jetzt bewerben</h1>
             <p className="text-slate-600">Fülle das Formular vollständig aus. Wir melden uns innerhalb von 24 Stunden.</p>
           </div>

@@ -60,12 +60,12 @@ export default function ServicesPage() {
       <main className="pt-16">
 
         {/* Hero */}
-        <section className="bg-primary py-16 sm:py-20">
+        <section className="bg-primary py-10 sm:py-16 lg:py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-3 sm:mb-4">
               Unsere Services
             </h1>
-            <p className="text-blue-200 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+            <p className="text-white/70 text-sm sm:text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
               Wir begleiten dich weit über den Unterricht hinaus –
               von der ersten Anfrage bis zum ersten Semester in Deutschland.
             </p>
@@ -73,9 +73,9 @@ export default function ServicesPage() {
         </section>
 
         {/* Services-Grid */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16 lg:py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {SERVICES.map(service => {
                 const Icon = service.icon;
                 return (
@@ -105,9 +105,9 @@ export default function ServicesPage() {
         </section>
 
         {/* Aachen-Grafik + Standort-Info */}
-        <section className="py-16 sm:py-20 bg-slate-50 border-t border-b border-slate-100">
+        <section className="py-10 sm:py-16 lg:py-20 bg-slate-50 border-t border-b border-slate-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-center">
               <div>
                 <img
                   src={AACHEN_GRAPHIC}
@@ -148,15 +148,15 @@ export default function ServicesPage() {
         </section>
 
         {/* Prozess-Überblick */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16 lg:py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-3 text-center">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold text-primary mb-3 text-center">
               Wie wir dich begleiten
             </h2>
-            <p className="text-slate-600 text-center mb-10 max-w-lg mx-auto">
+            <p className="text-slate-600 text-center mb-8 sm:mb-10 max-w-lg mx-auto">
               Von der ersten Kontaktaufnahme bis zum erfolgreichen Kursabschluss.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               {[
                 { step: '01', title: 'Erstberatung', desc: 'Wir prüfen deine Unterlagen und empfehlen den passenden Kurs.' },
                 { step: '02', title: 'Visa & Formalitäten', desc: 'Wir unterstützen beim Visum, der Anmeldung und allen Behördengängen.' },
@@ -178,23 +178,23 @@ export default function ServicesPage() {
         </section>
 
         {/* CTA */}
-        <section className="bg-primary py-16">
+        <section className="bg-primary py-10 sm:py-14 lg:py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white mb-4">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold text-white mb-3 sm:mb-4">
               Bereit loszulegen?
             </h2>
-            <p className="text-blue-200 mb-8 max-w-lg mx-auto">
+            <p className="text-white/70 mb-6 sm:mb-8 max-w-lg mx-auto">
               Bewirb dich jetzt und erhalte innerhalb von 24 Stunden eine persönliche Rückmeldung.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/apply"
                 data-testid="services-cta-apply"
-                className="bg-white text-primary font-semibold px-8 py-3.5 rounded-sm hover:bg-slate-50 transition-all inline-flex items-center justify-center gap-2">
+                className="bg-white text-primary font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-sm hover:bg-slate-50 transition-all inline-flex items-center justify-center gap-2 text-sm sm:text-base">
                 Jetzt bewerben <ArrowRight size={16} />
               </Link>
               <Link to="/contact"
                 data-testid="services-cta-contact"
-                className="border-2 border-white/40 text-white font-semibold px-8 py-3.5 rounded-sm hover:border-white/70 transition-all inline-flex items-center justify-center">
+                className="border-2 border-white/40 text-white font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-sm hover:border-white/70 transition-all inline-flex items-center justify-center text-sm sm:text-base">
                 Beratung anfragen
               </Link>
             </div>

@@ -9,9 +9,9 @@ export default function ContactPage() {
     <div className="min-h-screen bg-white">
       <PublicNav />
       <main className="pt-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
-          <div className="text-center mb-12">
-            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-primary mb-3">Kontakt</h1>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-primary mb-3">Kontakt</h1>
             <p className="text-slate-600 max-w-md mx-auto">
               Wir sind für dich da – persönlich, schnell und zuverlässig.
             </p>
@@ -85,7 +85,7 @@ export default function ContactPage() {
             <div className="lg:col-span-2 space-y-4">
               <div className="bg-primary rounded-sm p-6 text-white">
                 <h3 className="font-heading font-bold text-lg mb-2">Jetzt bewerben</h3>
-                <p className="text-blue-200 text-sm mb-5 leading-relaxed">
+                <p className="text-white/70 text-sm mb-5 leading-relaxed">
                   Starte deine Bewerbung mit dem vollständigen Online-Formular.
                   Wir melden uns innerhalb von 24 Stunden.
                 </p>
@@ -105,7 +105,7 @@ export default function ContactPage() {
                 <a href="https://api.whatsapp.com/message/RVKVWFEKNCIRG1?autoload=1&app_absent=0"
                   target="_blank" rel="noopener noreferrer"
                   data-testid="contact-whatsapp-btn"
-                  className="block w-full bg-green-600 text-white text-center font-semibold py-2.5 rounded-sm hover:bg-green-700 transition-colors text-sm">
+                  className="block w-full bg-slate-800 text-white text-center font-semibold py-2.5 rounded-sm hover:bg-slate-900 transition-colors text-sm">
                   WhatsApp öffnen
                 </a>
               </div>

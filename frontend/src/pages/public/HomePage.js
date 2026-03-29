@@ -113,7 +113,7 @@ export default function HomePage() {
                 </Link>
               </div>
               <p className="mt-6 text-xs text-slate-500 flex items-center gap-2">
-                <CheckCircle size={14} className="text-green-500" />
+                <CheckCircle size={14} className="text-primary" />
                 {t('hero.trust')}
               </p>
             </div>
@@ -151,10 +151,10 @@ export default function HomePage() {
               return (
                 <div key={item.key} className="text-center text-white">
                   <div className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center mx-auto mb-3">
-                    <Icon size={20} className="text-accent" />
+                    <Icon size={20} className="text-white/80" />
                   </div>
                   <h3 className="font-semibold text-sm mb-1">{t(`trust.items.${item.key}.title`)}</h3>
-                  <p className="text-blue-200 text-xs leading-relaxed">{t(`trust.items.${item.key}.desc`)}</p>
+                  <p className="text-white/70 text-xs leading-relaxed">{t(`trust.items.${item.key}.desc`)}</p>
                 </div>
               );
             })}
@@ -212,7 +212,7 @@ export default function HomePage() {
                   'Unterkunft, Visum-Support und Versicherungslösungen',
                 ].map(item => (
                   <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
-                    <CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />
+                    <CheckCircle size={16} className="text-primary mt-0.5 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -309,7 +309,7 @@ export default function HomePage() {
                 onError={e => { e.target.style.display = 'none'; }}
               />
               <div className="w-16 h-0.5 bg-white/20 my-6 rounded-full" />
-              <p className="text-blue-200 text-sm text-center max-w-xs leading-relaxed">
+              <p className="text-white/70 text-sm text-center max-w-xs leading-relaxed">
                 Seit Jahren vertrauenswürdiger Partner für internationale Studierende auf dem Weg nach Deutschland.
               </p>
               <div className="mt-6 text-center">
@@ -350,7 +350,7 @@ export default function HomePage() {
           <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white mb-4">
             Bereit, deinen Weg zu starten?
           </h2>
-          <p className="text-blue-200 mb-8 max-w-xl mx-auto">
+          <p className="text-white/70 mb-8 max-w-xl mx-auto">
             Bewirb dich jetzt mit deinen Unterlagen und erhalte innerhalb von 24 Stunden eine Rückmeldung.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

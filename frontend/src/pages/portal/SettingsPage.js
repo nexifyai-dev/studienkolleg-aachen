@@ -38,7 +38,7 @@ export default function SettingsPage() {
         <form onSubmit={handleSave} className="space-y-4" data-testid="settings-form">
           {error && <p className="text-red-600 text-sm">{error}</p>}
           {success && (
-            <div className="flex items-center gap-2 text-green-700 text-sm bg-green-50 p-3 rounded-sm" data-testid="settings-success">
+            <div className="flex items-center gap-2 text-primary text-sm bg-primary/8 p-3 rounded-sm" data-testid="settings-success">
               <CheckCircle size={16} /> Gespeichert
             </div>
           )}

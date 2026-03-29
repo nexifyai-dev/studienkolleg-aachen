@@ -1,0 +1,75 @@
+{
+  "summary": "Phase 3.6 UI-Harmonisierung – Frontend-only testing. Tested all 12 requirements: public pages, color scheme (no pastel), ScrollToTop, footer address separation, apply form, staff login + Kanban, AI screening panel, mobile nav, course cards, legal pages, portal login, admin UsersPage badges. 23/24 checks passed. One minor issue: LegalPage accordion sections with [OFFEN] content still use amber colors (border-amber-200, bg-amber-50/30, text-amber-800) on the accordion container – spec says slate instead of amber.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "LegalPage – AccordionSection (LegalPage.js line 314+320)",
+        "issue": "Accordion sections containing [OFFEN] text use amber colors: `border-amber-200 bg-amber-50/30` on the container div and `text-amber-800` on the section title. Spec requires neutral (slate) colors throughout legal pages. The outer 'Rechtlicher Hinweis' box is correctly slate, and the inline [OFFEN] markers inside the content are correctly slate (bg-slate-100). Only the accordion wrapper and title are still amber.",
+        "selector": ".border-amber-200, .bg-amber-50\\/30, .text-amber-800",
+        "priority": "LOW",
+        "fix": "In LegalPage.js AccordionSection: change `border-amber-200 bg-amber-50/30` → `border-slate-200 bg-slate-50/50` and `text-amber-800` → `text-slate-700`"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Portal Dashboard (/portal)",
+        "issues": ["TEST_portal_ui@example.com has no application – shows 'Noch keine Bewerbung' state which is correct and working fine"]
+      }
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "LOW: Fix LegalPage.js AccordionSection amber colors → change border-amber-200/bg-amber-50/30/text-amber-800 to slate equivalents (line 314, 320)"
+  ],
+  "critical_code_review_comments": [
+    "LegalPage.js: AccordionSection still uses amber color tokens for OFFEN-flagged sections despite Phase 3.6 spec requiring full slate harmonization",
+    "ScrollToTop: Works correctly via React Router Link clicks (scroll=0). pushState() navigation bypasses useEffect – not an app issue"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend-only test)",
+    "frontend": "96% (23/24 checks passed)"
+  },
+  "test_credentials": {
+    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "applicant": "TEST_portal_ui@example.com / Portal@2026!"
+  },
+  "seed_data_creation": "None in this iteration",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase 3.6 UI harmonization is 96% complete. All corporate blue/white design requirements met. Only remaining issue: LegalPage.js AccordionSection amber color on OFFEN sections (line 314: border-amber-200 bg-amber-50/30, line 320: text-amber-800). All routing, ScrollToTop, footer address separation, staff/portal/admin pages, Kanban, AI Screening, mobile nav all working. Active badge in UsersPage correctly uses bg-primary/10 (not green). WhatsApp button on /contact correctly uses slate-800 (not green).",
+  "passed_checks": [
+    "Homepage loads with corporate blue/white, no pastel colors",
+    "/courses – no colorful/pastel classes, only primary/slate",
+    "Course card expand accordion works",
+    "/contact – WhatsApp button uses slate-800 (not green)",
+    "/contact – Address: Theaterstr. 30-32 (Standort) + Theaterstr. 24 (Gesellschaftssitz)",
+    "Footer – Theaterstr. 30-32 (Standort) + Theaterstr. 24 (Gesellschaftssitz)",
+    "Footer – No text-blue-* classes, correctly uses text-white/*",
+    "Apply form loads, all fields fillable, 3 file upload zones present",
+    "Apply form client-side validation works",
+    "Apply success state uses neutral slate colors (bg-slate-50)",
+    "Staff login (admin@studienkolleg-aachen.de) redirects to /staff",
+    "Staff Dashboard loads with corporate colors, stats cards correct",
+    "Kanban Board loads with 7 pipeline columns, 37 application cards",
+    "ApplicantDetailPage loads from Kanban card click (/staff/applications/:id)",
+    "AI Screening Panel loads correctly (local checks run even without LLM)",
+    "AI Screening Panel uses no green colors (only primary/slate/red for errors)",
+    "Stage change buttons work (9 stages visible)",
+    "Admin UsersPage – Active badge uses bg-primary/10 text-primary (not green)",
+    "Portal Dashboard loads with no bg-blue-50/bg-accent colors",
+    "Mobile navigation (390px) hamburger menu opens correctly",
+    "ScrollToTop works on React Router navigation (scroll=0 after route change)",
+    "/agb loads correctly",
+    "/privacy loads correctly",
+    "/services loads with no pastel colors"
+  ],
+  "failed_checks": [
+    "LegalPage accordion OFFEN sections still use amber colors (border-amber-200, bg-amber-50/30, text-amber-800)"
+  ]
+}

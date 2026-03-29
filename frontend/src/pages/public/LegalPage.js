@@ -291,7 +291,7 @@ Beim ersten Besuch der Seite werden Sie über ein Cookie-Einwilligungsfenster in
 • Technisch notwendig: Authentifizierung (Login-Session), Sprachauswahl – diese sind für den Betrieb der Plattform zwingend erforderlich und können nicht deaktiviert werden.
 • Funktionale Cookies: Speicherung Ihrer Cookie-Präferenzen und Onboarding-Status – diese verbessern die Nutzererfahrung und können individuell aktiviert oder deaktiviert werden.
 
-Ihre Einwilligung wird lokal gespeichert und kann jederzeit angepasst werden.`,
+Ihre Einwilligung wird lokal gespeichert und kann jederzeit über den Link „Cookie-Einstellungen" im Seitenfuß (Footer) erneut aufgerufen und angepasst werden.`,
   },
   {
     title: '10. Aktualität dieser Datenschutzerklärung',

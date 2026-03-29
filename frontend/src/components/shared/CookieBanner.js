@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Shield, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Shield, ChevronDown, ChevronUp } from 'lucide-react';
 
 const STORAGE_KEY = 'w2g_cookie_consent';
 
@@ -33,6 +33,10 @@ const TEXTS = {
     always_active: 'Immer aktiv',
     privacy_link: 'Datenschutzerklärung',
     legal_note: 'W2G Academy GmbH · Amtsgericht Aachen HRB 23610',
+    manage_title: 'Cookie-Einstellungen verwalten',
+    manage_desc: 'Hier können Sie Ihre Cookie-Einstellungen jederzeit anpassen.',
+    save_changes: 'Änderungen speichern',
+    current_status: 'Aktuelle Auswahl',
   },
   en: {
     title: 'Cookie Settings',
@@ -49,6 +53,10 @@ const TEXTS = {
     always_active: 'Always Active',
     privacy_link: 'Privacy Policy',
     legal_note: 'W2G Academy GmbH · Amtsgericht Aachen HRB 23610',
+    manage_title: 'Manage Cookie Settings',
+    manage_desc: 'You can adjust your cookie settings at any time here.',
+    save_changes: 'Save Changes',
+    current_status: 'Current selection',
   },
 };
 
@@ -69,6 +77,7 @@ function saveConsent(categories) {
     version: '1.0',
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
+  window.dispatchEvent(new CustomEvent('w2g-consent-updated', { detail: consent }));
   return consent;
 }
 
@@ -78,24 +87,48 @@ export function hasConsent(categoryId) {
   return consent.categories?.[categoryId] === true;
 }
 
+// Global event-based reopen mechanism
+let _openManageFn = null;
+
+export function openCookieSettings() {
+  if (_openManageFn) _openManageFn();
+}
+
 export default function CookieBanner() {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'en' ? 'en' : 'de';
   const t = TEXTS[lang];
 
   const [visible, setVisible] = useState(false);
+  const [isManageMode, setIsManageMode] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [selections, setSelections] = useState({
-    necessary: true,
-    functional: false,
-  });
+  const [selections, setSelections] = useState({ necessary: true, functional: false });
+
+  const openManage = useCallback(() => {
+    const existing = getConsent();
+    if (existing?.categories) {
+      setSelections({ ...existing.categories, necessary: true });
+    }
+    setIsManageMode(true);
+    setShowDetails(true);
+    setVisible(true);
+  }, []);
 
   useEffect(() => {
+    _openManageFn = openManage;
     const existing = getConsent();
     if (!existing) {
       setVisible(true);
     }
-  }, []);
+    return () => { _openManageFn = null; };
+  }, [openManage]);
+
+  // Listen for external open requests (footer link, etc.)
+  useEffect(() => {
+    const handler = () => openManage();
+    window.addEventListener('w2g-open-cookie-settings', handler);
+    return () => window.removeEventListener('w2g-open-cookie-settings', handler);
+  }, [openManage]);
 
   if (!visible) return null;
 
@@ -104,16 +137,26 @@ export default function CookieBanner() {
     Object.keys(COOKIE_CATEGORIES).forEach(k => { all[k] = true; });
     saveConsent(all);
     setVisible(false);
+    setIsManageMode(false);
   };
 
   const handleAcceptNecessary = () => {
     saveConsent({ necessary: true, functional: false });
     setVisible(false);
+    setIsManageMode(false);
   };
 
-  const handleAcceptSelected = () => {
+  const handleSave = () => {
     saveConsent({ ...selections, necessary: true });
     setVisible(false);
+    setIsManageMode(false);
+  };
+
+  const handleClose = () => {
+    if (isManageMode) {
+      setVisible(false);
+      setIsManageMode(false);
+    }
   };
 
   const toggleCategory = (id) => {
@@ -121,9 +164,12 @@ export default function CookieBanner() {
     setSelections(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const title = isManageMode ? t.manage_title : t.title;
+  const description = isManageMode ? t.manage_desc : t.description;
+
   return (
     <div className="fixed inset-0 z-[99999] flex items-end sm:items-center justify-center" data-testid="cookie-banner">
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/40" onClick={handleClose} />
       <div className="relative bg-white w-full sm:max-w-lg sm:rounded-lg shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="px-5 pt-5 pb-3 flex items-start justify-between">
@@ -131,34 +177,41 @@ export default function CookieBanner() {
             <div className="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
               <Shield size={16} className="text-primary" />
             </div>
-            <h2 className="text-base font-semibold text-slate-800">{t.title}</h2>
+            <h2 className="text-base font-semibold text-slate-800">{title}</h2>
           </div>
+          {isManageMode && (
+            <button onClick={handleClose} className="text-slate-400 hover:text-slate-600 text-sm px-2 py-1" data-testid="cookie-close-btn">
+              &times;
+            </button>
+          )}
         </div>
 
         {/* Description */}
         <div className="px-5 pb-4">
-          <p className="text-sm text-slate-600 leading-relaxed">{t.description}</p>
+          <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
         </div>
 
         {/* Details toggle */}
-        <div className="px-5 pb-3">
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            data-testid="cookie-details-toggle"
-            className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
-          >
-            {showDetails ? t.hide_details : t.details}
-            {showDetails ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-          </button>
-        </div>
+        {!isManageMode && (
+          <div className="px-5 pb-3">
+            <button
+              onClick={() => setShowDetails(!showDetails)}
+              data-testid="cookie-details-toggle"
+              className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
+            >
+              {showDetails ? t.hide_details : t.details}
+              {showDetails ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            </button>
+          </div>
+        )}
 
         {/* Category details */}
         {showDetails && (
           <div className="px-5 pb-4 space-y-3" data-testid="cookie-details-panel">
             {Object.entries(COOKIE_CATEGORIES).map(([key, cat]) => (
               <div key={key} className="border border-slate-100 rounded p-3">
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-800">
                       {key === 'necessary' ? t.necessary_title : t.functional_title}
                     </p>
@@ -174,7 +227,7 @@ export default function CookieBanner() {
                     <button
                       onClick={() => toggleCategory(key)}
                       data-testid={`cookie-toggle-${key}`}
-                      className={`relative w-10 h-5 rounded-full transition-colors ${
+                      className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${
                         selections[key] ? 'bg-primary' : 'bg-slate-300'
                       }`}
                     >
@@ -198,31 +251,52 @@ export default function CookieBanner() {
 
         {/* Actions */}
         <div className="px-5 pb-4 flex flex-col gap-2">
-          <button
-            onClick={handleAcceptAll}
-            data-testid="cookie-accept-all"
-            className="w-full bg-primary text-white text-sm font-semibold py-2.5 rounded hover:bg-primary/90 transition-colors"
-          >
-            {t.accept_all}
-          </button>
-          <div className="flex gap-2">
-            {showDetails && (
+          {isManageMode ? (
+            <>
               <button
-                onClick={handleAcceptSelected}
-                data-testid="cookie-accept-selected"
-                className="flex-1 border border-primary text-primary text-sm font-medium py-2 rounded hover:bg-primary/5 transition-colors"
+                onClick={handleSave}
+                data-testid="cookie-save-changes"
+                className="w-full bg-primary text-white text-sm font-semibold py-2.5 rounded hover:bg-primary/90 transition-colors"
               >
-                {t.accept_selected}
+                {t.save_changes}
               </button>
-            )}
-            <button
-              onClick={handleAcceptNecessary}
-              data-testid="cookie-accept-necessary"
-              className="flex-1 border border-slate-300 text-slate-600 text-sm font-medium py-2 rounded hover:bg-slate-50 transition-colors"
-            >
-              {t.accept_necessary}
-            </button>
-          </div>
+              <button
+                onClick={handleAcceptAll}
+                data-testid="cookie-accept-all"
+                className="w-full border border-primary text-primary text-sm font-medium py-2 rounded hover:bg-primary/5 transition-colors"
+              >
+                {t.accept_all}
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleAcceptAll}
+                data-testid="cookie-accept-all"
+                className="w-full bg-primary text-white text-sm font-semibold py-2.5 rounded hover:bg-primary/90 transition-colors"
+              >
+                {t.accept_all}
+              </button>
+              <div className="flex gap-2">
+                {showDetails && (
+                  <button
+                    onClick={handleSave}
+                    data-testid="cookie-accept-selected"
+                    className="flex-1 border border-primary text-primary text-sm font-medium py-2 rounded hover:bg-primary/5 transition-colors"
+                  >
+                    {t.accept_selected}
+                  </button>
+                )}
+                <button
+                  onClick={handleAcceptNecessary}
+                  data-testid="cookie-accept-necessary"
+                  className="flex-1 border border-slate-300 text-slate-600 text-sm font-medium py-2 rounded hover:bg-slate-50 transition-colors"
+                >
+                  {t.accept_necessary}
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Footer */}

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { GraduationCap, MapPin, Phone, Mail, MessageCircle } from 'lucide-react';
+import { GraduationCap, MapPin, Phone, Mail, MessageCircle, Shield } from 'lucide-react';
+import { openCookieSettings } from '../shared/CookieBanner';
 
 export default function PublicFooter() {
   const { t } = useTranslation();
@@ -70,6 +71,16 @@ export default function PublicFooter() {
               <li><Link to="/legal" className="hover:text-white transition-colors">{t('footer.legal')}</Link></li>
               <li><Link to="/privacy" className="hover:text-white transition-colors">{t('footer.privacy')}</Link></li>
               <li><Link to="/agb" className="hover:text-white transition-colors">{t('footer.agb')}</Link></li>
+              <li>
+                <button
+                  onClick={openCookieSettings}
+                  data-testid="footer-cookie-settings"
+                  className="hover:text-white transition-colors flex items-center gap-1.5 text-left"
+                >
+                  <Shield size={12} className="opacity-60" />
+                  {t('footer.cookie_settings')}
+                </button>
+              </li>
               <li><Link to="/apply" className="hover:text-white transition-colors">{t('nav.apply')}</Link></li>
             </ul>
             <div className="text-xs text-white/40 space-y-0.5">

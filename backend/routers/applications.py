@@ -150,4 +150,25 @@ async def update_application(
             "actor_id": user["id"],
             "occurred_at": datetime.now(timezone.utc),
         })
+        # Automation: Status-Change-E-Mail an Bewerber senden
+        try:
+            applicant_user = None
+            if app.get("applicant_id"):
+                from bson import ObjectId as ObjId
+                applicant_user = await db.users.find_one(
+                    {"_id": ObjId(app["applicant_id"])},
+                    {"email": 1, "full_name": 1},
+                )
+            if applicant_user:
+                from services.automation import trigger_status_change
+                await trigger_status_change(
+                    application_id=app_id,
+                    applicant_email=applicant_user.get("email", ""),
+                    applicant_name=applicant_user.get("full_name", ""),
+                    old_stage=old_stage,
+                    new_stage=data.current_stage,
+                    actor_id=user["id"],
+                )
+        except Exception:
+            pass
     return {"message": "Aktualisiert", "id": app_id}

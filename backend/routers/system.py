@@ -21,7 +21,7 @@ async def get_audit_logs(request: Request, user: dict = Depends(require_roles(*A
     if aid := request.query_params.get("actor_id"):
         query["actor_id"] = aid
     logs = await db.audit_logs.find(query).sort("occurred_at", -1).to_list(500)
-    return [to_str_id(l) for l in logs]
+    return [to_str_id(log) for log in logs]
 
 
 # ─── Dashboard Router ─────────────────────────────────────────────────────────

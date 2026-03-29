@@ -304,7 +304,8 @@ async def forgot_password(data: ForgotPasswordRequest):
         reset_url = f"{APP_URL}/auth/reset-password?token={token}"
         sent = send_password_reset(email, reset_url)
         if not sent:
-            import logging; logging.getLogger(__name__).info(f"[RESET] {email}: {reset_url}")
+            import logging
+            logging.getLogger(__name__).info(f"[RESET] {email}: {reset_url}")
     # Always return same response (no user enumeration)
     return {"message": "Wenn diese E-Mail existiert, wurde ein Reset-Link gesendet"}
 

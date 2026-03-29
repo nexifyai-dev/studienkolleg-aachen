@@ -5,11 +5,17 @@ import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
 import {
   CheckCircle, Star, ChevronDown, ChevronUp, MapPin,
-  Phone, ArrowRight, Shield, Users, BookOpen, Award
+  Phone, ArrowRight, Shield, Users, BookOpen, Award, Play
 } from 'lucide-react';
 
-const HERO_IMAGE = "https://images.pexels.com/photos/7683629/pexels-photo-7683629.jpeg";
-const LIBRARY_IMAGE = "https://images.pexels.com/photos/9158999/pexels-photo-9158999.jpeg";
+// Echte Assets von studienkollegaachen.de
+const HERO_IMAGE = "https://www.studienkollegaachen.de/images/foto_1_startseite_studienkolleg_aachen_studium_germany_study_deutschland-1052.webp";
+const AACHEN_GRAPHIC = "https://www.studienkollegaachen.de/images/grafik_hi_aachen_deutschkurs_german_course_a1_c1-380.webp";
+const LOGO_W2G = "https://www.studienkollegaachen.de/images/logo_gross_studienkolleg_aachen_way_2_germany_studie_german_courses-684.webp";
+
+// YouTube-Videos
+const VIDEO_MAIN = "https://www.youtube.com/embed/oD9UIiTOT8E";
+const VIDEO_SERVICES = "https://www.youtube.com/embed/kZ-sxLHH5-g";
 
 function FAQItem({ q, a }) {
   const [open, setOpen] = useState(false);
@@ -26,11 +32,44 @@ function FAQItem({ q, a }) {
   );
 }
 
+function YouTubeEmbed({ src, title }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className="relative bg-slate-900 rounded-sm overflow-hidden aspect-video shadow-card-hover">
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center cursor-pointer" onClick={() => setLoaded(true)}>
+          <img
+            src={`https://img.youtube.com/vi/${src.split('/embed/')[1]}/hqdefault.jpg`}
+            alt={title}
+            className="w-full h-full object-cover"
+            onError={e => { e.target.style.display = 'none'; }}
+          />
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+              <Play size={24} fill="white" className="text-white ml-1" />
+            </div>
+          </div>
+          <p className="absolute bottom-3 left-3 text-white text-sm font-medium drop-shadow">{title}</p>
+        </div>
+      )}
+      {loaded && (
+        <iframe
+          className="w-full h-full absolute inset-0"
+          src={`${src}?autoplay=1&rel=0`}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      )}
+    </div>
+  );
+}
+
 const COURSES = [
-  { key: 't_course', color: 'bg-blue-50 border-blue-200', badge: 'T-Kurs', badgeColor: 'bg-blue-100 text-blue-700' },
-  { key: 'm_course', color: 'bg-green-50 border-green-200', badge: 'M-Kurs', badgeColor: 'bg-green-100 text-green-700' },
-  { key: 'w_course', color: 'bg-purple-50 border-purple-200', badge: 'W-Kurs', badgeColor: 'bg-purple-100 text-purple-700' },
-  { key: 'mt_course', color: 'bg-orange-50 border-orange-200', badge: 'M/T-Kurs', badgeColor: 'bg-orange-100 text-orange-700' },
+  { key: 't_course', color: 'bg-blue-50 border-blue-200 hover:border-blue-400', badge: 'T-Kurs', badgeColor: 'bg-blue-100 text-blue-700' },
+  { key: 'm_course', color: 'bg-green-50 border-green-200 hover:border-green-400', badge: 'M-Kurs', badgeColor: 'bg-green-100 text-green-700' },
+  { key: 'w_course', color: 'bg-purple-50 border-purple-200 hover:border-purple-400', badge: 'W-Kurs', badgeColor: 'bg-purple-100 text-purple-700' },
+  { key: 'mt_course', color: 'bg-orange-50 border-orange-200 hover:border-orange-400', badge: 'M/T-Kurs', badgeColor: 'bg-orange-100 text-orange-700' },
 ];
 
 export default function HomePage() {
@@ -54,7 +93,7 @@ export default function HomePage() {
             <div className="animate-slide-up">
               <div className="inline-flex items-center gap-2 bg-accent/30 text-primary px-3 py-1.5 rounded-sm text-xs font-semibold mb-6 border border-accent">
                 <GraduationCap16 />
-                {t('hero.badge')}
+                Studienkolleg Aachen / Way2Germany
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold text-primary leading-tight tracking-tight text-balance mb-6">
                 {t('hero.headline')}
@@ -79,13 +118,16 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Hero image */}
+            {/* Hero image – echtes Foto von studienkollegaachen.de */}
             <div className="relative hidden lg:block">
               <div className="absolute inset-0 bg-primary/5 rounded-sm transform rotate-3 scale-105"></div>
-              <img src={HERO_IMAGE} alt="International students in Aachen"
+              <img
+                src={HERO_IMAGE}
+                alt="Studienkolleg Aachen – Internationale Studenten"
                 className="relative rounded-sm object-cover w-full h-[480px] shadow-card-hover"
-                data-testid="hero-image" />
-              {/* Floating badge */}
+                data-testid="hero-image"
+                onError={e => { e.target.src = "https://images.pexels.com/photos/7683629/pexels-photo-7683629.jpeg"; }}
+              />
               <div className="absolute bottom-6 left-6 bg-white rounded-sm shadow-card-hover p-4 flex items-center gap-3">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="#F59E0B" className="text-yellow-400" />)}
@@ -120,7 +162,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Courses */}
+      {/* Kurse */}
       <section id="courses" className="py-16 sm:py-24 bg-slate-50" data-testid="courses-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -150,7 +192,81 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Process */}
+      {/* Video – Hauptvideo */}
+      <section className="py-16 sm:py-24 bg-white" data-testid="video-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-4">
+                Lerne das Studienkolleg Aachen kennen
+              </h2>
+              <p className="text-slate-600 mb-6 leading-relaxed">
+                Wir begleiten internationale Bewerber von der ersten Anfrage bis zum Studienplatz –
+                persönlich, digital und mit voller Transparenz in jedem Schritt.
+              </p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  'Offizielle Vorbereitung auf die Feststellungsprüfung (FSP)',
+                  'Persönliche Beratung und Begleitung auf Deutsch und Englisch',
+                  'Digitales Portal für Dokumente, Status und Kommunikation',
+                  'Unterkunft, Visum-Support und Versicherungslösungen',
+                ].map(item => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
+                    <CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/apply" data-testid="video-cta"
+                className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-sm hover:bg-primary-hover transition-all hover:-translate-y-0.5">
+                Jetzt bewerben <ArrowRight size={16} />
+              </Link>
+            </div>
+            <div>
+              <YouTubeEmbed src={VIDEO_MAIN} title="Studienkolleg Aachen – Way2Germany" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Aachen Graphic + Services Video */}
+      <section className="py-16 sm:py-24 bg-slate-50" data-testid="services-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-4">
+              {t('services.title')}
+            </h2>
+            <p className="text-slate-600 max-w-xl mx-auto">
+              Alles aus einer Hand – von der Beratung bis zum ersten Semester.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            {/* Services-Video */}
+            <div>
+              <YouTubeEmbed src={VIDEO_SERVICES} title="Unsere Services – Studienkolleg Aachen" />
+            </div>
+            {/* Aachen Grafik + Services-Liste */}
+            <div className="space-y-4">
+              <img
+                src={AACHEN_GRAPHIC}
+                alt="Deutschkurs Aachen A1-C1"
+                className="w-full rounded-sm object-contain max-h-48"
+                onError={e => { e.target.style.display = 'none'; }}
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {['visa', 'housing', 'mentoring', 'documents', 'uni', 'insurance'].map(key => (
+                  <div key={key} className="bg-white border border-slate-100 rounded-sm p-4 hover:shadow-card transition-shadow">
+                    <h4 className="font-semibold text-sm text-primary mb-1">{t(`services.${key}.name`)}</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed">{t(`services.${key}.desc`)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Prozess */}
       <section className="py-16 sm:py-24 bg-white" data-testid="process-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -163,10 +279,10 @@ export default function HomePage() {
               </p>
               <div className="space-y-4">
                 {[
-                  { step: '01', title: 'Bewerbung einreichen', desc: 'Fülle das kurze Formular aus. Wir melden uns innerhalb von 24 Stunden.' },
-                  { step: '02', title: 'Portalzugang erhalten', desc: 'Du bekommst dein persönliches Portal mit klarem Aufgaben-Dashboard.' },
-                  { step: '03', title: 'Dokumente hochladen', desc: 'Sichere, strukturierte Dokumentenverwaltung – alles an einem Ort.' },
-                  { step: '04', title: 'Zulassung & Start', desc: 'Nach Prüfung und Zahlung erhältst du deinen Admission Letter.' },
+                  { step: '01', title: 'Bewerbung einreichen', desc: 'Fülle das vollständige Formular aus und lade deine Pflichtdokumente hoch. Wir melden uns innerhalb von 24 Stunden.' },
+                  { step: '02', title: 'KI-gestützte Vorprüfung', desc: 'Unser System prüft automatisch die Vollständigkeit deiner Unterlagen und bereitet die Staffbewertung vor.' },
+                  { step: '03', title: 'Portalzugang & Statusverfolgung', desc: 'Du erhältst dein persönliches Portal mit klarem Aufgaben-Dashboard und direktem Kontakt zum Team.' },
+                  { step: '04', title: 'Zulassung & Start', desc: 'Nach Prüfung und Zahlung erhältst du deinen Zulassungsbescheid und startest ins Studienkolleg.' },
                 ].map(item => (
                   <div key={item.step} className="flex gap-4 items-start" data-testid={`process-step-${item.step}`}>
                     <div className="w-8 h-8 bg-primary text-white rounded-sm flex items-center justify-center text-xs font-bold shrink-0">
@@ -184,9 +300,17 @@ export default function HomePage() {
                 Jetzt bewerben <ArrowRight size={16} />
               </Link>
             </div>
-            <div className="hidden lg:block">
-              <img src={LIBRARY_IMAGE} alt="Student studying"
-                className="rounded-sm object-cover w-full h-[400px] shadow-card-hover" />
+            {/* W2G Logo */}
+            <div className="hidden lg:flex flex-col items-center justify-center bg-slate-50 rounded-sm p-12 border border-slate-100">
+              <img
+                src={LOGO_W2G}
+                alt="Studienkolleg Aachen – Way2Germany"
+                className="max-w-xs w-full object-contain"
+                onError={e => { e.target.style.display = 'none'; }}
+              />
+              <p className="text-slate-500 text-sm text-center mt-6 max-w-xs">
+                Seit Jahren vertrauenswürdiger Partner für internationale Studierende auf dem Weg nach Deutschland.
+              </p>
             </div>
           </div>
         </div>
@@ -222,7 +346,7 @@ export default function HomePage() {
             Bereit, deinen Weg zu starten?
           </h2>
           <p className="text-blue-200 mb-8 max-w-xl mx-auto">
-            Bewirb dich jetzt und erhalte innerhalb von 24 Stunden deinen persönlichen Portalzugang.
+            Bewirb dich jetzt mit deinen Unterlagen und erhalte innerhalb von 24 Stunden eine Rückmeldung.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/apply" data-testid="bottom-cta-apply"

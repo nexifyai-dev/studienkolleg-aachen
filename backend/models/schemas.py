@@ -1,7 +1,7 @@
 """
 Shared Pydantic schemas and helper utilities.
 """
-from typing import Optional, Any
+from typing import Optional, List
 from pydantic import BaseModel
 
 
@@ -24,7 +24,6 @@ class RegisterRequest(BaseModel):
     password: str
     full_name: str
     invite_token: Optional[str] = None
-    # role is intentionally NOT user-settable; derived from invite or defaulted to applicant
 
 
 class InviteRequest(BaseModel):
@@ -67,17 +66,35 @@ class DocumentStatusUpdate(BaseModel):
 
 
 # ─── Lead schemas ─────────────────────────────────────────────────────────────
+class LeadDocumentUpload(BaseModel):
+    """Inline document upload within a lead submission."""
+    document_type: str  # language_certificate | highschool_diploma | passport | other
+    filename: str
+    content_type: str = "application/octet-stream"
+    file_data: Optional[str] = None  # base64 encoded
+
+
 class LeadIngest(BaseModel):
+    # Personal data
     full_name: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     email: str
     phone: Optional[str] = None
+    date_of_birth: Optional[str] = None
     country: Optional[str] = None
+    # Application specifics
     area_interest: str = "studienkolleg"
-    desired_start: Optional[str] = None
-    language_level: Optional[str] = None
+    course_type: Optional[str] = None       # M-Course | T-Course | W-Course | M/T-Course | Language Course
+    desired_start: Optional[str] = None     # Winter Semester 2026/27 etc.
+    combo_option: Optional[str] = None      # additional combo course
+    language_level: Optional[str] = None   # A1 | A2 | B1 | B2 | C1 | C2
+    degree_country: Optional[str] = None   # country where last degree was obtained
     notes: Optional[str] = None
     source: str = "website_form"
     referral_code: Optional[str] = None
+    # Inline document uploads (optional)
+    documents: Optional[List[LeadDocumentUpload]] = None
 
 
 # ─── Task schemas ─────────────────────────────────────────────────────────────

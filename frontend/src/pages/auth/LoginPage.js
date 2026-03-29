@@ -18,8 +18,10 @@ export default function LoginPage() {
     setError('');
     try {
       const user = await login(form.email, form.password);
-      const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff'];
-      navigate(staffRoles.includes(user.role) ? '/staff' : '/portal');
+      const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff', 'teacher'];
+      if (staffRoles.includes(user.role)) navigate('/staff');
+      else if (user.role === 'affiliate') navigate('/partner');
+      else navigate('/portal');
     } catch (err) {
       setError(formatApiError(err.response?.data?.detail) || 'Anmeldung fehlgeschlagen.');
     } finally {
@@ -77,7 +79,7 @@ export default function LoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-slate-400">
-          <Link to="/" className="hover:text-primary">← Zurück zur Website</Link>
+          <Link to="/" className="hover:text-primary">{t('auth.back_to_site')}</Link>
         </p>
       </div>
     </div>

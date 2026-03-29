@@ -409,6 +409,7 @@
   },
   "auth": {
     "login_title": "Sign In",
+    "back_to_site": "← Back to website",
     "email": "Email",
     "password": "Password",
     "login_btn": "Sign In",

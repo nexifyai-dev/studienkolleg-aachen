@@ -306,6 +306,7 @@
   },
   "auth": {
     "login_title": "Anmelden",
+    "back_to_site": "← Zurück zur Website",
     "email": "E-Mail",
     "password": "Passwort",
     "login_btn": "Anmelden",

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import apiClient from '../../lib/apiClient';
 import { useAuth } from '../../contexts/AuthContext';
+import { toast } from 'sonner';
 import {
   CheckSquare, Clock, AlertCircle, Plus, Loader2, CheckCircle, X,
   Paperclip, Download, FileText, MessageSquare, History, Send,
@@ -70,6 +71,7 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       if (Object.keys(payload).length > 0) {
         const r = await apiClient.put(`/api/tasks/${task.id}`, payload, { withCredentials: true });
         onUpdate(r.data);
+        toast.success('Aufgabe gespeichert');
       }
       setEditing(false);
     } catch {} finally { setSaving(false); }
@@ -79,7 +81,8 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
     try {
       const r = await apiClient.put(`/api/tasks/${task.id}`, { status }, { withCredentials: true });
       onUpdate(r.data);
-    } catch {}
+      toast.success(`Status: ${STATUS_LABELS[status]}`);
+    } catch { toast.error('Fehler beim Statuswechsel'); }
   };
 
   const addNote = async () => {
@@ -89,7 +92,8 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       await apiClient.post(`/api/tasks/${task.id}/notes`, { content: newNote.trim() }, { withCredentials: true });
       setNewNote('');
       await loadTab('notes');
-    } catch {} finally { setSendingNote(false); }
+      toast.success('Notiz hinzugefügt');
+    } catch { toast.error('Fehler'); } finally { setSendingNote(false); }
   };
 
   const uploadAttachment = async (file) => {
@@ -101,7 +105,8 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
         filename: file.name, content_type: file.type || 'application/octet-stream', file_data: b64,
       }, { withCredentials: true });
       await loadTab('attachments');
-    } catch {} finally { setUploading(false); }
+      toast.success('Datei hochgeladen');
+    } catch { toast.error('Upload fehlgeschlagen'); } finally { setUploading(false); }
   };
 
   const tabs = [

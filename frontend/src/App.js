@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { Toaster } from 'sonner';
 import './i18n';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ScrollToTop from './components/ScrollToTop';
@@ -85,6 +86,7 @@ export default function App() {
       <BrowserRouter>
         <ScrollToTop />
         <CookieBanner />
+        <Toaster position="top-right" richColors closeButton duration={3000} />
         <Routes>
           {/* Public */}
           <Route path="/" element={<HomePage />} />

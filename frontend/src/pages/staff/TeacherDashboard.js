@@ -97,8 +97,8 @@ export default function TeacherDashboard() {
         </div>
         <div className="bg-white border border-slate-200 rounded-sm p-5" data-testid="teacher-stat-enrolled">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-sm bg-green-50 flex items-center justify-center">
-              <CheckCircle size={20} className="text-green-600" />
+            <div className="w-10 h-10 rounded-sm bg-primary/8 flex items-center justify-center">
+              <CheckCircle size={20} className="text-primary" />
             </div>
             <div>
               <p className="text-2xl font-bold text-slate-800">
@@ -110,8 +110,8 @@ export default function TeacherDashboard() {
         </div>
         <div className="bg-white border border-slate-200 rounded-sm p-5" data-testid="teacher-stat-pending">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-sm bg-yellow-50 flex items-center justify-center">
-              <Clock size={20} className="text-yellow-600" />
+            <div className="w-10 h-10 rounded-sm bg-primary/8 flex items-center justify-center">
+              <Clock size={20} className="text-primary" />
             </div>
             <div>
               <p className="text-2xl font-bold text-slate-800">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
+import { toast } from 'sonner';
 import { STAGE_LABELS, STAGE_COLORS, formatDate } from '../../lib/utils';
 import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
@@ -193,7 +194,8 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
     try {
       await apiClient.post(`/api/applications/${appId}/accept-ai-suggestion`, { suggested_stage: suggestedStage }, { withCredentials: true });
       if (onStageAccepted) onStageAccepted(suggestedStage);
-    } catch {} finally { setAccepting(false); }
+      toast.success('KI-Vorschlag übernommen');
+    } catch { toast.error('Fehler bei der Übernahme'); } finally { setAccepting(false); }
   };
 
   const latest = screenings[0];

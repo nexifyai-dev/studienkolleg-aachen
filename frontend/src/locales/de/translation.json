@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "courses": "Kurse",
+    "services": "Services",
+    "contact": "Kontakt",
+    "apply": "Jetzt bewerben",
+    "login": "Anmelden",
+    "portal": "Zum Portal"
+  },
+  "hero": {
+    "badge": "Studienkolleg Aachen",
+    "headline": "Dein Weg nach Deutschland – strukturiert und digital begleitet.",
+    "sub": "Wir bereiten internationale Bewerber auf das Studium in Deutschland vor: von Sprachnachweisen bis zur Feststellungsprüfung – persönlich, klar und transparent.",
+    "cta_primary": "Jetzt bewerben",
+    "cta_secondary": "Kostenlose Beratung buchen",
+    "trust": "Über 50 Nationen. Persönliche Begleitung. Sicherer Dokumentenprozess."
+  },
+  "courses": {
+    "title": "Unsere Kurse",
+    "sub": "Alle Kurse bereiten auf die offizielle Feststellungsprüfung (FSP) vor.",
+    "t_course": {
+      "name": "T-Kurs",
+      "desc": "Für technische Studiengänge: Maschinenbau, Elektrotechnik, Mathematik, Physik."
+    },
+    "m_course": {
+      "name": "M-Kurs",
+      "desc": "Für Medizin, Zahnmedizin, Biologie, Biochemie, Pharmazie."
+    },
+    "w_course": {
+      "name": "W-Kurs",
+      "desc": "Für Wirtschaft, BWL, Informatik, Tourismus, Sozialwissenschaften, Jura."
+    },
+    "mt_course": {
+      "name": "M/T-Kurs",
+      "desc": "Kombiniert T- und M-Kurs für technische und medizinische Studiengänge."
+    }
+  },
+  "services": {
+    "title": "Unsere Services",
+    "visa": { "name": "Visaunterstützung", "desc": "Wir helfen bei allen notwendigen Visa-Dokumenten und Übersetzungen." },
+    "housing": { "name": "Unterkunft", "desc": "Möblierte Unterkunftslösungen in Aachen – bereit vor deiner Ankunft." },
+    "mentoring": { "name": "Mentoring & Begleitung", "desc": "Persönliche Berater, Check-ins und Orientierungsunterstützung." },
+    "documents": { "name": "Zeugnisanerkennung", "desc": "Wir begleiten den Anerkennungsprozess deiner Schulzeugnisse." },
+    "uni": { "name": "Uni-Bewerbungscoaching", "desc": "Von der Kurswahl bis zum uni-assist – wir begleiten dich." },
+    "insurance": { "name": "Krankenversicherung", "desc": "Vollversicherung, die Visa- und Hochschulanforderungen erfüllt." }
+  },
+  "apply": {
+    "title": "Jetzt bewerben",
+    "sub": "Starte deinen Weg. Wir melden uns innerhalb von 24 Stunden.",
+    "name": "Vollständiger Name",
+    "email": "E-Mail-Adresse",
+    "phone": "Telefon / WhatsApp",
+    "country": "Herkunftsland",
+    "area": "Gewünschter Bereich",
+    "start": "Gewünschter Starttermin",
+    "level": "Deutschkenntnisse",
+    "submit": "Bewerbung absenden",
+    "success": "Deine Bewerbung wurde eingereicht. Wir kontaktieren dich bald.",
+    "privacy": "Mit dem Absenden stimmst du unserer Datenschutzerklärung zu."
+  },
+  "trust": {
+    "title": "Warum Studienkolleg Aachen?",
+    "items": {
+      "recognized": { "title": "Anerkannter Weg", "desc": "Offizielle Vorbereitung auf die Feststellungsprüfung." },
+      "allinone": { "title": "Alles aus einer Hand", "desc": "Sprache. Visa. Unterkunft. Uni-Bewerbung. Du lernst – wir kümmern uns." },
+      "community": { "title": "Internationale Community", "desc": "Studierende aus über 50 Nationen. Interkulturelles Coaching." },
+      "central": { "title": "Zentral in Aachen", "desc": "Das einzige Studienkolleg im Herzen von Aachen." }
+    }
+  },
+  "faq": {
+    "title": "Häufige Fragen",
+    "items": [
+      { "q": "Benötige ich Deutschkenntnisse auf B1-Niveau?", "a": "Für den direkten Einstieg ins Studienkolleg ist B1 erforderlich. Bei geringerem Niveau bieten wir vorgelagerte Sprachkurse an." },
+      { "q": "Kann ich die FSP garantiert ablegen?", "a": "Nein. Die finale Entscheidung über die FSP-Berechtigung trifft die zuständige Bezirksregierung. Wir bereiten dich optimal vor und begleiten deinen Antrag." },
+      { "q": "Was passiert nach meiner Bewerbung?", "a": "Nach Eingang deiner Bewerbung meldet sich unser Team innerhalb von 24 Stunden. Du erhältst Zugang zu deinem persönlichen Portal." },
+      { "q": "Helft ihr beim Visum?", "a": "Ja. Wir unterstützen bei der Vorbereitung aller notwendigen Visa-Unterlagen und arbeiten mit verlässlichen Partnern zusammen." },
+      { "q": "Gibt es Online-Kurse?", "a": "Im ersten Semester ist ein Teilzeit-Online-Anteil möglich. Die Details hängen von deinem Programm ab." }
+    ]
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "address": "Theaterstraße 30-32, 52062 Aachen",
+    "phone": "+49 241 990 322 92",
+    "email": "info@stk-aachen.de",
+    "legal": "Impressum",
+    "privacy": "Datenschutz",
+    "agb": "AGB",
+    "note": "Adresse und Kontaktdaten: Offen / nicht final verifiziert – Verwendung mit Vorbehalt."
+  },
+  "auth": {
+    "login_title": "Anmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "login_btn": "Anmelden",
+    "forgot_pw": "Passwort vergessen?",
+    "no_account": "Noch kein Konto?",
+    "register_link": "Registrieren",
+    "register_title": "Konto erstellen",
+    "name": "Vollständiger Name",
+    "register_btn": "Registrieren",
+    "have_account": "Bereits ein Konto?",
+    "login_link": "Anmelden"
+  },
+  "portal": {
+    "dashboard": "Dashboard",
+    "journey": "Bewerbungsstatus",
+    "documents": "Dokumente",
+    "messages": "Nachrichten",
+    "financials": "Rechnungen",
+    "settings": "Einstellungen",
+    "welcome": "Willkommen zurück",
+    "next_step": "Dein nächster Schritt",
+    "no_tasks": "Aktuell keine offene Aufgabe.",
+    "no_docs": "Noch keine Dokumente hochgeladen.",
+    "upload_doc": "Dokument hochladen",
+    "logout": "Abmelden"
+  },
+  "staff": {
+    "kanban": "Kanban Board",
+    "applicants": "Bewerber",
+    "documents": "Dokumente",
+    "tasks": "Aufgaben",
+    "reports": "Berichte"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "Nutzer",
+    "workspaces": "Bereiche",
+    "audit": "Audit Logs"
+  }
+}

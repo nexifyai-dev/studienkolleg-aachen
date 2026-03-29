@@ -1,0 +1,67 @@
+{
+  "summary": "First full test run of W2G Platform MVP. All 19 features tested. Fixed one critical backend bug (MongoDB mixed projection in /api/applications). All backend tests now pass (11/11). All frontend flows verified via Playwright.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "DocumentsPage (/portal/documents)",
+        "issue": "No upload button visible when applicant has no active application. Users who register but haven't submitted an apply form cannot upload documents.",
+        "selector": "/portal/documents",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "Portal Dashboard",
+        "issue": "Dashboard main area appears mostly empty for newly registered users (no application). 'Noch keine Bewerbung' state works but the page content area is very sparse.",
+        "selector": "[data-testid='applicant-dashboard']",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Apply form footer",
+        "issues": ["Footer banner shows '[OFFEN] Kontaktdaten und Adresse noch nicht abschließend verifiziert. Verwendung unter Vorbehalt.' - placeholder content needs replacing with real data"]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_w2g_platform.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Replace footer placeholder '[OFFEN]' text with real address/contact data",
+    "Consider showing upload button on /portal/documents even when no application exists (or link to /apply)",
+    "Consider adding a confirmation field for password in register form"
+  ],
+  "critical_code_review_comments": [
+    "FIXED: Mixed MongoDB projection in list_applications endpoint (line 602): {'password_hash': 0, 'full_name': 1, ...} caused 500 error. Fixed to use inclusion-only projection.",
+    "CORS: allow_origins only includes FRONTEND_URL and localhost:3000 - if deployed on production domain, CORS may fail. Consider making this more flexible.",
+    "Token expiry: Access tokens expire in 60 min. No silent refresh mechanism on frontend detected - users will be logged out without notice.",
+    "Lead ingest: Creates user record without password - these users cannot log in. If a user submits the apply form and then tries to register with same email, they get 409 conflict.",
+    "server.py is 856 lines - approaching the 700-line threshold for splitting"
+  ],
+  "updated_files": [
+    "/app/backend/server.py (line 602 - fixed mixed MongoDB projection)"
+  ],
+  "success_rate": {
+    "backend": "100% (11/11 tests passing)",
+    "frontend": "95% (all flows working, minor UX issues noted)"
+  },
+  "test_credentials": {
+    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "test_credentials_file": "Not found at /app/memory/test_credentials.md"
+  },
+  "seed_data_creation": "Created test applicant and lead users during testing (test_applicant_*, test_lead_*, portal_test_* emails)",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All 19 MVP features tested and working. The critical bug was a MongoDB mixed projection error in GET /api/applications (fixed). Backend 100% passing. Key flows: Homepage/Lang switch OK, Apply form OK, Admin login -> /staff OK, Staff dashboard/Kanban/Admin panel OK, Applicant registration -> /portal OK, Portal journey/documents OK, Logout OK. Minor: Documents upload button not shown without an application.",
+  "rca_of_fixed_issue": {
+    "bug": "GET /api/applications returned HTTP 500",
+    "root_cause": "MongoDB does not allow mixing inclusion (1) and exclusion (0) in the same projection. In list_applications (server.py line ~602), the query used {'password_hash': 0, 'full_name': 1, 'email': 1, 'phone': 1, 'country': 1} which mixes both.",
+    "fix": "Changed to inclusion-only projection: {'full_name': 1, 'email': 1, 'phone': 1, 'country': 1}",
+    "reproduction": "Login as admin, call GET /api/applications - returned 500 error"
+  }
+}

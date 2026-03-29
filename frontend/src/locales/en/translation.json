@@ -1,0 +1,98 @@
+{
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "services": "Services",
+    "contact": "Contact",
+    "apply": "Apply Now",
+    "login": "Sign In",
+    "portal": "Go to Portal"
+  },
+  "hero": {
+    "badge": "Studienkolleg Aachen",
+    "headline": "Your Path to Germany – structured and digitally guided.",
+    "sub": "We prepare international students for university in Germany: from language certificates to the Feststellungsprüfung – personal, clear and transparent.",
+    "cta_primary": "Apply Now",
+    "cta_secondary": "Book Free Consultation",
+    "trust": "50+ nations. Personal guidance. Secure document process."
+  },
+  "courses": {
+    "title": "Our Courses",
+    "sub": "All courses prepare for the official Feststellungsprüfung (FSP).",
+    "t_course": { "name": "T-Course", "desc": "For technical programs: Engineering, Mathematics, Physics." },
+    "m_course": { "name": "M-Course", "desc": "For Medicine, Dentistry, Biology, Biochemistry, Pharmaceutics." },
+    "w_course": { "name": "W-Course", "desc": "For Economics, Business, Informatics, Law, Social Sciences." },
+    "mt_course": { "name": "M/T-Course", "desc": "Combines T and M courses for both technical and medical programs." }
+  },
+  "trust": {
+    "title": "Why Studienkolleg Aachen?",
+    "items": {
+      "recognized": { "title": "Recognized Pathway", "desc": "Official preparation for the Feststellungsprüfung (FSP)." },
+      "allinone": { "title": "All-in-One Support", "desc": "Language. Visa. Housing. University application. You study – we handle the rest." },
+      "community": { "title": "International Community", "desc": "Students from 50+ nations. Intercultural coaching." },
+      "central": { "title": "Central Location", "desc": "The only Studienkolleg in the heart of Aachen." }
+    }
+  },
+  "apply": {
+    "title": "Apply Now",
+    "sub": "Start your journey. We respond within 24 hours.",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone / WhatsApp",
+    "country": "Country of Origin",
+    "area": "Desired Area",
+    "start": "Desired Start Date",
+    "level": "German Language Level",
+    "submit": "Submit Application",
+    "success": "Your application has been submitted. We will contact you soon.",
+    "privacy": "By submitting, you agree to our privacy policy."
+  },
+  "auth": {
+    "login_title": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "login_btn": "Sign In",
+    "forgot_pw": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "register_link": "Register",
+    "register_title": "Create Account",
+    "name": "Full Name",
+    "register_btn": "Register",
+    "have_account": "Already have an account?",
+    "login_link": "Sign In"
+  },
+  "portal": {
+    "dashboard": "Dashboard",
+    "journey": "Application Status",
+    "documents": "Documents",
+    "messages": "Messages",
+    "financials": "Financials",
+    "settings": "Settings",
+    "welcome": "Welcome back",
+    "next_step": "Your next step",
+    "no_tasks": "No open tasks right now.",
+    "no_docs": "No documents uploaded yet.",
+    "upload_doc": "Upload Document",
+    "logout": "Sign Out"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      { "q": "Do I need German at B1 level?", "a": "For direct enrollment, B1 is required. If your level is lower, we offer preparatory language courses." },
+      { "q": "Is the FSP exam guaranteed?", "a": "No. The final decision is made by the responsible regional authority. We prepare you and support your application." },
+      { "q": "What happens after I apply?", "a": "Our team contacts you within 24 hours and you get access to your personal portal." },
+      { "q": "Do you help with the visa?", "a": "Yes. We support all necessary visa documentation in collaboration with reliable partners." },
+      { "q": "Are there online courses?", "a": "Partial online attendance is possible in the first semester for some programs. Details depend on your chosen track." }
+    ]
+  },
+  "footer": {
+    "contact": "Contact",
+    "address": "Theaterstraße 30-32, 52062 Aachen",
+    "phone": "+49 241 990 322 92",
+    "email": "info@stk-aachen.de",
+    "legal": "Legal Notice",
+    "privacy": "Privacy Policy",
+    "agb": "Terms",
+    "note": "[OPEN] Address and contact data not yet fully verified."
+  }
+}

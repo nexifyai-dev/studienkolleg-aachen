@@ -186,3 +186,23 @@ class UserUpdate(BaseModel):
     # Admin-only fields (enforced in route):
     role: Optional[str] = None
     active: Optional[bool] = None
+
+
+# ─── Invoice schemas ──────────────────────────────────────────────────────────
+class InvoiceCreate(BaseModel):
+    applicant_id: str
+    application_id: Optional[str] = None
+    description: str
+    amount: float
+    currency: str = "EUR"
+    due_date: str  # ISO date string
+    items: Optional[List[dict]] = None  # [{description, quantity, unit_price}]
+
+
+class InvoiceUpdate(BaseModel):
+    status: Optional[str] = None  # draft | sent | paid | overdue | cancelled
+    description: Optional[str] = None
+    amount: Optional[float] = None
+    due_date: Optional[str] = None
+    notes: Optional[str] = None
+    paid_at: Optional[str] = None

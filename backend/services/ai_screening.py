@@ -367,6 +367,9 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
         "ai_model": ai_model_used,
         "ai_tokens_used": ai_tokens_used,
         "local_checks": local_summary,
+        # Verbindliche Trennung für Audit und Betriebslogik:
+        # 1) completeness (Dokumentlage), 2) formal_precheck (Regelprüfung),
+        # 3) ai_recommendation (nicht bindend), 4) staff_decision (final).
         "screening_breakdown": {
             "completeness": {
                 "status": "complete" if completeness["complete"] else "incomplete",

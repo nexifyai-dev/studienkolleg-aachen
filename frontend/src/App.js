@@ -52,6 +52,13 @@ import PartnerReferralsPage from './pages/partner/PartnerReferralsPage';
 import PartnerLinkPage from './pages/partner/PartnerLinkPage';
 import PartnerSettingsPage from './pages/partner/PartnerSettingsPage';
 
+/**
+ * Routing Source-of-Truth (Frontend):
+ * - Public, Applicant, Staff/Teacher, Admin und Partner bleiben in einer
+ *   konsistenten Route-Hierarchie.
+ * - Rollenbasierte Redirects verhindern, dass Nutzer im falschen Portal landen.
+ * - Änderungen an Portal-Entrypoints müssen mit Rollen-/Doku-Update erfolgen.
+ */
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;

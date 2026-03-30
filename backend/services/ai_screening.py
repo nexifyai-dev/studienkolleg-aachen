@@ -26,7 +26,9 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-# Anabin-Referenzwissen (vereinfacht)
+# Lokale Referenzbasis (kein Live-Anabin-Call)
+# Hinweis: Diese Matrix ist eine dokumentierte Offline-Heuristik zur Vorprüfung.
+# Sie ersetzt keine offizielle, tagesaktuelle Anerkennungsprüfung.
 ANABIN_COUNTRY_HINTS = {
     "h_plus": [
         "deutschland", "österreich", "schweiz", "usa", "kanada", "australien",
@@ -53,9 +55,37 @@ ANABIN_COUNTRY_HINTS = {
     ],
 }
 
-COURSE_LANGUAGE_REQUIREMENTS = {
-    "M-Course": "B1", "T-Course": "B1", "W-Course": "B1",
-    "M/T-Course": "B1", "Language Course": "A1",
+COURSE_RULE_MATRIX = {
+    "M-Course": {
+        "language_min": "B1",
+        "required_docs": ["language_certificate", "highschool_diploma", "passport"],
+        "preferred_docs": ["transcript", "university_record"],
+        "focus": "mathematisch-naturwissenschaftliches Profil",
+    },
+    "T-Course": {
+        "language_min": "B1",
+        "required_docs": ["language_certificate", "highschool_diploma", "passport"],
+        "preferred_docs": ["transcript", "university_record"],
+        "focus": "technisch-naturwissenschaftliches Profil",
+    },
+    "W-Course": {
+        "language_min": "B1",
+        "required_docs": ["language_certificate", "highschool_diploma", "passport"],
+        "preferred_docs": ["transcript", "university_record"],
+        "focus": "wirtschaftswissenschaftliches Profil",
+    },
+    "M/T-Course": {
+        "language_min": "B1",
+        "required_docs": ["language_certificate", "highschool_diploma", "passport"],
+        "preferred_docs": ["transcript", "university_record"],
+        "focus": "hybrides M/T-Profil",
+    },
+    "Language Course": {
+        "language_min": "A1",
+        "required_docs": ["passport"],
+        "preferred_docs": ["language_certificate", "highschool_diploma"],
+        "focus": "Spracherwerb vor Fachkurs",
+    },
 }
 
 CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
@@ -66,6 +96,21 @@ REQUIRED_DOC_LABELS = {
     "highschool_diploma": "Schulzeugnis / Hochschulzugangsberechtigung",
     "passport": "Reisepass / Personalausweis",
 }
+
+
+def _normalize_level(level: Optional[str]) -> Optional[str]:
+    if not level:
+        return None
+    clean = str(level).strip().upper()
+    return clean if clean in CEFR_LEVELS else None
+
+
+def _doc_status_bucket(doc_status: str) -> str:
+    if doc_status in ("approved", "in_review", "uploaded"):
+        return "present"
+    if doc_status in ("rejected", "invalid"):
+        return "invalid"
+    return "unknown"
 
 
 def _get_anabin_category(country: Optional[str]) -> dict:
@@ -82,33 +127,110 @@ def _get_anabin_category(country: Optional[str]) -> dict:
 
 
 def _check_language_level(course_type: Optional[str], language_level: Optional[str]) -> dict:
-    if not course_type or not language_level:
-        return {"ok": False, "note": "Kurstyp oder Sprachniveau nicht angegeben."}
-    required = COURSE_LANGUAGE_REQUIREMENTS.get(course_type)
+    normalized = _normalize_level(language_level)
+    if not course_type:
+        return {"ok": False, "note": "Kurstyp nicht angegeben.", "required": None, "actual": normalized}
+    required = (COURSE_RULE_MATRIX.get(course_type) or {}).get("language_min")
     if not required:
-        return {"ok": True, "note": "Kurstyp unbekannt – manuelle Prüfung."}
+        return {"ok": False, "note": "Kurstyp unbekannt – manuelle Prüfung.", "required": None, "actual": normalized}
+    if not normalized:
+        return {"ok": False, "note": "Sprachniveau fehlt oder ungültig.", "required": required, "actual": language_level}
     try:
         required_idx = CEFR_LEVELS.index(required)
-        actual_idx = CEFR_LEVELS.index(language_level)
+        actual_idx = CEFR_LEVELS.index(normalized)
         if actual_idx >= required_idx:
-            return {"ok": True, "note": f"Sprachniveau {language_level} erfüllt Mindestanforderung {required} für {course_type}."}
-        else:
-            return {"ok": False, "note": f"Sprachniveau {language_level} unzureichend für {course_type} (Mindest: {required}). Vorgelagerter Sprachkurs empfohlen."}
+            return {"ok": True, "note": f"Sprachniveau {normalized} erfüllt Mindestanforderung {required} für {course_type}.", "required": required, "actual": normalized}
+        return {
+            "ok": False,
+            "note": f"Sprachniveau {normalized} unzureichend für {course_type} (Mindest: {required}).",
+            "required": required,
+            "actual": normalized,
+        }
     except ValueError:
-        return {"ok": False, "note": f"Ungültiges Sprachniveau '{language_level}' – manuelle Prüfung."}
+        return {"ok": False, "note": f"Ungültiges Sprachniveau '{language_level}' – manuelle Prüfung.", "required": required, "actual": language_level}
 
 
-def _check_completeness(docs: list) -> dict:
-    uploaded_types = {d.get("document_type") for d in docs if d.get("status") not in ("rejected",)}
-    missing = [t for t in REQUIRED_DOCUMENT_TYPES if t not in uploaded_types]
-    present = [t for t in REQUIRED_DOCUMENT_TYPES if t in uploaded_types]
+def _check_completeness(docs: list, course_type: Optional[str]) -> dict:
+    course_rules = COURSE_RULE_MATRIX.get(course_type, {})
+    required_types = course_rules.get("required_docs", REQUIRED_DOCUMENT_TYPES)
+    uploaded_types = {}
+    evidence = []
+    for d in docs:
+        doc_type = d.get("document_type")
+        if not doc_type:
+            continue
+        status_bucket = _doc_status_bucket(d.get("status"))
+        uploaded_types.setdefault(doc_type, set()).add(status_bucket)
+        evidence.append({
+            "document_type": doc_type,
+            "status": d.get("status", "unknown"),
+            "bucket": status_bucket,
+            "source": "uploaded_document_metadata",
+        })
+
+    missing = [t for t in required_types if t not in uploaded_types or "present" not in uploaded_types.get(t, set())]
+    present = [t for t in required_types if t in uploaded_types and "present" in uploaded_types.get(t, set())]
+    invalid = [t for t, states in uploaded_types.items() if "invalid" in states]
+    reasons = (
+        ["Alle Pflichtdokumente für diesen Kurstyp liegen mit prüfbarem Status vor."]
+        if not missing
+        else [f"Es fehlen Pflichtdokumente: {', '.join(REQUIRED_DOC_LABELS.get(t, t) for t in missing)}."]
+    )
     return {
         "complete": len(missing) == 0,
         "missing_types": missing,
         "missing_labels": [REQUIRED_DOC_LABELS[t] for t in missing],
         "present_labels": [REQUIRED_DOC_LABELS[t] for t in present],
-        "total_required": len(REQUIRED_DOCUMENT_TYPES),
+        "invalid_types": invalid,
+        "required_types": required_types,
+        "total_required": len(required_types),
         "total_present": len(present),
+        "reasons": reasons,
+        "evidence": evidence,
+    }
+
+
+def _build_formal_precheck(completeness: dict, language_check: dict, anabin_info: dict, application: dict) -> dict:
+    evidence = [
+        {"criterion": "degree_country", "value": application.get("degree_country"), "source": "application_form"},
+        {"criterion": "course_type", "value": application.get("course_type"), "source": "application_form"},
+        {"criterion": "language_level", "value": application.get("language_level"), "source": "application_form"},
+        {"criterion": "anabin_category", "value": anabin_info["category"], "source": "local_rulebook_v1"},
+    ]
+    risks = []
+    open_points = []
+    reasons = []
+
+    if not language_check["ok"]:
+        risks.append("Sprachniveau unterschreitet Mindestanforderung oder ist unklar.")
+        open_points.append("Valides Sprachzertifikat mit CEFR-Level erforderlich.")
+    else:
+        reasons.append("Sprachniveau erfüllt die Mindestanforderung.")
+
+    if anabin_info["category"] == "D":
+        risks.append("Herkunftsabschluss mit erhöhter Anerkennungsunsicherheit (D-Kategorie).")
+        open_points.append("Manuelle Detailprüfung inkl. externer Referenzabgleich erforderlich.")
+    elif anabin_info["category"] in ("prüfen", "unbekannt"):
+        open_points.append("Herkunftsabschluss ist in lokaler Matrix nicht eindeutig zuordenbar.")
+    else:
+        reasons.append(f"Herkunftsland liegt in lokaler Kategorie {anabin_info['category']}.")
+
+    if completeness["invalid_types"]:
+        open_points.append("Mindestens ein Dokument liegt in abgelehntem/ungültigem Status vor.")
+
+    if risks:
+        status = "critical"
+    elif open_points:
+        status = "unclear"
+    else:
+        status = "plausible"
+
+    return {
+        "status": status,
+        "reasons": reasons or ["Keine hinreichend belastbaren Positivkriterien vorhanden."],
+        "risks": risks,
+        "open_points": open_points,
+        "evidence": evidence,
     }
 
 
@@ -125,17 +247,26 @@ async def run_ai_screening(
     from services.deepseek_provider import chat_completion, is_enabled
 
     # Lokale regelbasierte Checks
-    completeness = _check_completeness(docs)
+    completeness = _check_completeness(docs, application.get("course_type"))
     anabin_info = _get_anabin_category(application.get("degree_country"))
     language_check = _check_language_level(
         application.get("course_type"),
         application.get("language_level"),
     )
 
+    formal_precheck = _build_formal_precheck(completeness, language_check, anabin_info, application)
+
     local_summary = {
         "completeness": completeness,
         "anabin_assessment": anabin_info,
         "language_level_check": language_check,
+        "formal_precheck": formal_precheck,
+        "reference_basis": {
+            "mode": "local_rulebook",
+            "version": "screening_rules_v1",
+            "live_reference_connected": False,
+            "note": "Keine Live-Anbindung an externe Referenzsysteme; Ergebnisse sind Vorprüfungshinweise.",
+        },
     }
 
     ai_report = None
@@ -221,10 +352,11 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
     else:
         ai_report = "KI-Prüfung nicht verfügbar (DEEPSEEK_API_KEY nicht konfiguriert). Lokale Vorprüfung abgeschlossen."
 
-    suggested_stage = _suggest_stage(completeness, language_check, anabin_info)
+    suggested_stage = _suggest_stage(completeness, formal_precheck)
 
-    precheck_status = "ok" if completeness["complete"] and language_check["ok"] else "action_required"
-    formal_precheck_status = "ok" if language_check["ok"] and anabin_info["category"] != "D" else "manual_review_required"
+    precheck_status = "ok" if completeness["complete"] and formal_precheck["status"] == "plausible" else "action_required"
+    formal_precheck_status = formal_precheck["status"]
+    next_actions = _suggest_next_actions(completeness, formal_precheck, suggested_stage)
 
     return {
         "screening_id": str(uuid.uuid4()),
@@ -240,21 +372,32 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
                 "status": "complete" if completeness["complete"] else "incomplete",
                 "missing_documents": completeness["missing_labels"],
                 "present_documents": completeness["present_labels"],
+                "reasons": completeness["reasons"],
+                "evidence": completeness["evidence"],
             },
             "formal_precheck": {
                 "status": formal_precheck_status,
                 "language_level_ok": language_check["ok"],
                 "anabin_category": anabin_info["category"],
                 "notes": [language_check["note"], anabin_info["label"]],
+                "reasons": formal_precheck["reasons"],
+                "risks": formal_precheck["risks"],
+                "open_points": formal_precheck["open_points"],
+                "evidence": formal_precheck["evidence"],
             },
             "ai_recommendation": {
                 "suggested_stage": suggested_stage,
                 "status": "available" if ai_report else "unavailable",
                 "note": "Nur Empfehlung – keine finale Zulassungsentscheidung.",
+                "next_actions": next_actions,
             },
             "staff_decision": {
                 "status": "pending",
                 "note": "Finale Entscheidung erfolgt ausschließlich durch Staff.",
+                "required_confirmation": [
+                    "Manuelle Prüfung aller kritischen/unklaren Punkte",
+                    "Explizite Staff-Freigabe des finalen Stages",
+                ],
             },
         },
         "precheck_status": precheck_status,
@@ -265,17 +408,33 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
         "missing_documents": completeness["missing_labels"],
         "anabin_category": anabin_info["category"],
         "language_level_ok": language_check["ok"],
+        "next_actions": next_actions,
+        "reference_basis": local_summary["reference_basis"],
         "decision_note": "KI-Vorprüfung via DeepSeek. Keine bindende Entscheidung. Staff-Review erforderlich.",
     }
 
 
-def _suggest_stage(completeness: dict, language_check: dict, anabin_info: dict) -> str:
+def _suggest_stage(completeness: dict, formal_precheck: dict) -> str:
     if not completeness["complete"]:
         return "pending_docs"
-    if not language_check["ok"]:
+    if formal_precheck["status"] == "critical":
+        return "on_hold"
+    if formal_precheck["status"] == "unclear":
         return "in_review"
-    if anabin_info["category"] == "D":
-        return "in_review"
-    if anabin_info["category"] in ("H", "H+"):
-        return "in_review"
-    return "in_review"
+    return "interview_scheduled"
+
+
+def _suggest_next_actions(completeness: dict, formal_precheck: dict, suggested_stage: str) -> list:
+    actions = []
+    if not completeness["complete"]:
+        actions.append("Fehlende Pflichtunterlagen beim Bewerber anfordern.")
+    if completeness["invalid_types"]:
+        actions.append("Ungültige/abgelehnte Dokumente durch neue Nachweise ersetzen lassen.")
+    if formal_precheck["status"] == "critical":
+        actions.append("Fall an erfahrenes Staff-Mitglied zur vertieften Anerkennungsprüfung eskalieren.")
+    if formal_precheck["status"] in ("critical", "unclear"):
+        actions.append("Externe Referenzprüfung (z. B. Anabin) manuell durchführen und dokumentieren.")
+    if formal_precheck["status"] == "plausible":
+        actions.append("Interview oder Beratungsgespräch terminieren und Ergebnis dokumentieren.")
+    actions.append(f"Staff entscheidet final über Stage-Wechsel ({suggested_stage}).")
+    return actions

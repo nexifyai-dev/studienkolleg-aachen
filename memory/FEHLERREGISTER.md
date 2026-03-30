@@ -94,3 +94,14 @@ Deutsche typografische Anführungszeichen (z.B. „…") dürfen NICHT in JSON-D
 - **workflow_rule**: Stage-Übernahme aus KI-Empfehlung nur für explizit erlaubte, nicht-zulassungsentscheidende Stages zulassen.
 - **release_state**: DeepSeek-Migration und CRM-Basisfunktionen (Kanban/Tasks Suche+Selektion+Bulk) integriert, Build-Setup lokal unvollständig.
 - **test_result**: `python -m compileall backend` bestanden; Frontend-Build wegen fehlendem `react-scripts` blockiert.
+
+## Projekt-Memory-Update (2026-03-30, Lauf 2)
+
+- **error**: Frontend-Dependency-Drift (`package.json` vs. `package-lock.json`) plus inkompatible Peer-Range (`i18next@26` + `react-i18next@17` gegen CRA/TypeScript-Stack) blockierte reproduzierbare Installationen.
+- **fix**: i18n-Pakete auf CRA-kompatible Versionen stabilisiert (`i18next@23.16.8`, `react-i18next@13.5.0`) und Lockfile neu aufgebaut.
+- **error**: `react-router-dom@7` brach Jest/CJS-Testlauf in CRA-Umgebung.
+- **fix**: Router auf `react-router-dom@6.30.2` gesetzt; Test- und Build-Pipeline wieder lauffähig.
+- **error**: Legacy `App.test.js` erwartete "learn react"; nicht mehr zur tatsächlichen UI passend.
+- **fix**: Test auf reale Startoberfläche (`nav-logo`) umgestellt und `window.scrollTo` in `setupTests.js` gemockt.
+- **decision**: Screening-Vorprüfung bleibt strikt nicht-bindend; lokale Regelbasis explizit als `local_rulebook` markiert, ohne Live-Referenzbehauptung.
+- **fix**: Screening um Evidenz-, Risiko-, Open-Point- und Next-Action-Felder erweitert; differenzierte Stage-Vorschläge (`pending_docs` / `in_review` / `on_hold` / `interview_scheduled`) statt pauschalem `in_review`.

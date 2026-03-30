@@ -16,7 +16,7 @@ import os
 import base64
 from datetime import datetime, timedelta
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/') or "https://ai-screening-staff.preview.emergentagent.com"
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/') or "https://aachen-checkout.preview.emergentagent.com"
 
 # Test credentials
 STAFF_EMAIL = "staff@studienkolleg-aachen.de"

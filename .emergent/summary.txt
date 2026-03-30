@@ -1,156 +1,143 @@
 <analysis>**original_problem_statement**: 
-Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany.
-**Current Phase (3.7k - UX/Portal Consistency & Applicant Flow Finalization):**
-1. **Messaging UI:** Visually correct the messages view to be flush top/bottom, fully responsive, with logical input area anchoring.
-2. **i18n (DE/EN):** Fully translate the applicant portal (remove hardcoded German texts).
-3. **AI Screening (Staff):** Make the KI-Prüfung starten button more prominent. Make the AI suggestion explicitly actionable (e.g., clicking to accept the suggestion triggers a status change with an audit trail).
-4. **Applicant Portal-First Flow:** Finalize the application->registration->portal flow (empty states, logical first steps, portal as the primary communication channel).
-5. **Operability:** Ensure tasks, messages, and AI tools are fully operable, not just visible.
-6. **Github Push:** Push the final state to the specific Nexify repository.
+Baue eine produktionsreife, skalierbare, mehrmandantenfähige Plattform für Studienkolleg Aachen / Way2Germany. 
+Aktuelle Anforderung: Integration des bereitgestellten NSCall-API-Keys, Implementierung der Rechnungs-Erstellung (Invoicing) und Vorbereitung der Stripe-Zahlungsintegration (sodass diese über die Eingabe eines Stripe-API-Keys im Admin-Bereich aktiviert wird). Abschließender Final-Check für den Go-Live.
 
 **User's preferred language**: **German** (Deutsch). INSTRUCT the next agent to respond in **German** ONLY.
 
 **what currently exists?** 
-Phases 3.7i and 3.7j were successfully completed and tested (100% pass in ). The application now features a unified top-header navigation across all portals, file upload capabilities in messaging, coupled application and registration flows, and N+1 query/CORS fixes for deployment. However, the applicant portal still contains hardcoded German strings, the Messaging UI layout is visually disjointed, and the Staff AI screening panel has passive suggestions instead of actionable ones.
+Das System hat Phase 3.7k und 3.7l (Härtung, UI-Konsistenz, SEO, Bugfixes) erfolgreich abgeschlossen und 100% E2E-Tests bestanden. Das Bewerberportal ist vollständig zweisprachig (DE/EN), das Aufgaben-Modul ist nun voll operativ (mit Datei-Anhängen, Notizen, Historie), SEO via  ist integriert, und es gibt ein systemweites CI-Blau-Button-Design. Toast-Notifications () sind aktiv. Ein kritischer Login-Bug im Deployment (CORS/Cookie) wurde durch Umstellung auf relative API-URLs behoben. 
 
 **Last working item**: 
-- Last item agent was working: Investigating the applicant portal for hardcoded German strings. The agent executed a  in  and found un-translated text in , , and  to prepare for full i18n integration.
+- Last item agent was working: Der Agent hat im letzten Schritt einen langen API-Key/JWT-Token vom User für NSCall erhalten und den Auftrag bekommen, diesen zu integrieren. Zudem soll die Rechnungserstellung (Invoices) implementiert und Stripe so vorbereitet werden, dass es via Admin-Eingabe eines API-Keys aktiviert werden kann. Der Agent war gerade dabei, die  und  zu lesen.
 - Status: IN PROGRESS
 - Agent Testing Done: N
-- Which testing method agent to use? Both (Frontend screenshot testing for Messaging UI layout; backend/frontend testing agent for the actionable AI screening feature).
+- Which testing method agent to use? Backend testing agent (für Rechnungs-Logik und Stripe) sowie Frontend Screenshot Testing für Admin-Einstellungen.
 - User Testing Done: N
 
 **All Pending/In progress Issue list**: 
-  Issue 1: Applicant Portal is not fully bilingual (P0)
-     - Attempted fixes: Agent used  to identify hardcoded strings but hasn't updated files yet.
-     - Next debug checklist: Replace hardcoded strings in  (specifically , , ) with  function calls and add keys to  and .
-     - Why fix this issue and what will be achieved with the fix?: Fulfills the requirement for a fully DE/EN supported portal.
+  Issue 1: NSCall Key Integration & Payment/Invoice Modul (P0)
+     - Attempted fixes: Agent hat begonnen, die Environment-Dateien zu sichten.
+     - Next debug checklist: 
+       1. Den vom User bereitgestellten Token (beginnt mit ) sicher im Backend ( oder Admin-DB) für NSCall hinterlegen.
+       2. Logik zur Rechnungserstellung (PDF oder DB-Eintrag) im Backend ( o.ä.) und Frontend () implementieren.
+       3. Admin-Interface ( oder ) erweitern, um einen Stripe API-Key sicher in der DB zu speichern.
+       4. Payment-Modul so vorbereiten, dass es bei Vorhandensein des Stripe-Keys Checkouts generieren kann.
+     - Why fix this issue and what will be achieved with the fix?: Dies ist der letzte harte Blocker, den der User vor dem endgültigen Go-Live gefordert hat.
      - Status: IN PROGRESS
-     - Is recurring issue? N
-     - Should Test frontend/backend/both after fix?: Frontend
-     - Blocked on other issue: None
-
-  Issue 2: Messaging UI layout issues (P0)
-     - Attempted fixes: None yet.
-     - Next debug checklist: Modify  (and Staff counterpart if needed) to ensure the chat window is flush top/bottom, visually balanced, and the input area is anchored at the bottom without dead space. Test on mobile and desktop views.
-     - Why fix this issue and what will be achieved with the fix?: Fixes visual disjointedness flagged by the user.
-     - Status: NOT STARTED
-     - Is recurring issue? Y (UI inconsistencies)
-     - Should Test frontend/backend/both after fix?: Frontend (Screenshot tool highly recommended)
-     - Blocked on other issue: None
-
-  Issue 3: AI Screening UX and Actionable Suggestions (P0)
-     - Attempted fixes: Agent reviewed  but made no edits yet.
-     - Next debug checklist: In , redesign the KI-Prüfung starten button for higher prominence. Modify the AI suggestion display to include a CTA (e.g., Vorschlag übernehmen). Implement backend logic (likely in  or a dedicated endpoint) to apply the suggested status change and write an audit log.
-     - Why fix this issue and what will be achieved with the fix?: Moves the AI tool from a passive reader to an active operational tool.
-     - Status: NOT STARTED
      - Is recurring issue? N
      - Should Test frontend/backend/both after fix?: Both
      - Blocked on other issue: None
 
-  Issue 4: Portal-First Flow Polish (Empty states & Onboarding) (P1)
-     - Attempted fixes: Application is already linked to registration, but empty states and first-steps need validation.
-     - Next debug checklist: Review the user journey immediately post-registration. Ensure logical empty states in the Dashboard/Journey pages, a clear first message, and obvious next actions for document uploads.
-     - Status: NOT STARTED
-     - Is recurring issue? N
-     - Should Test frontend/backend/both after fix?: Frontend
-
 **In progress Task List**: 
-  Task 1: Replace Hardcoded text with i18n
-     - Where to resume: Replace texts found via grep in  and add to .
-     - What will be achieved with this?: Full English/German support.
-     - Status: IN PROGRESS
-     - Should Test frontend/backend/both after fix?: Frontend
+  Task 1: Rechnungserstellung implementieren
+     - Where to resume: Backend-Router für Financials/Invoices aufbauen; UI in  aktivieren (bisher Keine Rechnungen vorhanden Mock).
+     - What will be achieved with this?: Echtes Financial-Tracking für Bewerber und Staff.
+     - Status: NOT STARTED
+     - Should Test frontend/backend/both after fix?: Both
+     - Blocked on something: None
+
+  Task 2: Stripe Admin-Aktivierung
+     - Where to resume: Admin-Einstellungsseite erweitern, um Drittanbieter-Keys (Stripe) zu speichern. Backend-Logik für Stripe-Checkouts vorbereiten.
+     - What will be achieved with this?: Payment-Freischaltung ohne Hardcoding von Keys im Code.
+     - Status: NOT STARTED
+     - Should Test frontend/backend/both after fix?: Both
      - Blocked on something: None
 
 **Upcoming and Future Tasks**
   Future Tasks:
-  - Partner-/Sub-Agentur-Portal (P2)
-  - Payment-Freischaltung (P2)
   - PWA-Fähigkeit (P3)
   - Erweiterte Suchfilter (P2)
+  - Erweiterte Partner-Statistiken / Provisionsabrechnung (Backlog)
 
 **Completed work in this session**
-- Fixed CORS configuration for production deployment (DONE)
-- Fixed N+1 Queries in , , and  (DONE)
-- Phase 3.7j: Replaced sidebar with Top-Navigation portal-wide (Applicant/Staff) (DONE)
-- Phase 3.7j: Made tasks operable and added follow-up/export endpoints (DONE)
-- Phase 3.7j: Added file attachment support to messages (DONE)
-- Phase 3.7j: Coupled public application form with immediate account registration (DONE)
+- Login-Bug / CORS-Fix für Deployment-Umgebung (Relative URLs in Frontend) (DONE)
+- SEO-Integration (react-helmet-async) auf öffentlichen Seiten (DONE)
+- Vollständige i18n DE/EN Synchronisation (inklusive Onboarding-Tour) (DONE)
+- Operatives Aufgaben-Modul (Anhänge, Downloads, Notizen, Historie in Tasks) (DONE)
+- Systemweite Durchsetzung der CI-Blau Button-Regel (DONE)
+- Generierung und Einbindung eines Favicons () (DONE)
+- Behebung von Datenintegritäts-Mapping-Fehlern in der Staff-Bewerberansicht (DONE)
+- Globale Toast-Notifications via  (DONE)
+- Partner-Portal (Grundgerüst und Router) (DONE)
 
 **Earlier issues found/mentioned but not fixed**
-   - Issue 1: GitHub Push Execution
-   - Debug checklist: Ensure the final completed state is actively pushed to  via bash commands, rather than instructing the user to click Save to Github. If authentication blocks this, provide a highly detailed technical justification.
-   - Why to solve this issue and what will be achieved with this?: Explicit user demand across multiple phases.
+   - Issue 1: Automatisierter GitHub Push
+   - Debug checklist: Der Agent konnte keinen automatisierten  via Bash durchführen und hat stattdessen den  befragt. Dieser verwies auf den Save to GitHub Button in der Emergent UI. Es muss sichergestellt werden, dass keine Code-Änderungen verloren gehen.
+   - Why to solve this issue and what will be achieved with this?: Code-Sicherung im Kunden-Repo.
    - Should Test frontend/backend/both after fix: NA
    - Is recurring issue? Y
 
 **Known issue recurrence from previous fork**
-  - Issue recurrence in previous fork: Handoff visual state not matching preview expectations; adding potential improvements to the finish summary against user instructions.
+  - Issue recurrence in previous fork: Agenten melden oft Aufgaben als Erledigt / Go-Live bereit, wenn das Frontend nur Mocks oder leere States anzeigt.
   - Recurrence count: Multiple
-  - Status: IN PROGRESS
-  - Note: You MUST read  before starting. Do NOT pitch future ideas in the finish summary. Rely strictly on Preview screenshots instead of assumed code states.
+  - Status: RESOLVED (in dieser Session stark verbessert, aber Vorsicht geboten).
+  - Note: Der User pocht strikt auf **Preview schlägt Handoff** – nichts ist fertig, solange es visuell nicht bedienbar ist. **Alle Änderungen müssen zwingend in  und  dokumentiert werden!**
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-React, Tailwind CSS, FastAPI, MongoDB, NSCall (AI Provider exclusively), Resend (Emails), i18next (Translations).
+React, Tailwind CSS, FastAPI, MongoDB, NSCall (AI), Resend (Emails), i18next (Translations), react-helmet-async (SEO), sonner (Toasts), Stripe (Payments - pending).
 
 **key DB schema**
-- : Contains applicant cases.
-- : Messaging system (now supports file attachments).
-- : Re-submission / follow-up tasks.
+- : Bewerberdaten (jetzt korrekt gejoint mit User-Daten)
+- : Erweitert um , , 
+- : Historisierung von Aktionen
+- :  steuert nun korrekte i18n-Ausgabe.
 
 **changes in tech stack**
-- None.
+- Hinzugefügt im Frontend:  (SEO) und  (Toast-UI).
+- Frontend-API-Aufrufe () nutzen nun relative URLs, da direkte CORS-Aufrufe mit Credentials in der Ingress/Cloudflare-Umgebung fehlschlugen.
 
-**All files of reference**
--  (MANDATORY READ)
+**All files of reference** 
+-  (Hier muss der NSCall-Key rein)
+-  (Integration prüfen)
+-  (PFLICHTLEKTÜRE VOR START)
 - 
--  (Target for UI fix & i18n)
--  (Target for AI Screening panel update)
--  & 
+-  (Auth Daten für Tests)
+-  (Target für Rechnungen)
 
 **Areas that need refactoring**:
--  (Applicant and Staff): Needs flex/grid refactoring to ensure proper full-height flush layout without scroll breaks or empty gaps.
+-  ist aktuell ein Mock (Keine Rechnungen vorhanden) und muss durch die im letzten Prompt geforderte Rechnungs-Logik ersetzt werden.
 
-**Critical Info for New Agent**
+**Critical Info for New Agent** 
 1. **LANGUAGE:** Ausschließlich **Deutsch** for all interactions.
-2. **AI TOOLS:** NSCall only. 
-3. **NO PITCH RULE:** Do not pitch improvements or nice-to-haves in the finish summary.
-4. **OPERABILITY RULE:** Ensure that tasks, messages, and AI suggestions are actively usable/executable. A visual UI representation is not enough.
-5. **MANDATORY CHECK:** You must load  (PRD, FEHLERREGISTER) and review the current Preview state before writing code.
+2. **CURRENT PROMPT:** Der User hat in der *allerletzten* Nachricht einen langen JWT/API-Key übergeben. Diesen musst du als NSCall-Key implementieren. Direkt im Anschluss musst du die Rechnungen erstellbar machen und Stripe so vorbereiten, dass Admin-Nutzer nur noch den API-Key eintragen müssen, um Zahlungen zu aktivieren.
+3. **DESIGN:** Striktes CI-Blau für primäre Buttons. Keine grünen/gelben Buttons für Standardaktionen.
+4. **OPERABILITY:** Leere States oder Dummy-Listen sind nicht erlaubt. Rechnungen müssen *wirklich* erstellbar und einsehbar sein.
+5. Verwende immer  für die Stripe-Integration, falls du unsicher bist, wie der neueste Checkout-Prozess aufgebaut ist.
 
 **documents and test reports created in this job**
 - 
 - 
 - 
+- 
+- 
 
 **Last 10 User Messages and any pending HUMAN messages** 
-1. User confirmed 3.7i was successful, initiated Phase 3.7j (portal-wide top-nav, file uploads in messages, application+registration coupling).
-2. Agent implemented and tested 3.7j (100% pass).
-3. User requested a Deployment Health Check.
-4. Deployment agent flagged CORS and N+1 queries. Agent fixed these.
-5. User initiated Phase 3.7k: Focus on messaging UI layout fix, complete applicant portal i18n (DE/EN), actionable AI suggestions in Staff panel, and finalizing the portal-first application flow. (Pending implementation).
+1. User fordert Phase 3.7l (Portal-Konsistenz, Tasks operativ, Favicon, CI-Blau).
+2. Agent implementiert 3.7l, behebt CORS Bug.
+3. User verlangt im selben Lauf Quick-Wins (Toasts, Navigation) und großen E2E-Test vor Go-Live.
+4. Agent setzt  ein, repariert letzte Buttons, Test-Agent meldet 100% (28/28) bestanden.
+5. User übergibt in der letzten Nachricht einen langen API-Key, fordert dessen Integration, den Einbau der Rechnungserstellung und Vorbereitung von Stripe via Admin-Eingabe als finalen Schritt zum Go-Live. (PENDING)
 
 **Project Health Check:**
-- Broken: Applicant Portal hardcoded German text, Messaging UI layout inconsistencies.
-- Mocked: Payment Module, Pricing Calculator.
+- Broken: None currently.
+- Mocked: Payment Module / Invoices ( shows empty state).
 
 **3rd Party Integrations**
-- NSCall / nscale (AI Inference) — requires User API Key
+- NSCall (AI Inference) — requires User API Key (Provided in the last message)
 - Resend (Emails) — requires User API Key
+- Stripe (Payments) — requires User API Key (To be dynamically fetched from Admin settings)
 
 **Testing status**
-- Testing agent used after significant changes: YES (for 3.7j).
+- Testing agent used after significant changes: YES (Iteration 14 & 15, 100% Pass).
 - Troubleshoot agent used after agent stuck in loop: NO.
-- Test files created: None new.
-- Known regressions: None currently, but UI layout requires manual screenshot verification.
+- Test files created: 
+- Known regressions: None currently.
 
 **Credentials to test flow:**
-Refer to .
-, , ,  (Default Password: ).
+Siehe . (admin, staff, teacher, applicant, partner).
 
 **What agent forgot to execute**
-The agent was in the middle of analyzing the codebase for Phase 3.7k (finding hardcoded portal strings). It has not yet implemented the i18n extraction, the Messaging UI fix, or the actionable AI screening feature requested in the latest prompt.</analysis>
+Der Agent hat den vom User in der letzten Nachricht bereitgestellten Key () noch nicht verarbeitet und die Tasks Rechnungserstellung und Stripe Admin Setup noch nicht begonnen, da der Lauf kurz nach dem Lesen der  Datei endete.</analysis>

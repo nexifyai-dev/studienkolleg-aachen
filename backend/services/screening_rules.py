@@ -23,6 +23,14 @@ COURSE_LANGUAGE_REQUIREMENTS = {
     "Language Course": "A1",
 }
 
+COURSE_RULE_MATRIX = {
+    "M-Course": {"required_docs": ["language_certificate", "highschool_diploma", "passport"]},
+    "T-Course": {"required_docs": ["language_certificate", "highschool_diploma", "passport"]},
+    "W-Course": {"required_docs": ["language_certificate", "highschool_diploma", "passport"]},
+    "M/T-Course": {"required_docs": ["language_certificate", "highschool_diploma", "passport"]},
+    "Language Course": {"required_docs": ["passport"]},
+}
+
 REQUIRED_DOCUMENT_TYPES = ["language_certificate", "highschool_diploma", "passport"]
 REQUIRED_DOC_LABELS = {
     "language_certificate": "Deutsches Sprachzertifikat",
@@ -94,7 +102,8 @@ def check_language_level(course_type: Optional[str], language_level: Optional[st
         return {"ok": False, "note": f"Ungültiges Sprachniveau '{language_level}'.", "required": required}
 
 
-def check_document_completeness(docs: list) -> dict:
+def check_document_completeness(docs: list, course_type: Optional[str] = None) -> dict:
+    required_types = COURSE_RULE_MATRIX.get(course_type, {}).get("required_docs", REQUIRED_DOCUMENT_TYPES)
     uploaded_types = {}
     evidence = []
     for d in docs:
@@ -118,29 +127,30 @@ def check_document_completeness(docs: list) -> dict:
             }
         )
 
-    missing = [t for t in REQUIRED_DOCUMENT_TYPES if "present" not in uploaded_types.get(t, set())]
-    present = [t for t in REQUIRED_DOCUMENT_TYPES if "present" in uploaded_types.get(t, set())]
+    missing = [t for t in required_types if "present" not in uploaded_types.get(t, set())]
+    present = [t for t in required_types if "present" in uploaded_types.get(t, set())]
     invalid = [t for t, states in uploaded_types.items() if "invalid" in states]
     reasons = (
         ["Alle Pflichtdokumente liegen in prüffähigem Status vor."]
         if not missing
-        else [f"Fehlende Pflichtdokumente: {', '.join(REQUIRED_DOC_LABELS[t] for t in missing)}"]
+        else [f"Fehlende Pflichtdokumente: {', '.join(REQUIRED_DOC_LABELS.get(t, t) for t in missing)}"]
     )
     return {
         "complete": len(missing) == 0,
         "missing_types": missing,
-        "missing_labels": [REQUIRED_DOC_LABELS[t] for t in missing],
-        "present_labels": [REQUIRED_DOC_LABELS[t] for t in present],
+        "missing_labels": [REQUIRED_DOC_LABELS.get(t, t) for t in missing],
+        "present_labels": [REQUIRED_DOC_LABELS.get(t, t) for t in present],
         "invalid_types": invalid,
+        "required_types": required_types,
         "reasons": reasons,
         "evidence": evidence,
-        "total_required": len(REQUIRED_DOCUMENT_TYPES),
+        "total_required": len(required_types),
         "total_present": len(present),
     }
 
 
 def evaluate_screening_criteria(application: dict, applicant: dict, docs: list) -> dict:
-    completeness = check_document_completeness(docs)
+    completeness = check_document_completeness(docs, application.get("course_type"))
     anabin = get_anabin_category(application.get("degree_country"))
     language = check_language_level(application.get("course_type"), application.get("language_level"))
 
@@ -228,7 +238,7 @@ def evaluate_screening_criteria(application: dict, applicant: dict, docs: list) 
     evidence = {
         "required_fields": required_fields,
         "documents": {
-            "required": [REQUIRED_DOC_LABELS[d] for d in REQUIRED_DOCUMENT_TYPES],
+            "required": [REQUIRED_DOC_LABELS.get(d, d) for d in completeness["required_types"]],
             "present": completeness["present_labels"],
             "missing": completeness["missing_labels"],
         },

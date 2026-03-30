@@ -106,8 +106,10 @@ def _normalize_level(level: Optional[str]) -> Optional[str]:
 
 
 def _doc_status_bucket(doc_status: str) -> str:
-    if doc_status in ("approved", "in_review", "uploaded"):
-        return "present"
+    if doc_status == "approved":
+        return "verified"
+    if doc_status in ("in_review", "uploaded"):
+        return "provisional"
     if doc_status in ("rejected", "invalid"):
         return "invalid"
     return "unknown"
@@ -168,23 +170,40 @@ def _check_completeness(docs: list, course_type: Optional[str]) -> dict:
             "source": "uploaded_document_metadata",
         })
 
-    missing = [t for t in required_types if t not in uploaded_types or "present" not in uploaded_types.get(t, set())]
-    present = [t for t in required_types if t in uploaded_types and "present" in uploaded_types.get(t, set())]
+    missing = [
+        t for t in required_types
+        if t not in uploaded_types or not uploaded_types.get(t, set()).intersection({"verified", "provisional"})
+    ]
+    present = [
+        t for t in required_types
+        if t in uploaded_types and uploaded_types.get(t, set()).intersection({"verified", "provisional"})
+    ]
+    verified = [t for t in required_types if t in uploaded_types and "verified" in uploaded_types.get(t, set())]
+    unverified = [t for t in required_types if t in uploaded_types and "verified" not in uploaded_types.get(t, set())]
     invalid = [t for t, states in uploaded_types.items() if "invalid" in states]
-    reasons = (
-        ["Alle Pflichtdokumente für diesen Kurstyp liegen mit prüfbarem Status vor."]
-        if not missing
-        else [f"Es fehlen Pflichtdokumente: {', '.join(REQUIRED_DOC_LABELS.get(t, t) for t in missing)}."]
-    )
+    reasons = []
+    if missing:
+        reasons.append(f"Es fehlen Pflichtdokumente: {', '.join(REQUIRED_DOC_LABELS.get(t, t) for t in missing)}.")
+    else:
+        reasons.append("Alle Pflichtdokumente wurden hochgeladen oder zur Prüfung eingereicht.")
+    if unverified:
+        reasons.append(
+            f"Folgende Pflichtdokumente sind noch nicht verifiziert: {', '.join(REQUIRED_DOC_LABELS.get(t, t) for t in unverified)}."
+        )
     return {
         "complete": len(missing) == 0,
         "missing_types": missing,
         "missing_labels": [REQUIRED_DOC_LABELS[t] for t in missing],
         "present_labels": [REQUIRED_DOC_LABELS[t] for t in present],
+        "verified_types": verified,
+        "verified_labels": [REQUIRED_DOC_LABELS[t] for t in verified],
+        "unverified_types": unverified,
+        "unverified_labels": [REQUIRED_DOC_LABELS[t] for t in unverified],
         "invalid_types": invalid,
         "required_types": required_types,
         "total_required": len(required_types),
         "total_present": len(present),
+        "total_verified": len(verified),
         "reasons": reasons,
         "evidence": evidence,
     }
@@ -215,8 +234,11 @@ def _build_formal_precheck(completeness: dict, language_check: dict, anabin_info
     else:
         reasons.append(f"Herkunftsland liegt in lokaler Kategorie {anabin_info['category']}.")
 
-    if completeness["invalid_types"]:
+    if completeness.get("invalid_types"):
         open_points.append("Mindestens ein Dokument liegt in abgelehntem/ungültigem Status vor.")
+
+    if completeness.get("unverified_types"):
+        open_points.append("Pflichtdokumente sind vorhanden, aber noch nicht fachlich verifiziert.")
 
     if risks:
         status = "critical"
@@ -372,6 +394,8 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
                 "status": "complete" if completeness["complete"] else "incomplete",
                 "missing_documents": completeness["missing_labels"],
                 "present_documents": completeness["present_labels"],
+                "verified_documents": completeness["verified_labels"],
+                "unverified_documents": completeness["unverified_labels"],
                 "reasons": completeness["reasons"],
                 "evidence": completeness["evidence"],
             },
@@ -428,7 +452,9 @@ def _suggest_next_actions(completeness: dict, formal_precheck: dict, suggested_s
     actions = []
     if not completeness["complete"]:
         actions.append("Fehlende Pflichtunterlagen beim Bewerber anfordern.")
-    if completeness["invalid_types"]:
+    if completeness.get("unverified_types"):
+        actions.append("Eingereichte Pflichtdokumente fachlich prüfen und verifizieren, bevor eine finale Eignung angenommen wird.")
+    if completeness.get("invalid_types"):
         actions.append("Ungültige/abgelehnte Dokumente durch neue Nachweise ersetzen lassen.")
     if formal_precheck["status"] == "critical":
         actions.append("Fall an erfahrenes Staff-Mitglied zur vertieften Anerkennungsprüfung eskalieren.")

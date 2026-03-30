@@ -42,7 +42,7 @@
 - Bewerberdetail: Alle Daten (Name, E-Mail, Telefon, Land, Geb.-Datum), Stage-Selector, Follow-ups, Notizen, Audit-Log, KI-Screening
 - Aufgaben: Volloperativ (CRUD, Detail-Modal, Notizen, Anhänge, Download, Historie, Filter, Zuweisung, Priorität, Toast-Feedback)
 - Nachrichten: Staff-Messaging mit Konversationsliste + Chat
-- KI-Prüfung: Prominenter Button, "Vorschlag übernehmen" → Statuswechsel + Audit (NSCall/nscale)
+- KI-Prüfung: Prominenter Button, "Vorschlag übernehmen" → Statuswechsel + Audit (DeepSeek)
 - Export: CSV-Export der Bewerbungen
 
 ### Teacher-Portal (/staff als teacher-Rolle)
@@ -72,7 +72,7 @@
 /app/
 ├── backend/ (FastAPI)
 │   ├── routers/ (auth, users, applications, documents, tasks, messaging, ai_screening, partner, export, followups, leads, teacher)
-│   ├── services/ (audit, email, storage, ai, nscale_provider, automation)
+│   ├── services/ (audit, email, storage, ai_screening, deepseek_provider, automation)
 │   ├── models/schemas.py
 │   ├── config.py, database.py, deps.py, seed.py, server.py
 │   └── tests/
@@ -104,7 +104,7 @@
 ## Mocked / Feature-Flagged
 - Zahlungsmodul: "in Vorbereitung"
 - Preiskalkulator: feature-flagged
-- AI-Screening: abhängig von NSCALE_API_KEY
+- AI-Screening: abhängig von DEEPSEEK_API_KEY
 
 ## Offene Punkte (P2/P3 Backlog)
 - Payment-Modul Anbindung (P2)

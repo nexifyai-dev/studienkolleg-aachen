@@ -6,7 +6,7 @@ import PublicFooter from '../../components/layout/PublicFooter';
 import SEOHead from '../../components/shared/SEOHead';
 import {
   CheckCircle, Star, ChevronDown, ChevronUp, MapPin,
-  Phone, ArrowRight, Shield, Users, BookOpen, Award, Play
+  ArrowRight, Shield, Users, Award, Play
 } from 'lucide-react';
 
 const HERO_IMAGE = "https://www.studienkollegaachen.de/images/foto_1_startseite_studienkolleg_aachen_studium_germany_study_deutschland-1052.webp";

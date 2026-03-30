@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import NotificationBell from '../shared/NotificationBell';
 import {
-  LayoutDashboard, Columns, FileText, MessageSquare,
+  LayoutDashboard, Columns, MessageSquare,
   LogOut, Menu, X, GraduationCap, ShieldCheck, ChevronDown,
   CheckSquare, User
 } from 'lucide-react';

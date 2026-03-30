@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../lib/apiClient';
 import { ROLE_LABELS, formatDate } from '../../lib/utils';
-import { UserPlus, RefreshCw, UserCheck, UserX, Filter } from 'lucide-react';
+import { UserPlus, RefreshCw, UserCheck, UserX, Search } from 'lucide-react';
 import { formatApiError } from '../../contexts/AuthContext';
 
 const STAFF_ROLES = ['superadmin', 'admin', 'staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
@@ -23,6 +23,7 @@ export default function UsersPage() {
   const [inviteResult, setInviteResult] = useState(null);
   const [error, setError] = useState('');
   const [filterRole, setFilterRole] = useState('all');
+  const [query, setQuery] = useState('');
   const [updating, setUpdating] = useState(null);
 
   const load = async () => {
@@ -58,11 +59,16 @@ export default function UsersPage() {
   const staffUsers = users.filter(u => STAFF_ROLES.includes(u.role));
   const applicantUsers = users.filter(u => u.role === 'applicant');
 
-  const displayUsers = filterRole === 'all'
+  const roleFilteredUsers = filterRole === 'all'
     ? users
     : filterRole === 'staff_only'
     ? staffUsers
     : applicantUsers;
+  const displayUsers = roleFilteredUsers.filter(u => {
+    if (!query.trim()) return true;
+    const haystack = [u.full_name, u.email, u.role].filter(Boolean).join(' ').toLowerCase();
+    return haystack.includes(query.trim().toLowerCase());
+  });
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="admin-users-page">
@@ -137,7 +143,8 @@ export default function UsersPage() {
       )}
 
       {/* Filter-Tabs */}
-      <div className="flex items-center gap-2" data-testid="users-filter-tabs">
+      <div className="flex items-center justify-between flex-wrap gap-2" data-testid="users-filter-tabs">
+        <div className="flex items-center gap-2">
         {[
           { key: 'all', label: `Alle (${users.length})` },
           { key: 'staff_only', label: `Mitarbeiter (${staffUsers.length})` },
@@ -153,6 +160,17 @@ export default function UsersPage() {
             {tab.label}
           </button>
         ))}
+        </div>
+        <div className="relative">
+          <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Name, E-Mail, Rolle…"
+            className="border border-slate-200 rounded-sm pl-8 pr-2.5 py-2 text-xs focus:outline-none focus:border-primary w-56"
+            data-testid="users-search"
+          />
+        </div>
       </div>
 
       {/* Tabelle */}

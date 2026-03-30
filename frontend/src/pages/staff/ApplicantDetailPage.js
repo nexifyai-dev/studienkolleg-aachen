@@ -218,7 +218,7 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
         {!loading && !latest && <p className="text-xs text-slate-400 text-center py-2">Noch keine KI-Prüfung durchgeführt</p>}
         {latest && (
           <>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5">
               <div className={`rounded-sm p-2 text-center text-[10px] ${latest.is_complete ? 'bg-primary/8 text-primary' : 'bg-slate-50 text-slate-500'}`}>
                 {latest.is_complete ? <CheckCircle size={13} className="mx-auto mb-0.5" /> : <AlertCircle size={13} className="mx-auto mb-0.5" />}
                 {latest.is_complete ? 'Vollständig' : `${latest.missing_documents?.length || 0} fehlend`}
@@ -227,12 +227,48 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
               <div className={`rounded-sm p-2 text-center text-[10px] ${latest.language_level_ok ? 'bg-primary/8 text-primary' : 'bg-red-50 text-red-600'}`}>
                 Sprache: {latest.language_level_ok ? 'OK' : 'Fehlt'}
               </div>
+              <div className="rounded-sm p-2 text-center text-[10px] bg-slate-50">
+                Formal: <strong>{latest.screening_breakdown?.formal_precheck?.status || '–'}</strong>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="border border-slate-200 rounded-sm p-2.5 bg-white">
+                <p className="text-[11px] font-semibold text-slate-700 mb-1">Sicher belegt</p>
+                <ul className="space-y-1 text-[11px] text-slate-600 list-disc pl-4">
+                  {(latest.screening_breakdown?.completeness?.reasons || []).map((item, idx) => (
+                    <li key={`complete-reason-${idx}`}>{item}</li>
+                  ))}
+                  {(latest.screening_breakdown?.formal_precheck?.reasons || []).map((item, idx) => (
+                    <li key={`formal-reason-${idx}`}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="border border-slate-200 rounded-sm p-2.5 bg-slate-50">
+                <p className="text-[11px] font-semibold text-slate-700 mb-1">Offen / kritisch</p>
+                <ul className="space-y-1 text-[11px] text-slate-600 list-disc pl-4">
+                  {(latest.screening_breakdown?.formal_precheck?.risks || []).map((item, idx) => (
+                    <li key={`risk-${idx}`} className="text-red-600">{item}</li>
+                  ))}
+                  {(latest.screening_breakdown?.formal_precheck?.open_points || []).map((item, idx) => (
+                    <li key={`open-${idx}`}>{item}</li>
+                  ))}
+                  {(!latest.screening_breakdown?.formal_precheck?.risks?.length && !latest.screening_breakdown?.formal_precheck?.open_points?.length) && (
+                    <li>Keine offenen Punkte aus lokaler Vorprüfung.</li>
+                  )}
+                </ul>
+              </div>
             </div>
             {latest.suggested_stage && (
               <div className="bg-primary/5 border-2 border-primary/25 rounded-sm p-3">
                 <div className="flex items-center gap-2 mb-2">
                   <Brain size={14} className="text-primary" />
                   <span className="text-xs text-primary font-semibold">KI-Vorschlag: {STAGE_LABELS[latest.suggested_stage] || latest.suggested_stage}</span>
+                </div>
+                <div className="mb-2 rounded-sm border border-primary/15 bg-white p-2">
+                  <p className="text-[10px] font-semibold text-slate-700 mb-1">Nächste Aktionen (Empfehlung)</p>
+                  <ul className="space-y-0.5 text-[10px] text-slate-600 list-disc pl-4">
+                    {(latest.next_actions || []).map((a, idx) => <li key={`next-action-${idx}`}>{a}</li>)}
+                  </ul>
                 </div>
                 {latest.suggested_stage !== currentStage && (
                   <button
@@ -250,6 +286,9 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
                 )}
               </div>
             )}
+            <div className="rounded-sm border border-slate-200 p-2 text-[10px] text-slate-500 bg-slate-50">
+              Datenbasis: {latest.reference_basis?.note || 'Lokale Vorprüfungsregeln ohne Live-Referenzprüfung.'}
+            </div>
             {latest.ai_report && (
               <div>
                 <button onClick={() => setExpanded(expanded === 'report' ? null : 'report')} data-testid="ai-report-toggle"

@@ -13,6 +13,17 @@ def test_completeness_is_course_specific_language_course():
     result = _check_completeness(docs, "Language Course")
     assert result["complete"] is True
     assert result["total_required"] == 1
+    assert result["total_verified"] == 1
+
+
+def test_completeness_tracks_unverified_uploads_without_treating_them_as_verified():
+    docs = [
+        {"document_type": "passport", "status": "uploaded"},
+    ]
+    result = _check_completeness(docs, "Language Course")
+    assert result["complete"] is True
+    assert result["total_verified"] == 0
+    assert result["total_unverified"] == 1
 
 
 def test_formal_precheck_marks_critical_for_d_category_and_missing_language():
@@ -29,8 +40,13 @@ def test_formal_precheck_marks_critical_for_d_category_and_missing_language():
 
 
 def test_suggest_stage_is_not_in_review_by_default_when_plausible():
-    stage = _suggest_stage({"complete": True}, {"status": "plausible"})
+    stage = _suggest_stage({"complete": True, "total_unverified": 0}, {"status": "plausible"})
     assert stage == "interview_scheduled"
+
+
+def test_suggest_stage_stays_in_review_when_documents_are_unverified():
+    stage = _suggest_stage({"complete": True, "total_unverified": 1}, {"status": "plausible"})
+    assert stage == "in_review"
 
 
 def test_language_check_returns_required_actual():

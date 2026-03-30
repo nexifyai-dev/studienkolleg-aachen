@@ -3,9 +3,8 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useAuth, formatApiError } from '../../contexts/AuthContext';
+import { resolveApiUrl } from '../../lib/apiClient';
 import { Loader2, AlertCircle, GraduationCap } from 'lucide-react';
-
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -24,7 +23,7 @@ export default function RegisterPage() {
     setLoading(true); setError('');
     try {
       const payload = { ...form, invite_token: inviteToken || undefined };
-      const { data } = await axios.post(`${API}/api/auth/register`, payload, { withCredentials: true });
+      const { data } = await axios.post(resolveApiUrl('/api/auth/register'), payload, { withCredentials: true });
       setUser(data);
       const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff'];
       navigate(staffRoles.includes(data.role) ? '/staff' : '/portal');

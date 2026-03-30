@@ -3,12 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
+import { resolveApiUrl } from '../../lib/apiClient';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
 import SEOHead from '../../components/shared/SEOHead';
 import { CheckCircle, Loader2, AlertCircle, Upload, X, FileText, Eye, EyeOff } from 'lucide-react';
-
-const API = process.env.REACT_APP_BACKEND_URL;
 
 const COURSE_VALUES = ['T-Course', 'M-Course', 'W-Course', 'M/T-Course', 'Language Course'];
 const COURSE_KEYS = ['t', 'm', 'w', 'mt', 'lang'];
@@ -195,7 +194,7 @@ export default function ApplyPage() {
         payload.password = form.password;
       }
 
-      const res = await axios.post(`${API}/api/leads/ingest`, payload, { withCredentials: true });
+      const res = await axios.post(resolveApiUrl('/api/leads/ingest'), payload, { withCredentials: true });
 
       if (res.data?.account_created) {
         // Account wurde erstellt, auto-login via Cookie

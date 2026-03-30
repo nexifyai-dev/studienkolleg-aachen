@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import apiClient from '../lib/apiClient';
+import apiClient, { resolveApiUrl } from '../lib/apiClient';
 import i18n from '../i18n';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 const AuthContext = createContext(null);
 
 function syncLanguage(userData) {
@@ -31,7 +30,7 @@ export function AuthProvider({ children }) {
   useEffect(() => { checkAuth(); }, [checkAuth]);
 
   const login = async (email, password) => {
-    const { data } = await axios.post(`${API}/api/auth/login`, { email, password }, { withCredentials: true });
+    const { data } = await axios.post(resolveApiUrl('/api/auth/login'), { email, password }, { withCredentials: true });
     setUser(data);
     syncLanguage(data);
     return data;

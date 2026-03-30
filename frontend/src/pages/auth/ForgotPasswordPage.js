@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { formatApiError } from '../../contexts/AuthContext';
+import { resolveApiUrl } from '../../lib/apiClient';
 import { Loader2, AlertCircle, CheckCircle, GraduationCap } from 'lucide-react';
-
-const API = process.env.REACT_APP_BACKEND_URL;
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -16,7 +15,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      await axios.post(`${API}/api/auth/forgot-password`, { email }, { withCredentials: true });
+      await axios.post(resolveApiUrl('/api/auth/forgot-password'), { email }, { withCredentials: true });
       setSuccess(true);
     } catch (err) {
       setError(formatApiError(err.response?.data?.detail));

@@ -50,11 +50,11 @@ S3_REGION: str = os.environ.get("S3_REGION", "eu-central-1")
 LOCAL_STORAGE_PATH: str = os.environ.get("LOCAL_STORAGE_PATH", "/app/storage")
 STORAGE_ENABLED: bool = bool(S3_ENDPOINT or STORAGE_BACKEND == "local")
 
-# ─── AI / KI-Inferenz (nscale – NSCall) ───────────────────────────────────────
-# Alle produktiven KI-Funktionen laufen über die nscale API.
-# NSCALE_API_KEY muss gesetzt sein, damit AI-Features aktiv sind.
-NSCALE_API_KEY: str = os.environ.get("NSCALE_API_KEY", "")
-AI_SCREENING_ENABLED: bool = bool(NSCALE_API_KEY)
+# ─── AI / KI-Inferenz (DeepSeek) ──────────────────────────────────────────────
+# Alle produktiven KI-Funktionen laufen über DeepSeek.
+DEEPSEEK_API_KEY: str = os.environ.get("DEEPSEEK_API_KEY", "")
+DEEPSEEK_BASE_URL: str = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+AI_SCREENING_ENABLED: bool = bool(DEEPSEEK_API_KEY)
 
 # Legacy – wird nicht mehr für Produktiv-KI genutzt (Übergangscode entfernt)
 EMERGENT_LLM_KEY: str = os.environ.get("EMERGENT_LLM_KEY", "")

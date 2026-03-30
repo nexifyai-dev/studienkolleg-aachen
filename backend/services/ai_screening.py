@@ -1,14 +1,14 @@
 """
 KI-gestützte Bewerberprüfung (AI Application Screening)
 
-Provider: nscale (NSCall) – alle KI-Inferenzen laufen über die nscale API.
+Provider: DeepSeek – alle KI-Inferenzen laufen über DeepSeek.
 Kein anderer Modellprovider wird für Produktiv-KI genutzt.
 
 Funktion:
 - Vollständigkeit der Unterlagen prüfen (regelbasiert)
 - Formale Eignung auf Basis von Anabin-Kriterien bewerten (regelbasiert)
-- Kursempfehlung vorbereiten (KI-gestützt via nscale)
-- Risiken / Unklarheiten markieren (KI-gestützt via nscale)
+- Kursempfehlung vorbereiten (KI-gestützt via DeepSeek)
+- Risiken / Unklarheiten markieren (KI-gestützt via DeepSeek)
 - Statusvorschlag + nächste Aktion generieren
 - Audit-Trail speichern
 
@@ -119,10 +119,10 @@ async def run_ai_screening(
     messages: list,
 ) -> dict:
     """
-    KI-gestützte Vorprüfung via nscale (NSCall).
-    Alle KI-Inferenzen laufen über die nscale-API.
+    KI-gestützte Vorprüfung via DeepSeek.
+    Alle KI-Inferenzen laufen über DeepSeek.
     """
-    from services.nscale_provider import chat_completion, is_enabled
+    from services.deepseek_provider import chat_completion, is_enabled
 
     # Lokale regelbasierte Checks
     completeness = _check_completeness(docs)
@@ -216,22 +216,48 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
                 ai_error = result.get("error", "Unbekannter Fehler")
 
         except Exception as e:
-            logger.error(f"[AI_SCREENING] nscale error: {e}")
+            logger.error(f"[AI_SCREENING] DeepSeek error: {e}")
             ai_error = str(e)
     else:
-        ai_report = "KI-Prüfung nicht verfügbar (NSCALE_API_KEY nicht konfiguriert). Lokale Prüfung abgeschlossen."
+        ai_report = "KI-Prüfung nicht verfügbar (DEEPSEEK_API_KEY nicht konfiguriert). Lokale Vorprüfung abgeschlossen."
 
     suggested_stage = _suggest_stage(completeness, language_check, anabin_info)
+
+    precheck_status = "ok" if completeness["complete"] and language_check["ok"] else "action_required"
+    formal_precheck_status = "ok" if language_check["ok"] and anabin_info["category"] != "D" else "manual_review_required"
 
     return {
         "screening_id": str(uuid.uuid4()),
         "application_id": application.get("id"),
         "screened_at": datetime.now(timezone.utc).isoformat(),
         "screened_by": "ai_system",
-        "ai_provider": "nscale",
+        "ai_provider": "deepseek",
         "ai_model": ai_model_used,
         "ai_tokens_used": ai_tokens_used,
         "local_checks": local_summary,
+        "screening_breakdown": {
+            "completeness": {
+                "status": "complete" if completeness["complete"] else "incomplete",
+                "missing_documents": completeness["missing_labels"],
+                "present_documents": completeness["present_labels"],
+            },
+            "formal_precheck": {
+                "status": formal_precheck_status,
+                "language_level_ok": language_check["ok"],
+                "anabin_category": anabin_info["category"],
+                "notes": [language_check["note"], anabin_info["label"]],
+            },
+            "ai_recommendation": {
+                "suggested_stage": suggested_stage,
+                "status": "available" if ai_report else "unavailable",
+                "note": "Nur Empfehlung – keine finale Zulassungsentscheidung.",
+            },
+            "staff_decision": {
+                "status": "pending",
+                "note": "Finale Entscheidung erfolgt ausschließlich durch Staff.",
+            },
+        },
+        "precheck_status": precheck_status,
         "ai_report": ai_report,
         "ai_error": ai_error,
         "suggested_stage": suggested_stage,
@@ -239,7 +265,7 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
         "missing_documents": completeness["missing_labels"],
         "anabin_category": anabin_info["category"],
         "language_level_ok": language_check["ok"],
-        "decision_note": "KI-Vorprüfung via nscale. Keine bindende Entscheidung. Staff-Review erforderlich.",
+        "decision_note": "KI-Vorprüfung via DeepSeek. Keine bindende Entscheidung. Staff-Review erforderlich.",
     }
 
 

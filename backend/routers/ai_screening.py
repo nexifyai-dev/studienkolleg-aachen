@@ -125,9 +125,9 @@ async def get_ai_model_registry(
     user: dict = Depends(require_roles(*STAFF_ROLES)),
 ):
     """Returns the current AI model registry for audit/documentation (staff only)."""
-    from services.nscale_provider import get_model_registry, is_enabled
+    from services.deepseek_provider import get_model_registry, is_enabled
     return {
-        "provider": "nscale",
+        "provider": "deepseek",
         "enabled": is_enabled(),
         "models": get_model_registry(),
     }
@@ -147,6 +147,10 @@ async def accept_ai_suggestion(
     suggested_stage = body.get("suggested_stage")
     if not suggested_stage:
         raise HTTPException(status_code=400, detail="suggested_stage erforderlich")
+
+    allowed_suggested_stages = {"pending_docs", "in_review", "interview_scheduled", "on_hold"}
+    if suggested_stage not in allowed_suggested_stages:
+        raise HTTPException(status_code=400, detail="Ungültiger KI-Vorschlag für Stage-Übernahme")
 
     try:
         app = await db.applications.find_one({"_id": ObjectId(app_id)})

@@ -7,7 +7,7 @@
 4. Arbeitsplan gegen **Drive + Mem0 + Fehlerregister + Preview** synchronisieren
 5. Nach jeder Änderung **Mem0 aktualisieren**
 6. **Preview schlägt Handoff** – nichts als fertig melden, was im sichtbaren Zustand nicht stimmt
-7. KI nur über **NSCall / nscale**
+7. KI nur über **DeepSeek**
 8. **Keine Potenzielle Verbesserungen** im Finish-Summary
 9. Sprache: **Deutsch** in allen Interaktionen
 
@@ -81,4 +81,16 @@ Deutsche typografische Anführungszeichen (z.B. „…") dürfen NICHT in JSON-D
 4. Preview-Screenshots als Prüfgrundlage?
 5. Aufgaben-/Feature-Operabilität getestet (nicht nur sichtbar)?
 6. CI-Blau durchgehend?
-7. KI nur über NSCall?
+7. KI nur über DeepSeek?
+
+## Projekt-Memory-Update (2026-03-30)
+
+- **requirement**: KI-Provider systemweit auf DeepSeek umstellen; keine produktive Nutzung von nscale/NSCall mehr.
+- **decision**: Zentrale Provider-Schicht auf `services/deepseek_provider.py` gelegt; Model-Registry bleibt task-basiert für Auditierbarkeit.
+- **error**: Screening-Ausgaben konnten operativ als zu nah an einer finalen Entscheidung gelesen werden.
+- **fix**: `screening_breakdown` mit expliziter Trennung eingeführt: `completeness`, `formal_precheck`, `ai_recommendation`, `staff_decision`.
+- **lesson_learned**: Upload/Dateivorhandensein darf nur Vollständigkeit beeinflussen, nie Annahme-/Zulassungswirkung entfalten.
+- **design_rule**: CRM-Listenansichten brauchen Suchfeld + Selektionszustand + sichere Sammelaktion als Standardbedienmuster.
+- **workflow_rule**: Stage-Übernahme aus KI-Empfehlung nur für explizit erlaubte, nicht-zulassungsentscheidende Stages zulassen.
+- **release_state**: DeepSeek-Migration und CRM-Basisfunktionen (Kanban/Tasks Suche+Selektion+Bulk) integriert, Build-Setup lokal unvollständig.
+- **test_result**: `python -m compileall backend` bestanden; Frontend-Build wegen fehlendem `react-scripts` blockiert.

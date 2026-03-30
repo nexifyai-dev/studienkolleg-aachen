@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../lib/apiClient';
 import { ROLE_LABELS, formatDate } from '../../lib/utils';
-import { UserPlus, RefreshCw, UserCheck, UserX, Search } from 'lucide-react';
+import { UserPlus, RefreshCw, UserCheck, UserX, Search, Copy, CheckSquare } from 'lucide-react';
 import { formatApiError } from '../../contexts/AuthContext';
 
 const STAFF_ROLES = ['superadmin', 'admin', 'staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
@@ -25,6 +25,8 @@ export default function UsersPage() {
   const [filterRole, setFilterRole] = useState('all');
   const [query, setQuery] = useState('');
   const [updating, setUpdating] = useState(null);
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [bulkUpdating, setBulkUpdating] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -69,6 +71,26 @@ export default function UsersPage() {
     const haystack = [u.full_name, u.email, u.role].filter(Boolean).join(' ').toLowerCase();
     return haystack.includes(query.trim().toLowerCase());
   });
+  const displayUserIds = displayUsers.filter(u => u.role !== 'superadmin').map(u => u.id);
+  const allVisibleSelected = displayUserIds.length > 0 && displayUserIds.every(id => selectedUserIds.includes(id));
+
+  const copyInviteUrl = async () => {
+    if (!inviteResult?.invite_url) return;
+    try {
+      await navigator.clipboard.writeText(inviteResult.invite_url);
+    } catch {}
+  };
+
+  const runBulkActive = async (active) => {
+    if (!selectedUserIds.length) return;
+    setBulkUpdating(true);
+    try {
+      await apiClient.put('/api/users/bulk/active', { user_ids: selectedUserIds, active }, { withCredentials: true });
+      setUsers(prev => prev.map(u => selectedUserIds.includes(u.id) && u.role !== 'superadmin' ? { ...u, active } : u));
+      setSelectedUserIds([]);
+    } catch {}
+    finally { setBulkUpdating(false); }
+  };
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="admin-users-page">
@@ -106,9 +128,14 @@ export default function UsersPage() {
               <p className="font-medium text-slate-800 mb-1">Einladungslink erstellt:</p>
               <code className="block text-slate-700 break-all text-xs bg-slate-100 p-2 rounded-sm">{inviteResult.invite_url}</code>
               <p className="text-slate-600 text-xs mt-2">Bitte diesen Link sicher an den Mitarbeiter senden (nicht per unverschlüsselter E-Mail).</p>
-              <button onClick={() => setInviteResult(null)} className="mt-2 text-xs text-primary hover:underline">
-                Weiteren Mitarbeiter einladen
-              </button>
+              <div className="mt-2 flex items-center gap-3">
+                <button onClick={copyInviteUrl} className="text-xs text-primary hover:underline inline-flex items-center gap-1">
+                  <Copy size={12} /> Link kopieren
+                </button>
+                <button onClick={() => setInviteResult(null)} className="text-xs text-primary hover:underline">
+                  Weiteren Mitarbeiter einladen
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleInvite} className="space-y-3">
@@ -171,6 +198,41 @@ export default function UsersPage() {
             data-testid="users-search"
           />
         </div>
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <span>{selectedUserIds.length} ausgewählt</span>
+          <button
+            onClick={() => setSelectedUserIds(allVisibleSelected ? [] : displayUserIds)}
+            className="inline-flex items-center gap-1 border border-slate-200 rounded-sm px-2 py-1 hover:bg-slate-50"
+            data-testid="users-select-visible-btn"
+          >
+            <CheckSquare size={12} />
+            {allVisibleSelected ? 'Auswahl aufheben' : 'Sichtbare auswählen'}
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between gap-3 flex-wrap" data-testid="users-bulk-actions">
+        <p className="text-xs text-slate-500">
+          Bulk-Aktion für aktive/deaktivierte Nutzer (Superadmins werden automatisch ausgeschlossen).
+        </p>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => runBulkActive(true)}
+            disabled={!selectedUserIds.length || bulkUpdating}
+            className="text-xs border border-primary/30 text-primary rounded-sm px-3 py-1.5 hover:bg-primary/5 disabled:opacity-50"
+            data-testid="users-bulk-activate"
+          >
+            Aktivieren
+          </button>
+          <button
+            onClick={() => runBulkActive(false)}
+            disabled={!selectedUserIds.length || bulkUpdating}
+            className="text-xs border border-red-200 text-red-600 rounded-sm px-3 py-1.5 hover:bg-red-50 disabled:opacity-50"
+            data-testid="users-bulk-deactivate"
+          >
+            Deaktivieren
+          </button>
+        </div>
       </div>
 
       {/* Tabelle */}
@@ -179,6 +241,7 @@ export default function UsersPage() {
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr className="text-xs text-slate-500 font-medium">
+                <th className="px-4 py-3 text-left">#</th>
                 <th className="px-4 py-3 text-left">Name</th>
                 <th className="px-4 py-3 text-left">E-Mail</th>
                 <th className="px-4 py-3 text-left">Rolle</th>
@@ -189,11 +252,20 @@ export default function UsersPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400 text-sm">Laden…</td></tr>
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-slate-400 text-sm">Laden…</td></tr>
               ) : displayUsers.length === 0 ? (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400 text-sm">Keine Nutzer gefunden</td></tr>
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-slate-400 text-sm">Keine Nutzer gefunden</td></tr>
               ) : displayUsers.map(u => (
                 <tr key={u.id} className="border-t border-slate-50 hover:bg-slate-50 transition-colors" data-testid={`user-row-${u.id}`}>
+                  <td className="px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedUserIds.includes(u.id)}
+                      disabled={u.role === 'superadmin'}
+                      onChange={(e) => setSelectedUserIds(prev => e.target.checked ? [...new Set([...prev, u.id])] : prev.filter(id => id !== u.id))}
+                      data-testid={`user-select-${u.id}`}
+                    />
+                  </td>
                   <td className="px-4 py-3 text-sm font-medium text-slate-800">{u.full_name || '–'}</td>
                   <td className="px-4 py-3 text-sm text-slate-600">{u.email}</td>
                   <td className="px-4 py-3">

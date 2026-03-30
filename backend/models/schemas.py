@@ -188,6 +188,11 @@ class UserUpdate(BaseModel):
     active: Optional[bool] = None
 
 
+class UsersBulkActiveUpdate(BaseModel):
+    user_ids: List[str]
+    active: bool
+
+
 # ─── Invoice schemas ──────────────────────────────────────────────────────────
 class InvoiceCreate(BaseModel):
     applicant_id: str

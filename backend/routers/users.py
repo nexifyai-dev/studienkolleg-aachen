@@ -11,7 +11,7 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from bson import ObjectId
 from database import get_db
 from deps import get_current_user, require_roles, ADMIN_ROLES, STAFF_ROLES
-from models.schemas import UserUpdate, to_str_id
+from models.schemas import UserUpdate, UsersBulkActiveUpdate, to_str_id
 from services.audit import write_audit_log
 
 router = APIRouter(prefix="/api/users", tags=["users"])
@@ -27,6 +27,54 @@ async def list_users(user: dict = Depends(require_roles(*ADMIN_ROLES))):
     db = get_db()
     users = await db.users.find({}, {"password_hash": 0}).to_list(500)
     return [to_str_id(u) for u in users]
+
+
+@router.put("/bulk/active")
+async def bulk_set_active(
+    data: UsersBulkActiveUpdate,
+    current_user: dict = Depends(require_roles(*ADMIN_ROLES)),
+):
+    user_ids = [uid for uid in data.user_ids if uid and uid != current_user["id"]]
+    if not user_ids:
+        raise HTTPException(status_code=400, detail="Keine gültigen Zielnutzer")
+
+    object_ids = []
+    for uid in user_ids:
+        try:
+            object_ids.append(ObjectId(uid))
+        except Exception:
+            raise HTTPException(status_code=400, detail=f"Ungültige ID: {uid}")
+
+    db = get_db()
+    users = await db.users.find(
+        {"_id": {"$in": object_ids}},
+        {"_id": 1, "role": 1},
+    ).to_list(len(object_ids))
+    superadmin_ids = {str(u["_id"]) for u in users if u.get("role") == "superadmin"}
+    allowed_ids = [oid for oid in object_ids if str(oid) not in superadmin_ids]
+    if not allowed_ids:
+        raise HTTPException(status_code=400, detail="Keine änderbaren Nutzer im Batch")
+
+    result = await db.users.update_many(
+        {"_id": {"$in": allowed_ids}},
+        {"$set": {"active": data.active, "updated_at": datetime.now(timezone.utc)}},
+    )
+    for user_id in [str(oid) for oid in allowed_ids]:
+        await write_audit_log(
+            "user_bulk_active_changed",
+            current_user["id"],
+            "user",
+            user_id,
+            {"active": data.active},
+        )
+
+    return {
+        "message": "Batch-Update durchgeführt",
+        "requested": len(user_ids),
+        "updated": result.modified_count,
+        "skipped_superadmin": len(superadmin_ids),
+        "skipped_self": len(data.user_ids) - len(user_ids),
+    }
 
 
 @router.get("/{user_id}")
@@ -65,3 +113,4 @@ async def update_user(user_id: str, data: UserUpdate, current_user: dict = Depen
         raise HTTPException(status_code=400, detail="Ungültige ID")
     await write_audit_log("user_updated", current_user["id"], "user", user_id, {"fields": list(update.keys())})
     return {"message": "Aktualisiert"}
+

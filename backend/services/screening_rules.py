@@ -95,18 +95,45 @@ def check_language_level(course_type: Optional[str], language_level: Optional[st
 
 
 def check_document_completeness(docs: list) -> dict:
-    uploaded_types = {
-        d.get("document_type")
-        for d in docs
-        if d.get("status") not in ("rejected", "superseded")
-    }
-    missing = [t for t in REQUIRED_DOCUMENT_TYPES if t not in uploaded_types]
-    present = [t for t in REQUIRED_DOCUMENT_TYPES if t in uploaded_types]
+    uploaded_types = {}
+    evidence = []
+    for d in docs:
+        doc_type = d.get("document_type")
+        if not doc_type:
+            continue
+        status = d.get("status", "unknown")
+        if status in ("approved", "in_review", "uploaded"):
+            bucket = "present"
+        elif status in ("rejected", "invalid", "superseded"):
+            bucket = "invalid"
+        else:
+            bucket = "unknown"
+        uploaded_types.setdefault(doc_type, set()).add(bucket)
+        evidence.append(
+            {
+                "document_type": doc_type,
+                "status": status,
+                "bucket": bucket,
+                "source": "uploaded_document_metadata",
+            }
+        )
+
+    missing = [t for t in REQUIRED_DOCUMENT_TYPES if "present" not in uploaded_types.get(t, set())]
+    present = [t for t in REQUIRED_DOCUMENT_TYPES if "present" in uploaded_types.get(t, set())]
+    invalid = [t for t, states in uploaded_types.items() if "invalid" in states]
+    reasons = (
+        ["Alle Pflichtdokumente liegen in prüffähigem Status vor."]
+        if not missing
+        else [f"Fehlende Pflichtdokumente: {', '.join(REQUIRED_DOC_LABELS[t] for t in missing)}"]
+    )
     return {
         "complete": len(missing) == 0,
         "missing_types": missing,
         "missing_labels": [REQUIRED_DOC_LABELS[t] for t in missing],
         "present_labels": [REQUIRED_DOC_LABELS[t] for t in present],
+        "invalid_types": invalid,
+        "reasons": reasons,
+        "evidence": evidence,
         "total_required": len(REQUIRED_DOCUMENT_TYPES),
         "total_present": len(present),
     }
@@ -183,6 +210,21 @@ def evaluate_screening_criteria(application: dict, applicant: dict, docs: list) 
     elif formal_result == "language_gap":
         suggested_next_step = "offer_language_pathway"
 
+    formal_precheck = {
+        "status": "critical" if any(flag in risk_flags for flag in ("anabin_restricted", "language_requirement_not_met")) else (
+            "unclear" if criteria_missing else "plausible"
+        ),
+        "reasons": [c["note"] for c in criteria_checked if c["status"] == "passed"] or ["Keine belastbaren Positivkriterien."],
+        "risks": [c["note"] for c in criteria_failed],
+        "open_points": [c["note"] for c in criteria_missing],
+        "evidence": [
+            {"criterion": "course_type", "value": application.get("course_type"), "source": "application_form"},
+            {"criterion": "language_level", "value": application.get("language_level"), "source": "application_form"},
+            {"criterion": "degree_country", "value": application.get("degree_country"), "source": "application_form"},
+            {"criterion": "anabin_category", "value": anabin["category"], "source": "local_rulebook_v1"},
+        ],
+    }
+
     evidence = {
         "required_fields": required_fields,
         "documents": {
@@ -215,4 +257,11 @@ def evaluate_screening_criteria(application: dict, applicant: dict, docs: list) 
         "risk_flags": sorted(set(risk_flags)),
         "suggested_next_step": suggested_next_step,
         "evidence": evidence,
+        "formal_precheck": formal_precheck,
+        "reference_basis": {
+            "mode": "local_rulebook",
+            "version": "screening_rules_v2",
+            "live_reference_connected": False,
+            "note": "Lokale, dokumentierte Regelbasis aus Drive-Spiegelquellen ohne Live-Anabin-API.",
+        },
     }

@@ -38,6 +38,7 @@ async def run_ai_screening(
     completeness = local_summary["completeness"]
     anabin_info = local_summary["anabin_assessment"]
     language_check = local_summary["language_level_check"]
+    formal_precheck = local_summary["formal_precheck"]
 
     ai_report = None
     ai_error = None
@@ -128,7 +129,8 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
     else:
         ai_report = "KI-Prüfung nicht verfügbar (DEEPSEEK_API_KEY nicht konfiguriert). Lokale Vorprüfung abgeschlossen."
 
-    suggested_stage = _suggest_stage(local_summary)
+    suggested_stage = _suggest_stage(local_summary, formal_precheck)
+    next_actions = _suggest_next_actions(completeness, formal_precheck, suggested_stage, local_summary["suggested_next_step"])
 
     precheck_status = "ok" if local_summary["formal_result"] == "precheck_passed" else "action_required"
 
@@ -160,21 +162,32 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
                 "status": "complete" if completeness["complete"] else "incomplete",
                 "missing_documents": completeness["missing_labels"],
                 "present_documents": completeness["present_labels"],
+                "reasons": completeness["reasons"],
+                "evidence": completeness["evidence"],
             },
             "formal_precheck": {
                 "status": local_summary["formal_result"],
                 "language_level_ok": language_check["ok"],
                 "anabin_category": anabin_info["category"],
                 "notes": [language_check["note"], anabin_info["label"]],
+                "reasons": formal_precheck["reasons"],
+                "risks": formal_precheck["risks"],
+                "open_points": formal_precheck["open_points"],
+                "evidence": formal_precheck["evidence"],
             },
             "ai_recommendation": {
                 "suggested_stage": suggested_stage,
                 "status": "available" if ai_report else "unavailable",
                 "note": "Nur Empfehlung – keine finale Zulassungsentscheidung.",
+                "next_actions": next_actions,
             },
             "staff_decision": {
                 "status": "pending",
                 "note": "Finale Entscheidung erfolgt ausschließlich durch Staff.",
+                "required_confirmation": [
+                    "Manuelle Prüfung aller kritischen/unklaren Punkte",
+                    "Explizite Staff-Freigabe des finalen Stages",
+                ],
             },
         },
         "precheck_status": precheck_status,
@@ -185,13 +198,36 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
         "missing_documents": completeness["missing_labels"],
         "anabin_category": anabin_info["category"],
         "language_level_ok": language_check["ok"],
+        "next_actions": next_actions,
+        "reference_basis": local_summary["reference_basis"],
         "decision_note": "Regelbasierte Vorprüfung + KI-Empfehlung via DeepSeek. Keine bindende Entscheidung. Staff-Review erforderlich.",
     }
 
 
-def _suggest_stage(local_summary: dict) -> str:
+def _suggest_stage(local_summary: dict, formal_precheck: dict) -> str:
     if local_summary["formal_result"] == "documents_missing":
         return "pending_docs"
     if local_summary["formal_result"] in {"language_gap", "manual_review_required"}:
         return "in_review"
-    return "in_review"
+    if formal_precheck["status"] == "critical":
+        return "on_hold"
+    if formal_precheck["status"] == "unclear":
+        return "in_review"
+    return "interview_scheduled"
+
+
+def _suggest_next_actions(completeness: dict, formal_precheck: dict, suggested_stage: str, suggested_next_step: str) -> list:
+    actions = []
+    if not completeness["complete"]:
+        actions.append("Fehlende Pflichtunterlagen beim Bewerber anfordern.")
+    if completeness["invalid_types"]:
+        actions.append("Ungültige/abgelehnte Dokumente durch neue Nachweise ersetzen lassen.")
+    if formal_precheck["status"] == "critical":
+        actions.append("Fall an erfahrenes Staff-Mitglied zur vertieften Anerkennungsprüfung eskalieren.")
+    if formal_precheck["status"] in ("critical", "unclear"):
+        actions.append("Externe Referenzprüfung (z. B. Anabin) manuell durchführen und dokumentieren.")
+    if formal_precheck["status"] == "plausible":
+        actions.append("Interview oder Beratungsgespräch terminieren und Ergebnis dokumentieren.")
+    actions.append(f"Nächster Prozessschritt laut Regelmatrix: {suggested_next_step}.")
+    actions.append(f"Staff entscheidet final über Stage-Wechsel ({suggested_stage}).")
+    return actions

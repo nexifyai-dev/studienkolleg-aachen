@@ -11,7 +11,7 @@ Status: Foundation live, NICHT produktionsreif ohne Auflösung der Blocker unten
 |---|---|---|---|
 | T1 | `COOKIE_SECURE=true` setzen (HTTPS-Pflicht in Prod) | .env ändern | Bereit, warten auf HTTPS-Bestätigung |
 | T2 | `RESEND_API_KEY` konfigurieren + verifizierte Absender-Domain | .env + Resend-Setup | [OFFEN] |
-| T3 | Echten Datei-Upload aktivieren: S3/MinIO Credentials (`S3_ENDPOINT`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET`) | .env + ggf. `pip install boto3` | [OFFEN] |
+| T3 | Echten Datei-Upload aktivieren: S3/MinIO Credentials (`S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET`; zusätzlich `S3_ENDPOINT` bei `STORAGE_BACKEND=minio`) | .env + ggf. `pip install boto3` | [OFFEN] |
 | T4 | `JWT_SECRET` produktionstauglichen Wert setzen (min. 64 Zeichen, zufällig) | .env ändern | Bereit |
 | T5 | `ADMIN_PASSWORD` nach erstem Login rotieren oder initialen Admin deaktivieren | Prozess | Bereit |
 | T6 | MongoDB-Sicherung und Backup-Routine | Infra | [OFFEN] |
@@ -68,10 +68,10 @@ EMAIL_FROM=noreply@studienkolleg-aachen.de
 # Storage [OFFEN]
 STORAGE_BACKEND=local               # local | s3 | minio
 LOCAL_STORAGE_PATH=/app/storage     # nur bei STORAGE_BACKEND=local
-S3_ENDPOINT=                        # Leer = S3/MinIO nicht aktiv
-S3_ACCESS_KEY=
-S3_SECRET_KEY=
-S3_BUCKET=w2g-documents
+S3_ENDPOINT=                        # Pflicht bei STORAGE_BACKEND=minio; optional bei s3
+S3_ACCESS_KEY=                      # Pflicht bei STORAGE_BACKEND in (s3,minio)
+S3_SECRET_KEY=                      # Pflicht bei STORAGE_BACKEND in (s3,minio)
+S3_BUCKET=                          # Pflicht bei STORAGE_BACKEND in (s3,minio)
 S3_REGION=eu-central-1
 ```
 
@@ -96,8 +96,8 @@ PRODUKTIONSREIF:
 
 VORBEREITET, ABER NICHT AKTIV:
   ○ E-Mail-Delivery (Code bereit, RESEND_API_KEY fehlt)
-  ○ Binäre Datei-Uploads (Code bereit, Storage-Credentials fehlen)
-  ○ S3/MinIO Backend (Code bereit, boto3 bei Bedarf installieren)
+  ○ Binäre Datei-Uploads (Code bereit; bei fehlenden Credentials jetzt Runtime-Fehler statt Metadata-Fallback)
+  ○ S3/MinIO Backend (Aktivierung: s3 mit Keys+Bucket, minio mit Endpoint+Keys+Bucket; boto3 bei Bedarf installieren)
   ○ HTTPS/Secure-Cookies (COOKIE_SECURE=false, änderbar per .env)
 
 EXPLIZIT BLOCKIERT (kein Go-Live):

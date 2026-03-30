@@ -5,7 +5,7 @@ Tests:
 - All 4 role logins (admin, staff, teacher, applicant)
 - Teacher API: GET /api/teacher/my-students
 - Consent API: POST /api/consents/grant, GET /api/consents/my
-- AI Model Registry: GET /api/ai/model-registry (nscale provider)
+- AI Model Registry: GET /api/ai/model-registry (deepseek provider)
 """
 import pytest
 import requests
@@ -243,7 +243,7 @@ class TestConsentAPI:
 
 
 class TestAIModelRegistry:
-    """AI Model Registry tests (nscale provider)"""
+    """AI Model Registry tests (deepseek provider)"""
     
     @pytest.fixture
     def staff_session(self):
@@ -269,8 +269,8 @@ class TestAIModelRegistry:
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
         data = response.json()
         
-        # Verify nscale provider
-        assert data.get("provider") == "nscale", f"Expected nscale provider, got {data.get('provider')}"
+        # Verify deepseek provider
+        assert data.get("provider") == "deepseek", f"Expected deepseek provider, got {data.get('provider')}"
         assert "enabled" in data, "Should have enabled field"
         assert "models" in data, "Should have models field"
         

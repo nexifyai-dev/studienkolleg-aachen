@@ -57,7 +57,6 @@ function MessageBubble({ msg, isOwn }) {
 export default function MessagesPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [conversations, setConversations] = useState([]);
   const [activeConv, setActiveConv] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState('');
@@ -75,13 +74,11 @@ export default function MessagesPage() {
       const supportConv = supportRes.data;
       const convsRes = await apiClient.get('/api/conversations', { withCredentials: true });
       const convs = convsRes.data || [];
-      setConversations(convs);
       const found = convs.find(c => c.id === supportConv?.id);
       setActiveConv(found || convs[0] || supportConv);
     } catch {
       try {
         const convsRes = await apiClient.get('/api/conversations', { withCredentials: true });
-        setConversations(convsRes.data || []);
         if (convsRes.data?.[0]) setActiveConv(convsRes.data[0]);
       } catch {}
     } finally { setLoading(false); }

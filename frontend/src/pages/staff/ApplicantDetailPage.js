@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
 import { toast } from 'sonner';
-import { STAGE_LABELS, STAGE_COLORS, formatDate } from '../../lib/utils';
+import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
   FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2,
@@ -17,14 +17,14 @@ function FollowupPanel({ appId }) {
   const [form, setForm] = useState({ due_date: '', reason: '' });
   const [creating, setCreating] = useState(false);
 
-  useEffect(() => { loadFollowups(); }, [appId]);
-
-  const loadFollowups = async () => {
+  const loadFollowups = useCallback(async () => {
     try {
       const r = await apiClient.get('/api/followups', { withCredentials: true });
       setFollowups((r.data || []).filter(f => f.application_id === appId));
     } catch {}
-  };
+  }, [appId]);
+
+  useEffect(() => { loadFollowups(); }, [loadFollowups]);
 
   const create = async () => {
     if (!form.due_date || !form.reason) return;
@@ -117,9 +117,7 @@ function TeacherAssignmentPanel({ applicantId, applicantName }) {
   const [actionLoading, setActionLoading] = useState('');
   const [showPicker, setShowPicker] = useState(false);
 
-  useEffect(() => { loadData(); }, [applicantId]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [assignRes, usersRes] = await Promise.all([
         apiClient.get('/api/teacher/assignments'),
@@ -129,7 +127,9 @@ function TeacherAssignmentPanel({ applicantId, applicantName }) {
       setAssignments(all.filter(a => a.applicant_id === applicantId));
       setTeachers((usersRes.data || []).filter(u => u.role === 'teacher' && u.active));
     } catch {} finally { setLoading(false); }
-  };
+  }, [applicantId]);
+
+  useEffect(() => { loadData(); }, [loadData]);
 
   const assign = async (tid) => {
     setActionLoading(tid);

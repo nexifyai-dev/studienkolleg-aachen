@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import apiClient from '../../lib/apiClient';
-import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
 import {
   CheckSquare, Clock, AlertCircle, Plus, Loader2, CheckCircle, X,
   Paperclip, Download, FileText, MessageSquare, History, Send,
-  ChevronDown, ChevronUp, Edit3, Save, Trash2, User
+  Edit3, Save, User
 } from 'lucide-react';
 
 const PRIORITY_LABELS = { high: 'Hoch', normal: 'Normal', low: 'Niedrig' };
@@ -319,7 +318,6 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
 
 /* ═══════ Main Tasks Page ═══════ */
 export default function StaffTasksPage() {
-  const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('open');

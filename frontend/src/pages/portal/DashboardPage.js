@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import apiClient from '../../lib/apiClient';
 import { FileText, MessageSquare, CreditCard, CheckCircle, Clock, AlertCircle, BookOpen } from 'lucide-react';
-import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
+import { STAGE_LABELS } from '../../lib/utils';
 
 
 export default function DashboardPage() {

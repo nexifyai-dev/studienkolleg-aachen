@@ -4,17 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
 
-const ICON_MAP = {
-  'file-text': 'FileText',
-  'refresh-cw': 'RefreshCw',
-  'upload': 'Upload',
-  'graduation-cap': 'GraduationCap',
-  'shield': 'Shield',
-  'shield-off': 'ShieldOff',
-  'message-square': 'MessageSquare',
-  'bell': 'Bell',
-};
-
 function timeAgo(dateStr, lang) {
   const now = new Date();
   const d = new Date(dateStr);

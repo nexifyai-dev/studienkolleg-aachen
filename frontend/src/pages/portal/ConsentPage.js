@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../contexts/AuthContext';
 import apiClient from '../../lib/apiClient';
-import { Shield, CheckCircle, XCircle, Clock, AlertCircle, Info } from 'lucide-react';
+import { Shield, CheckCircle, XCircle, Clock, Info } from 'lucide-react';
 
 const CONSENT_INFO = {
   de: {
@@ -26,8 +25,7 @@ const CONSENT_INFO = {
 };
 
 export default function ConsentPage() {
-  const { t, i18n } = useTranslation();
-  const { user } = useAuth();
+  const { i18n } = useTranslation();
   const [consents, setConsents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState('');

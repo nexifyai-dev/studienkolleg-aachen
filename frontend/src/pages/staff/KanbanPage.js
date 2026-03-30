@@ -160,11 +160,14 @@ export default function KanbanPage() {
   const [screenings, setScreenings] = useState({});
   const [loading, setLoading] = useState(true);
   const [filterCourse, setFilterCourse] = useState('');
+  const [filterPriority, setFilterPriority] = useState('');
+  const [filterDocState, setFilterDocState] = useState('');
   const [filterStage, setFilterStage] = useState(searchParams.get('stage') || '');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIds, setSelectedIds] = useState([]);
   const [bulkStage, setBulkStage] = useState('in_review');
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   // Read URL stage filter on mount
   useEffect(() => {
@@ -210,6 +213,13 @@ export default function KanbanPage() {
 
   const filtered = applications.filter(a => {
     if (filterCourse && a.course_type !== filterCourse) return false;
+    if (filterPriority && a.priority !== filterPriority) return false;
+    if (filterDocState) {
+      const screening = screenings[a.id];
+      if (filterDocState === 'incomplete' && screening?.is_complete !== false) return false;
+      if (filterDocState === 'complete' && screening?.is_complete !== true) return false;
+      if (filterDocState === 'unknown' && screening) return false;
+    }
     if (query.trim()) {
       const q = query.trim().toLowerCase();
       const haystack = [
@@ -266,6 +276,28 @@ export default function KanbanPage() {
               data-testid="kanban-search-input"
             />
           </div>
+          <select
+            value={filterPriority}
+            onChange={(e) => setFilterPriority(e.target.value)}
+            className="px-2.5 py-2 text-sm border border-slate-200 rounded-sm focus:outline-none focus:border-primary"
+            data-testid="kanban-priority-filter"
+          >
+            <option value="">Priorität</option>
+            <option value="high">Hoch</option>
+            <option value="normal">Normal</option>
+            <option value="low">Niedrig</option>
+          </select>
+          <select
+            value={filterDocState}
+            onChange={(e) => setFilterDocState(e.target.value)}
+            className="px-2.5 py-2 text-sm border border-slate-200 rounded-sm focus:outline-none focus:border-primary"
+            data-testid="kanban-doc-filter"
+          >
+            <option value="">Dokumentenstatus</option>
+            <option value="incomplete">Unvollständig</option>
+            <option value="complete">Vollständig</option>
+            <option value="unknown">Kein Screening</option>
+          </select>
           {/* Filter */}
           <div className="relative">
             <button onClick={() => setShowFilterMenu(!showFilterMenu)}
@@ -320,16 +352,45 @@ export default function KanbanPage() {
           <button
             disabled={!selectedIds.length}
             onClick={async () => {
-              await Promise.allSettled(selectedIds.map((id) =>
-                apiClient.put(`/api/applications/${id}`, { current_stage: bulkStage }, { withCredentials: true })
-              ));
-              setApplications(prev => prev.map(a => selectedIds.includes(a.id) ? { ...a, current_stage: bulkStage } : a));
-              setSelectedIds([]);
+              setBulkBusy(true);
+              try {
+                await Promise.allSettled(selectedIds.map((id) =>
+                  apiClient.put(`/api/applications/${id}`, { current_stage: bulkStage }, { withCredentials: true })
+                ));
+                setApplications(prev => prev.map(a => selectedIds.includes(a.id) ? { ...a, current_stage: bulkStage } : a));
+                setSelectedIds([]);
+              } finally {
+                setBulkBusy(false);
+              }
             }}
             className="text-xs bg-primary text-white rounded-sm px-3 py-1.5 disabled:opacity-40"
             data-testid="kanban-bulk-stage-btn"
           >
-            <CheckSquare size={12} className="inline mr-1" /> Sammelaktion: Status setzen
+            <CheckSquare size={12} className="inline mr-1" /> {bulkBusy ? 'Wird verarbeitet…' : 'Sammelaktion: Status setzen'}
+          </button>
+          <button
+            disabled={!selectedIds.length || bulkBusy}
+            onClick={async () => {
+              setBulkBusy(true);
+              try {
+                const due = new Date();
+                due.setDate(due.getDate() + 2);
+                const dueDate = due.toISOString().slice(0, 10);
+                await Promise.allSettled(selectedIds.map((id) =>
+                  apiClient.post('/api/followups', {
+                    application_id: id,
+                    due_date: dueDate,
+                    reason: 'Bulk Follow-up aus Kanban',
+                  }, { withCredentials: true })
+                ));
+              } finally {
+                setBulkBusy(false);
+              }
+            }}
+            className="text-xs border border-primary/25 text-primary rounded-sm px-3 py-1.5 disabled:opacity-40"
+            data-testid="kanban-bulk-followup-btn"
+          >
+            Bulk: Follow-up +2 Tage
           </button>
         </div>
       </div>

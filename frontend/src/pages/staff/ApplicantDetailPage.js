@@ -199,6 +199,12 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
   };
 
   const latest = screenings[0];
+  const formalStatusLabel = {
+    precheck_passed: 'Formale Vorprüfung bestanden',
+    documents_missing: 'Unterlagen unvollständig',
+    language_gap: 'Sprachanforderung nicht erfüllt',
+    manual_review_required: 'Manuelle Prüfung erforderlich',
+  };
 
   return (
     <div className="bg-white border border-slate-200 rounded-sm overflow-hidden" data-testid="ai-screening-panel">
@@ -226,6 +232,37 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
               <div className="rounded-sm p-2 text-center text-[10px] bg-slate-50">Anabin: <strong>{latest.anabin_category || '–'}</strong></div>
               <div className={`rounded-sm p-2 text-center text-[10px] ${latest.language_level_ok ? 'bg-primary/8 text-primary' : 'bg-red-50 text-red-600'}`}>
                 Sprache: {latest.language_level_ok ? 'OK' : 'Fehlt'}
+              </div>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-sm p-3 space-y-2">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-slate-500">Formale Vorprüfung</span>
+                <span className={`font-semibold ${latest.formal_result === 'precheck_passed' ? 'text-primary' : 'text-amber-700'}`}>
+                  {formalStatusLabel[latest.formal_result] || latest.formal_result || '–'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-[10px]">
+                <div>
+                  <p className="text-slate-400 mb-1">Nicht erfüllt</p>
+                  <ul className="space-y-1">
+                    {(latest.criteria_failed || []).length === 0 && <li className="text-slate-400">Keine</li>}
+                    {(latest.criteria_failed || []).map((c) => (
+                      <li key={`failed-${c.rule_id}`} className="text-red-600">{c.rule_id}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-slate-400 mb-1">Fehlende Kriterien</p>
+                  <ul className="space-y-1">
+                    {(latest.criteria_missing || []).length === 0 && <li className="text-slate-400">Keine</li>}
+                    {(latest.criteria_missing || []).map((c) => (
+                      <li key={`missing-${c.rule_id}`} className="text-amber-700">{c.rule_id}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="text-[10px] text-slate-500">
+                Nächster Schritt: <span className="font-medium text-slate-700">{latest.suggested_next_step || 'staff_formal_review'}</span>
               </div>
             </div>
             {latest.suggested_stage && (

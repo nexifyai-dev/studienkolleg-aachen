@@ -41,14 +41,19 @@ EMAIL_ENABLED: bool = bool(RESEND_API_KEY)
 
 # ─── Storage ─────────────────────────────────────────────────────────────────
 # [OFFEN] S3/MinIO credentials must be set before binary file uploads are active.
+# Activation logic: local always active; s3 requires credentials; minio requires credentials + endpoint.
 STORAGE_BACKEND: str = os.environ.get("STORAGE_BACKEND", "local")  # local | s3 | minio
 S3_ENDPOINT: str = os.environ.get("S3_ENDPOINT", "")
 S3_ACCESS_KEY: str = os.environ.get("S3_ACCESS_KEY", "")
 S3_SECRET_KEY: str = os.environ.get("S3_SECRET_KEY", "")
-S3_BUCKET: str = os.environ.get("S3_BUCKET", "w2g-documents")
+S3_BUCKET: str = os.environ.get("S3_BUCKET", "")
 S3_REGION: str = os.environ.get("S3_REGION", "eu-central-1")
 LOCAL_STORAGE_PATH: str = os.environ.get("LOCAL_STORAGE_PATH", "/app/storage")
-STORAGE_ENABLED: bool = bool(S3_ENDPOINT or STORAGE_BACKEND == "local")
+STORAGE_ENABLED: bool = (
+    STORAGE_BACKEND == "local"
+    or (STORAGE_BACKEND == "s3" and bool(S3_ACCESS_KEY and S3_SECRET_KEY and S3_BUCKET))
+    or (STORAGE_BACKEND == "minio" and bool(S3_ENDPOINT and S3_ACCESS_KEY and S3_SECRET_KEY and S3_BUCKET))
+)
 
 # ─── AI / KI-Inferenz (DeepSeek) ──────────────────────────────────────────────
 # Alle produktiven KI-Funktionen laufen über DeepSeek.

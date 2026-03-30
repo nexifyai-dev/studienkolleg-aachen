@@ -1,7 +1,7 @@
 """
 Storage service – S3/MinIO-compatible abstraction.
 
-[OFFEN] S3_ENDPOINT, S3_ACCESS_KEY, S3_SECRET_KEY must be set in .env before
+[OFFEN] S3_ACCESS_KEY, S3_SECRET_KEY, S3_BUCKET must be set in .env before
 binary file uploads are active in production.
 
 When STORAGE_BACKEND=local, files are saved to LOCAL_STORAGE_PATH.
@@ -167,16 +167,41 @@ class MetadataOnlyBackend:
         raise NotImplementedError("No storage backend configured.")
 
 
+def _validate_s3_configuration(storage_backend: str, require_endpoint: bool) -> None:
+    from config import S3_ENDPOINT, S3_ACCESS_KEY, S3_SECRET_KEY, S3_BUCKET
+
+    missing = []
+    if require_endpoint and not S3_ENDPOINT:
+        missing.append("S3_ENDPOINT")
+    if not S3_ACCESS_KEY:
+        missing.append("S3_ACCESS_KEY")
+    if not S3_SECRET_KEY:
+        missing.append("S3_SECRET_KEY")
+    if not S3_BUCKET:
+        missing.append("S3_BUCKET")
+
+    if missing:
+        required_for = "minio" if require_endpoint else "s3"
+        raise RuntimeError(
+            f"[STORAGE:{storage_backend}] Missing required configuration for {required_for}: {', '.join(missing)}"
+        )
+
+
 def get_storage_backend():
     """Factory: returns the active storage backend based on config."""
-    from config import STORAGE_BACKEND, LOCAL_STORAGE_PATH, S3_ENDPOINT
-    if STORAGE_BACKEND in ("s3", "minio") and S3_ENDPOINT:
+    from config import STORAGE_BACKEND, LOCAL_STORAGE_PATH
+
+    if STORAGE_BACKEND in ("s3", "minio"):
+        _validate_s3_configuration(
+            STORAGE_BACKEND,
+            require_endpoint=STORAGE_BACKEND == "minio",
+        )
         return S3StorageBackend()
-    elif STORAGE_BACKEND == "local":
+    if STORAGE_BACKEND == "local":
         return LocalStorageBackend(LOCAL_STORAGE_PATH)
-    else:
-        logger.warning("[STORAGE] No storage backend configured – using metadata-only mode.")
-        return MetadataOnlyBackend()
+
+    logger.warning("[STORAGE] No storage backend configured – using metadata-only mode.")
+    return MetadataOnlyBackend()
 
 
 # Singleton instance

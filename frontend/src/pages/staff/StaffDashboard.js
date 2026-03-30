@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import apiClient from '../../lib/apiClient';
+import apiClient, { resolveApiUrl } from '../../lib/apiClient';
 import {
   Users, FileText, CheckSquare, TrendingUp, Clock,
   ArrowRight, AlertCircle, ChevronRight, RefreshCw,
@@ -87,7 +87,7 @@ export default function StaffDashboard() {
           <h1 className="text-xl font-heading font-bold text-primary">Dashboard</h1>
           <p className="text-slate-500 text-sm">Willkommen, {user?.full_name || user?.email}</p>
         </div>
-        <a href={`${process.env.REACT_APP_BACKEND_URL}/api/export/applications`}
+        <a href={resolveApiUrl('/api/export/applications')}
           data-testid="export-btn"
           className="flex items-center gap-1.5 text-xs font-medium border border-slate-200 text-slate-600 px-3 py-2 rounded-sm hover:bg-slate-50 hover:border-primary/30 transition-colors">
           <DownloadCloud size={14} /> CSV-Export

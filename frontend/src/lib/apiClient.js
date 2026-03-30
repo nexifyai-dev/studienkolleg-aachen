@@ -12,10 +12,16 @@
  */
 import axios from 'axios';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+export const API_BASE = process.env.REACT_APP_BACKEND_URL || '';
+export function resolveApiUrl(path = '') {
+  if (!path) return API_BASE || '';
+  if (/^https?:\/\//i.test(path)) return path;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return API_BASE ? `${API_BASE}${normalizedPath}` : normalizedPath;
+}
 
 const apiClient = axios.create({
-  baseURL: API,
+  baseURL: API_BASE || undefined,
   withCredentials: true,
 });
 
@@ -55,14 +61,14 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await axios.post(`${API}/api/auth/refresh`, {}, { withCredentials: true });
+        await axios.post(resolveApiUrl('/api/auth/refresh'), {}, { withCredentials: true });
         processQueue(null);
         return apiClient(original);
       } catch (refreshError) {
         processQueue(refreshError);
         // Refresh failed – clear state and redirect
         try {
-          await axios.post(`${API}/api/auth/logout`, {}, { withCredentials: true });
+          await axios.post(resolveApiUrl('/api/auth/logout'), {}, { withCredentials: true });
         } catch {}
         window.location.href = '/auth/login';
         return Promise.reject(refreshError);

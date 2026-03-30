@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import apiClient from '../../lib/apiClient';
+import apiClient, { resolveApiUrl } from '../../lib/apiClient';
 import { MessageSquare, Send, Loader2, Paperclip, FileText, Download, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-const API = process.env.REACT_APP_BACKEND_URL;
 const MAX_FILE_MB = 10;
 
 function fileToBase64(file) {
@@ -37,7 +36,7 @@ function MessageBubble({ msg, isOwn }) {
                 </p>
               )}
             </div>
-            <a href={`${API}/api/messages/${msg.id}/attachment`}
+            <a href={resolveApiUrl(`/api/messages/${msg.id}/attachment`)}
               target="_blank" rel="noreferrer"
               data-testid={`download-attachment-${msg.id}`}
               className={`shrink-0 ${isOwn ? 'text-white/70 hover:text-white' : 'text-primary hover:text-primary/70'}`}>

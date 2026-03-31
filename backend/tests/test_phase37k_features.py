@@ -7,6 +7,7 @@ Phase 3.7k Backend Tests
 import pytest
 import requests
 import os
+import uuid
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
@@ -184,41 +185,141 @@ class TestAIScreeningAcceptSuggestion:
         assert resp.status_code == 403
         print("✓ Accept AI suggestion correctly forbidden for applicant")
     
-    def test_accept_ai_suggestion_requires_suggested_stage(self, staff_session, test_application_id):
-        """Accept AI suggestion requires suggested_stage field"""
-        resp = staff_session.post(
-            f"{BASE_URL}/api/applications/{test_application_id}/accept-ai-suggestion",
-            json={}
-        )
-        assert resp.status_code == 400
-        print("✓ Accept AI suggestion correctly requires suggested_stage")
-    
-    def test_accept_ai_suggestion_works(self, staff_session, test_application_id):
-        """Accept AI suggestion changes stage and returns audit info"""
+    @pytest.fixture
+    def latest_screening_context(self, staff_session, test_application_id):
+        """Ensure an application has a latest screening with suggested_stage."""
+        screenings_resp = staff_session.get(f"{BASE_URL}/api/applications/{test_application_id}/ai-screenings")
+        if screenings_resp.status_code != 200:
+            pytest.skip("Cannot load AI screenings list")
+        screenings = screenings_resp.json()
+
+        if not screenings or not screenings[0].get("suggested_stage"):
+            run_resp = staff_session.post(f"{BASE_URL}/api/applications/{test_application_id}/ai-screen", json={})
+            if run_resp.status_code != 200:
+                pytest.skip("Cannot create AI screening for accept-ai-suggestion tests")
+            screenings_resp = staff_session.get(f"{BASE_URL}/api/applications/{test_application_id}/ai-screenings")
+            if screenings_resp.status_code != 200:
+                pytest.skip("Cannot reload AI screenings after ai-screen run")
+            screenings = screenings_resp.json()
+
+        if not screenings:
+            pytest.skip("No AI screenings available")
+
+        latest = screenings[0]
+        suggested_stage = latest.get("suggested_stage")
+        if not suggested_stage:
+            pytest.skip("Latest AI screening has no suggested_stage")
+
+        return {
+            "application_id": test_application_id,
+            "suggested_stage": suggested_stage,
+        }
+
+    def test_accept_ai_suggestion_uses_latest_screening_without_body_stage(
+        self, staff_session, latest_screening_context
+    ):
+        """Accept AI suggestion works with server-side latest suggested_stage."""
+        app_id = latest_screening_context["application_id"]
+        expected_stage = latest_screening_context["suggested_stage"]
+
         # First get current stage
-        app_resp = staff_session.get(f"{BASE_URL}/api/applications/{test_application_id}")
+        app_resp = staff_session.get(f"{BASE_URL}/api/applications/{app_id}")
         if app_resp.status_code != 200:
             pytest.skip("Cannot get application details")
         current_stage = app_resp.json().get("current_stage", "lead_new")
-        
-        # Try to accept a different stage
-        new_stage = "in_review" if current_stage != "in_review" else "pending_docs"
+
         resp = staff_session.post(
-            f"{BASE_URL}/api/applications/{test_application_id}/accept-ai-suggestion",
-            json={"suggested_stage": new_stage}
+            f"{BASE_URL}/api/applications/{app_id}/accept-ai-suggestion",
+            json={}
         )
         assert resp.status_code == 200
         data = resp.json()
         assert data.get("status") in ["accepted", "unchanged"]
+        assert data.get("new_stage") == expected_stage
+        assert data.get("screening_id")
+        assert "screening_created_at" in data
+        assert data.get("accepted_from_latest_screening") is True
+        print(f"✓ Accept AI suggestion from latest screening OK - stage {data.get('new_stage')}")
+
+        # Restore original stage
+        staff_session.put(
+            f"{BASE_URL}/api/applications/{app_id}",
+            json={"current_stage": current_stage}
+        )
+
+    def test_accept_ai_suggestion_rejects_manipulated_stage_input(
+        self, staff_session, latest_screening_context
+    ):
+        """Accept AI suggestion rejects when body stage differs from latest screening suggestion."""
+        app_id = latest_screening_context["application_id"]
+        latest_stage = latest_screening_context["suggested_stage"]
+        manipulated_stage = "on_hold" if latest_stage != "on_hold" else "in_review"
+
+        resp = staff_session.post(
+            f"{BASE_URL}/api/applications/{app_id}/accept-ai-suggestion",
+            json={"suggested_stage": manipulated_stage}
+        )
+        assert resp.status_code == 409
+        detail = resp.json().get("detail", "")
+        assert "neuesten KI-Empfehlung" in detail
+        print("✓ Accept AI suggestion rejects manipulated stage input with 409")
+
+    def test_accept_ai_suggestion_fails_without_screening(self, staff_session):
+        """Accept AI suggestion fails if no screening exists for application."""
+        unique = str(uuid.uuid4())[:8]
+        payload = {
+            "full_name": f"TEST_NoScreening {unique}",
+            "email": f"TEST_noscreening_{unique}@example.com",
+            "area_interest": "studienkolleg",
+        }
+        ingest_resp = requests.post(f"{BASE_URL}/api/leads/ingest", json=payload)
+        if ingest_resp.status_code != 200:
+            pytest.skip("Cannot create test application without screening")
+        app_id = ingest_resp.json().get("application_id")
+        if not app_id:
+            pytest.skip("No application_id returned from leads ingest")
+
+        resp = staff_session.post(
+            f"{BASE_URL}/api/applications/{app_id}/accept-ai-suggestion",
+            json={"suggested_stage": "in_review"}
+        )
+        assert resp.status_code == 409
+        detail = resp.json().get("detail", "")
+        assert "Keine KI-Prüfung vorhanden" in detail
+        print("✓ Accept AI suggestion correctly fails when no screening exists")
+
+    def test_accept_ai_suggestion_works_with_matching_stage(
+        self, staff_session, latest_screening_context
+    ):
+        """Accept AI suggestion changes stage when body matches latest suggestion."""
+        app_id = latest_screening_context["application_id"]
+        expected_stage = latest_screening_context["suggested_stage"]
+
+        # First get current stage
+        app_resp = staff_session.get(f"{BASE_URL}/api/applications/{app_id}")
+        if app_resp.status_code != 200:
+            pytest.skip("Cannot get application details")
+        current_stage = app_resp.json().get("current_stage", "lead_new")
+
+        # Try to accept exact latest AI stage
+        resp = staff_session.post(
+            f"{BASE_URL}/api/applications/{app_id}/accept-ai-suggestion",
+            json={"suggested_stage": expected_stage}
+        )
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data.get("status") in ["accepted", "unchanged"]
+        assert data.get("new_stage") == expected_stage
+        assert data.get("accepted_from_latest_screening") is True
         if data.get("status") == "accepted":
-            assert data.get("new_stage") == new_stage
+            assert data.get("new_stage") == expected_stage
             print(f"✓ Accept AI suggestion OK - changed from {data.get('old_stage')} to {data.get('new_stage')}")
         else:
             print(f"✓ Accept AI suggestion OK - status unchanged (already at suggested stage)")
-        
+
         # Restore original stage
         staff_session.put(
-            f"{BASE_URL}/api/applications/{test_application_id}",
+            f"{BASE_URL}/api/applications/{app_id}",
             json={"current_stage": current_stage}
         )
     

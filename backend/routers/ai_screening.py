@@ -136,7 +136,7 @@ async def get_ai_model_registry(
 @router.post("/applications/{app_id}/accept-ai-suggestion")
 async def accept_ai_suggestion(
     app_id: str,
-    body: dict,
+    body: dict | None = None,
     user: dict = Depends(require_roles(*STAFF_ROLES)),
 ):
     """
@@ -144,13 +144,10 @@ async def accept_ai_suggestion(
     und schreibt einen Audit-Trail-Eintrag.
     """
     db = get_db()
-    suggested_stage = body.get("suggested_stage")
-    if not suggested_stage:
-        raise HTTPException(status_code=400, detail="suggested_stage erforderlich")
+    body = body or {}
+    requested_stage = body.get("suggested_stage")
 
     allowed_suggested_stages = {"pending_docs", "in_review", "interview_scheduled", "on_hold"}
-    if suggested_stage not in allowed_suggested_stages:
-        raise HTTPException(status_code=400, detail="Ungültiger KI-Vorschlag für Stage-Übernahme")
 
     try:
         app = await db.applications.find_one({"_id": ObjectId(app_id)})
@@ -159,9 +156,41 @@ async def accept_ai_suggestion(
     if not app:
         raise HTTPException(status_code=404, detail="Bewerbung nicht gefunden")
 
+    latest_screening_raw = await db.ai_screenings.find_one(
+        {"application_id": app_id},
+        sort=[("created_at", -1)],
+    )
+    if not latest_screening_raw:
+        raise HTTPException(status_code=409, detail="Keine KI-Prüfung vorhanden")
+
+    latest_screening = to_str_id(dict(latest_screening_raw))
+    latest_suggested_stage = latest_screening.get("suggested_stage")
+    if not latest_suggested_stage:
+        raise HTTPException(status_code=409, detail="Neueste KI-Prüfung enthält keinen Stage-Vorschlag")
+
+    if latest_suggested_stage not in allowed_suggested_stages:
+        raise HTTPException(status_code=400, detail="Ungültiger KI-Vorschlag im neuesten Screening")
+
+    accepted_from_latest_screening = True
+    if requested_stage and requested_stage != latest_suggested_stage:
+        accepted_from_latest_screening = False
+        raise HTTPException(
+            status_code=409,
+            detail="Stage stimmt nicht mit der neuesten KI-Empfehlung überein",
+        )
+
+    suggested_stage = latest_suggested_stage
+
     old_stage = app.get("current_stage", "")
     if old_stage == suggested_stage:
-        return {"status": "unchanged", "message": "Status stimmt bereits überein"}
+        return {
+            "status": "unchanged",
+            "message": "Status stimmt bereits überein",
+            "new_stage": suggested_stage,
+            "screening_id": latest_screening.get("id"),
+            "screening_created_at": latest_screening.get("created_at"),
+            "accepted_from_latest_screening": accepted_from_latest_screening,
+        }
 
     await db.applications.update_one(
         {"_id": ObjectId(app_id)},
@@ -178,7 +207,17 @@ async def accept_ai_suggestion(
             "new_value": suggested_stage,
             "source": "ai_suggestion_accepted",
             "actor_name": user.get("full_name", user.get("email", "")),
+            "screening_id": latest_screening.get("id"),
+            "screening_created_at": latest_screening.get("created_at"),
+            "accepted_from_latest_screening": accepted_from_latest_screening,
         },
     )
 
-    return {"status": "accepted", "old_stage": old_stage, "new_stage": suggested_stage}
+    return {
+        "status": "accepted",
+        "old_stage": old_stage,
+        "new_stage": suggested_stage,
+        "screening_id": latest_screening.get("id"),
+        "screening_created_at": latest_screening.get("created_at"),
+        "accepted_from_latest_screening": accepted_from_latest_screening,
+    }

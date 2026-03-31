@@ -46,8 +46,7 @@ def _extract_text_source(doc: dict[str, Any]) -> tuple[str, str]:
         if isinstance(value, str) and value.strip():
             return value.strip(), "document_embedded_text"
 
-    filename = str(doc.get("filename") or "")
-    return filename, "filename_fallback"
+    return "", "no_machine_readable_text"
 
 
 def _document_processing_mode(doc: dict[str, Any]) -> str:
@@ -73,6 +72,17 @@ def _first_date(text: str) -> str | None:
 
 
 def _extract_core_fields(text: str, doc: dict[str, Any], application: dict[str, Any], applicant: dict[str, Any]) -> dict[str, Any]:
+    if not text or len(text.strip()) < 3:
+        return {
+            "person_name": None,
+            "date_of_birth": None,
+            "issuer": None,
+            "degree_type": None,
+            "exam_authority": None,
+            "cefr_level": None,
+            "exam_date": None,
+        }
+
     lowered = text.lower()
     person_name = applicant.get("full_name")
     if person_name and person_name.lower() not in lowered:
@@ -137,14 +147,15 @@ def _classify_document(doc: dict[str, Any], content_readable: bool, has_required
 def _build_document_analysis(doc: dict[str, Any], application: dict[str, Any], applicant: dict[str, Any]) -> dict[str, Any]:
     text, text_source = _extract_text_source(doc)
     process_mode = _document_processing_mode(doc)
+    content_readable = bool(text and len(text.strip()) >= 3)
     extracted_fields = _extract_core_fields(text, doc, application, applicant)
     required_fields = DOC_CLASS_REQUIREMENTS.get(doc.get("document_type"), ["person_name", "issuer"])
-
-    content_readable = bool(text and len(text.strip()) >= 3)
     contains_required_fields = all(extracted_fields.get(field) for field in required_fields)
     relevance_score = _compute_relevance_score(doc.get("document_type"), extracted_fields)
 
     category = _classify_document(doc, content_readable, contains_required_fields, relevance_score)
+    if not content_readable:
+        category = "manual_review_required"
     if category not in ALLOWED_RESULT_CATEGORIES:
         category = "manual_review_required"
 
@@ -180,6 +191,15 @@ def _build_document_analysis(doc: dict[str, Any], application: dict[str, Any], a
                 "kind": "required_fields",
                 "value": required_fields,
                 "source": "document_class_definition",
+            },
+            {
+                "kind": "content_verification",
+                "value": (
+                    "Nur Datei-Metadaten vorhanden, keine inhaltliche Verifikation"
+                    if not content_readable
+                    else "Inhaltliche Verifikation auf Basis extrahierten Texts"
+                ),
+                "source": "document_processing",
             },
         ],
     }

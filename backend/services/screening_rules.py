@@ -74,8 +74,10 @@ def _normalize_level(level: Optional[str]) -> Optional[str]:
 
 
 def _doc_status_bucket(doc_status: str) -> str:
-    if doc_status in ("approved", "in_review", "uploaded"):
+    if doc_status in ("approved", "in_review"):
         return "present"
+    if doc_status == "uploaded":
+        return "uploaded_unverified"
     if doc_status in ("rejected", "invalid"):
         return "invalid"
     return "unknown"
@@ -165,6 +167,11 @@ def _check_completeness(docs: list, course_type: Optional[str], course_rule_matr
 
     missing = [doc_type for doc_type in required_types if "present" not in uploaded_types.get(doc_type, set())]
     present = [doc_type for doc_type in required_types if "present" in uploaded_types.get(doc_type, set())]
+    uploaded_but_unverified = [
+        doc_type
+        for doc_type in required_types
+        if "uploaded_unverified" in uploaded_types.get(doc_type, set()) and "present" not in uploaded_types.get(doc_type, set())
+    ]
     invalid = [doc_type for doc_type, states in uploaded_types.items() if "invalid" in states]
 
     reasons = (
@@ -178,6 +185,8 @@ def _check_completeness(docs: list, course_type: Optional[str], course_rule_matr
         "missing_types": missing,
         "missing_labels": [REQUIRED_DOC_LABELS.get(doc_type, doc_type) for doc_type in missing],
         "present_labels": [REQUIRED_DOC_LABELS.get(doc_type, doc_type) for doc_type in present],
+        "uploaded_but_unverified_types": uploaded_but_unverified,
+        "uploaded_but_unverified_labels": [REQUIRED_DOC_LABELS.get(doc_type, doc_type) for doc_type in uploaded_but_unverified],
         "invalid_types": invalid,
         "required_types": required_types,
         "total_required": len(required_types),

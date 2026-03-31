@@ -1,0 +1,253 @@
+meta:
+  checklist_id: golive-2026-03
+  source: memory/GO_LIVE_BLOCKERS.md
+  generated_at: '2026-03-30'
+  timezone: UTC
+  go_live_decision: NO_GO
+  decision_owner: release-management
+  decision_note: Pflichtkriterien sind noch nicht vollständig erfüllt.
+
+gate:
+  deployment_blocked_until_all_required_pass: true
+  required_criteria:
+    - T1
+    - T2
+    - T3
+    - T4
+    - T5
+    - T6
+    - T7
+    - R1
+    - R2
+    - R3
+    - R4
+    - R5
+    - B1
+    - B2
+    - B3
+
+criteria:
+  - id: T1
+    category: TECH
+    title: COOKIE_SECURE=true in Produktion
+    mandatory: true
+    owner: platform-security
+    deadline: '2026-04-02'
+    status: blocked
+    verification:
+      type: header-cookie-check
+      description: Set-Cookie Header enthält Secure + HttpOnly + SameSite auf HTTPS-Host.
+      evidence_artifact: release/evidence/T1_cookie_secure_headers.txt
+      verification_command: "curl -I https://<app-url>/api/auth/login"
+      result: pending
+
+  - id: T2
+    category: TECH
+    title: RESEND_API_KEY + verifizierte Sender-Domain
+    mandatory: true
+    owner: ops-messaging
+    deadline: '2026-04-02'
+    status: open
+    verification:
+      type: mail-delivery-proof
+      description: Erfolgreiche Zustellung von Welcome + Application Received inkl. Message-ID.
+      evidence_artifact: release/evidence/T2_mail_delivery_report.md
+      verification_command: "pytest backend/tests/test_phase37e_notifications.py -k email"
+      result: pending
+
+  - id: T3
+    category: TECH
+    title: Reale Datei-Uploads auf Ziel-Storage (S3/MinIO)
+    mandatory: true
+    owner: platform-storage
+    deadline: '2026-04-03'
+    status: open
+    verification:
+      type: storage-upload-proof
+      description: Upload, Download und Metadatenabgleich gegen produktiven Storage-Bucket.
+      evidence_artifact: release/evidence/T3_storage_upload_proof.json
+      verification_command: "pytest backend/tests/test_phase37l_golive.py -k attachment"
+      result: pending
+
+  - id: T4
+    category: TECH
+    title: JWT_SECRET produktionstauglich (>=64, random)
+    mandatory: true
+    owner: platform-security
+    deadline: '2026-04-01'
+    status: ready_for_validation
+    verification:
+      type: config-compliance-check
+      description: Secret-Länge/Entropie nachgewiesen, kein Default-Wert im Deployment.
+      evidence_artifact: release/evidence/T4_jwt_secret_compliance.md
+      verification_command: "python scripts/check_golive_gate.py --file release/golive_checklist.yaml --check structure"
+      result: pending
+
+  - id: T5
+    category: TECH
+    title: ADMIN_PASSWORD rotiert oder Seed-Admin deaktiviert
+    mandatory: true
+    owner: iam-admin
+    deadline: '2026-04-01'
+    status: ready_for_validation
+    verification:
+      type: access-control-proof
+      description: Admin-Seed-Credentials invalidiert und Rotation/Aktivitätsprotokoll dokumentiert.
+      evidence_artifact: release/evidence/T5_admin_rotation_log.md
+      verification_command: "pytest backend/tests/test_phase37k_golive.py -k admin_login"
+      result: pending
+
+  - id: T6
+    category: TECH
+    title: MongoDB Backup-Routine inkl. Restore-Test
+    mandatory: true
+    owner: db-operations
+    deadline: '2026-04-04'
+    status: open
+    verification:
+      type: backup-restore-protocol
+      description: Erfolgreicher Restore in Testumgebung mit RPO/RTO-Protokoll.
+      evidence_artifact: release/evidence/T6_backup_restore_protocol.md
+      verification_command: "./scripts/run_backup_restore_drill.sh"
+      result: pending
+
+  - id: T7
+    category: TECH
+    title: HTTPS/TLS produktiv erzwingen
+    mandatory: true
+    owner: infra-platform
+    deadline: '2026-04-02'
+    status: open
+    verification:
+      type: tls-certificate-check
+      description: Qualys/SSL-Report + Redirect HTTP->HTTPS + HSTS Header geprüft.
+      evidence_artifact: release/evidence/T7_tls_report.md
+      verification_command: "curl -I https://<app-url>"
+      result: pending
+
+  - id: R1
+    category: LEGAL
+    title: Impressum-Adresse verifiziert
+    mandatory: true
+    owner: legal-counsel
+    deadline: '2026-04-03'
+    status: open
+    legal:
+      document_name: Impressum
+      version: IMP-2026-04-v1
+      signoff_date: null
+      signed_by: null
+      live_url: https://www.studienkolleg-aachen.de/impressum
+      page_version: web-impressum-2026-03-30
+      evidence_artifact: release/evidence/R1_impressum_address_signoff.pdf
+
+  - id: R2
+    category: LEGAL
+    title: Impressum vollständig (GF, HR, USt-Id)
+    mandatory: true
+    owner: legal-counsel
+    deadline: '2026-04-03'
+    status: open
+    legal:
+      document_name: Impressum
+      version: IMP-2026-04-v1
+      signoff_date: null
+      signed_by: null
+      live_url: https://www.studienkolleg-aachen.de/impressum
+      page_version: web-impressum-2026-03-30
+      evidence_artifact: release/evidence/R2_impressum_completeness_signoff.pdf
+
+  - id: R3
+    category: LEGAL
+    title: Datenschutzerklärung juristisch final
+    mandatory: true
+    owner: legal-counsel
+    deadline: '2026-04-03'
+    status: open
+    legal:
+      document_name: Datenschutzerklärung
+      version: DSE-2026-04-v1
+      signoff_date: null
+      signed_by: null
+      live_url: https://www.studienkolleg-aachen.de/datenschutz
+      page_version: web-dse-2026-03-30
+      evidence_artifact: release/evidence/R3_privacy_signoff.pdf
+
+  - id: R4
+    category: LEGAL
+    title: AGB juristisch final
+    mandatory: true
+    owner: legal-counsel
+    deadline: '2026-04-03'
+    status: open
+    legal:
+      document_name: AGB
+      version: AGB-2026-04-v1
+      signoff_date: null
+      signed_by: null
+      live_url: https://www.studienkolleg-aachen.de/agb
+      page_version: web-agb-2026-03-30
+      evidence_artifact: release/evidence/R4_tos_signoff.pdf
+
+  - id: R5
+    category: LEGAL
+    title: Preisangaben konsistent und verifiziert
+    mandatory: true
+    owner: legal-counsel
+    deadline: '2026-04-03'
+    status: open
+    legal:
+      document_name: Preisblatt + Webpreise
+      version: PRC-2026-04-v1
+      signoff_date: null
+      signed_by: null
+      live_url: https://www.studienkolleg-aachen.de/courses
+      page_version: web-pricing-2026-03-30
+      evidence_artifact: release/evidence/R5_pricing_consistency_signoff.pdf
+
+  - id: B1
+    category: OPERATIONS
+    title: Staff-Onboarding mit echtem Mitarbeiter-Account
+    mandatory: true
+    owner: operations-lead
+    deadline: '2026-04-03'
+    status: open
+    uat:
+      case_id: UAT-B1
+      scenario: Neuer Staff-Account wird angelegt, onboarded und produktiv nutzbar.
+      acceptance_owner: operations-lead
+      acceptance_status: pending
+      acceptance_date: null
+      protocol_artifact: release/evidence/B1_uat_staff_onboarding.md
+
+  - id: B2
+    category: OPERATIONS
+    title: Externe Testbewerbung Ende-zu-Ende
+    mandatory: true
+    owner: operations-lead
+    deadline: '2026-04-03'
+    status: open
+    uat:
+      case_id: UAT-B2
+      scenario: Bewerbung von Public-Funnel bis Staff-Sichtbarkeit vollständig durchlaufen.
+      acceptance_owner: operations-lead
+      acceptance_status: pending
+      acceptance_date: null
+      protocol_artifact: release/evidence/B2_uat_external_application.md
+
+  - id: B3
+    category: OPERATIONS
+    title: E-Mail-Delivery (Willkommen + Bewerbungseingang)
+    mandatory: true
+    owner: operations-lead
+    deadline: '2026-04-04'
+    status: blocked
+    dependencies:
+      - T2
+    uat:
+      case_id: UAT-B3
+      scenario: Beide Pflichtmails werden ausgelöst, zugestellt und nachvollziehbar protokolliert.
+      acceptance_owner: operations-lead
+      acceptance_status: pending
+      acceptance_date: null
+      protocol_artifact: release/evidence/B3_uat_email_delivery.md

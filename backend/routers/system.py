@@ -1,7 +1,7 @@
 """
 Audit & system routers: audit logs, dashboard stats, health, consent, notifications.
 """
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, Request
 from database import get_db
 from deps import get_current_user, require_roles, ADMIN_ROLES, STAFF_ROLES
@@ -33,15 +33,57 @@ async def dashboard_stats(user: dict = Depends(get_current_user)):
     db = get_db()
     if user["role"] == "applicant":
         apps = await db.applications.find({"applicant_id": user["id"]}).to_list(20)
+        app_ids = [str(a["_id"]) for a in apps]
         open_tasks = await db.tasks.count_documents({
-            "application_id": {"$in": [str(a["_id"]) for a in apps]},
+            "application_id": {"$in": app_ids},
             "status": "open",
             "visibility": "public",
         })
+
+        required_doc_types = ["passport", "school_certificate", "language_certificate"]
+        uploaded_required_docs = await db.documents.find({
+            "application_id": {"$in": app_ids},
+            "document_type": {"$in": required_doc_types},
+            "status": {"$ne": "rejected"},
+        }).to_list(200)
+        uploaded_types = {d.get("document_type") for d in uploaded_required_docs}
+        missing_documents = [doc_type for doc_type in required_doc_types if doc_type not in uploaded_types]
+
+        convs = await db.conversations.find({"participants": user["id"]}).to_list(50)
+        conv_ids = [str(c["_id"]) for c in convs]
+        unread_messages = await db.messages.count_documents({
+            "conversation_id": {"$in": conv_ids},
+            "sender_id": {"$ne": user["id"]},
+            "read": {"$ne": True},
+        }) if conv_ids else 0
+
+        active_consent = await db.consents.find_one({
+            "user_id": user["id"],
+            "consent_type": "teacher_data_access",
+            "granted": True,
+            "revoked_at": None,
+        })
+        consent_missing = active_consent is None
+
+        due_soon_count = await db.tasks.count_documents({
+            "application_id": {"$in": app_ids},
+            "status": "open",
+            "visibility": "public",
+            "due_date": {
+                "$gte": datetime.now(timezone.utc),
+                "$lte": datetime.now(timezone.utc) + timedelta(days=3),
+            },
+        })
+
         return {
             "applications": len(apps),
             "open_tasks": open_tasks,
             "stages": [{"stage": a.get("current_stage"), "id": str(a["_id"])} for a in apps],
+            "missing_documents": len(missing_documents),
+            "missing_document_types": missing_documents,
+            "unread_messages": unread_messages,
+            "consent_missing": consent_missing,
+            "due_soon_tasks": due_soon_count,
         }
     else:
         total_leads = await db.applications.count_documents({})

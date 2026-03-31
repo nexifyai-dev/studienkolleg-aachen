@@ -11,6 +11,7 @@
  * - No tokens stored in localStorage (httpOnly cookies only)
  */
 import axios from 'axios';
+import { LOGIN_PATH } from '../constants/routes';
 
 export const API_BASE = process.env.REACT_APP_BACKEND_URL || '';
 export function resolveApiUrl(path = '') {
@@ -70,7 +71,7 @@ apiClient.interceptors.response.use(
         try {
           await axios.post(resolveApiUrl('/api/auth/logout'), {}, { withCredentials: true });
         } catch {}
-        window.location.href = '/auth/login';
+        window.location.href = LOGIN_PATH;
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

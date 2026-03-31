@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'sonner';
 import './i18n';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { LOGIN_PATH } from './constants/routes';
 import ScrollToTop from './components/ScrollToTop';
 import CookieBanner from './components/shared/CookieBanner';
 
@@ -55,7 +56,7 @@ import PartnerSettingsPage from './pages/partner/PartnerSettingsPage';
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
-  if (!user) return <Navigate to="/auth/login" replace />;
+  if (!user) return <Navigate to={LOGIN_PATH} replace />;
   if (allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to="/portal" replace />;
   return children;
 }
@@ -99,7 +100,7 @@ export default function App() {
           <Route path="/agb" element={<LegalPage type="agb" />} />
 
           {/* Auth */}
-          <Route path="/auth/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+          <Route path={LOGIN_PATH} element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/auth/register" element={<RegisterPage />} />
           <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
 

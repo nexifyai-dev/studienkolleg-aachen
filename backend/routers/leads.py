@@ -9,7 +9,7 @@ import bcrypt
 import jwt
 import logging
 from datetime import datetime, timezone, timedelta
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from database import get_db
 from config import JWT_SECRET, JWT_ALGORITHM, ACCESS_TOKEN_TTL_MINUTES, REFRESH_TOKEN_TTL_DAYS, COOKIE_SECURE, COOKIE_SAMESITE
@@ -21,6 +21,11 @@ from services.ai_screening import REQUIRED_DOCUMENT_TYPES
 
 router = APIRouter(prefix="/api/leads", tags=["leads"])
 logger = logging.getLogger(__name__)
+INTAKE_START_STAGE = {
+    "structured_application": "lead_new",
+    "contact_form": "in_review",
+    "email_inquiry": "pending_docs",
+}
 
 
 def _hash(password: str) -> str:
@@ -43,10 +48,27 @@ def _refresh_token(user_id: str) -> str:
     )
 
 
-@router.post("/ingest")
-async def ingest_lead(data: LeadIngest):
+def _validate_intake_payload(data: LeadIngest) -> None:
+    required_by_type = {
+        "structured_application": ["course_type", "desired_start", "language_level", "degree_country"],
+        "contact_form": ["phone", "notes"],
+        "email_inquiry": ["notes"],
+    }
+    missing_fields = [
+        field for field in required_by_type.get(data.intake_type, [])
+        if not getattr(data, field, None)
+    ]
+    if missing_fields:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Missing required fields for intake_type '{data.intake_type}': {', '.join(missing_fields)}",
+        )
+
+
+async def _ingest_lead(data: LeadIngest):
     db = get_db()
     email = data.email.lower().strip()
+    _validate_intake_payload(data)
 
     full_name = data.full_name
     if not full_name and data.first_name:
@@ -109,7 +131,8 @@ async def ingest_lead(data: LeadIngest):
         app_doc = {
             "applicant_id": user_id,
             "workspace_id": workspace_id,
-            "current_stage": "lead_new",
+            "current_stage": INTAKE_START_STAGE.get(data.intake_type, "lead_new"),
+            "intake_type": data.intake_type,
             "source": data.source,
             "course_type": data.course_type,
             "desired_start": data.desired_start,
@@ -129,7 +152,7 @@ async def ingest_lead(data: LeadIngest):
         await write_audit_log(
             "lead_created", "system", "application", application_id,
             {"source": data.source, "email": email, "duplicate": duplicate_flag,
-             "course": data.course_type, "degree_country": data.degree_country}
+             "course": data.course_type, "degree_country": data.degree_country, "intake_type": data.intake_type}
         )
 
         # Inline document uploads
@@ -172,9 +195,23 @@ async def ingest_lead(data: LeadIngest):
                     logger.warning(f"[LEADS] Doc upload failed for {doc_upload.document_type}: {e}")
 
         missing_types = [t for t in REQUIRED_DOCUMENT_TYPES if t not in uploaded_doc_types]
-        await trigger_application_received(application_id, email, full_name, data.course_type)
+        await trigger_application_received(
+            application_id,
+            email,
+            full_name,
+            applicant_id=user_id,
+            course_type=data.course_type,
+            intake_type=data.intake_type,
+        )
         if missing_types:
-            await trigger_missing_documents(application_id, email, full_name, missing_types)
+            await trigger_missing_documents(
+                application_id,
+                email,
+                full_name,
+                missing_types,
+                applicant_id=user_id,
+                intake_type=data.intake_type,
+            )
 
     # Welcome email
     if password_hash:
@@ -201,3 +238,16 @@ async def ingest_lead(data: LeadIngest):
         return resp
 
     return response_data
+
+
+@router.post("/ingest")
+async def ingest_lead(data: LeadIngest):
+    return await _ingest_lead(data)
+
+
+@router.post("/ingest/{intake_type}")
+async def ingest_lead_by_type(intake_type: str, data: LeadIngest):
+    if intake_type not in INTAKE_START_STAGE:
+        raise HTTPException(status_code=404, detail="Unknown intake_type")
+    payload = data.model_copy(update={"intake_type": intake_type})
+    return await _ingest_lead(payload)

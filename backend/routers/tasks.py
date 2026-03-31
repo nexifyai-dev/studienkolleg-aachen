@@ -68,9 +68,21 @@ async def list_tasks(request: Request, user: dict = Depends(get_current_user)):
             pass
 
     result = []
+    app_ids = list(set(t.get("application_id") for t in tasks if t.get("application_id")))
+    app_map = {}
+    if app_ids:
+        apps = await db.applications.find(
+            {"_id": {"$in": [ObjectId(aid) for aid in app_ids if ObjectId.is_valid(aid)]}},
+            {"intake_type": 1, "current_stage": 1},
+        ).to_list(None)
+        app_map = {str(a["_id"]): a for a in apps}
     for t in tasks:
         td = _serialize_task(t)
         td["assigned_name"] = user_map.get(td.get("assigned_to"), "")
+        app_ctx = app_map.get(td.get("application_id"))
+        if app_ctx:
+            td["intake_type"] = app_ctx.get("intake_type", "structured_application")
+            td["application_stage"] = app_ctx.get("current_stage")
         result.append(td)
     return result
 
@@ -79,6 +91,10 @@ async def list_tasks(request: Request, user: dict = Depends(get_current_user)):
 async def create_task(data: TaskCreate, user: dict = Depends(require_roles(*STAFF_ROLES))):
     db = get_db()
     now = datetime.now(timezone.utc)
+    intake_type = "structured_application"
+    if data.application_id and ObjectId.is_valid(data.application_id):
+        app = await db.applications.find_one({"_id": ObjectId(data.application_id)}, {"intake_type": 1})
+        intake_type = (app or {}).get("intake_type", intake_type)
     task = {
         "title": data.title,
         "description": data.description,
@@ -90,6 +106,7 @@ async def create_task(data: TaskCreate, user: dict = Depends(require_roles(*STAF
         "status": "open",
         "created_by": user["id"],
         "created_at": now,
+        "intake_type": intake_type,
     }
     result = await db.tasks.insert_one(task)
     task_id = str(result.inserted_id)
@@ -137,6 +154,14 @@ async def get_task(task_id: str, user: dict = Depends(get_current_user)):
             td["created_by_name"] = u.get("full_name", u.get("email", "")) if u else ""
         except Exception:
             pass
+    if td.get("application_id") and ObjectId.is_valid(td["application_id"]):
+        app = await db.applications.find_one(
+            {"_id": ObjectId(td["application_id"])},
+            {"intake_type": 1, "current_stage": 1},
+        )
+        if app:
+            td["intake_type"] = app.get("intake_type", "structured_application")
+            td["application_stage"] = app.get("current_stage")
     return td
 
 

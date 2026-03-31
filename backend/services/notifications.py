@@ -97,7 +97,12 @@ async def create_notification(
     return str(result.inserted_id)
 
 
-async def notify_staff_new_application(applicant_name: str, application_id: str, triggered_by: str) -> None:
+async def notify_staff_new_application(
+    applicant_name: str,
+    application_id: str,
+    triggered_by: str,
+    intake_type: str = "structured_application",
+) -> None:
     """Notify all staff/admin about a new application."""
     db = get_db()
     staff_users = await db.users.find(
@@ -108,9 +113,14 @@ async def notify_staff_new_application(applicant_name: str, application_id: str,
     for user in staff_users:
         uid = str(user["_id"])
         lang = user.get("language_pref", "de")
-        msg = f"Neue Bewerbung von {applicant_name}" if lang == "de" else f"New application from {applicant_name}"
+        intake_msg = f" · Intake: {intake_type}"
+        msg = (
+            f"Neue Bewerbung von {applicant_name}{intake_msg}"
+            if lang == "de" else f"New application from {applicant_name}{intake_msg}"
+        )
         await create_notification(uid, "application_received", msg,
-            link=f"/staff/applications/{application_id}", triggered_by=triggered_by, lang=lang)
+            link=f"/staff/applications/{application_id}", triggered_by=triggered_by, lang=lang,
+            metadata={"application_id": application_id, "intake_type": intake_type})
 
 
 async def notify_applicant_status_change(applicant_id: str, new_status: str, lang: str = "de") -> None:

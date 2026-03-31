@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import apiClient from '../../lib/apiClient';
-import { Users, BookOpen, Shield, Clock, CheckCircle, AlertCircle, Mail, Phone } from 'lucide-react';
+import { Users, BookOpen, Shield, Clock, CheckCircle, AlertCircle, Mail, Phone, Search } from 'lucide-react';
 
 export default function TeacherDashboard() {
   const { user } = useAuth();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [query, setQuery] = useState('');
+  const [stageFilter, setStageFilter] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -53,6 +55,18 @@ export default function TeacherDashboard() {
     enrolled: 'bg-green-50 text-green-700 border-green-200',
     declined: 'bg-red-50 text-red-700 border-red-200',
   };
+  const visibleStudents = students.filter(student => {
+    if (stageFilter && student.current_stage !== stageFilter) return false;
+    if (!query.trim()) return true;
+    const haystack = [
+      student.full_name,
+      student.email,
+      student.course_type,
+      student.degree_country,
+      stageLabels[student.current_stage] || student.current_stage,
+    ].filter(Boolean).join(' ').toLowerCase();
+    return haystack.includes(query.trim().toLowerCase());
+  });
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="teacher-dashboard">
@@ -124,19 +138,45 @@ export default function TeacherDashboard() {
       </div>
 
       {/* Student List */}
-      {students.length === 0 ? (
+      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between flex-wrap gap-2" data-testid="teacher-filter-bar">
+        <div className="relative">
+          <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Lernende suchen…"
+            className="border border-slate-200 rounded-sm pl-8 pr-2.5 py-2 text-xs focus:outline-none focus:border-primary w-60"
+          />
+        </div>
+        <select
+          value={stageFilter}
+          onChange={e => setStageFilter(e.target.value)}
+          className="border border-slate-200 rounded-sm px-2 py-2 text-xs focus:outline-none focus:border-primary"
+        >
+          <option value="">Alle Status</option>
+          {[...new Set(students.map(s => s.current_stage).filter(Boolean))].map(stage => (
+            <option key={stage} value={stage}>{stageLabels[stage] || stage}</option>
+          ))}
+        </select>
+      </div>
+
+      {visibleStudents.length === 0 ? (
         <div className="bg-white border border-slate-200 rounded-sm p-10 text-center" data-testid="teacher-empty">
           <BookOpen size={32} className="text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm">Keine Lernenden zugewiesen oder keine aktive Einwilligung vorhanden.</p>
+          <p className="text-slate-500 text-sm">
+            {students.length === 0
+              ? 'Keine Lernenden zugewiesen oder keine aktive Einwilligung vorhanden.'
+              : 'Keine Treffer für die aktuelle Suche/Filterung.'}
+          </p>
           <p className="text-xs text-slate-400 mt-1">Zuweisungen werden durch das Staff-Team vorgenommen.</p>
         </div>
       ) : (
         <div className="bg-white border border-slate-200 rounded-sm" data-testid="teacher-student-list">
           <div className="p-4 border-b border-slate-100">
-            <h2 className="font-semibold text-slate-800">Zugewiesene Lernende ({students.length})</h2>
+            <h2 className="font-semibold text-slate-800">Zugewiesene Lernende ({visibleStudents.length})</h2>
           </div>
           <div className="divide-y divide-slate-100">
-            {students.map(student => (
+            {visibleStudents.map(student => (
               <div key={student.id} className="p-4 hover:bg-slate-50 transition-colors" data-testid={`teacher-student-${student.id}`}>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">

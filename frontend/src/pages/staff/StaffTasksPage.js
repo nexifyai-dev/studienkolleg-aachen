@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import apiClient from '../../lib/apiClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
+import { handleApiError } from '../../lib/errorHandling';
 import {
   CheckSquare, Clock, AlertCircle, Plus, Loader2, CheckCircle, X,
   Paperclip, Download, FileText, MessageSquare, History, Send,
@@ -54,7 +55,9 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
         const r = await apiClient.get(`/api/tasks/${task.id}/history`, { withCredentials: true });
         setHistory(r.data || []);
       }
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: `staff.tasks.loadTab.${tab}`, suppressToast: true });
+    }
   }, [task.id]);
 
   useEffect(() => { loadTab(activeTab); }, [activeTab, loadTab]);
@@ -74,7 +77,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
         toast.success('Aufgabe gespeichert');
       }
       setEditing(false);
-    } catch {} finally { setSaving(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.saveTask',
+        toastMessage: 'Aufgabe konnte nicht gespeichert werden',
+      });
+    } finally { setSaving(false); }
   };
 
   const changeStatus = async (status) => {
@@ -82,7 +90,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       const r = await apiClient.put(`/api/tasks/${task.id}`, { status }, { withCredentials: true });
       onUpdate(r.data);
       toast.success(`Status: ${STATUS_LABELS[status]}`);
-    } catch { toast.error('Fehler beim Statuswechsel'); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.changeStatus',
+        toastMessage: `Statuswechsel (${STATUS_LABELS[status]}) fehlgeschlagen`,
+      });
+    }
   };
 
   const addNote = async () => {
@@ -93,7 +106,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       setNewNote('');
       await loadTab('notes');
       toast.success('Notiz hinzugefügt');
-    } catch { toast.error('Fehler'); } finally { setSendingNote(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.addNote',
+        toastMessage: 'Notiz konnte nicht gespeichert werden',
+      });
+    } finally { setSendingNote(false); }
   };
 
   const uploadAttachment = async (file) => {
@@ -106,7 +124,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       }, { withCredentials: true });
       await loadTab('attachments');
       toast.success('Datei hochgeladen');
-    } catch { toast.error('Upload fehlgeschlagen'); } finally { setUploading(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.uploadAttachment',
+        toastMessage: `Upload fehlgeschlagen (${file?.name || 'Datei'})`,
+      });
+    } finally { setUploading(false); }
   };
 
   const tabs = [
@@ -329,17 +352,28 @@ export default function StaffTasksPage() {
   const [creating, setCreating] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [staffList, setStaffList] = useState([]);
+  const [query, setQuery] = useState('');
+  const [selectedTaskIds, setSelectedTaskIds] = useState([]);
+  const [bulkStatus, setBulkStatus] = useState('in_progress');
 
   const load = useCallback(async () => {
     try {
       const [tasksRes, usersRes] = await Promise.all([
         apiClient.get('/api/tasks', { withCredentials: true }),
-        apiClient.get('/api/users', { withCredentials: true }).catch(() => ({ data: [] })),
+        apiClient.get('/api/users', { withCredentials: true }).catch((error) => {
+          handleApiError(error, { context: 'staff.tasks.loadUsers', suppressToast: true });
+          return { data: [] };
+        }),
       ]);
       setTasks(tasksRes.data || []);
       const staff = (usersRes.data || []).filter(u => ['staff','admin','superadmin','teacher'].includes(u.role) && u.active !== false);
       setStaffList(staff);
-    } catch {} finally { setLoading(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.load',
+        toastMessage: 'Aufgaben konnten nicht geladen werden',
+      });
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -355,14 +389,24 @@ export default function StaffTasksPage() {
       setForm({ title: '', description: '', priority: 'normal', due_date: '', assigned_to: '' });
       setShowCreate(false);
       await load();
-    } catch {} finally { setCreating(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.create',
+        toastMessage: 'Aufgabe konnte nicht erstellt werden',
+      });
+    } finally { setCreating(false); }
   };
 
   const updateStatus = async (taskId, status) => {
     try {
       const r = await apiClient.put(`/api/tasks/${taskId}`, { status }, { withCredentials: true });
       setTasks(prev => prev.map(t => t.id === taskId ? r.data : t));
-    } catch {}
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.delete',
+        toastMessage: 'Aufgabe konnte nicht gelöscht werden',
+      });
+    }
   };
 
   const handleTaskUpdate = (updated) => {
@@ -372,6 +416,11 @@ export default function StaffTasksPage() {
 
   let filtered = filter === 'all' ? tasks : tasks.filter(t => t.status === filter);
   if (priorityFilter !== 'all') filtered = filtered.filter(t => t.priority === priorityFilter);
+  if (query.trim()) {
+    const q = query.trim().toLowerCase();
+    filtered = filtered.filter((t) => [t.title, t.description, t.assigned_name, t.application_id, t.status]
+      .filter(Boolean).join(' ').toLowerCase().includes(q));
+  }
   const openCount = tasks.filter(t => t.status === 'open').length;
   const inProgressCount = tasks.filter(t => t.status === 'in_progress').length;
   const doneCount = tasks.filter(t => t.status === 'done').length;
@@ -447,6 +496,50 @@ export default function StaffTasksPage() {
           <option value="all">Alle Prioritaeten</option>
           <option value="high">Hoch</option><option value="normal">Normal</option><option value="low">Niedrig</option>
         </select>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Suche: Titel, Beschreibung, Zuweisung, Status..."
+          className="text-xs border border-slate-200 rounded-sm px-2 py-1.5 w-72 focus:outline-none focus:border-primary"
+          data-testid="task-search-input"
+        />
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSelectedTaskIds(selectedTaskIds.length === filtered.length ? [] : filtered.map(t => t.id))}
+            className="text-xs border border-slate-200 rounded-sm px-2 py-1 hover:bg-slate-50"
+          >
+            {selectedTaskIds.length === filtered.length ? 'Auswahl aufheben' : 'Alle gefilterten auswählen'}
+          </button>
+          <span className="text-xs text-slate-500">{selectedTaskIds.length} ausgewählt</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <select value={bulkStatus} onChange={e => setBulkStatus(e.target.value)} className="text-xs border border-slate-200 rounded-sm px-2 py-1.5">
+            <option value="open">Offen</option>
+            <option value="in_progress">In Bearbeitung</option>
+            <option value="done">Erledigt</option>
+          </select>
+          <button
+            disabled={!selectedTaskIds.length}
+            onClick={async () => {
+              const updates = await Promise.allSettled(selectedTaskIds.map((id) =>
+                apiClient.put(`/api/tasks/${id}`, { status: bulkStatus }, { withCredentials: true })
+              ));
+              const successById = new Map();
+              updates.forEach((r, idx) => {
+                if (r.status === 'fulfilled') successById.set(selectedTaskIds[idx], r.value.data);
+              });
+              setTasks(prev => prev.map(t => successById.get(t.id) || t));
+              setSelectedTaskIds([]);
+            }}
+            className="text-xs bg-primary text-white rounded-sm px-3 py-1.5 disabled:opacity-40"
+            data-testid="task-bulk-status-btn"
+          >
+            Sammelaktion: Status setzen
+          </button>
+        </div>
       </div>
 
       {/* Task List */}
@@ -463,6 +556,16 @@ export default function StaffTasksPage() {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
+                    <input
+                      type="checkbox"
+                      checked={selectedTaskIds.includes(task.id)}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        setSelectedTaskIds(prev => e.target.checked ? [...prev, task.id] : prev.filter(id => id !== task.id));
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      data-testid={`task-select-${task.id}`}
+                    />
                     {task.status === 'done' ? <CheckCircle size={14} className="text-primary shrink-0" /> :
                      task.status === 'in_progress' ? <AlertCircle size={14} className="text-primary shrink-0" /> :
                      <Clock size={14} className="text-slate-400 shrink-0" />}

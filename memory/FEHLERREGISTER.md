@@ -7,7 +7,7 @@
 4. Arbeitsplan gegen **Drive + Mem0 + Fehlerregister + Preview** synchronisieren
 5. Nach jeder Änderung **Mem0 aktualisieren**
 6. **Preview schlägt Handoff** – nichts als fertig melden, was im sichtbaren Zustand nicht stimmt
-7. KI nur über **NSCall / nscale**
+7. KI nur über **DeepSeek**
 8. **Keine Potenzielle Verbesserungen** im Finish-Summary
 9. Sprache: **Deutsch** in allen Interaktionen
 
@@ -81,4 +81,27 @@ Deutsche typografische Anführungszeichen (z.B. „…") dürfen NICHT in JSON-D
 4. Preview-Screenshots als Prüfgrundlage?
 5. Aufgaben-/Feature-Operabilität getestet (nicht nur sichtbar)?
 6. CI-Blau durchgehend?
-7. KI nur über NSCall?
+7. KI nur über DeepSeek?
+
+## Projekt-Memory-Update (2026-03-30)
+
+- **requirement**: KI-Provider systemweit auf DeepSeek umstellen; keine produktive Nutzung von nscale/NSCall mehr.
+- **decision**: Zentrale Provider-Schicht auf `services/deepseek_provider.py` gelegt; Model-Registry bleibt task-basiert für Auditierbarkeit.
+- **error**: Screening-Ausgaben konnten operativ als zu nah an einer finalen Entscheidung gelesen werden.
+- **fix**: `screening_breakdown` mit expliziter Trennung eingeführt: `completeness`, `formal_precheck`, `ai_recommendation`, `staff_decision`.
+- **lesson_learned**: Upload/Dateivorhandensein darf nur Vollständigkeit beeinflussen, nie Annahme-/Zulassungswirkung entfalten.
+- **design_rule**: CRM-Listenansichten brauchen Suchfeld + Selektionszustand + sichere Sammelaktion als Standardbedienmuster.
+- **workflow_rule**: Stage-Übernahme aus KI-Empfehlung nur für explizit erlaubte, nicht-zulassungsentscheidende Stages zulassen.
+- **release_state**: DeepSeek-Migration und CRM-Basisfunktionen (Kanban/Tasks Suche+Selektion+Bulk) integriert, Build-Setup lokal unvollständig.
+- **test_result**: `python -m compileall backend` bestanden; Frontend-Build wegen fehlendem `react-scripts` blockiert.
+
+## Projekt-Memory-Update (2026-03-30, Lauf 2)
+
+- **error**: Frontend-Dependency-Drift (`package.json` vs. `package-lock.json`) plus inkompatible Peer-Range (`i18next@26` + `react-i18next@17` gegen CRA/TypeScript-Stack) blockierte reproduzierbare Installationen.
+- **fix**: i18n-Pakete auf CRA-kompatible Versionen stabilisiert (`i18next@23.16.8`, `react-i18next@13.5.0`) und Lockfile neu aufgebaut.
+- **error**: `react-router-dom@7` brach Jest/CJS-Testlauf in CRA-Umgebung.
+- **fix**: Router auf `react-router-dom@6.30.2` gesetzt; Test- und Build-Pipeline wieder lauffähig.
+- **error**: Legacy `App.test.js` erwartete "learn react"; nicht mehr zur tatsächlichen UI passend.
+- **fix**: Test auf reale Startoberfläche (`nav-logo`) umgestellt und `window.scrollTo` in `setupTests.js` gemockt.
+- **decision**: Screening-Vorprüfung bleibt strikt nicht-bindend; lokale Regelbasis explizit als `local_rulebook` markiert, ohne Live-Referenzbehauptung.
+- **fix**: Screening um Evidenz-, Risiko-, Open-Point- und Next-Action-Felder erweitert; differenzierte Stage-Vorschläge (`pending_docs` / `in_review` / `on_hold` / `interview_scheduled`) statt pauschalem `in_review`.

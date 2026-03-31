@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../lib/apiClient';
 import { ROLE_LABELS, formatDate } from '../../lib/utils';
-import { UserPlus, RefreshCw, UserCheck, UserX, Filter } from 'lucide-react';
-import { formatApiError } from '../../contexts/AuthContext';
+import { UserPlus, RefreshCw, UserCheck, UserX, Search, Copy, CheckSquare } from 'lucide-react';
+import { handleApiError } from '../../lib/errorHandling';
 
 const STAFF_ROLES = ['superadmin', 'admin', 'staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
 const INVITABLE_ROLES = ['staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
@@ -23,15 +23,19 @@ export default function UsersPage() {
   const [inviteResult, setInviteResult] = useState(null);
   const [error, setError] = useState('');
   const [filterRole, setFilterRole] = useState('all');
+  const [query, setQuery] = useState('');
   const [updating, setUpdating] = useState(null);
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [bulkUpdating, setBulkUpdating] = useState(false);
 
   const load = async () => {
     setLoading(true);
     try {
       const res = await apiClient.get('/api/users', { withCredentials: true });
       setUsers(res.data || []);
-    } catch {}
-    finally { setLoading(false); }
+    } catch (error) {
+      handleApiError(error, { context: 'admin.users.load', suppressToast: true });
+    } finally { setLoading(false); }
   };
 
   useEffect(() => { load(); }, []);
@@ -41,8 +45,9 @@ export default function UsersPage() {
     try {
       const res = await apiClient.post('/api/auth/invite', invite, { withCredentials: true });
       setInviteResult(res.data);
-    } catch (err) {
-      setError(formatApiError(err.response?.data?.detail));
+    } catch (error) {
+      const msg = handleApiError(error, { context: 'admin.users.invite', suppressToast: true });
+      setError(msg);
     }
   };
 
@@ -51,18 +56,53 @@ export default function UsersPage() {
     try {
       await apiClient.put(`/api/users/${userId}`, { active: !currentActive }, { withCredentials: true });
       setUsers(prev => prev.map(u => u.id === userId ? { ...u, active: !currentActive } : u));
-    } catch {}
-    finally { setUpdating(null); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'admin.users.toggleActive',
+        toastMessage: 'Nutzerstatus konnte nicht geändert werden',
+      });
+    } finally { setUpdating(null); }
   };
 
   const staffUsers = users.filter(u => STAFF_ROLES.includes(u.role));
   const applicantUsers = users.filter(u => u.role === 'applicant');
 
-  const displayUsers = filterRole === 'all'
+  const roleFilteredUsers = filterRole === 'all'
     ? users
     : filterRole === 'staff_only'
     ? staffUsers
     : applicantUsers;
+  const displayUsers = roleFilteredUsers.filter(u => {
+    if (!query.trim()) return true;
+    const haystack = [u.full_name, u.email, u.role].filter(Boolean).join(' ').toLowerCase();
+    return haystack.includes(query.trim().toLowerCase());
+  });
+  const displayUserIds = displayUsers.filter(u => u.role !== 'superadmin').map(u => u.id);
+  const allVisibleSelected = displayUserIds.length > 0 && displayUserIds.every(id => selectedUserIds.includes(id));
+
+  const copyInviteUrl = async () => {
+    if (!inviteResult?.invite_url) return;
+    try {
+      await navigator.clipboard.writeText(inviteResult.invite_url);
+    } catch (error) {
+      handleApiError(error, { context: 'admin.users.copyInvite', suppressToast: true });
+    }
+  };
+
+  const runBulkActive = async (active) => {
+    if (!selectedUserIds.length) return;
+    setBulkUpdating(true);
+    try {
+      await apiClient.put('/api/users/bulk/active', { user_ids: selectedUserIds, active }, { withCredentials: true });
+      setUsers(prev => prev.map(u => selectedUserIds.includes(u.id) && u.role !== 'superadmin' ? { ...u, active } : u));
+      setSelectedUserIds([]);
+    } catch (error) {
+      handleApiError(error, {
+        context: 'admin.users.bulkActive',
+        toastMessage: active ? 'Bulk-Aktion Aktivieren fehlgeschlagen' : 'Bulk-Aktion Deaktivieren fehlgeschlagen',
+      });
+    } finally { setBulkUpdating(false); }
+  };
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="admin-users-page">
@@ -100,9 +140,14 @@ export default function UsersPage() {
               <p className="font-medium text-slate-800 mb-1">Einladungslink erstellt:</p>
               <code className="block text-slate-700 break-all text-xs bg-slate-100 p-2 rounded-sm">{inviteResult.invite_url}</code>
               <p className="text-slate-600 text-xs mt-2">Bitte diesen Link sicher an den Mitarbeiter senden (nicht per unverschlüsselter E-Mail).</p>
-              <button onClick={() => setInviteResult(null)} className="mt-2 text-xs text-primary hover:underline">
-                Weiteren Mitarbeiter einladen
-              </button>
+              <div className="mt-2 flex items-center gap-3">
+                <button onClick={copyInviteUrl} className="text-xs text-primary hover:underline inline-flex items-center gap-1">
+                  <Copy size={12} /> Link kopieren
+                </button>
+                <button onClick={() => setInviteResult(null)} className="text-xs text-primary hover:underline">
+                  Weiteren Mitarbeiter einladen
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleInvite} className="space-y-3">
@@ -137,7 +182,8 @@ export default function UsersPage() {
       )}
 
       {/* Filter-Tabs */}
-      <div className="flex items-center gap-2" data-testid="users-filter-tabs">
+      <div className="flex items-center justify-between flex-wrap gap-2" data-testid="users-filter-tabs">
+        <div className="flex items-center gap-2">
         {[
           { key: 'all', label: `Alle (${users.length})` },
           { key: 'staff_only', label: `Mitarbeiter (${staffUsers.length})` },
@@ -153,6 +199,52 @@ export default function UsersPage() {
             {tab.label}
           </button>
         ))}
+        </div>
+        <div className="relative">
+          <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Name, E-Mail, Rolle…"
+            className="border border-slate-200 rounded-sm pl-8 pr-2.5 py-2 text-xs focus:outline-none focus:border-primary w-56"
+            data-testid="users-search"
+          />
+        </div>
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <span>{selectedUserIds.length} ausgewählt</span>
+          <button
+            onClick={() => setSelectedUserIds(allVisibleSelected ? [] : displayUserIds)}
+            className="inline-flex items-center gap-1 border border-slate-200 rounded-sm px-2 py-1 hover:bg-slate-50"
+            data-testid="users-select-visible-btn"
+          >
+            <CheckSquare size={12} />
+            {allVisibleSelected ? 'Auswahl aufheben' : 'Sichtbare auswählen'}
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between gap-3 flex-wrap" data-testid="users-bulk-actions">
+        <p className="text-xs text-slate-500">
+          Bulk-Aktion für aktive/deaktivierte Nutzer (Superadmins werden automatisch ausgeschlossen).
+        </p>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => runBulkActive(true)}
+            disabled={!selectedUserIds.length || bulkUpdating}
+            className="text-xs border border-primary/30 text-primary rounded-sm px-3 py-1.5 hover:bg-primary/5 disabled:opacity-50"
+            data-testid="users-bulk-activate"
+          >
+            Aktivieren
+          </button>
+          <button
+            onClick={() => runBulkActive(false)}
+            disabled={!selectedUserIds.length || bulkUpdating}
+            className="text-xs border border-red-200 text-red-600 rounded-sm px-3 py-1.5 hover:bg-red-50 disabled:opacity-50"
+            data-testid="users-bulk-deactivate"
+          >
+            Deaktivieren
+          </button>
+        </div>
       </div>
 
       {/* Tabelle */}
@@ -161,6 +253,7 @@ export default function UsersPage() {
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr className="text-xs text-slate-500 font-medium">
+                <th className="px-4 py-3 text-left">#</th>
                 <th className="px-4 py-3 text-left">Name</th>
                 <th className="px-4 py-3 text-left">E-Mail</th>
                 <th className="px-4 py-3 text-left">Rolle</th>
@@ -171,11 +264,20 @@ export default function UsersPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400 text-sm">Laden…</td></tr>
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-slate-400 text-sm">Laden…</td></tr>
               ) : displayUsers.length === 0 ? (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400 text-sm">Keine Nutzer gefunden</td></tr>
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-slate-400 text-sm">Keine Nutzer gefunden</td></tr>
               ) : displayUsers.map(u => (
                 <tr key={u.id} className="border-t border-slate-50 hover:bg-slate-50 transition-colors" data-testid={`user-row-${u.id}`}>
+                  <td className="px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedUserIds.includes(u.id)}
+                      disabled={u.role === 'superadmin'}
+                      onChange={(e) => setSelectedUserIds(prev => e.target.checked ? [...new Set([...prev, u.id])] : prev.filter(id => id !== u.id))}
+                      data-testid={`user-select-${u.id}`}
+                    />
+                  </td>
                   <td className="px-4 py-3 text-sm font-medium text-slate-800">{u.full_name || '–'}</td>
                   <td className="px-4 py-3 text-sm text-slate-600">{u.email}</td>
                   <td className="px-4 py-3">

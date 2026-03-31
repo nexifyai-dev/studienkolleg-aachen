@@ -4,8 +4,9 @@ import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
 import {
   RefreshCw, Brain, AlertTriangle, CheckCircle, FileX,
-  Archive, Users, Filter, XCircle, ChevronDown
+  Archive, Users, Filter, XCircle, ChevronDown, Search, CheckSquare
 } from 'lucide-react';
+import { handleApiError } from '../../lib/errorHandling';
 
 // Kanban-Stages (aktive Pipeline)
 const PIPELINE_STAGES = [
@@ -162,6 +163,9 @@ export default function KanbanPage() {
   const [filterCourse, setFilterCourse] = useState('');
   const [filterStage, setFilterStage] = useState(searchParams.get('stage') || '');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [query, setQuery] = useState('');
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [bulkStage, setBulkStage] = useState('in_review');
 
   // Read URL stage filter on mount
   useEffect(() => {
@@ -183,12 +187,18 @@ export default function KanbanPage() {
           try {
             const sr = await apiClient.get(`/api/applications/${app.id}/ai-screenings`, { withCredentials: true });
             if (sr.data?.length) screeningMap[app.id] = sr.data[0];
-          } catch {}
+          } catch (error) {
+            handleApiError(error, { context: `staff.kanban.loadScreening.${app.id}`, suppressToast: true });
+          }
         })
       );
       setScreenings(screeningMap);
-    } catch {}
-    finally { setLoading(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.kanban.load',
+        toastMessage: 'Kanban-Daten konnten nicht geladen werden',
+      });
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -197,7 +207,12 @@ export default function KanbanPage() {
     try {
       await apiClient.put(`/api/applications/${appId}`, { current_stage: newStage }, { withCredentials: true });
       setApplications(prev => prev.map(a => a.id === appId ? { ...a, current_stage: newStage } : a));
-    } catch {}
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.kanban.moveApplication',
+        toastMessage: `Statuswechsel zu ${STAGE_LABELS[newStage] || newStage} fehlgeschlagen`,
+      });
+    }
   };
 
   const clearStageFilter = () => {
@@ -207,6 +222,14 @@ export default function KanbanPage() {
 
   const filtered = applications.filter(a => {
     if (filterCourse && a.course_type !== filterCourse) return false;
+    if (query.trim()) {
+      const q = query.trim().toLowerCase();
+      const haystack = [
+        a.applicant?.full_name, a.applicant?.email, a.applicant?.country,
+        a.course_type, a.desired_start, a.current_stage, a.degree_country
+      ].filter(Boolean).join(' ').toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
     return true;
   });
 
@@ -223,6 +246,7 @@ export default function KanbanPage() {
     acc[stage] = pipeline.filter(a => a.current_stage === stage);
     return acc;
   }, {});
+  const allVisibleIds = pipeline.map(a => a.id);
 
   const COURSE_OPTIONS = ['T-Course', 'M-Course', 'W-Course', 'M/T-Course', 'Language Course'];
 
@@ -244,6 +268,16 @@ export default function KanbanPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <div className="relative">
+            <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Suche: Name, E-Mail, Land, Kurs, Status..."
+              className="pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-sm w-64 focus:outline-none focus:border-primary"
+              data-testid="kanban-search-input"
+            />
+          </div>
           {/* Filter */}
           <div className="relative">
             <button onClick={() => setShowFilterMenu(!showFilterMenu)}
@@ -271,6 +305,43 @@ export default function KanbanPage() {
             className="flex items-center gap-2 text-slate-500 hover:text-primary text-sm border border-slate-200 px-3 py-2 rounded-sm hover:border-primary transition-colors"
             data-testid="kanban-refresh-btn">
             <RefreshCw size={14} /> Aktualisieren
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between gap-3 flex-wrap" data-testid="kanban-selection-bar">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSelectedIds(selectedIds.length === allVisibleIds.length ? [] : allVisibleIds)}
+            className="text-xs border border-slate-200 rounded-sm px-2 py-1 hover:bg-slate-50"
+          >
+            {selectedIds.length === allVisibleIds.length ? 'Auswahl aufheben' : 'Alle sichtbaren auswählen'}
+          </button>
+          <span className="text-xs text-slate-500">{selectedIds.length} ausgewählt</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={bulkStage}
+            onChange={(e) => setBulkStage(e.target.value)}
+            className="text-xs border border-slate-200 rounded-sm px-2 py-1.5"
+          >
+            {PIPELINE_STAGES.map((stage) => (
+              <option value={stage} key={stage}>{STAGE_LABELS[stage] || stage}</option>
+            ))}
+          </select>
+          <button
+            disabled={!selectedIds.length}
+            onClick={async () => {
+              await Promise.allSettled(selectedIds.map((id) =>
+                apiClient.put(`/api/applications/${id}`, { current_stage: bulkStage }, { withCredentials: true })
+              ));
+              setApplications(prev => prev.map(a => selectedIds.includes(a.id) ? { ...a, current_stage: bulkStage } : a));
+              setSelectedIds([]);
+            }}
+            className="text-xs bg-primary text-white rounded-sm px-3 py-1.5 disabled:opacity-40"
+            data-testid="kanban-bulk-stage-btn"
+          >
+            <CheckSquare size={12} className="inline mr-1" /> Sammelaktion: Status setzen
           </button>
         </div>
       </div>
@@ -315,13 +386,24 @@ export default function KanbanPage() {
 
               <div className="space-y-2 min-h-[100px]">
                 {appsByStage[stage].map(app => (
-                  <KanbanCard
-                    key={app.id}
-                    app={app}
-                    latestScreening={screenings[app.id]}
-                    onMove={moveApplication}
-                    nextStage={!filterStage && stageIdx < activePipelineStages.length - 1 ? activePipelineStages[stageIdx + 1] : null}
-                  />
+                  <div key={app.id} className="relative">
+                    <label className="absolute top-2 right-2 z-10 bg-white/90 rounded-sm p-0.5">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(app.id)}
+                        onChange={(e) => {
+                          setSelectedIds(prev => e.target.checked ? [...prev, app.id] : prev.filter(id => id !== app.id));
+                        }}
+                        data-testid={`kanban-select-${app.id}`}
+                      />
+                    </label>
+                    <KanbanCard
+                      app={app}
+                      latestScreening={screenings[app.id]}
+                      onMove={moveApplication}
+                      nextStage={!filterStage && stageIdx < activePipelineStages.length - 1 ? activePipelineStages[stageIdx + 1] : null}
+                    />
+                  </div>
                 ))}
                 {appsByStage[stage].length === 0 && (
                   <div className="border-2 border-dashed border-slate-100 rounded-sm py-6 text-center">

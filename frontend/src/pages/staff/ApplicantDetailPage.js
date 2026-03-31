@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
 import { toast } from 'sonner';
 import { STAGE_LABELS, STAGE_COLORS, formatDate } from '../../lib/utils';
+import { handleApiError } from '../../lib/errorHandling';
 import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
   FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2,
@@ -23,7 +24,9 @@ function FollowupPanel({ appId }) {
     try {
       const r = await apiClient.get('/api/followups', { withCredentials: true });
       setFollowups((r.data || []).filter(f => f.application_id === appId));
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: 'staff.applicant.followups.load', suppressToast: true });
+    }
   };
 
   const create = async () => {
@@ -38,21 +41,36 @@ function FollowupPanel({ appId }) {
       setForm({ due_date: '', reason: '' });
       setShowCreate(false);
       await loadFollowups();
-    } catch {} finally { setCreating(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.applicant.followups.create',
+        toastMessage: 'Wiedervorlage konnte nicht erstellt werden',
+      });
+    } finally { setCreating(false); }
   };
 
   const markDone = async (id) => {
     try {
       await apiClient.put(`/api/followups/${id}`, { status: 'done' }, { withCredentials: true });
       await loadFollowups();
-    } catch {}
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.applicant.followups.markDone',
+        toastMessage: 'Wiedervorlage konnte nicht abgeschlossen werden',
+      });
+    }
   };
 
   const dismiss = async (id) => {
     try {
       await apiClient.delete(`/api/followups/${id}`, { withCredentials: true });
       await loadFollowups();
-    } catch {}
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.applicant.followups.dismiss',
+        toastMessage: 'Wiedervorlage konnte nicht entfernt werden',
+      });
+    }
   };
 
   return (
@@ -128,16 +146,18 @@ function TeacherAssignmentPanel({ applicantId, applicantName }) {
       const all = assignRes.data.assignments || [];
       setAssignments(all.filter(a => a.applicant_id === applicantId));
       setTeachers((usersRes.data || []).filter(u => u.role === 'teacher' && u.active));
-    } catch {} finally { setLoading(false); }
+    } catch (error) {
+      handleApiError(error, { context: 'staff.applicant.teacher.load', suppressToast: true });
+    } finally { setLoading(false); }
   };
 
   const assign = async (tid) => {
     setActionLoading(tid);
-    try { await apiClient.post(`/api/teacher/assignments?applicant_id=${applicantId}&teacher_id=${tid}`); await loadData(); setShowPicker(false); } catch {} finally { setActionLoading(''); }
+    try { await apiClient.post(`/api/teacher/assignments?applicant_id=${applicantId}&teacher_id=${tid}`); await loadData(); setShowPicker(false); } catch (error) { handleApiError(error, { context: 'staff.applicant.teacher.assign', toastMessage: `Lehrerzuweisung fehlgeschlagen (${applicantName || 'Bewerber'})` }); } finally { setActionLoading(''); }
   };
   const remove = async (tid) => {
     setActionLoading(tid);
-    try { await apiClient.delete(`/api/teacher/assignments?applicant_id=${applicantId}&teacher_id=${tid}`); await loadData(); } catch {} finally { setActionLoading(''); }
+    try { await apiClient.delete(`/api/teacher/assignments?applicant_id=${applicantId}&teacher_id=${tid}`); await loadData(); } catch (error) { handleApiError(error, { context: 'staff.applicant.teacher.remove', toastMessage: 'Lehrerzuweisung konnte nicht entfernt werden' }); } finally { setActionLoading(''); }
   };
 
   const assignedIds = new Set(assignments.map(a => a.teacher_id));
@@ -183,11 +203,11 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
   const [expanded, setExpanded] = useState(null);
 
   const load = useCallback(async () => {
-    try { const res = await apiClient.get(`/api/applications/${appId}/ai-screenings`); setScreenings(res.data || []); } catch {} finally { setLoading(false); }
+    try { const res = await apiClient.get(`/api/applications/${appId}/ai-screenings`); setScreenings(res.data || []); } catch (error) { handleApiError(error, { context: 'staff.applicant.ai.load', suppressToast: true }); } finally { setLoading(false); }
   }, [appId]);
   useEffect(() => { load(); }, [load]);
 
-  const run = async () => { setRunning(true); try { await apiClient.post(`/api/applications/${appId}/ai-screen`); await load(); } catch {} finally { setRunning(false); } };
+  const run = async () => { setRunning(true); try { await apiClient.post(`/api/applications/${appId}/ai-screen`); await load(); } catch (error) { handleApiError(error, { context: 'staff.applicant.ai.run', toastMessage: 'KI-Prüfung konnte nicht gestartet werden' }); } finally { setRunning(false); } };
 
   const acceptSuggestion = async (suggestedStage) => {
     setAccepting(true);
@@ -195,7 +215,9 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
       await apiClient.post(`/api/applications/${appId}/accept-ai-suggestion`, { suggested_stage: suggestedStage }, { withCredentials: true });
       if (onStageAccepted) onStageAccepted(suggestedStage);
       toast.success('KI-Vorschlag übernommen');
-    } catch { toast.error('Fehler bei der Übernahme'); } finally { setAccepting(false); }
+    } catch (error) {
+      handleApiError(error, { context: 'staff.applicant.ai.accept', toastMessage: `KI-Vorschlag (${STAGE_LABELS[suggestedStage] || suggestedStage}) konnte nicht übernommen werden` });
+    } finally { setAccepting(false); }
   };
 
   const latest = screenings[0];
@@ -218,7 +240,7 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
         {!loading && !latest && <p className="text-xs text-slate-400 text-center py-2">Noch keine KI-Prüfung durchgeführt</p>}
         {latest && (
           <>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5">
               <div className={`rounded-sm p-2 text-center text-[10px] ${latest.is_complete ? 'bg-primary/8 text-primary' : 'bg-slate-50 text-slate-500'}`}>
                 {latest.is_complete ? <CheckCircle size={13} className="mx-auto mb-0.5" /> : <AlertCircle size={13} className="mx-auto mb-0.5" />}
                 {latest.is_complete ? 'Vollständig' : `${latest.missing_documents?.length || 0} fehlend`}
@@ -227,12 +249,48 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
               <div className={`rounded-sm p-2 text-center text-[10px] ${latest.language_level_ok ? 'bg-primary/8 text-primary' : 'bg-red-50 text-red-600'}`}>
                 Sprache: {latest.language_level_ok ? 'OK' : 'Fehlt'}
               </div>
+              <div className="rounded-sm p-2 text-center text-[10px] bg-slate-50">
+                Formal: <strong>{latest.screening_breakdown?.formal_precheck?.status || '–'}</strong>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="border border-slate-200 rounded-sm p-2.5 bg-white">
+                <p className="text-[11px] font-semibold text-slate-700 mb-1">Sicher belegt</p>
+                <ul className="space-y-1 text-[11px] text-slate-600 list-disc pl-4">
+                  {(latest.screening_breakdown?.completeness?.reasons || []).map((item, idx) => (
+                    <li key={`complete-reason-${idx}`}>{item}</li>
+                  ))}
+                  {(latest.screening_breakdown?.formal_precheck?.reasons || []).map((item, idx) => (
+                    <li key={`formal-reason-${idx}`}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="border border-slate-200 rounded-sm p-2.5 bg-slate-50">
+                <p className="text-[11px] font-semibold text-slate-700 mb-1">Offen / kritisch</p>
+                <ul className="space-y-1 text-[11px] text-slate-600 list-disc pl-4">
+                  {(latest.screening_breakdown?.formal_precheck?.risks || []).map((item, idx) => (
+                    <li key={`risk-${idx}`} className="text-red-600">{item}</li>
+                  ))}
+                  {(latest.screening_breakdown?.formal_precheck?.open_points || []).map((item, idx) => (
+                    <li key={`open-${idx}`}>{item}</li>
+                  ))}
+                  {(!latest.screening_breakdown?.formal_precheck?.risks?.length && !latest.screening_breakdown?.formal_precheck?.open_points?.length) && (
+                    <li>Keine offenen Punkte aus lokaler Vorprüfung.</li>
+                  )}
+                </ul>
+              </div>
             </div>
             {latest.suggested_stage && (
               <div className="bg-primary/5 border-2 border-primary/25 rounded-sm p-3">
                 <div className="flex items-center gap-2 mb-2">
                   <Brain size={14} className="text-primary" />
                   <span className="text-xs text-primary font-semibold">KI-Vorschlag: {STAGE_LABELS[latest.suggested_stage] || latest.suggested_stage}</span>
+                </div>
+                <div className="mb-2 rounded-sm border border-primary/15 bg-white p-2">
+                  <p className="text-[10px] font-semibold text-slate-700 mb-1">Nächste Aktionen (Empfehlung)</p>
+                  <ul className="space-y-0.5 text-[10px] text-slate-600 list-disc pl-4">
+                    {(latest.next_actions || []).map((a, idx) => <li key={`next-action-${idx}`}>{a}</li>)}
+                  </ul>
                 </div>
                 {latest.suggested_stage !== currentStage && (
                   <button
@@ -250,6 +308,9 @@ function AIScreeningPanel({ appId, currentStage, onStageAccepted }) {
                 )}
               </div>
             )}
+            <div className="rounded-sm border border-slate-200 p-2 text-[10px] text-slate-500 bg-slate-50">
+              Datenbasis: {latest.reference_basis?.note || 'Lokale Vorprüfungsregeln ohne Live-Referenzprüfung.'}
+            </div>
             {latest.ai_report && (
               <div>
                 <button onClick={() => setExpanded(expanded === 'report' ? null : 'report')} data-testid="ai-report-toggle"
@@ -307,14 +368,14 @@ function CaseNotes({ appId }) {
   const [sending, setSending] = useState(false);
 
   const load = useCallback(async () => {
-    try { const res = await apiClient.get(`/api/applications/${appId}/notes`); setNotes(res.data || []); } catch {} finally { setLoading(false); }
+    try { const res = await apiClient.get(`/api/applications/${appId}/notes`); setNotes(res.data || []); } catch (error) { handleApiError(error, { context: 'staff.applicant.notes.load', suppressToast: true }); } finally { setLoading(false); }
   }, [appId]);
   useEffect(() => { load(); }, [load]);
 
   const addNote = async () => {
     if (!newNote.trim()) return;
     setSending(true);
-    try { await apiClient.post(`/api/applications/${appId}/notes`, { content: newNote.trim(), visibility: 'internal' }); setNewNote(''); await load(); } catch {} finally { setSending(false); }
+    try { await apiClient.post(`/api/applications/${appId}/notes`, { content: newNote.trim(), visibility: 'internal' }); setNewNote(''); await load(); } catch (error) { handleApiError(error, { context: 'staff.applicant.notes.add', toastMessage: 'Notiz konnte nicht gespeichert werden' }); } finally { setSending(false); }
   };
 
   return (
@@ -353,7 +414,7 @@ function ActivityHistory({ appId }) {
 
   useEffect(() => {
     (async () => {
-      try { const res = await apiClient.get(`/api/applications/${appId}/activities`); setActivities(res.data || []); } catch {} finally { setLoading(false); }
+      try { const res = await apiClient.get(`/api/applications/${appId}/activities`); setActivities(res.data || []); } catch (error) { handleApiError(error, { context: 'staff.applicant.activities.load', suppressToast: true }); } finally { setLoading(false); }
     })();
   }, [appId]);
 
@@ -432,7 +493,12 @@ function CaseEmailComposer({ appId, applicantEmail, applicantName }) {
       await apiClient.post(`/api/applications/${appId}/send-email`, { subject: subject.trim(), body: body.trim(), lang: 'de' });
       setSent(true);
       setTimeout(() => { setSent(false); setOpen(false); setSubject(''); setBody(''); }, 2000);
-    } catch {} finally { setSending(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.applicant.email.send',
+        toastMessage: `E-Mail an ${applicantName || applicantEmail || 'Bewerber'} konnte nicht gesendet werden`,
+      });
+    } finally { setSending(false); }
   };
 
   if (!open) return (
@@ -495,7 +561,12 @@ export default function ApplicantDetailPage() {
         ]);
         setApp(appRes.data);
         setDocs(docsRes.data);
-      } catch {} finally { setLoading(false); }
+      } catch (error) {
+        handleApiError(error, {
+          context: 'staff.applicant.load',
+          toastMessage: 'Bewerbungsdaten konnten nicht geladen werden',
+        });
+      } finally { setLoading(false); }
     };
     load();
   }, [id, refreshKey]);
@@ -506,7 +577,12 @@ export default function ApplicantDetailPage() {
       await apiClient.put(`/api/applications/${id}`, { current_stage: newStage });
       setApp(prev => ({ ...prev, current_stage: newStage }));
       setRefreshKey(k => k + 1);
-    } catch {} finally { setStageUpdating(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.applicant.updateStage',
+        toastMessage: `Statuswechsel zu ${STAGE_LABELS[newStage] || newStage} fehlgeschlagen`,
+      });
+    } finally { setStageUpdating(false); }
   };
 
   const saveProfileField = async (field, value) => {
@@ -517,7 +593,7 @@ export default function ApplicantDetailPage() {
         applicant: { ...prev.applicant, [field]: value },
       }));
       setRefreshKey(k => k + 1);
-    } catch (e) { console.error('Profile save failed', e); }
+    } catch (error) { handleApiError(error, { context: 'staff.applicant.profile.save', toastMessage: 'Profilfeld konnte nicht gespeichert werden' }); }
   };
 
   const saveAppField = async (field, value) => {
@@ -525,7 +601,7 @@ export default function ApplicantDetailPage() {
       await apiClient.put(`/api/applications/${id}`, { [field]: value });
       setApp(prev => ({ ...prev, [field]: value }));
       setRefreshKey(k => k + 1);
-    } catch (e) { console.error('App field save failed', e); }
+    } catch (error) { handleApiError(error, { context: 'staff.applicant.application.save', toastMessage: 'Bewerbungsfeld konnte nicht gespeichert werden' }); }
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 size={28} className="animate-spin text-primary" /></div>;

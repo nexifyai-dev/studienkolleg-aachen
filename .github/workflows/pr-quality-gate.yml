@@ -1,0 +1,31 @@
+name: PR Quality Gate
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled, ready_for_review]
+    branches: ["main"]
+
+jobs:
+  pr-quality-gate:
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate mandatory PR governance fields
+        run: python scripts/check_pr_gate.py
+
+      - name: Gate status summary
+        if: always()
+        run: |
+          echo "PR Quality Gate must be configured as required status check in branch protection."
+          echo "PRs with open core defects are blocked by this workflow."

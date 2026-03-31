@@ -1,0 +1,7 @@
+# Kritische Bereiche mit verpflichtendem Review.
+# HINWEIS: Bitte die Owner auf reale GitHub User/Teams mappen.
+
+/backend/services/ @backend-services-owner
+/backend/routers/auth/ @security-owner
+/frontend/src/App.js @frontend-architecture-owner
+/release/ @release-owner

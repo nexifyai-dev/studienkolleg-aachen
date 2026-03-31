@@ -104,7 +104,7 @@
 ## Mocked / Feature-Flagged
 - Zahlungsmodul: "in Vorbereitung"
 - Preiskalkulator: feature-flagged
-- AI-Screening: abhängig von DEEPSEEK_API_KEY
+- AI-Screening: abhängig von DEEPSEEK_API_KEY (einziger produktiver Provider; keine NSCALE-/NSCall-Pfade mehr)
 
 ## Offene Punkte (P2/P3 Backlog)
 - Payment-Modul Anbindung (P2)

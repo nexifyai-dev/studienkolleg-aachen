@@ -86,7 +86,7 @@ Deutsche typografische Anführungszeichen (z.B. „…") dürfen NICHT in JSON-D
 ## Projekt-Memory-Update (2026-03-30)
 
 - **requirement**: KI-Provider systemweit auf DeepSeek umstellen; keine produktive Nutzung von nscale/NSCall mehr.
-- **decision**: Zentrale Provider-Schicht auf `services/deepseek_provider.py` gelegt; Model-Registry bleibt task-basiert für Auditierbarkeit.
+- **decision**: Zentrale Provider-Schicht auf `services/deepseek_provider.py` gelegt; Legacy-`nscale_provider`/NSCALE-Reste entfernt; Model-Registry bleibt task-basiert für Auditierbarkeit.
 - **error**: Screening-Ausgaben konnten operativ als zu nah an einer finalen Entscheidung gelesen werden.
 - **fix**: `screening_breakdown` mit expliziter Trennung eingeführt: `completeness`, `formal_precheck`, `ai_recommendation`, `staff_decision`.
 - **lesson_learned**: Upload/Dateivorhandensein darf nur Vollständigkeit beeinflussen, nie Annahme-/Zulassungswirkung entfalten.

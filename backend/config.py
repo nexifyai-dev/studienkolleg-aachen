@@ -61,8 +61,6 @@ DEEPSEEK_API_KEY: str = os.environ.get("DEEPSEEK_API_KEY", "")
 DEEPSEEK_BASE_URL: str = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 AI_SCREENING_ENABLED: bool = bool(DEEPSEEK_API_KEY)
 
-# Legacy – wird nicht mehr für Produktiv-KI genutzt (Übergangscode entfernt)
-EMERGENT_LLM_KEY: str = os.environ.get("EMERGENT_LLM_KEY", "")
 
 # ─── Feature Flags ────────────────────────────────────────────────────────────
 COST_SIMULATOR_ENABLED: bool = os.environ.get("COST_SIMULATOR_ENABLED", "false").lower() == "true"

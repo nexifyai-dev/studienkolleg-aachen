@@ -37,6 +37,56 @@ def _serialize_task(task: dict) -> dict:
     return t
 
 
+async def _authorize_task_access(task_id: str, user: dict, mode: str = "read") -> dict:
+    """
+    Centralized task access guard.
+
+    Rules:
+    - Task must exist.
+    - Applicant: only tasks for own applications and only public visibility.
+    - Staff/Admin: read allowed for admins or creator/assignee.
+    - Write: only admin or creator/assignee.
+    """
+    if mode not in {"read", "write"}:
+        raise HTTPException(status_code=500, detail="Ungueltiger Zugriffsmodus")
+
+    db = get_db()
+    try:
+        task = await db.tasks.find_one({"_id": ObjectId(task_id)})
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungueltige Task-ID")
+
+    if not task:
+        raise HTTPException(status_code=404, detail="Aufgabe nicht gefunden")
+
+    role = user.get("role")
+    if role == "applicant":
+        app_id = task.get("application_id")
+        if not app_id or not ObjectId.is_valid(app_id):
+            raise HTTPException(status_code=403, detail="Forbidden")
+        app = await db.applications.find_one({"_id": ObjectId(app_id)}, {"applicant_id": 1})
+        if not app or str(app.get("applicant_id")) != user["id"] or task.get("visibility") != "public":
+            raise HTTPException(status_code=403, detail="Forbidden")
+        if mode == "write":
+            raise HTTPException(status_code=403, detail="Forbidden")
+        return task
+
+    if role in ADMIN_ROLES:
+        return task
+
+    if mode == "read":
+        if task.get("assigned_to") != user["id"] and task.get("created_by") != user["id"]:
+            raise HTTPException(status_code=403, detail="Forbidden")
+        return task
+
+    if task.get("assigned_to") != user["id"] and task.get("created_by") != user["id"]:
+        raise HTTPException(
+            status_code=403,
+            detail="Nur der Ersteller oder zugewiesene Person kann diese Aufgabe bearbeiten",
+        )
+    return task
+
+
 @router.get("")
 async def list_tasks(request: Request, user: dict = Depends(get_current_user)):
     db = get_db()
@@ -133,12 +183,7 @@ async def create_task(data: TaskCreate, user: dict = Depends(require_roles(*STAF
 @router.get("/{task_id}")
 async def get_task(task_id: str, user: dict = Depends(get_current_user)):
     db = get_db()
-    try:
-        task = await db.tasks.find_one({"_id": ObjectId(task_id)})
-    except Exception:
-        raise HTTPException(status_code=400, detail="Ungueltige Task-ID")
-    if not task:
-        raise HTTPException(status_code=404, detail="Aufgabe nicht gefunden")
+    task = await _authorize_task_access(task_id, user, mode="read")
     td = _serialize_task(task)
     # Get assigned user name
     if td.get("assigned_to"):
@@ -168,18 +213,7 @@ async def get_task(task_id: str, user: dict = Depends(get_current_user)):
 @router.put("/{task_id}")
 async def update_task(task_id: str, data: TaskUpdate, user: dict = Depends(get_current_user)):
     db = get_db()
-    try:
-        task = await db.tasks.find_one({"_id": ObjectId(task_id)})
-    except Exception:
-        raise HTTPException(status_code=400, detail="Ungueltige ID")
-    if not task:
-        raise HTTPException(status_code=404, detail="Aufgabe nicht gefunden")
-
-    if user["role"] == "applicant":
-        raise HTTPException(status_code=403, detail="Forbidden")
-    if user["role"] not in ADMIN_ROLES:
-        if task.get("assigned_to") != user["id"] and task.get("created_by") != user["id"]:
-            raise HTTPException(status_code=403, detail="Nur der Ersteller oder zugewiesene Person kann diese Aufgabe bearbeiten")
+    task = await _authorize_task_access(task_id, user, mode="write")
 
     now = datetime.now(timezone.utc)
     update = {k: v for k, v in data.model_dump(exclude_none=True).items()}
@@ -244,6 +278,7 @@ async def delete_task(task_id: str, user: dict = Depends(require_roles(*STAFF_RO
 @router.post("/{task_id}/notes")
 async def add_task_note(task_id: str, body: dict, user: dict = Depends(require_roles(*STAFF_ROLES))):
     db = get_db()
+    await _authorize_task_access(task_id, user, mode="write")
     content = body.get("content", "").strip()
     if not content:
         raise HTTPException(status_code=400, detail="Inhalt erforderlich")
@@ -268,6 +303,7 @@ async def add_task_note(task_id: str, body: dict, user: dict = Depends(require_r
 @router.get("/{task_id}/notes")
 async def list_task_notes(task_id: str, user: dict = Depends(get_current_user)):
     db = get_db()
+    await _authorize_task_access(task_id, user, mode="read")
     notes = await db.task_notes.find({"task_id": task_id}).sort("created_at", -1).to_list(100)
     result = []
     for n in notes:
@@ -283,6 +319,7 @@ async def list_task_notes(task_id: str, user: dict = Depends(get_current_user)):
 @router.post("/{task_id}/attachments")
 async def upload_task_attachment(task_id: str, body: dict, user: dict = Depends(require_roles(*STAFF_ROLES))):
     db = get_db()
+    await _authorize_task_access(task_id, user, mode="write")
     filename = body.get("filename", "")
     file_data = body.get("file_data", "")
     content_type = body.get("content_type", "application/octet-stream")
@@ -319,6 +356,7 @@ async def upload_task_attachment(task_id: str, body: dict, user: dict = Depends(
 @router.get("/{task_id}/attachments")
 async def list_task_attachments(task_id: str, user: dict = Depends(get_current_user)):
     db = get_db()
+    await _authorize_task_access(task_id, user, mode="read")
     atts = await db.task_attachments.find(
         {"task_id": task_id},
         {"file_data": 0}  # Don't return binary data in listing
@@ -335,6 +373,7 @@ async def list_task_attachments(task_id: str, user: dict = Depends(get_current_u
 @router.get("/{task_id}/attachments/{att_id}")
 async def download_task_attachment(task_id: str, att_id: str, user: dict = Depends(get_current_user)):
     db = get_db()
+    await _authorize_task_access(task_id, user, mode="read")
     try:
         att = await db.task_attachments.find_one({"_id": ObjectId(att_id), "task_id": task_id})
     except Exception:
@@ -357,6 +396,7 @@ async def download_task_attachment(task_id: str, att_id: str, user: dict = Depen
 @router.get("/{task_id}/history")
 async def get_task_history(task_id: str, user: dict = Depends(get_current_user)):
     db = get_db()
+    await _authorize_task_access(task_id, user, mode="read")
     entries = await db.task_history.find({"task_id": task_id}).sort("occurred_at", -1).to_list(100)
     result = []
     for e in entries:

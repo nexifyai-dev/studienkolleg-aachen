@@ -53,22 +53,26 @@ import PartnerReferralsPage from './pages/partner/PartnerReferralsPage';
 import PartnerLinkPage from './pages/partner/PartnerLinkPage';
 import PartnerSettingsPage from './pages/partner/PartnerSettingsPage';
 
-function ProtectedRoute({ children, allowedRoles }) {
+export function resolveHomeByRole(role) {
+  if (['superadmin', 'admin'].includes(role)) return '/admin';
+  if (['staff', 'accounting_staff', 'teacher'].includes(role)) return '/staff';
+  if (role === 'affiliate') return '/partner';
+  return '/portal';
+}
+
+export function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
   if (!user) return <Navigate to={LOGIN_PATH} replace />;
-  if (allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to="/portal" replace />;
+  if (allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to={resolveHomeByRole(user.role)} replace />;
   return children;
 }
 
-function PublicRoute({ children }) {
+export function PublicRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return null;
   if (user) {
-    const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff', 'teacher'];
-    if (staffRoles.includes(user.role)) return <Navigate to="/staff" replace />;
-    if (user.role === 'affiliate') return <Navigate to="/partner" replace />;
-    return <Navigate to="/portal" replace />;
+    return <Navigate to={resolveHomeByRole(user.role)} replace />;
   }
   return children;
 }

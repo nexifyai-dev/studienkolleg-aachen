@@ -40,3 +40,37 @@ def test_document_analysis_extracts_core_fields_and_categories():
     assert result["documents"][0]["core_fields"]["person_name"] == "Max Mustermann"
     assert result["documents"][1]["core_fields"]["cefr_level"] == "B2"
     assert isinstance(result["documents"][0]["suitability"]["relevance_score"], float)
+
+
+def test_document_analysis_without_machine_text_does_not_infer_from_filename():
+    application = {"date_of_birth": "2001-02-03"}
+    applicant = {"full_name": "Max Mustermann"}
+    docs = [
+        {
+            "id": "doc-lang",
+            "document_type": "language_certificate",
+            "filename": "Max_Mustermann_Goethe_B2.pdf",
+            "content_type": "application/pdf",
+            "status": "uploaded",
+            "extracted_text": "   ",
+            "ocr_text": None,
+            "text": "",
+            "content_text": None,
+            "notes": "",
+        }
+    ]
+
+    result = analyze_documents_for_screening(application, applicant, docs)
+    document = result["documents"][0]
+
+    assert document["processing"]["text_source"] == "no_machine_readable_text"
+    assert document["core_fields"]["person_name"] is None
+    assert document["core_fields"]["issuer"] is None
+    assert document["core_fields"]["cefr_level"] is None
+    assert document["category"] == "manual_review_required"
+    assert result["overall_category"] == "manual_review_required"
+    assert any(
+        evidence["kind"] == "content_verification"
+        and evidence["value"] == "Nur Datei-Metadaten vorhanden, keine inhaltliche Verifikation"
+        for evidence in document["evidence"]
+    )

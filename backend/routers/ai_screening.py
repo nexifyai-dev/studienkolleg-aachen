@@ -19,6 +19,7 @@ from deps import get_current_user, require_roles, STAFF_ROLES
 from models.schemas import to_str_id
 from services.audit import write_audit_log
 from services.ai_screening import run_ai_screening
+from services.automation import trigger_case_signal
 
 router = APIRouter(prefix="/api", tags=["ai_screening"])
 
@@ -76,6 +77,51 @@ async def start_ai_screening(
         "created_at": datetime.now(timezone.utc),
     }
     await db.ai_screenings.insert_one(result_to_save)
+
+    try:
+        applicant_email = applicant.get("email", "")
+        applicant_name = applicant.get("full_name", "")
+        applicant_id = app_dict.get("applicant_id", "")
+        anabin_category = result.get("anabin_category")
+
+        if result.get("formal_result") == "manual_review_required":
+            await trigger_case_signal(
+                application_id=app_id,
+                trigger_code="special_case_detected",
+                actor_id=user["id"],
+                applicant_id=applicant_id,
+                applicant_email=applicant_email,
+                applicant_name=applicant_name,
+                status_context=result.get("formal_result", ""),
+                area_context="admission_precheck",
+                detail="Sonderfall im Screening erkannt; manuelle Staff-Prüfung erforderlich.",
+            )
+        if anabin_category in {"prüfen", "unbekannt", "D"}:
+            await trigger_case_signal(
+                application_id=app_id,
+                trigger_code="reference_mismatch",
+                actor_id=user["id"],
+                applicant_id=applicant_id,
+                applicant_email=applicant_email,
+                applicant_name=applicant_name,
+                status_context=f"anabin_{anabin_category}",
+                area_context="recognition_reference",
+                detail="Referenz-Mismatch bzw. ungeklärte Anerkennungsbasis im Screening festgestellt.",
+            )
+        if result.get("local_checks", {}).get("language_level_check", {}).get("ok") is False:
+            await trigger_case_signal(
+                application_id=app_id,
+                trigger_code="language_course_needed",
+                actor_id=user["id"],
+                applicant_id=applicant_id,
+                applicant_email=applicant_email,
+                applicant_name=applicant_name,
+                status_context=result.get("formal_result", ""),
+                area_context="language_pathway",
+                detail="Sprachkursbedarf aus Vorprüfung erkannt.",
+            )
+    except Exception:
+        pass
 
     # Audit-Log
     await write_audit_log(

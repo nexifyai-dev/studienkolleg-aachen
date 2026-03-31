@@ -22,6 +22,7 @@ from services.audit import write_audit_log
 from services.email import (
     send_application_received,
     send_document_requested,
+    send_precheck_process_update,
     send_status_changed,
     send_teacher_assigned,
 )
@@ -46,6 +47,44 @@ REQUIRED_DOCUMENT_LABELS_EN = {
     "passport": "Passport / ID Card",
 }
 
+AUTOMATION_TRIGGER_MAP = {
+    "special_case_detected": {
+        "task_type": "staff_manual_review",
+        "priority": "high",
+        "scope": "admission",
+    },
+    "document_rejected": {
+        "task_type": "staff_manual_review",
+        "priority": "high",
+        "scope": "documents",
+    },
+    "reference_mismatch": {
+        "task_type": "authority_clarification",
+        "priority": "high",
+        "scope": "recognition",
+    },
+    "missing_activity": {
+        "task_type": "applicant_followup",
+        "priority": "normal",
+        "scope": "engagement",
+    },
+    "seat_reservation": {
+        "task_type": "seat_reservation_check",
+        "priority": "normal",
+        "scope": "capacity",
+    },
+    "language_course_needed": {
+        "task_type": "language_course_followup",
+        "priority": "normal",
+        "scope": "language",
+    },
+    "payment_status_active_case": {
+        "task_type": "payment_status_review",
+        "priority": "high",
+        "scope": "finance",
+    },
+}
+
 
 async def _get_user_lang(user_id: str) -> str:
     """Resolve a user's language preference from DB."""
@@ -55,6 +94,62 @@ async def _get_user_lang(user_id: str) -> str:
         return (user or {}).get("language_pref", "de")
     except Exception:
         return "de"
+
+
+async def _create_automation_task(
+    *,
+    application_id: str,
+    task_type: str,
+    title: str,
+    description: str,
+    priority: str,
+    scope: str,
+    actor_id: str = "system",
+) -> Optional[str]:
+    """Create an internal task and history entry for automation-driven follow-ups."""
+    try:
+        db = get_db()
+        now = datetime.now(timezone.utc)
+
+        app = await db.applications.find_one({"_id": ObjectId(application_id)}, {"assigned_staff_id": 1})
+        assigned_to = (app or {}).get("assigned_staff_id")
+        if not assigned_to:
+            staff = await db.users.find_one(
+                {"role": {"$in": ["superadmin", "admin", "staff"]}, "active": True},
+                {"_id": 1},
+            )
+            assigned_to = str(staff["_id"]) if staff else None
+
+        task_doc = {
+            "title": title,
+            "description": description,
+            "application_id": application_id,
+            "assigned_to": assigned_to,
+            "priority": priority,
+            "visibility": "internal",
+            "status": "open",
+            "created_by": actor_id,
+            "created_at": now,
+            "task_type": task_type,
+            "scope": scope,
+            "source": "automation",
+        }
+        result = await db.tasks.insert_one(task_doc)
+        task_id = str(result.inserted_id)
+
+        await db.task_history.insert_one({
+            "task_id": task_id,
+            "action": "created",
+            "old_value": None,
+            "new_value": "open",
+            "actor_id": actor_id,
+            "actor_name": "Automation",
+            "occurred_at": now,
+        })
+        return task_id
+    except Exception as exc:
+        logger.error("[AUTOMATION] _create_automation_task failed: %s", exc)
+        return None
 
 
 async def trigger_application_received(
@@ -252,6 +347,16 @@ async def trigger_inactivity_reminder(
             <p style="color:#64748b;font-size:13px;margin-top:24px">Fragen? <a href="mailto:info@stk-aachen.de" style="color:#113655">info@stk-aachen.de</a></p>"""
 
         _send(applicant_email, subject, _wrap(content, lang))
+        await trigger_case_signal(
+            application_id=application_id,
+            trigger_code="missing_activity",
+            actor_id="system",
+            applicant_id=applicant_id,
+            applicant_email=applicant_email,
+            applicant_name=applicant_name,
+            status_context="inactive",
+            area_context="engagement",
+        )
         await write_audit_log(
             "automation_inactivity_reminder",
             "system",
@@ -262,3 +367,115 @@ async def trigger_inactivity_reminder(
         logger.info(f"[AUTOMATION] inactivity_reminder: {application_id}, {days_inactive}d")
     except Exception as e:
         logger.error(f"[AUTOMATION] trigger_inactivity_reminder failed: {e}")
+
+
+async def trigger_case_signal(
+    *,
+    application_id: str,
+    trigger_code: str,
+    actor_id: str,
+    applicant_id: str = "",
+    applicant_email: str = "",
+    applicant_name: str = "",
+    status_context: str = "",
+    area_context: str = "",
+    fachlich_aktiv: bool = False,
+    detail: str = "",
+):
+    """
+    Generic automation trigger for case-relevant signals.
+    Creates concrete follow-up tasks and (if possible) sends a precheck process email.
+    """
+    config = AUTOMATION_TRIGGER_MAP.get(trigger_code)
+    if not config:
+        logger.warning("[AUTOMATION] Unknown trigger_code=%s", trigger_code)
+        return
+    if trigger_code == "payment_status_active_case" and not fachlich_aktiv:
+        logger.info("[AUTOMATION] Skip payment_status_active_case (fachlich_aktiv=False)")
+        return
+
+    try:
+        task_title = f"{config['task_type']}: {trigger_code}"
+        task_description = detail or f"Automation trigger '{trigger_code}' wurde erkannt."
+        task_id = await _create_automation_task(
+            application_id=application_id,
+            task_type=config["task_type"],
+            title=task_title,
+            description=task_description,
+            priority=config["priority"],
+            scope=config["scope"],
+            actor_id=actor_id or "system",
+        )
+
+        if applicant_email:
+            lang = await _get_user_lang(applicant_id) if applicant_id else "de"
+            send_precheck_process_update(
+                to=applicant_email,
+                full_name=applicant_name,
+                status_context=status_context or trigger_code,
+                area_context=area_context or config["scope"],
+                lang=lang,
+                requires_staff_review=config["task_type"] == "staff_manual_review",
+                requires_authority_or_university_decision=config["task_type"] == "authority_clarification",
+            )
+
+        await write_audit_log(
+            "automation_case_signal",
+            actor_id or "system",
+            "application",
+            application_id,
+            {
+                "trigger_code": trigger_code,
+                "task_type": config["task_type"],
+                "task_id": task_id,
+                "scope": config["scope"],
+                "status_context": status_context,
+                "area_context": area_context,
+                "fachlich_aktiv": fachlich_aktiv,
+            },
+        )
+        logger.info("[AUTOMATION] case_signal: app=%s trigger=%s task=%s", application_id, trigger_code, task_id)
+    except Exception as exc:
+        logger.error("[AUTOMATION] trigger_case_signal failed: %s", exc)
+
+
+async def trigger_seat_reservation(
+    application_id: str,
+    actor_id: str,
+    applicant_id: str = "",
+    applicant_email: str = "",
+    applicant_name: str = "",
+):
+    await trigger_case_signal(
+        application_id=application_id,
+        trigger_code="seat_reservation",
+        actor_id=actor_id,
+        applicant_id=applicant_id,
+        applicant_email=applicant_email,
+        applicant_name=applicant_name,
+        status_context="seat_reservation_pending",
+        area_context="capacity",
+        detail="Platzreservierung wurde markiert und benötigt Staff-Validierung.",
+    )
+
+
+async def trigger_payment_status_active_case(
+    application_id: str,
+    actor_id: str,
+    fachlich_aktiv: bool,
+    applicant_id: str = "",
+    applicant_email: str = "",
+    applicant_name: str = "",
+):
+    await trigger_case_signal(
+        application_id=application_id,
+        trigger_code="payment_status_active_case",
+        actor_id=actor_id,
+        applicant_id=applicant_id,
+        applicant_email=applicant_email,
+        applicant_name=applicant_name,
+        status_context="payment_status_open",
+        area_context="finance",
+        fachlich_aktiv=fachlich_aktiv,
+        detail="Zahlungsstatus im fachlich aktiven Fall erfordert Nachverfolgung.",
+    )

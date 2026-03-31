@@ -203,4 +203,28 @@ async def review_document(
     await db.documents.update_one({"_id": ObjectId(doc_id)}, {"$set": update})
     await write_audit_log(f"document_{data.status}", user["id"], "document", doc_id,
                           {"reason": data.rejection_reason})
+
+    if data.status == "rejected":
+        try:
+            from services.automation import trigger_case_signal
+            app = await db.applications.find_one({"_id": ObjectId(doc.get("application_id"))})
+            applicant = None
+            if app and app.get("applicant_id"):
+                applicant = await db.users.find_one(
+                    {"_id": ObjectId(app["applicant_id"])},
+                    {"email": 1, "full_name": 1},
+                )
+            await trigger_case_signal(
+                application_id=doc.get("application_id"),
+                trigger_code="document_rejected",
+                actor_id=user["id"],
+                applicant_id=str((app or {}).get("applicant_id", "")),
+                applicant_email=(applicant or {}).get("email", ""),
+                applicant_name=(applicant or {}).get("full_name", ""),
+                status_context="document_rejected",
+                area_context=doc.get("document_type", "documents"),
+                detail=f"Dokument '{doc.get('filename')}' wurde abgelehnt. Grund: {data.rejection_reason or 'nicht angegeben'}.",
+            )
+        except Exception:
+            pass
     return {"message": f"Dokument: {data.status}", "id": doc_id}

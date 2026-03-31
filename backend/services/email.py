@@ -320,6 +320,83 @@ def send_teacher_assigned(to: str, full_name: str, teacher_name: str, lang: str 
     return _send(to, subject, _wrap(content, lang))
 
 
+def send_precheck_process_update(
+    to: str,
+    full_name: str,
+    status_context: str,
+    area_context: str,
+    lang: str = "de",
+    requires_staff_review: bool = False,
+    requires_authority_or_university_decision: bool = False,
+) -> bool:
+    """
+    Sendet ein klar getrenntes Vorprüfungs-Update:
+    1) Vorprüfung (informativ)
+    2) Staff-Prüfung erforderlich (falls relevant)
+    3) Behörden-/Uni-Entscheidung erforderlich (falls relevant)
+    + ausdrücklicher Hinweis: keine Zusagegarantie
+    """
+    name = full_name or ("Applicant" if lang == "en" else "Bewerber/in")
+    app_url = _get_app_url()
+
+    if lang == "en":
+        subject = "Precheck Update – Studies Application Status"
+        precheck_section = f"""
+        <h4 style="color:#113655;margin:0 0 8px;font-size:15px">Precheck</h4>
+        <p style="color:#475569;line-height:1.7;font-size:14px;margin:0">
+          Your case has been prechecked in the area <strong>{area_context}</strong>
+          with current status context <strong>{status_context}</strong>.
+          This step is a formal precheck and not a final admission decision.
+        </p>"""
+        staff_section = f"""
+        <h4 style="color:#113655;margin:20px 0 8px;font-size:15px">Staff review required</h4>
+        <p style="color:#475569;line-height:1.7;font-size:14px;margin:0">
+          A manual review by our staff team is required before further processing.
+        </p>""" if requires_staff_review else ""
+        authority_section = f"""
+        <h4 style="color:#113655;margin:20px 0 8px;font-size:15px">Authority/University decision may be required</h4>
+        <p style="color:#475569;line-height:1.7;font-size:14px;margin:0">
+          Clarification by an authority or partner university may be needed depending on your specific documents.
+        </p>""" if requires_authority_or_university_decision else ""
+        content = f"""<h3 style="color:#113655;margin-top:0;font-size:16px">Hello {name},</h3>
+        {precheck_section}
+        {staff_section}
+        {authority_section}
+        {_divider()}
+        <p style="color:#334155;line-height:1.7;font-size:14px"><strong>No admission guarantee:</strong> This communication does not guarantee admission, seat reservation, or final acceptance.</p>
+        {_btn(f'{app_url}/portal/journey', 'Open Application Status')}
+        <p style="color:#64748b;font-size:13px;margin-top:16px">Questions? <a href="mailto:info@stk-aachen.de" style="color:#113655;text-decoration:none">info@stk-aachen.de</a></p>"""
+    else:
+        subject = "Vorprüfungs-Update – Bewerbungsstatus"
+        precheck_section = f"""
+        <h4 style="color:#113655;margin:0 0 8px;font-size:15px">Vorprüfung</h4>
+        <p style="color:#475569;line-height:1.7;font-size:14px;margin:0">
+          Dein Fall wurde im Bereich <strong>{area_context}</strong> mit dem aktuellen Statuskontext
+          <strong>{status_context}</strong> vorgeprüft.
+          Dieser Schritt ist eine formale Vorprüfung und keine finale Zulassungsentscheidung.
+        </p>"""
+        staff_section = f"""
+        <h4 style="color:#113655;margin:20px 0 8px;font-size:15px">Staff-Prüfung erforderlich</h4>
+        <p style="color:#475569;line-height:1.7;font-size:14px;margin:0">
+          Vor der weiteren Bearbeitung ist eine manuelle Prüfung durch unser Staff-Team erforderlich.
+        </p>""" if requires_staff_review else ""
+        authority_section = f"""
+        <h4 style="color:#113655;margin:20px 0 8px;font-size:15px">Ggf. Behörden-/Uni-Entscheidung erforderlich</h4>
+        <p style="color:#475569;line-height:1.7;font-size:14px;margin:0">
+          Abhängig von deinen Unterlagen kann eine Klärung mit Behörde oder Partnerhochschule notwendig sein.
+        </p>""" if requires_authority_or_university_decision else ""
+        content = f"""<h3 style="color:#113655;margin-top:0;font-size:16px">Hallo {name},</h3>
+        {precheck_section}
+        {staff_section}
+        {authority_section}
+        {_divider()}
+        <p style="color:#334155;line-height:1.7;font-size:14px"><strong>Keine Zusagegarantie:</strong> Diese Mitteilung stellt keine Garantie auf Zulassung, Platzreservierung oder finale Annahme dar.</p>
+        {_btn(f'{app_url}/portal/journey', 'Bewerbungsstatus öffnen')}
+        <p style="color:#64748b;font-size:13px;margin-top:16px">Fragen? <a href="mailto:info@stk-aachen.de" style="color:#113655;text-decoration:none">info@stk-aachen.de</a></p>"""
+
+    return _send(to, subject, _wrap(content, lang))
+
+
 def send_case_email(to: str, full_name: str, subject_line: str, body_text: str, lang: str = "de") -> bool:
     """Staff-initiated email from case context – uses CI template wrapper."""
     name = full_name or ("Applicant" if lang == "en" else "Bewerber/in")

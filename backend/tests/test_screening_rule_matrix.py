@@ -3,14 +3,21 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from services.ai_screening import _check_completeness, _build_formal_precheck, _check_language_level, _suggest_stage
+from services.ai_screening import _suggest_stage
+from services.screening_rules import (
+    _build_formal_precheck,
+    _check_completeness,
+    _check_language_level,
+    evaluate_screening_criteria,
+    get_rule_matrix_versioning,
+)
 
 
 def test_completeness_is_course_specific_language_course():
     docs = [
         {"document_type": "passport", "status": "approved"},
     ]
-    result = _check_completeness(docs, "Language Course")
+    result = _check_completeness(docs, "Language Course", {"Language Course": {"required_docs": ["passport"]}})
     assert result["complete"] is True
     assert result["total_required"] == 1
 
@@ -29,12 +36,41 @@ def test_formal_precheck_marks_critical_for_d_category_and_missing_language():
 
 
 def test_suggest_stage_is_not_in_review_by_default_when_plausible():
-    stage = _suggest_stage({"complete": True}, {"status": "plausible"})
+    stage = _suggest_stage({"formal_result": "precheck_passed"}, {"status": "plausible"})
     assert stage == "interview_scheduled"
 
 
 def test_language_check_returns_required_actual():
-    result = _check_language_level("M-Course", "B1")
+    result = _check_language_level("M-Course", "B1", {"M-Course": {"language_min": "B1"}})
     assert result["ok"] is True
     assert result["required"] == "B1"
     assert result["actual"] == "B1"
+
+
+def test_evaluate_uses_active_matrix_version_and_metadata():
+    result = evaluate_screening_criteria(
+        application={"course_type": "M-Course", "degree_country": "Deutschland", "language_level": "B1"},
+        applicant={"id": "abc"},
+        docs=[
+            {"document_type": "language_certificate", "status": "approved"},
+            {"document_type": "highschool_diploma", "status": "approved"},
+            {"document_type": "passport", "status": "approved"},
+        ],
+    )
+
+    assert result["reference_basis"]["version"] == get_rule_matrix_versioning()["active_version"]
+    assert result["criteria_checked"][0]["rule_id"] == "docs_required_uploaded"
+    assert result["criteria_checked"][0]["source"]["pflichtenheft"]
+
+
+def test_deprecated_version_is_still_resolvable_for_backwards_compatibility():
+    result = evaluate_screening_criteria(
+        application={"course_type": "Language Course", "degree_country": "USA", "language_level": "A1"},
+        applicant={"id": "legacy"},
+        docs=[{"document_type": "passport", "status": "approved"}],
+        matrix_version="0.9.0",
+    )
+
+    assert result["reference_basis"]["version"] == "0.9.0"
+    assert "0.9.0" in result["reference_basis"]["deprecated_versions"]
+    assert result["formal_result"] == "precheck_passed"

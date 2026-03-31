@@ -21,6 +21,8 @@ import re
 import uuid
 import logging
 import aiofiles
+import zipfile
+from io import BytesIO
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -236,3 +238,163 @@ def validate_upload(filename: str, size: int, content_type: str) -> None:
     safe = sanitize_filename(filename)
     if not safe or safe.startswith("."):
         raise ValueError("Ungültiger Dateiname")
+
+
+def _normalize_mime(mime: str) -> str:
+    return {
+        "image/jpg": "image/jpeg",
+    }.get((mime or "").lower(), (mime or "").lower())
+
+
+def _detect_mime_from_magic(file_bytes: bytes) -> str | None:
+    if file_bytes.startswith(b"%PDF-"):
+        return "application/pdf"
+    if file_bytes.startswith(b"\xff\xd8\xff"):
+        return "image/jpeg"
+    if file_bytes.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "image/png"
+    if len(file_bytes) >= 12 and file_bytes[:4] == b"RIFF" and file_bytes[8:12] == b"WEBP":
+        return "image/webp"
+    if file_bytes.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        return "application/msword"
+    if file_bytes.startswith(b"PK\x03\x04"):
+        try:
+            with zipfile.ZipFile(BytesIO(file_bytes), "r") as zf:
+                names = set(zf.namelist())
+                if "[Content_Types].xml" in names and "word/document.xml" in names:
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        except Exception:
+            return "application/zip"
+    return None
+
+
+def _is_blank_file(file_bytes: bytes) -> bool:
+    if not file_bytes:
+        return True
+    blank_bytes = {0, 9, 10, 11, 12, 13, 32}
+    return all(b in blank_bytes for b in file_bytes)
+
+
+def _check_pdf_integrity(file_bytes: bytes) -> tuple[bool, bool]:
+    if not file_bytes.startswith(b"%PDF-"):
+        return False, True
+    trailer = file_bytes[-2048:] if len(file_bytes) > 2048 else file_bytes
+    has_eof = b"%%EOF" in trailer
+    has_structural_markers = b" obj" in file_bytes and (b"xref" in file_bytes or b"trailer" in file_bytes)
+    readable = has_eof and has_structural_markers
+    return readable, not readable
+
+
+def _check_png_integrity(file_bytes: bytes) -> tuple[bool, bool]:
+    if not file_bytes.startswith(b"\x89PNG\r\n\x1a\n") or len(file_bytes) < 33:
+        return False, True
+    ihdr_len = int.from_bytes(file_bytes[8:12], "big")
+    ihdr_type = file_bytes[12:16]
+    readable = ihdr_len == 13 and ihdr_type == b"IHDR"
+    return readable, not readable
+
+
+def _check_jpeg_integrity(file_bytes: bytes) -> tuple[bool, bool]:
+    readable = file_bytes.startswith(b"\xff\xd8") and file_bytes.endswith(b"\xff\xd9") and b"\xff\xda" in file_bytes
+    return readable, not readable
+
+
+def _check_webp_integrity(file_bytes: bytes) -> tuple[bool, bool]:
+    if len(file_bytes) < 12:
+        return False, True
+    readable = file_bytes[:4] == b"RIFF" and file_bytes[8:12] == b"WEBP"
+    return readable, not readable
+
+
+def _check_doc_integrity(file_bytes: bytes) -> tuple[bool, bool]:
+    readable = file_bytes.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1") and len(file_bytes) > 512
+    return readable, not readable
+
+
+def _check_docx_integrity(file_bytes: bytes) -> tuple[bool, bool]:
+    try:
+        with zipfile.ZipFile(BytesIO(file_bytes), "r") as zf:
+            names = set(zf.namelist())
+            readable = "[Content_Types].xml" in names and "word/document.xml" in names
+            return readable, not readable
+    except Exception:
+        return False, True
+
+
+def preflight_validate_upload(filename: str, content_type: str, file_bytes: bytes) -> dict:
+    """Structured technical validation for document uploads."""
+    result = {
+        "mime_declared": content_type,
+        "mime_detected": None,
+        "magic_match": False,
+        "is_corrupted": False,
+        "is_blank": False,
+        "readable": False,
+        "errors": [],
+    }
+
+    safe = sanitize_filename(filename)
+    if not safe or safe.startswith("."):
+        result["errors"].append("invalid_filename")
+        return result
+    if len(file_bytes) > MAX_FILE_SIZE_BYTES:
+        result["errors"].append("file_too_large")
+        return result
+
+    normalized_declared = _normalize_mime(content_type)
+    if normalized_declared not in ALLOWED_MIME_TYPES:
+        result["errors"].append("mime_not_allowed")
+        return result
+
+    if _is_blank_file(file_bytes):
+        result["is_blank"] = True
+        result["errors"].append("blank_file")
+        return result
+
+    detected = _detect_mime_from_magic(file_bytes)
+    result["mime_detected"] = detected
+    normalized_detected = _normalize_mime(detected) if detected else None
+    result["magic_match"] = normalized_detected == normalized_declared
+
+    readable = False
+    is_corrupted = True
+    if normalized_declared == "application/pdf":
+        readable, is_corrupted = _check_pdf_integrity(file_bytes)
+    elif normalized_declared == "image/png":
+        readable, is_corrupted = _check_png_integrity(file_bytes)
+    elif normalized_declared == "image/jpeg":
+        readable, is_corrupted = _check_jpeg_integrity(file_bytes)
+    elif normalized_declared == "image/webp":
+        readable, is_corrupted = _check_webp_integrity(file_bytes)
+    elif normalized_declared == "application/msword":
+        readable, is_corrupted = _check_doc_integrity(file_bytes)
+    elif normalized_declared == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        readable, is_corrupted = _check_docx_integrity(file_bytes)
+
+    result["readable"] = readable
+    result["is_corrupted"] = is_corrupted
+
+    if not result["magic_match"]:
+        result["errors"].append("magic_mismatch")
+    if result["is_corrupted"]:
+        result["errors"].append("corrupted_or_unreadable")
+
+    return result
+
+
+def derive_document_status(has_binary: bool, technical_validation: dict | None) -> str:
+    if not has_binary:
+        return "uploaded"
+    if not technical_validation:
+        return "invalid_technical"
+    if technical_validation.get("errors"):
+        return "invalid_technical"
+    if technical_validation.get("is_blank"):
+        return "invalid_technical"
+    if technical_validation.get("is_corrupted"):
+        return "invalid_technical"
+    if not technical_validation.get("readable"):
+        return "invalid_technical"
+    if not technical_validation.get("magic_match"):
+        return "invalid_technical"
+    return "uploaded"

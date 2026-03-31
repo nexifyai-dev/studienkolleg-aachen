@@ -11,6 +11,7 @@ export default function DashboardPage() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
+  const [summary, setSummary] = useState(null);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const locale = i18n.language === 'en' ? 'en-GB' : 'de-DE';
@@ -24,6 +25,10 @@ export default function DashboardPage() {
         ]);
         setStats(statsRes.data);
         setApplications(appsRes.data);
+        if (user?.role === 'applicant') {
+          const summaryRes = await apiClient.get('/api/dashboard/applicant-summary', { withCredentials: true });
+          setSummary(summaryRes.data);
+        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -31,7 +36,7 @@ export default function DashboardPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [user?.role]);
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">
@@ -41,6 +46,16 @@ export default function DashboardPage() {
 
   const activeApp = applications[0];
   const stage = activeApp?.current_stage;
+  const docsValue = summary
+    ? `${summary.documents?.missing || 0}/${summary.documents?.in_review || 0}/${summary.documents?.accepted || 0}`
+    : '–';
+  const messagesValue = summary
+    ? `${summary.messages?.unread || 0}/${summary.messages?.open || 0}`
+    : '–';
+  const financialsValue = summary
+    ? `${summary.financials?.open_invoices || 0}/${summary.financials?.paid || 0}`
+    : '–';
+  const nextActions = summary?.tasks?.next_actions || [];
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="applicant-dashboard">
@@ -85,10 +100,10 @@ export default function DashboardPage() {
       {/* Quick stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { icon: FileText, label: t('portal.docs_label'), value: '–', path: '/portal/documents', testid: 'dash-docs' },
-          { icon: MessageSquare, label: t('portal.messages_label'), value: '–', path: '/portal/messages', testid: 'dash-messages' },
-          { icon: CreditCard, label: t('portal.invoices_label'), value: '–', path: '/portal/financials', testid: 'dash-financials' },
-          { icon: CheckCircle, label: t('portal.tasks_label'), value: stats?.open_tasks || '0', path: '/portal/journey', testid: 'dash-tasks' },
+          { icon: FileText, label: t('portal.docs_label'), value: docsValue, hint: 'fehlend / in Prüfung / akzeptiert', path: '/portal/documents', testid: 'dash-docs' },
+          { icon: MessageSquare, label: t('portal.messages_label'), value: messagesValue, hint: 'ungelesen / offen', path: '/portal/messages', testid: 'dash-messages' },
+          { icon: CreditCard, label: t('portal.invoices_label'), value: financialsValue, hint: 'offen / bezahlt', path: '/portal/financials', testid: 'dash-financials' },
+          { icon: CheckCircle, label: t('portal.tasks_label'), value: (summary?.tasks?.open ?? stats?.open_tasks ?? '0'), hint: 'offene Aufgaben', path: '/portal/journey', testid: 'dash-tasks' },
         ].map(item => {
           const Icon = item.icon;
           return (
@@ -99,6 +114,7 @@ export default function DashboardPage() {
                 <span className="text-xs font-medium text-slate-500">{item.label}</span>
               </div>
               <p className="text-xl font-heading font-bold text-slate-800">{item.value}</p>
+              {item.hint && <p className="text-[10px] text-slate-400 mt-1">{item.hint}</p>}
             </Link>
           );
         })}
@@ -110,7 +126,13 @@ export default function DashboardPage() {
           <Clock size={16} className="text-primary" />
           {t('portal.next_step')}
         </h3>
-        {stage ? (
+        {nextActions.length > 0 ? (
+          <div className="space-y-2">
+            {nextActions.map((action, idx) => (
+              <NextStepItem key={`${action.type}-${idx}`} t={t} text={action.title} />
+            ))}
+          </div>
+        ) : stage ? (
           <div className="space-y-2">
             <NextStepItem stage={stage} t={t} />
           </div>
@@ -148,12 +170,12 @@ export default function DashboardPage() {
   );
 }
 
-function NextStepItem({ stage, t }) {
-  const text = t(`portal.steps.${stage}`, { defaultValue: t('portal.steps.default') });
+function NextStepItem({ stage, text, t }) {
+  const resolvedText = text || t(`portal.steps.${stage}`, { defaultValue: t('portal.steps.default') });
   return (
     <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-sm border border-slate-200">
       <AlertCircle size={16} className="text-primary mt-0.5 shrink-0" />
-      <p className="text-slate-700 text-sm">{text}</p>
+      <p className="text-slate-700 text-sm">{resolvedText}</p>
     </div>
   );
 }

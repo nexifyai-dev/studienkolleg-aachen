@@ -73,6 +73,20 @@ def partner_session():
     return session
 
 
+@pytest.fixture(scope="module")
+def admin_session():
+    """Admin login session with cookies"""
+    session = requests.Session()
+    session.headers.update({"Content-Type": "application/json"})
+    response = session.post(f"{BASE_URL}/api/auth/login", json={
+        "email": ADMIN_EMAIL,
+        "password": ADMIN_PASSWORD
+    })
+    if response.status_code != 200:
+        pytest.skip(f"Admin login failed: {response.status_code} - {response.text}")
+    return session
+
+
 class TestHealthAndLogin:
     """Health check and login tests for all 5 roles"""
     
@@ -236,6 +250,57 @@ class TestTasksCRUD:
         data = response.json()
         assert data.get("priority") == "low"
         print("✓ Task priority updated to low")
+
+
+class TestTaskAuthorization:
+    """Task detail and attachment authorization checks."""
+
+    def test_forbidden_access_to_foreign_task_id_returns_403(self, staff_session, admin_session):
+        """Staff cannot access admin-owned task that is not assigned/shared to staff."""
+        create_resp = admin_session.post(f"{BASE_URL}/api/tasks", json={
+            "title": "TEST_Phase37l_Auth: Private Admin Task",
+            "description": "Only admin should access",
+            "visibility": "internal"
+        })
+        assert create_resp.status_code == 200, f"Task creation failed: {create_resp.text}"
+        foreign_task_id = create_resp.json()["id"]
+
+        get_resp = staff_session.get(f"{BASE_URL}/api/tasks/{foreign_task_id}")
+        assert get_resp.status_code == 403, f"Expected 403, got {get_resp.status_code} - {get_resp.text}"
+        print(f"✓ Foreign task access denied with 403 for task {foreign_task_id}")
+
+    def test_access_to_own_task_id_returns_200(self, staff_session):
+        """Staff can access own task details."""
+        if not hasattr(pytest, 'task_id'):
+            pytest.skip("No own task created")
+        own_resp = staff_session.get(f"{BASE_URL}/api/tasks/{pytest.task_id}")
+        assert own_resp.status_code == 200, f"Expected 200, got {own_resp.status_code} - {own_resp.text}"
+        print(f"✓ Own task access allowed with 200 for task {pytest.task_id}")
+
+    def test_download_foreign_attachment_returns_403(self, staff_session, admin_session):
+        """Staff cannot download attachment from foreign admin-owned task."""
+        payload = base64.b64encode(b"foreign-attachment-content").decode("utf-8")
+        create_task_resp = admin_session.post(f"{BASE_URL}/api/tasks", json={
+            "title": "TEST_Phase37l_Auth: Admin Attachment Task",
+            "description": "Attachment authorization check",
+            "visibility": "internal"
+        })
+        assert create_task_resp.status_code == 200, f"Task creation failed: {create_task_resp.text}"
+        foreign_task_id = create_task_resp.json()["id"]
+
+        upload_resp = admin_session.post(f"{BASE_URL}/api/tasks/{foreign_task_id}/attachments", json={
+            "filename": "foreign-auth.txt",
+            "content_type": "text/plain",
+            "file_data": payload
+        })
+        assert upload_resp.status_code == 200, f"Attachment upload failed: {upload_resp.text}"
+        att_id = upload_resp.json()["id"]
+
+        download_resp = staff_session.get(f"{BASE_URL}/api/tasks/{foreign_task_id}/attachments/{att_id}")
+        assert download_resp.status_code == 403, (
+            f"Expected 403, got {download_resp.status_code} - {download_resp.text}"
+        )
+        print(f"✓ Foreign attachment download denied with 403 for attachment {att_id}")
 
 
 class TestTaskNotes:

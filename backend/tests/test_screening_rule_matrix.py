@@ -8,6 +8,7 @@ from services.document_analysis import analyze_documents_for_screening
 from services.screening_rules import (
     _build_formal_precheck,
     _check_completeness,
+    _doc_status_bucket,
     _check_language_level,
     evaluate_screening_criteria,
     get_rule_matrix_versioning,
@@ -21,6 +22,21 @@ def test_completeness_is_course_specific_language_course():
     result = _check_completeness(docs, "Language Course", {"Language Course": {"required_docs": ["passport"]}})
     assert result["complete"] is True
     assert result["total_required"] == 1
+
+
+def test_doc_status_bucket_treats_uploaded_as_unverified():
+    assert _doc_status_bucket("approved") == "present"
+    assert _doc_status_bucket("in_review") == "present"
+    assert _doc_status_bucket("uploaded") == "uploaded_unverified"
+
+
+def test_completeness_uploaded_only_is_not_complete_and_flagged_unverified():
+    docs = [{"document_type": "passport", "status": "uploaded"}]
+    result = _check_completeness(docs, "Language Course", {"Language Course": {"required_docs": ["passport"]}})
+
+    assert result["complete"] is False
+    assert result["missing_types"] == ["passport"]
+    assert result["uploaded_but_unverified_types"] == ["passport"]
 
 
 def test_formal_precheck_marks_critical_for_d_category_and_missing_language():

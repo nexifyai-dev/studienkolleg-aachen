@@ -1,8 +1,15 @@
--e 
 # Environment files
 *.env
 *.env.*
--e 
-# Environment files
-*.env
-*.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Node
+node_modules/
+
+# Local storage artifacts (must never be versioned)
+storage/messages/
+storage/uploads/

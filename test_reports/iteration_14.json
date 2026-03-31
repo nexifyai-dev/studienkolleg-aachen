@@ -28,7 +28,7 @@
     "✓ Messaging UI: Applicant /portal/messages - chat fills height, input anchored at bottom",
     "✓ Messaging UI: Staff /staff/messaging - conversation list on left, chat area on right",
     "✓ CORS: API responds correctly without Origin header (same-origin requests work)",
-    "Note: Admin password is 'Admin@2026!' not 'DevSeed@2026!' - update test_credentials.md if needed"
+    "Note: Admin password is '<redacted>' not '<redacted>' - update test_credentials.md if needed"
   ],
   "updated_files": [
     "/app/backend/tests/test_phase37k_golive.py"
@@ -38,22 +38,22 @@
     "frontend": "100% (all critical flows verified)"
   },
   "test_credentials": {
-    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
-    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!",
-    "partner": "partner@studienkolleg-aachen.de / DevSeed@2026!",
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!"
+    "staff": "staff@studienkolleg-aachen.de / <redacted>",
+    "applicant": "applicant@studienkolleg-aachen.de / <redacted>",
+    "partner": "partner@studienkolleg-aachen.de / <redacted>",
+    "admin": "admin@studienkolleg-aachen.de / <redacted>",
+    "teacher": "teacher@studienkolleg-aachen.de / <redacted>"
   },
   "seed_data_creation": "No new seed data created",
   "retest_needed": false,
   "main_agent_can_self_test": false,
-  "context_for_next_testing_agent": "Phase 3.7k GO-LIVE complete. All login flows work. REACT_APP_BACKEND_URL is now empty string (relative URLs for same-origin). Cookie settings: COOKIE_SECURE=true, COOKIE_SAMESITE=none. Admin uses different password (Admin@2026!) than other dev accounts (DevSeed@2026!). Partner settings page uses /api/users/{id} endpoint, not a dedicated /api/partner/settings endpoint.",
+  "context_for_next_testing_agent": "Phase 3.7k GO-LIVE complete. All login flows work. REACT_APP_BACKEND_URL is now empty string (relative URLs for same-origin). Cookie settings: COOKIE_SECURE=true, COOKIE_SAMESITE=none. Admin uses different password (<redacted>) than other dev accounts (<redacted>). Partner settings page uses /api/users/{id} endpoint, not a dedicated /api/partner/settings endpoint.",
   "passed_checks": [
     "Backend: Health endpoint returns OK",
     "Backend: Staff login returns staff role",
     "Backend: Applicant login returns applicant role",
     "Backend: Partner login returns affiliate role",
-    "Backend: Admin login returns superadmin role (password: Admin@2026!)",
+    "Backend: Admin login returns superadmin role (password: <redacted>)",
     "Backend: Teacher login returns teacher role",
     "Backend: Invalid login rejected with 401",
     "Backend: GET /api/partner/dashboard returns stats",

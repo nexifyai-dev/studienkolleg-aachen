@@ -30,10 +30,10 @@
     "frontend": "100% (all i18n pages tested)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
-    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
-    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+    "admin": "admin@studienkolleg-aachen.de / <redacted>",
+    "staff": "staff@studienkolleg-aachen.de / <redacted>",
+    "teacher": "teacher@studienkolleg-aachen.de / <redacted>",
+    "applicant": "applicant@studienkolleg-aachen.de / <redacted>"
   },
   "seed_data_creation": "4 accounts seeded via seed.py (admin uses ADMIN_PASSWORD, others use SEED_DEV_PASSWORD)",
   "retest_needed": false,
@@ -42,10 +42,10 @@
   "passed_checks": [
     "Backend: Health endpoint returns OK with email_enabled=true",
     "Backend: GET /api/consents/types returns teacher_data_access consent definition",
-    "Backend: Admin login (admin@studienkolleg-aachen.de / Admin@2026!) - role: superadmin",
-    "Backend: Staff login (staff@studienkolleg-aachen.de / DevSeed@2026!) - role: staff",
-    "Backend: Teacher login (teacher@studienkolleg-aachen.de / DevSeed@2026!) - role: teacher",
-    "Backend: Applicant login (applicant@studienkolleg-aachen.de / DevSeed@2026!) - role: applicant",
+    "Backend: Admin login (admin@studienkolleg-aachen.de / <redacted>) - role: superadmin",
+    "Backend: Staff login (staff@studienkolleg-aachen.de / <redacted>) - role: staff",
+    "Backend: Teacher login (teacher@studienkolleg-aachen.de / <redacted>) - role: teacher",
+    "Backend: Applicant login (applicant@studienkolleg-aachen.de / <redacted>) - role: applicant",
     "Backend: Invalid login returns 401",
     "Backend: GET /api/teacher/assignments requires auth (401 without)",
     "Backend: Teacher can list own assignments",

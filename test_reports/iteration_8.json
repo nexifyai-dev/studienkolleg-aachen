@@ -40,10 +40,10 @@
     "frontend": "100% (all UI tests passed)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
-    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
-    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+    "admin": "admin@studienkolleg-aachen.de / <redacted>",
+    "staff": "staff@studienkolleg-aachen.de / <redacted>",
+    "teacher": "teacher@studienkolleg-aachen.de / <redacted>",
+    "applicant": "applicant@studienkolleg-aachen.de / <redacted>"
   },
   "seed_data_creation": "Test notifications exist in DB (applicant has 2, staff has 1)",
   "retest_needed": false,

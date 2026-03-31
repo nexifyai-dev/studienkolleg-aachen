@@ -35,8 +35,8 @@
     "frontend": "100% (Homepage, Login form, Admin→/staff, Applicant→/portal, Kanban board all working)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "test_applicant_ui": "TEST_portal_ui@example.com / Portal@2026!"
+    "admin": "admin@studienkolleg-aachen.de / <redacted>",
+    "test_applicant_ui": "TEST_portal_ui@example.com / <redacted>"
   },
   "seed_data_creation": "Created multiple TEST_ prefixed applicants and lead users during testing",
   "retest_needed": true,

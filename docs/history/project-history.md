@@ -6,6 +6,7 @@
 
 - **2026-03-31:** Einführung einer produktionsfähigen, strukturierten Dokumentationslandschaft (`README`, `docs/`, `CHANGELOG`).
 - **2026-03-31:** Verbindliche Wiki-Sync-Governance eingeführt: GitHub-Wiki als verpflichtende Sekundärdoku mit lokaler Spiegelstruktur unter `docs/wiki/`, plus PR-Pflicht zur synchronen Pflege von README, Docs, Wiki, Changelog, Historie und ADR.
+- **2026-03-31:** Audit-Reality-Check gegen den tatsächlichen Repo-Stand dokumentiert (`docs/qa-release/reality-check-2026-03-31.md`) und P0-Block 1 umgesetzt (Credential-Redaktion in `test_reports`, Entfernung versionierter `storage/messages`-Artefakte, Ausweitung des Credential-Scans auf alle getrackten Textdateien).
 
 ## Warum diese Historie?
 

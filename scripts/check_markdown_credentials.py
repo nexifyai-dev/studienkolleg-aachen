@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Block obvious credential leaks in Markdown files."""
+"""Block obvious credential leaks in tracked documentation/report files."""
 
 from __future__ import annotations
 
@@ -25,14 +25,17 @@ ALLOWED_PLACEHOLDER_TOKENS = {
 
 EMAIL_RE = re.compile(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", re.IGNORECASE)
 PASSWORD_ASSIGN_RE = re.compile(
-    r'(?i)(password|passwort|pwd)\s*[:=]\s*["\'`]?([^\s"\'`|]{6,})'
+    r'(?i)\b(password|passwort|pwd)\b\s*[:=]\s*["\'`]?([^\s"\'`|]{6,})'
 )
 JSON_PASSWORD_RE = re.compile(r'"password"\s*:\s*"([^"]{6,})"', re.IGNORECASE)
 AUTH_HEADER_RE = re.compile(r"Authorization\s*:\s*Token\s+([^\s]+)", re.IGNORECASE)
 
 
-def git_tracked_markdown_files() -> list[Path]:
-    cmd = ["git", "ls-files", "*.md"]
+SCAN_GLOBS = ("*.md", "*.json", "*.yaml", "*.yml", "*.txt")
+
+
+def git_tracked_text_files() -> list[Path]:
+    cmd = ["git", "ls-files", *SCAN_GLOBS]
     result = subprocess.run(cmd, check=True, capture_output=True, text=True)
     files = [Path(line.strip()) for line in result.stdout.splitlines() if line.strip()]
     return files
@@ -53,17 +56,28 @@ def is_placeholder(value: str) -> bool:
     return False
 
 
+def looks_like_secret(value: str) -> bool:
+    candidate = value.strip().strip('"\'`')
+    if len(candidate) < 8:
+        return False
+    if candidate.lower() in {"password", "passwort"}:
+        return False
+    has_digit = any(ch.isdigit() for ch in candidate)
+    has_special = any(not ch.isalnum() for ch in candidate)
+    return has_digit or has_special
+
+
 def scan_file(path: Path) -> list[str]:
     issues: list[str] = []
     for idx, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         for match in PASSWORD_ASSIGN_RE.finditer(line):
             candidate = match.group(2)
-            if not is_placeholder(candidate):
+            if not is_placeholder(candidate) and looks_like_secret(candidate):
                 issues.append(f"{path}:{idx}: potential password assignment '{candidate}'")
 
         for match in JSON_PASSWORD_RE.finditer(line):
             candidate = match.group(1)
-            if not is_placeholder(candidate):
+            if not is_placeholder(candidate) and looks_like_secret(candidate):
                 issues.append(f"{path}:{idx}: potential JSON password value '{candidate}'")
 
         auth_match = AUTH_HEADER_RE.search(line)
@@ -78,7 +92,7 @@ def scan_file(path: Path) -> list[str]:
 
 
 def main() -> int:
-    files = git_tracked_markdown_files()
+    files = git_tracked_text_files()
     findings: list[str] = []
     for path in files:
         findings.extend(scan_file(path))
@@ -90,7 +104,7 @@ def main() -> int:
         print("\nUse placeholders and store real values in internal secret management.")
         return 1
 
-    print(f"Credential scan passed ({len(files)} markdown files checked).")
+    print(f"Credential scan passed ({len(files)} tracked text files checked).")
     return 0
 
 

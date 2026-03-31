@@ -52,16 +52,16 @@
     "frontend": "100% (all critical flows verified)"
   },
   "test_credentials": {
-    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
-    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!",
-    "partner": "partner@studienkolleg-aachen.de / DevSeed@2026!",
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!"
+    "staff": "staff@studienkolleg-aachen.de / <redacted>",
+    "applicant": "applicant@studienkolleg-aachen.de / <redacted>",
+    "partner": "partner@studienkolleg-aachen.de / <redacted>",
+    "admin": "admin@studienkolleg-aachen.de / <redacted>",
+    "teacher": "teacher@studienkolleg-aachen.de / <redacted>"
   },
   "seed_data_creation": "Test tasks created: TEST_Phase37l: E2E Test Task, TEST_Phase37l: Full Workflow Task (with notes and attachments)",
   "retest_needed": false,
   "main_agent_can_self_test": false,
-  "context_for_next_testing_agent": "Phase 3.7l GO-LIVE E2E complete. All critical flows work. Login URL is /auth/login (not /login). REACT_APP_BACKEND_URL is empty (relative URLs). Cookie settings: COOKIE_SECURE=true, COOKIE_SAMESITE=none. Admin uses different password (Admin@2026!) than other dev accounts (DevSeed@2026!). Task attachments use base64 JSON format (not multipart). Kanban cards don't navigate on click - use action buttons or direct URL navigation.",
+  "context_for_next_testing_agent": "Phase 3.7l GO-LIVE E2E complete. All critical flows work. Login URL is /auth/login (not /login). REACT_APP_BACKEND_URL is empty (relative URLs). Cookie settings: COOKIE_SECURE=true, COOKIE_SAMESITE=none. Admin uses different password (<redacted>) than other dev accounts (<redacted>). Task attachments use base64 JSON format (not multipart). Kanban cards don't navigate on click - use action buttons or direct URL navigation.",
   "passed_checks": [
     "=== PUBLIC SITE / FUNNEL ===",
     "1. Homepage loads with proper SEO title 'Studienkolleg Aachen – Your Path to University in Germany'",

@@ -51,7 +51,7 @@
     "frontend": "95% (all flows working, minor UX issues noted)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "admin": "admin@studienkolleg-aachen.de / <redacted>",
     "test_credentials_file": "Not found at /app/memory/test_credentials.md"
   },
   "seed_data_creation": "Created test applicant and lead users during testing (test_applicant_*, test_lead_*, portal_test_* emails)",

@@ -2,6 +2,8 @@
 
 > Übersicht: [README](../../README.md) · Artefakt: [release/golive_checklist.yaml](../../release/golive_checklist.yaml)
 
+Aktueller Audit-Abgleich: [Reality Check 2026-03-31](reality-check-2026-03-31.md)
+
 ## Gate-Set (verbindlich)
 
 1. **Build Gate**

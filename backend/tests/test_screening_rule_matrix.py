@@ -65,7 +65,7 @@ def test_evaluate_uses_active_matrix_version_and_metadata():
 
 def test_deprecated_version_is_still_resolvable_for_backwards_compatibility():
     result = evaluate_screening_criteria(
-        application={"course_type": "Language Course", "degree_country": "USA", "language_level": "A1"},
+        application={"course_type": "Language Course", "degree_country": "USA", "language_level": "A1", "primary_area": "language_courses"},
         applicant={"id": "legacy"},
         docs=[{"document_type": "passport", "status": "approved"}],
         matrix_version="0.9.0",
@@ -73,4 +73,22 @@ def test_deprecated_version_is_still_resolvable_for_backwards_compatibility():
 
     assert result["reference_basis"]["version"] == "0.9.0"
     assert "0.9.0" in result["reference_basis"]["deprecated_versions"]
+    assert result["formal_result"] == "precheck_passed"
+
+
+def test_evaluate_uses_area_specific_required_documents():
+    result = evaluate_screening_criteria(
+        application={
+            "course_type": "Language Course",
+            "degree_country": "Deutschland",
+            "language_level": "A1",
+            "primary_area": "language_courses",
+            "active_areas": ["language_courses"],
+        },
+        applicant={"id": "xy"},
+        docs=[{"document_type": "passport", "status": "approved"}],
+    )
+
+    assert result["completeness"]["required_types"] == ["passport"]
+    assert result["reference_basis"]["area_profile"] == "language_courses"
     assert result["formal_result"] == "precheck_passed"

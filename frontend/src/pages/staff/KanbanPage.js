@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
-import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
+import { STAGE_LABELS, STAGE_COLORS, AREA_LABELS } from '../../lib/utils';
 import {
   RefreshCw, Brain, AlertTriangle, CheckCircle, FileX,
   Archive, Users, Filter, XCircle, ChevronDown, Search, CheckSquare
@@ -70,6 +70,15 @@ function KanbanCard({ app, latestScreening, onMove, nextStage }) {
         <p className="text-slate-400 text-xs truncate mb-1">
           {[app.course_type, app.desired_start].filter(Boolean).join(' · ')}
         </p>
+      )}
+      {!!app.active_areas?.length && (
+        <div className="mb-1 flex flex-wrap gap-1">
+          {app.active_areas.map((area) => (
+            <span key={`${app.id}-${area}`} className="text-[10px] px-1.5 py-0.5 rounded-sm bg-primary/5 text-primary border border-primary/15">
+              {AREA_LABELS[area] || area}
+            </span>
+          ))}
+        </div>
       )}
 
       {/* Herkunftsland */}
@@ -160,6 +169,7 @@ export default function KanbanPage() {
   const [screenings, setScreenings] = useState({});
   const [loading, setLoading] = useState(true);
   const [filterCourse, setFilterCourse] = useState('');
+  const [filterArea, setFilterArea] = useState('');
   const [filterStage, setFilterStage] = useState(searchParams.get('stage') || '');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [query, setQuery] = useState('');
@@ -210,11 +220,15 @@ export default function KanbanPage() {
 
   const filtered = applications.filter(a => {
     if (filterCourse && a.course_type !== filterCourse) return false;
+    if (filterArea) {
+      const areas = a.active_areas?.length ? a.active_areas : [a.workspace_area || 'studienkolleg'];
+      if (!areas.includes(filterArea)) return false;
+    }
     if (query.trim()) {
       const q = query.trim().toLowerCase();
       const haystack = [
         a.applicant?.full_name, a.applicant?.email, a.applicant?.country,
-        a.course_type, a.desired_start, a.current_stage, a.degree_country
+        a.course_type, a.desired_start, a.current_stage, a.degree_country, ...(a.active_areas || []), a.workspace_area
       ].filter(Boolean).join(' ').toLowerCase();
       if (!haystack.includes(q)) return false;
     }
@@ -271,20 +285,32 @@ export default function KanbanPage() {
             <button onClick={() => setShowFilterMenu(!showFilterMenu)}
               className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-primary border border-slate-200 px-3 py-2 rounded-sm hover:border-primary/50 transition-colors">
               <Filter size={14} />
-              {filterCourse || 'Kurs filtern'}
-              {filterCourse && (
+              {filterCourse || filterArea ? `${filterArea ? (AREA_LABELS[filterArea] || filterArea) : ''}${filterCourse ? ` · ${filterCourse}` : ''}` : 'Bereich/Kurs filtern'}
+              {(filterCourse || filterArea) && (
                 <XCircle size={13} className="text-slate-400 hover:text-red-500 ml-1"
-                  onClick={e => { e.stopPropagation(); setFilterCourse(''); setShowFilterMenu(false); }} />
+                  onClick={e => { e.stopPropagation(); setFilterCourse(''); setFilterArea(''); setShowFilterMenu(false); }} />
               )}
             </button>
             {showFilterMenu && (
-              <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-sm shadow-card z-20 min-w-[160px]">
+              <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-sm shadow-card z-20 min-w-[210px]">
+                <div className="px-3 py-2 border-b border-slate-100">
+                  <p className="text-[11px] text-slate-400 uppercase tracking-wide">Bereich</p>
+                  {Object.keys(AREA_LABELS).map((area) => (
+                    <button key={area} onClick={() => { setFilterArea(area); setShowFilterMenu(false); }}
+                      className={`mt-1 w-full text-left px-2 py-1.5 text-xs rounded-sm hover:bg-primary/5 ${filterArea === area ? 'text-primary font-medium' : 'text-slate-700'}`}>
+                      {AREA_LABELS[area]}
+                    </button>
+                  ))}
+                </div>
+                <div className="px-3 py-2">
+                  <p className="text-[11px] text-slate-400 uppercase tracking-wide">Kurs</p>
                 {COURSE_OPTIONS.map(c => (
                   <button key={c} onClick={() => { setFilterCourse(c); setShowFilterMenu(false); }}
-                    className={`w-full text-left px-3 py-2 text-sm hover:bg-primary/5 ${filterCourse === c ? 'text-primary font-medium' : 'text-slate-700'}`}>
+                    className={`w-full text-left px-2 py-1.5 text-xs rounded-sm hover:bg-primary/5 ${filterCourse === c ? 'text-primary font-medium' : 'text-slate-700'}`}>
                     {c}
                   </button>
                 ))}
+                </div>
               </div>
             )}
           </div>

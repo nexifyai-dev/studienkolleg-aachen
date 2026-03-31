@@ -11,6 +11,7 @@ import json
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional
+from services.process_profiles import get_required_documents_for_area
 
 CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
 RULE_MATRIX_FILE = Path(__file__).resolve().parents[1] / "rules" / "screening_rule_matrix.v1.0.json"
@@ -19,6 +20,7 @@ REQUIRED_DOC_LABELS = {
     "language_certificate": "Deutsches Sprachzertifikat",
     "highschool_diploma": "Schulzeugnis / Hochschulzugangsberechtigung",
     "passport": "Reisepass / Personalausweis",
+    "cv": "Lebenslauf",
 }
 
 
@@ -129,9 +131,22 @@ def _check_language_level(course_type: Optional[str], language_level: Optional[s
     }
 
 
-def _check_completeness(docs: list, course_type: Optional[str], course_rule_matrix: Optional[dict] = None) -> dict:
+def _resolve_application_area(application: dict) -> str:
+    if application.get("primary_area"):
+        return application["primary_area"]
+    if application.get("active_areas"):
+        return application["active_areas"][0]
+    return application.get("workspace_area") or "studienkolleg"
+
+
+def _check_completeness(
+    docs: list,
+    course_type: Optional[str],
+    course_rule_matrix: Optional[dict] = None,
+    required_doc_types: Optional[list[str]] = None,
+) -> dict:
     course_rules = (course_rule_matrix or {}).get(course_type, {})
-    required_types = course_rules.get("required_docs", ["language_certificate", "highschool_diploma", "passport"])
+    required_types = required_doc_types or course_rules.get("required_docs") or ["language_certificate", "highschool_diploma", "passport"]
     uploaded_types = {}
     evidence = []
 
@@ -254,8 +269,15 @@ def evaluate_screening_criteria(
 ) -> dict:
     resolved_version, rule_set, versioning_payload = _resolve_rule_set(matrix_version)
     course_rule_matrix = rule_set.get("course_rule_matrix", {})
+    area = _resolve_application_area(application)
+    required_docs_for_area = get_required_documents_for_area(area)
 
-    completeness = _check_completeness(docs, application.get("course_type"), course_rule_matrix)
+    completeness = _check_completeness(
+        docs,
+        application.get("course_type"),
+        course_rule_matrix,
+        required_docs_for_area,
+    )
     anabin_info = _get_anabin_category(application.get("degree_country"), rule_set.get("anabin_country_hints", {}))
     language_check = _check_language_level(application.get("course_type"), application.get("language_level"), course_rule_matrix)
     formal_precheck = _build_formal_precheck(completeness, language_check, anabin_info, application)
@@ -312,6 +334,7 @@ def evaluate_screening_criteria(
         },
         "reference_basis": {
             "mode": "versioned_rule_matrix",
+            "area_profile": area,
             "version": resolved_version,
             "matrix_id": versioning_payload.get("matrix_id"),
             "active_version": versioning_payload.get("active_version"),
@@ -325,4 +348,4 @@ def evaluate_screening_criteria(
 
 DEFAULT_RULE_SET = get_active_rule_set()
 COURSE_RULE_MATRIX = DEFAULT_RULE_SET["rule_set"].get("course_rule_matrix", {})
-REQUIRED_DOCUMENT_TYPES = ["language_certificate", "highschool_diploma", "passport"]
+REQUIRED_DOCUMENT_TYPES = get_required_documents_for_area("studienkolleg")

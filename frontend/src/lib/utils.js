@@ -68,3 +68,10 @@ export const ROLE_LABELS = {
   affiliate: 'Partner',
   applicant: 'Bewerber',
 };
+
+export const AREA_LABELS = {
+  studienkolleg: 'Studienkolleg',
+  language_courses: 'Sprachkurse',
+  nursing: 'Pflege',
+  work_training: 'Arbeit & Ausbildung',
+};

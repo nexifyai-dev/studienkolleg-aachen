@@ -26,6 +26,7 @@ async def run_ai_screening(
     from services.deepseek_provider import chat_completion, is_enabled
 
     local_summary = evaluate_screening_criteria(application, applicant, docs)
+    required_documents = local_summary["completeness"].get("required_types") or REQUIRED_DOCUMENT_TYPES
     completeness = local_summary["completeness"]
     anabin_info = local_summary["anabin_assessment"]
     language_check = local_summary["language_level_check"]
@@ -87,7 +88,7 @@ DOKUMENTE ({len(docs)} vorhanden):
 
 FEHLENDE PFLICHTDOKUMENTE: {', '.join(completeness['missing_labels']) if completeness['missing_labels'] else 'Alle vorhanden'}
 
-ERWARTETE PFLICHTDOKUMENTE (Standard): {', '.join(REQUIRED_DOCUMENT_TYPES)}
+ERWARTETE PFLICHTDOKUMENTE (Bereichsprofil): {', '.join(required_documents)}
 
 KOMMUNIKATIONSVERLAUF:
 {msg_summary if msg_summary else 'Kein Verlauf vorhanden'}

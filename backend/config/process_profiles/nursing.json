@@ -1,0 +1,16 @@
+{
+  "area": "nursing",
+  "label": "Pflegefachschule",
+  "required_documents": ["language_certificate", "highschool_diploma", "passport", "cv"],
+  "status_chain": ["lead_new", "in_review", "pending_docs", "offer_sent", "enrolled", "declined", "archived"],
+  "automations": {
+    "on_create": ["application_received_email"],
+    "on_missing_docs": ["missing_documents_email"],
+    "on_stage_change": ["status_change_email", "status_change_notification"]
+  },
+  "templates": {
+    "application_received": "tmpl_application_received_de",
+    "missing_documents": "tmpl_missing_documents_de",
+    "status_change": "tmpl_status_change_de"
+  }
+}

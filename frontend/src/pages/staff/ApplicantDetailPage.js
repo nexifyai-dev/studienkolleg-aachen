@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
 import { toast } from 'sonner';
-import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
+import { STAGE_LABELS, STAGE_COLORS, AREA_LABELS } from '../../lib/utils';
 import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
   FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2,
@@ -520,6 +520,7 @@ export default function ApplicantDetailPage() {
   const [loading, setLoading] = useState(true);
   const [stageUpdating, setStageUpdating] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [selectedArea, setSelectedArea] = useState('');
 
   const STAGES = [
     'lead_new', 'in_review', 'pending_docs', 'interview_scheduled',
@@ -534,6 +535,10 @@ export default function ApplicantDetailPage() {
           apiClient.get(`/api/applications/${id}/documents`),
         ]);
         setApp(appRes.data);
+        const loadedAreas = appRes.data?.active_areas?.length
+          ? appRes.data.active_areas
+          : [appRes.data?.workspace_area || 'studienkolleg'];
+        setSelectedArea((prev) => prev || loadedAreas[0]);
         setDocs(docsRes.data);
       } catch {} finally { setLoading(false); }
     };
@@ -544,7 +549,14 @@ export default function ApplicantDetailPage() {
     setStageUpdating(true);
     try {
       await apiClient.put(`/api/applications/${id}`, { current_stage: newStage });
-      setApp(prev => ({ ...prev, current_stage: newStage }));
+      setApp(prev => ({
+        ...prev,
+        current_stage: newStage,
+        area_states: {
+          ...(prev.area_states || {}),
+          [selectedArea || prev.workspace_area || 'studienkolleg']: newStage,
+        },
+      }));
       setRefreshKey(k => k + 1);
     } catch {} finally { setStageUpdating(false); }
   };
@@ -591,6 +603,32 @@ export default function ApplicantDetailPage() {
         )}
         testId="applicant-record-header"
       />
+      <div className="bg-white border border-slate-200 rounded-sm p-3" data-testid="area-state-panel">
+        <div className="flex flex-wrap items-center gap-2 justify-between">
+          <p className="text-xs font-semibold text-slate-700">Bereichsstände</p>
+          <select
+            value={selectedArea}
+            onChange={(e) => setSelectedArea(e.target.value)}
+            className="text-xs border border-slate-200 rounded-sm px-2 py-1"
+            data-testid="area-select"
+          >
+            {(app.active_areas?.length ? app.active_areas : [app.workspace_area || 'studienkolleg']).map((area) => (
+              <option key={area} value={area}>{AREA_LABELS[area] || area}</option>
+            ))}
+          </select>
+        </div>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {(app.active_areas?.length ? app.active_areas : [app.workspace_area || 'studienkolleg']).map((area) => {
+            const stage = app.area_states?.[area] || app.current_stage;
+            return (
+              <div key={`area-state-${area}`} className="text-xs border border-slate-200 rounded-sm px-2 py-1">
+                <span className="text-slate-500">{AREA_LABELS[area] || area}:</span>{' '}
+                <span className="font-medium text-slate-700">{STAGE_LABELS[stage] || stage}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Quick Actions Bar */}
       <div className="flex flex-wrap gap-2">
@@ -651,13 +689,13 @@ export default function ApplicantDetailPage() {
 
           {/* Status Update */}
           <div className="bg-white border border-slate-200 rounded-sm p-4">
-            <h3 className="font-semibold text-slate-700 mb-2 text-xs">Status ändern</h3>
+            <h3 className="font-semibold text-slate-700 mb-2 text-xs">Status ändern ({AREA_LABELS[selectedArea] || selectedArea || 'Bereich'})</h3>
             <div className="flex flex-wrap gap-1.5">
               {STAGES.map(stage => (
-                <button key={stage} onClick={() => updateStage(stage)} disabled={stageUpdating || app.current_stage === stage}
+                <button key={stage} onClick={() => updateStage(stage)} disabled={stageUpdating || (app.area_states?.[selectedArea] || app.current_stage) === stage}
                   data-testid={`stage-btn-${stage}`}
                   className={`text-[11px] px-2.5 py-1.5 rounded-sm font-medium transition-all disabled:opacity-60 ${
-                    app.current_stage === stage ? 'bg-primary text-white' : 'border border-slate-200 text-slate-600 hover:border-primary/50 hover:text-primary'
+                    (app.area_states?.[selectedArea] || app.current_stage) === stage ? 'bg-primary text-white' : 'border border-slate-200 text-slate-600 hover:border-primary/50 hover:text-primary'
                   }`}>
                   {STAGE_LABELS[stage] || stage}
                 </button>

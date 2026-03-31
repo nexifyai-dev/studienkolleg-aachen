@@ -17,7 +17,7 @@ from models.schemas import LeadIngest, to_str_id
 from services.audit import write_audit_log
 from services.storage import storage, build_storage_key, sanitize_filename, validate_upload
 from services.automation import trigger_application_received, trigger_missing_documents
-from services.ai_screening import REQUIRED_DOCUMENT_TYPES
+from services.process_profiles import get_required_documents_for_area
 
 router = APIRouter(prefix="/api/leads", tags=["leads"])
 logger = logging.getLogger(__name__)
@@ -106,9 +106,15 @@ async def ingest_lead(data: LeadIngest):
 
     application_id = None
     if not existing_app and workspace_id:
+        active_areas = data.active_areas or [area]
+        required_documents = get_required_documents_for_area(area)
         app_doc = {
             "applicant_id": user_id,
             "workspace_id": workspace_id,
+            "workspace_area": area,
+            "primary_area": area,
+            "active_areas": active_areas,
+            "area_states": {x: "lead_new" for x in active_areas},
             "current_stage": "lead_new",
             "source": data.source,
             "course_type": data.course_type,
@@ -171,7 +177,7 @@ async def ingest_lead(data: LeadIngest):
                 except Exception as e:
                     logger.warning(f"[LEADS] Doc upload failed for {doc_upload.document_type}: {e}")
 
-        missing_types = [t for t in REQUIRED_DOCUMENT_TYPES if t not in uploaded_doc_types]
+        missing_types = [t for t in required_documents if t not in uploaded_doc_types]
         await trigger_application_received(application_id, email, full_name, data.course_type)
         if missing_types:
             await trigger_missing_documents(application_id, email, full_name, missing_types)

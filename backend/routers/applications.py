@@ -24,6 +24,7 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
     query = {}
     workspace_id = request.query_params.get("workspace_id")
     stage = request.query_params.get("stage")
+    area = request.query_params.get("area")
 
     if user["role"] == "applicant":
         # Applicants see only their own
@@ -43,6 +44,8 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
 
     if stage:
         query["current_stage"] = stage
+    if area:
+        query["active_areas"] = area
 
     apps = await db.applications.find(query).sort("last_activity_at", -1).to_list(500)
 
@@ -68,9 +71,9 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
             try:
                 workspaces = await db.workspaces.find(
                     {"_id": {"$in": [ObjectId(wid) for wid in workspace_ids]}},
-                    {"name": 1},
+                    {"name": 1, "area": 1},
                 ).to_list(None)
-                ws_map = {str(w["_id"]): w.get("name") for w in workspaces}
+                ws_map = {str(w["_id"]): {"name": w.get("name"), "area": w.get("area")} for w in workspaces}
             except Exception:
                 pass
 
@@ -81,7 +84,12 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
                 app_dict["applicant"] = to_str_id(applicant_map[aid])
             wid = app_dict.get("workspace_id")
             if wid and wid in ws_map:
-                app_dict["workspace_name"] = ws_map[wid]
+                app_dict["workspace_name"] = ws_map[wid]["name"]
+                if not app_dict.get("workspace_area"):
+                    app_dict["workspace_area"] = ws_map[wid]["area"]
+            if not app_dict.get("active_areas"):
+                if app_dict.get("workspace_area"):
+                    app_dict["active_areas"] = [app_dict["workspace_area"]]
             result.append(app_dict)
     else:
         result = [to_str_id(a) for a in apps]
@@ -99,10 +107,17 @@ async def create_application(data: ApplicationCreate, user: dict = Depends(get_c
     workspace = await db.workspaces.find_one({"_id": ObjectId(data.workspace_id)})
     if not workspace:
         raise HTTPException(status_code=404, detail="Workspace nicht gefunden")
+    workspace_area = workspace.get("area", "studienkolleg")
+    active_areas = data.active_areas or [workspace_area]
+    area_states = {area: "lead_new" for area in active_areas}
 
     app_doc = {
         "applicant_id": applicant_id,
         "workspace_id": data.workspace_id,
+        "workspace_area": workspace_area,
+        "primary_area": workspace_area,
+        "active_areas": active_areas,
+        "area_states": area_states,
         "current_stage": "lead_new",
         "source": data.source,
         "notes": data.notes,
@@ -127,6 +142,11 @@ async def get_application(app_id: str, user: dict = Depends(get_current_user)):
     if not app:
         raise HTTPException(status_code=404, detail="Nicht gefunden")
     app_dict = to_str_id(app)
+    if not app_dict.get("active_areas"):
+        if app_dict.get("workspace_area"):
+            app_dict["active_areas"] = [app_dict["workspace_area"]]
+        else:
+            app_dict["active_areas"] = ["studienkolleg"]
     # Ownership check
     if user["role"] == "applicant" and app_dict.get("applicant_id") != user["id"]:
         raise HTTPException(status_code=403, detail="Forbidden")
@@ -171,6 +191,14 @@ async def update_application(
 
     old_stage = app.get("current_stage")
     update = {k: v for k, v in data.model_dump().items() if v is not None}
+    if "active_areas" in update and not update["active_areas"]:
+        update["active_areas"] = app.get("active_areas") or [app.get("workspace_area", "studienkolleg")]
+    if data.current_stage:
+        active_areas = update.get("active_areas") or app.get("active_areas") or [app.get("workspace_area", "studienkolleg")]
+        area_states = dict(app.get("area_states") or {})
+        for area in active_areas:
+            area_states[area] = data.current_stage
+        update["area_states"] = area_states
     update["last_activity_at"] = datetime.now(timezone.utc)
     update["updated_by"] = user["id"]
     await db.applications.update_one({"_id": ObjectId(app_id)}, {"$set": update})

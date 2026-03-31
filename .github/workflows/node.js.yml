@@ -21,6 +21,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Guard legacy nscale references
+      run: .github/scripts/no_legacy_nscale_refs.sh
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:

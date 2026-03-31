@@ -38,5 +38,5 @@
 - KI-Entscheidungsgrenzen bleiben unverändert strikt nicht-faktisch (Vorprüfung + Staff-Entscheidung).
 
 ## 4) Verbleibende Restpunkte
-- Historische Artefakte mit nscale-Begriffen in `memory/` und `test_reports/` sind weiterhin vorhanden (nicht produktiv wirksam), sollten aber in einem separaten Content-Hardening-Schritt bereinigt werden.
+- Historische Artefakte mit nscale-Begriffen in `memory/` sind als „historisch/nicht produktiv“ markiert; Produktivcode bleibt auf DeepSeek beschränkt.
 - Ein vollständiger E2E-GO-Live-Lauf (inkl. reale Backend-Umgebungsvariablen + Live-Datenflüsse) ist außerhalb dieser lokalen Änderung weiterhin erforderlich.

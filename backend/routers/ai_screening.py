@@ -193,6 +193,12 @@ async def accept_ai_suggestion(
         raise HTTPException(status_code=409, detail="Keine KI-Prüfung vorhanden")
 
     latest_screening = to_str_id(dict(latest_screening_raw))
+
+    screening_reference = latest_screening.get("screening_id")
+    screening_db_id = latest_screening.get("id")
+    if not screening_reference:
+        screening_reference = screening_db_id
+
     latest_suggested_stage = latest_screening.get("suggested_stage")
     if not latest_suggested_stage:
         raise HTTPException(status_code=409, detail="Neueste KI-Prüfung enthält keinen Stage-Vorschlag")
@@ -218,7 +224,8 @@ async def accept_ai_suggestion(
             "status": "unchanged",
             "message": "Status stimmt bereits überein",
             "new_stage": suggested_stage,
-            "screening_id": latest_screening.get("id"),
+            "screening_id": screening_reference,
+            "screening_db_id": screening_db_id,
             "screening_created_at": latest_screening.get("created_at"),
             "accepted_from_latest_screening": accepted_from_latest_screening,
         }
@@ -238,7 +245,8 @@ async def accept_ai_suggestion(
             "new_value": suggested_stage,
             "source": "ai_suggestion_accepted",
             "actor_name": user.get("full_name", user.get("email", "")),
-            "screening_id": latest_screening.get("id"),
+            "screening_id": screening_reference,
+            "screening_db_id": screening_db_id,
             "screening_created_at": latest_screening.get("created_at"),
             "accepted_from_latest_screening": accepted_from_latest_screening,
         },
@@ -248,7 +256,8 @@ async def accept_ai_suggestion(
         "status": "accepted",
         "old_stage": old_stage,
         "new_stage": suggested_stage,
-        "screening_id": latest_screening.get("id"),
+        "screening_id": screening_reference,
+        "screening_db_id": screening_db_id,
         "screening_created_at": latest_screening.get("created_at"),
         "accepted_from_latest_screening": accepted_from_latest_screening,
     }

@@ -213,6 +213,8 @@ class TestAIScreeningAcceptSuggestion:
         return {
             "application_id": test_application_id,
             "suggested_stage": suggested_stage,
+            "screening_id": latest.get("screening_id") or latest.get("id"),
+            "screening_db_id": latest.get("id"),
         }
 
     def test_accept_ai_suggestion_uses_latest_screening_without_body_stage(
@@ -236,7 +238,8 @@ class TestAIScreeningAcceptSuggestion:
         data = resp.json()
         assert data.get("status") in ["accepted", "unchanged"]
         assert data.get("new_stage") == expected_stage
-        assert data.get("screening_id")
+        assert data.get("screening_id") == latest_screening_context["screening_id"]
+        assert data.get("screening_db_id") == latest_screening_context["screening_db_id"]
         assert "screening_created_at" in data
         assert data.get("accepted_from_latest_screening") is True
         print(f"✓ Accept AI suggestion from latest screening OK - stage {data.get('new_stage')}")
@@ -289,11 +292,13 @@ class TestAIScreeningAcceptSuggestion:
         print("✓ Accept AI suggestion correctly fails when no screening exists")
 
     def test_accept_ai_suggestion_works_with_matching_stage(
-        self, staff_session, latest_screening_context
+        self, staff_session, admin_session, latest_screening_context
     ):
         """Accept AI suggestion changes stage when body matches latest suggestion."""
         app_id = latest_screening_context["application_id"]
         expected_stage = latest_screening_context["suggested_stage"]
+        expected_screening_id = latest_screening_context["screening_id"]
+        expected_screening_db_id = latest_screening_context["screening_db_id"]
 
         # First get current stage
         app_resp = staff_session.get(f"{BASE_URL}/api/applications/{app_id}")
@@ -310,9 +315,19 @@ class TestAIScreeningAcceptSuggestion:
         data = resp.json()
         assert data.get("status") in ["accepted", "unchanged"]
         assert data.get("new_stage") == expected_stage
+        assert data.get("screening_id") == expected_screening_id
+        assert data.get("screening_db_id") == expected_screening_db_id
         assert data.get("accepted_from_latest_screening") is True
         if data.get("status") == "accepted":
             assert data.get("new_stage") == expected_stage
+            audit_resp = admin_session.get(f"{BASE_URL}/api/audit-logs", params={"target_id": app_id})
+            assert audit_resp.status_code == 200
+            logs = audit_resp.json()
+            stage_changed = next((l for l in logs if l.get("action") == "stage_changed"), None)
+            assert stage_changed is not None
+            details = stage_changed.get("details", {})
+            assert details.get("screening_id") == expected_screening_id
+            assert details.get("screening_db_id") == expected_screening_db_id
             print(f"✓ Accept AI suggestion OK - changed from {data.get('old_stage')} to {data.get('new_stage')}")
         else:
             print(f"✓ Accept AI suggestion OK - status unchanged (already at suggested stage)")

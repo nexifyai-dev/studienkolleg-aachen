@@ -19,6 +19,7 @@ from deps import get_current_user, require_roles, STAFF_ROLES
 from models.schemas import to_str_id
 from services.audit import write_audit_log
 from services.ai_screening import run_ai_screening
+from services.workflow_status import ai_suggestible_statuses, can_transition
 
 router = APIRouter(prefix="/api", tags=["ai_screening"])
 
@@ -175,7 +176,7 @@ async def accept_ai_suggestion(
     body = body or {}
     requested_stage = body.get("suggested_stage")
 
-    allowed_suggested_stages = {"pending_docs", "in_review", "interview_scheduled", "on_hold"}
+    allowed_suggested_stages = ai_suggestible_statuses()
 
     try:
         app = await db.applications.find_one({"_id": ObjectId(app_id)})
@@ -210,6 +211,8 @@ async def accept_ai_suggestion(
     suggested_stage = latest_suggested_stage
 
     old_stage = app.get("current_stage", "")
+    if not can_transition(old_stage, suggested_stage):
+        raise HTTPException(status_code=409, detail="Ungültiger Stage-Wechsel laut Workflow-Regeln")
     if old_stage == suggested_stage:
         return {
             "status": "unchanged",

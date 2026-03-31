@@ -14,6 +14,7 @@ from database import get_db
 from deps import get_current_user, require_roles, ADMIN_ROLES, STAFF_ROLES, PARTNER_ROLES
 from models.schemas import ApplicationCreate, ApplicationUpdate, CaseNoteCreate, CaseEmailSend, to_str_id
 from services.audit import write_audit_log
+from services.workflow_status import can_transition, is_valid_workflow_status
 
 router = APIRouter(prefix="/api/applications", tags=["applications"])
 
@@ -180,6 +181,13 @@ async def update_application(
         raise HTTPException(status_code=404, detail="Nicht gefunden")
 
     old_stage = app.get("current_stage")
+
+    if data.current_stage:
+        if not is_valid_workflow_status(data.current_stage):
+            raise HTTPException(status_code=400, detail="Ungültiger Workflow-Status")
+        if not can_transition(old_stage, data.current_stage):
+            raise HTTPException(status_code=409, detail="Ungültiger Stage-Wechsel laut Workflow-Regeln")
+
     update = {k: v for k, v in data.model_dump().items() if v is not None}
     update["last_activity_at"] = datetime.now(timezone.utc)
     update["updated_by"] = user["id"]

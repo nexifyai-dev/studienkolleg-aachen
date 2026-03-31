@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
 import { toast } from 'sonner';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
+import { WORKFLOW_STATUSES } from '../../constants/workflowStatus';
 import {
   ArrowLeft, Brain, RefreshCw, CheckCircle, AlertCircle,
   FileText, Clock, XCircle, ChevronDown, ChevronUp, Loader2,
@@ -521,10 +522,7 @@ export default function ApplicantDetailPage() {
   const [stageUpdating, setStageUpdating] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const STAGES = [
-    'lead_new', 'in_review', 'pending_docs', 'interview_scheduled',
-    'conditional_offer', 'offer_sent', 'enrolled', 'declined', 'on_hold',
-  ];
+  const STAGES = WORKFLOW_STATUSES;
 
   useEffect(() => {
     const load = async () => {

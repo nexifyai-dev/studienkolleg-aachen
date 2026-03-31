@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
+import { WORKFLOW_STATUSES, normalizeWorkflowStatus } from '../../constants/workflowStatus';
 import { CheckCircle, Circle, Clock } from 'lucide-react';
 
 
-const ALL_STAGES = [
-  'lead_new','contacted','docs_requested','docs_received',
-  'docs_review','invoice_open','payment_received','process_next','completed'
-];
 
 export default function JourneyPage() {
   const { t } = useTranslation();
@@ -51,8 +48,8 @@ export default function JourneyPage() {
 
             {/* Timeline */}
             <div className="space-y-0">
-              {ALL_STAGES.map((stage, idx) => {
-                const currentIdx = ALL_STAGES.indexOf(app.current_stage);
+              {WORKFLOW_STATUSES.map((stage, idx) => {
+                const currentIdx = WORKFLOW_STATUSES.indexOf(normalizeWorkflowStatus(app.current_stage));
                 const isComplete = idx < currentIdx;
                 const isCurrent = idx === currentIdx;
 
@@ -68,7 +65,7 @@ export default function JourneyPage() {
                          isCurrent ? <Clock size={12} className="text-primary" /> :
                          <Circle size={12} className="text-slate-300" />}
                       </div>
-                      {idx < ALL_STAGES.length - 1 && (
+                      {idx < WORKFLOW_STATUSES.length - 1 && (
                         <div className={`w-0.5 h-8 mt-1 ${isComplete ? 'bg-primary' : 'bg-slate-200'}`} />
                       )}
                     </div>

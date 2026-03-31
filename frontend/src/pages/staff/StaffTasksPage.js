@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import apiClient from '../../lib/apiClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
+import { handleApiError } from '../../lib/errorHandling';
 import {
   CheckSquare, Clock, AlertCircle, Plus, Loader2, CheckCircle, X,
   Paperclip, Download, FileText, MessageSquare, History, Send,
@@ -54,7 +55,9 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
         const r = await apiClient.get(`/api/tasks/${task.id}/history`, { withCredentials: true });
         setHistory(r.data || []);
       }
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: `staff.tasks.loadTab.${tab}`, suppressToast: true });
+    }
   }, [task.id]);
 
   useEffect(() => { loadTab(activeTab); }, [activeTab, loadTab]);
@@ -74,7 +77,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
         toast.success('Aufgabe gespeichert');
       }
       setEditing(false);
-    } catch {} finally { setSaving(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.saveTask',
+        toastMessage: 'Aufgabe konnte nicht gespeichert werden',
+      });
+    } finally { setSaving(false); }
   };
 
   const changeStatus = async (status) => {
@@ -82,7 +90,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       const r = await apiClient.put(`/api/tasks/${task.id}`, { status }, { withCredentials: true });
       onUpdate(r.data);
       toast.success(`Status: ${STATUS_LABELS[status]}`);
-    } catch { toast.error('Fehler beim Statuswechsel'); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.changeStatus',
+        toastMessage: `Statuswechsel (${STATUS_LABELS[status]}) fehlgeschlagen`,
+      });
+    }
   };
 
   const addNote = async () => {
@@ -93,7 +106,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       setNewNote('');
       await loadTab('notes');
       toast.success('Notiz hinzugefügt');
-    } catch { toast.error('Fehler'); } finally { setSendingNote(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.addNote',
+        toastMessage: 'Notiz konnte nicht gespeichert werden',
+      });
+    } finally { setSendingNote(false); }
   };
 
   const uploadAttachment = async (file) => {
@@ -106,7 +124,12 @@ function TaskDetailModal({ task, onClose, onUpdate, staffList }) {
       }, { withCredentials: true });
       await loadTab('attachments');
       toast.success('Datei hochgeladen');
-    } catch { toast.error('Upload fehlgeschlagen'); } finally { setUploading(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.uploadAttachment',
+        toastMessage: `Upload fehlgeschlagen (${file?.name || 'Datei'})`,
+      });
+    } finally { setUploading(false); }
   };
 
   const tabs = [
@@ -337,12 +360,20 @@ export default function StaffTasksPage() {
     try {
       const [tasksRes, usersRes] = await Promise.all([
         apiClient.get('/api/tasks', { withCredentials: true }),
-        apiClient.get('/api/users', { withCredentials: true }).catch(() => ({ data: [] })),
+        apiClient.get('/api/users', { withCredentials: true }).catch((error) => {
+          handleApiError(error, { context: 'staff.tasks.loadUsers', suppressToast: true });
+          return { data: [] };
+        }),
       ]);
       setTasks(tasksRes.data || []);
       const staff = (usersRes.data || []).filter(u => ['staff','admin','superadmin','teacher'].includes(u.role) && u.active !== false);
       setStaffList(staff);
-    } catch {} finally { setLoading(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.load',
+        toastMessage: 'Aufgaben konnten nicht geladen werden',
+      });
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -358,14 +389,24 @@ export default function StaffTasksPage() {
       setForm({ title: '', description: '', priority: 'normal', due_date: '', assigned_to: '' });
       setShowCreate(false);
       await load();
-    } catch {} finally { setCreating(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.create',
+        toastMessage: 'Aufgabe konnte nicht erstellt werden',
+      });
+    } finally { setCreating(false); }
   };
 
   const updateStatus = async (taskId, status) => {
     try {
       const r = await apiClient.put(`/api/tasks/${taskId}`, { status }, { withCredentials: true });
       setTasks(prev => prev.map(t => t.id === taskId ? r.data : t));
-    } catch {}
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.tasks.delete',
+        toastMessage: 'Aufgabe konnte nicht gelöscht werden',
+      });
+    }
   };
 
   const handleTaskUpdate = (updated) => {

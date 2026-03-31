@@ -3,6 +3,7 @@ import { Bell, Check, CheckCheck, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
+import { handleApiError } from '../../lib/errorHandling';
 
 const ICON_MAP = {
   'file-text': 'FileText',
@@ -46,7 +47,9 @@ export default function NotificationBell() {
     try {
       const res = await apiClient.get('/api/notifications/unread-count');
       setUnreadCount(res.data.count || 0);
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: 'notifications.fetchUnreadCount', suppressToast: true });
+    }
   }, []);
 
   const fetchNotifications = useCallback(async () => {
@@ -54,7 +57,9 @@ export default function NotificationBell() {
     try {
       const res = await apiClient.get('/api/notifications?limit=20');
       setNotifications(res.data || []);
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: 'notifications.fetchList', suppressToast: true });
+    }
     setLoading(false);
   }, []);
 
@@ -81,7 +86,9 @@ export default function NotificationBell() {
       await apiClient.patch(`/api/notifications/${id}/read`);
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
       setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: 'notifications.markRead', suppressToast: true });
+    }
   };
 
   const markAllRead = async () => {
@@ -89,7 +96,9 @@ export default function NotificationBell() {
       await apiClient.patch('/api/notifications/read-all');
       setNotifications(prev => prev.map(n => ({ ...n, read: true })));
       setUnreadCount(0);
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: 'notifications.markAllRead', suppressToast: true });
+    }
   };
 
   const handleClick = (notif) => {

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import apiClient from '../../lib/apiClient';
 import { MessageSquare, Send, Loader2, Paperclip, FileText, Download, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { handleApiError } from '../../lib/errorHandling';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 const MAX_FILE_MB = 10;
@@ -78,12 +79,15 @@ export default function MessagesPage() {
       setConversations(convs);
       const found = convs.find(c => c.id === supportConv?.id);
       setActiveConv(found || convs[0] || supportConv);
-    } catch {
+    } catch (error) {
+      handleApiError(error, { context: 'portal.messages.initSupport', suppressToast: true });
       try {
         const convsRes = await apiClient.get('/api/conversations', { withCredentials: true });
         setConversations(convsRes.data || []);
         if (convsRes.data?.[0]) setActiveConv(convsRes.data[0]);
-      } catch {}
+      } catch (fallbackError) {
+        handleApiError(fallbackError, { context: 'portal.messages.initFallback', suppressToast: true });
+      }
     } finally { setLoading(false); }
   }, []);
 
@@ -95,7 +99,9 @@ export default function MessagesPage() {
     try {
       const r = await apiClient.get(`/api/conversations/${convId}/messages`, { withCredentials: true });
       setMessages(r.data || []);
-    } catch {} finally { setLoadingMsgs(false); }
+    } catch (error) {
+      handleApiError(error, { context: 'portal.messages.loadMessages', suppressToast: true });
+    } finally { setLoadingMsgs(false); }
   }, []);
 
   useEffect(() => {
@@ -134,7 +140,12 @@ export default function MessagesPage() {
         setNewMsg('');
         if (!activeConv?.id) await initConversation();
       }
-    } catch {} finally { setSending(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'portal.messages.send',
+        toastMessage: attachFile ? 'Anhang konnte nicht gesendet werden' : 'Nachricht konnte nicht gesendet werden',
+      });
+    } finally { setSending(false); }
   };
 
   const handleFileSelect = (e) => {

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import apiClient from '../../lib/apiClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { formatDate } from '../../lib/utils';
+import { handleApiError } from '../../lib/errorHandling';
 import {
   MessageSquare, Send, Users, Search, ArrowLeft, Loader2,
   Paperclip, FileText, Download, X
@@ -114,7 +115,9 @@ export default function StaffMessagingPage() {
     try {
       const r = await apiClient.get('/api/conversations', { withCredentials: true });
       setConversations(r.data || []);
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: 'staff.messages.loadConversations', suppressToast: true });
+    }
   }, []);
 
   useEffect(() => {
@@ -127,7 +130,9 @@ export default function StaffMessagingPage() {
     try {
       const r = await apiClient.get(`/api/conversations/${convId}/messages`, { withCredentials: true });
       setMessages(r.data || []);
-    } catch {} finally { setLoadingMsgs(false); }
+    } catch (error) {
+      handleApiError(error, { context: 'staff.messages.loadMessages', suppressToast: true });
+    } finally { setLoadingMsgs(false); }
   }, []);
 
   useEffect(() => {
@@ -171,7 +176,12 @@ export default function StaffMessagingPage() {
       }
       setNewMsg('');
       loadConversations();
-    } catch {} finally { setSending(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.messages.send',
+        toastMessage: attachFile ? 'Dateianhang konnte nicht gesendet werden' : 'Nachricht konnte nicht gesendet werden',
+      });
+    } finally { setSending(false); }
   };
 
   const handleFileSelect = (e) => {

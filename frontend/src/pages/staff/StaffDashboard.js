@@ -8,6 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
+import { handleApiError } from '../../lib/errorHandling';
 
 function StatCard({ label, value, icon: Icon, color, link, testId }) {
   const inner = (
@@ -53,13 +54,21 @@ export default function StaffDashboard() {
           apiClient.get('/api/dashboard/stats'),
           apiClient.get('/api/applications'),
           apiClient.get('/api/tasks'),
-          apiClient.get('/api/followups/due').catch(() => ({ data: [] })),
+          apiClient.get('/api/followups/due').catch((error) => {
+            handleApiError(error, { context: 'staff.dashboard.followupsDue', suppressToast: true });
+            return { data: [] };
+          }),
         ]);
         setStats(statsRes.data);
         setApps(appsRes.data || []);
         setTasks(tasksRes.data || []);
         setFollowups(followupsRes.data || []);
-      } catch {}
+      } catch (error) {
+        handleApiError(error, {
+          context: 'staff.dashboard.load',
+          toastMessage: 'Dashboard-Daten konnten nicht geladen werden',
+        });
+      }
       finally { setLoading(false); }
     };
     load();

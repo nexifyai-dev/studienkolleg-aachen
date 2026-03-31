@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '../../lib/apiClient';
 import { ROLE_LABELS, formatDate } from '../../lib/utils';
 import { UserPlus, RefreshCw, UserCheck, UserX, Search, Copy, CheckSquare } from 'lucide-react';
-import { formatApiError } from '../../contexts/AuthContext';
+import { handleApiError } from '../../lib/errorHandling';
 
 const STAFF_ROLES = ['superadmin', 'admin', 'staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
 const INVITABLE_ROLES = ['staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
@@ -33,8 +33,9 @@ export default function UsersPage() {
     try {
       const res = await apiClient.get('/api/users', { withCredentials: true });
       setUsers(res.data || []);
-    } catch {}
-    finally { setLoading(false); }
+    } catch (error) {
+      handleApiError(error, { context: 'admin.users.load', suppressToast: true });
+    } finally { setLoading(false); }
   };
 
   useEffect(() => { load(); }, []);
@@ -44,8 +45,9 @@ export default function UsersPage() {
     try {
       const res = await apiClient.post('/api/auth/invite', invite, { withCredentials: true });
       setInviteResult(res.data);
-    } catch (err) {
-      setError(formatApiError(err.response?.data?.detail));
+    } catch (error) {
+      const msg = handleApiError(error, { context: 'admin.users.invite', suppressToast: true });
+      setError(msg);
     }
   };
 
@@ -54,8 +56,12 @@ export default function UsersPage() {
     try {
       await apiClient.put(`/api/users/${userId}`, { active: !currentActive }, { withCredentials: true });
       setUsers(prev => prev.map(u => u.id === userId ? { ...u, active: !currentActive } : u));
-    } catch {}
-    finally { setUpdating(null); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'admin.users.toggleActive',
+        toastMessage: 'Nutzerstatus konnte nicht geändert werden',
+      });
+    } finally { setUpdating(null); }
   };
 
   const staffUsers = users.filter(u => STAFF_ROLES.includes(u.role));
@@ -78,7 +84,9 @@ export default function UsersPage() {
     if (!inviteResult?.invite_url) return;
     try {
       await navigator.clipboard.writeText(inviteResult.invite_url);
-    } catch {}
+    } catch (error) {
+      handleApiError(error, { context: 'admin.users.copyInvite', suppressToast: true });
+    }
   };
 
   const runBulkActive = async (active) => {
@@ -88,8 +96,12 @@ export default function UsersPage() {
       await apiClient.put('/api/users/bulk/active', { user_ids: selectedUserIds, active }, { withCredentials: true });
       setUsers(prev => prev.map(u => selectedUserIds.includes(u.id) && u.role !== 'superadmin' ? { ...u, active } : u));
       setSelectedUserIds([]);
-    } catch {}
-    finally { setBulkUpdating(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'admin.users.bulkActive',
+        toastMessage: active ? 'Bulk-Aktion Aktivieren fehlgeschlagen' : 'Bulk-Aktion Deaktivieren fehlgeschlagen',
+      });
+    } finally { setBulkUpdating(false); }
   };
 
   return (

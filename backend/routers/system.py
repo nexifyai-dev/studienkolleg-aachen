@@ -2,7 +2,9 @@
 Audit & system routers: audit logs, dashboard stats, health, consent, notifications.
 """
 from datetime import datetime, timezone
-from fastapi import APIRouter, Depends, Request
+import re
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 from database import get_db
 from deps import get_current_user, require_roles, ADMIN_ROLES, STAFF_ROLES
 from models.schemas import ConsentCapture, to_str_id
@@ -12,15 +14,67 @@ from bson import ObjectId
 audit_router = APIRouter(prefix="/api", tags=["audit"])
 
 
+def _parse_iso_date(value: str, field_name: str) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=f"Ungültiges Datum für {field_name}: {value}") from exc
+
+
 @audit_router.get("/audit-logs")
-async def get_audit_logs(request: Request, user: dict = Depends(require_roles(*ADMIN_ROLES))):
+async def get_audit_logs(
+    action: str | None = Query(default=None),
+    target_type: str | None = Query(default=None),
+    target_id: str | None = Query(default=None),
+    actor_id: str | None = Query(default=None),
+    role: str | None = Query(default=None),
+    date_from: str | None = Query(default=None),
+    date_to: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    sort: str = Query(default="newest"),
+    user: dict = Depends(require_roles(*ADMIN_ROLES)),
+):
     db = get_db()
-    query = {}
-    if tid := request.query_params.get("target_id"):
-        query["target_id"] = tid
-    if aid := request.query_params.get("actor_id"):
-        query["actor_id"] = aid
-    logs = await db.audit_logs.find(query).sort("occurred_at", -1).to_list(500)
+    query: dict = {}
+
+    if action:
+        query["action"] = action
+    if target_type:
+        query["target_type"] = target_type
+    if target_id:
+        query["target_id"] = target_id
+    if actor_id:
+        query["actor_id"] = actor_id
+    if role:
+        query["details.role"] = role
+
+    if date_from or date_to:
+        date_filter: dict = {}
+        if date_from:
+            date_filter["$gte"] = _parse_iso_date(date_from, "date_from")
+        if date_to:
+            date_filter["$lte"] = _parse_iso_date(date_to, "date_to")
+        query["occurred_at"] = date_filter
+
+    if q and q.strip():
+        safe_query = re.escape(q.strip())
+        regex = {"$regex": safe_query, "$options": "i"}
+        query.setdefault("$and", []).append({
+            "$or": [
+                {"action": regex},
+                {"actor_id": regex},
+                {"target_id": regex},
+                {"target_type": regex},
+                {"details.role": regex},
+                {"details.stage": regex},
+            ]
+        })
+
+    sort_dir = 1 if sort == "oldest" else -1
+    logs = await db.audit_logs.find(query).sort("occurred_at", sort_dir).to_list(500)
     return [to_str_id(log) for log in logs]
 
 

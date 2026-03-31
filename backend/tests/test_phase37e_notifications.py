@@ -16,10 +16,10 @@ BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
 
 # Test credentials from test_credentials.md
 CREDENTIALS = {
-    "admin": {"email": "admin@studienkolleg-aachen.de", "password": "Admin@2026!"},
-    "staff": {"email": "staff@studienkolleg-aachen.de", "password": "DevSeed@2026!"},
-    "teacher": {"email": "teacher@studienkolleg-aachen.de", "password": "DevSeed@2026!"},
-    "applicant": {"email": "applicant@studienkolleg-aachen.de", "password": "DevSeed@2026!"},
+    "admin": {"email": "admin@studienkolleg-aachen.de", "password": os.environ["TEST_ADMIN_PASSWORD"]},
+    "staff": {"email": "staff@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]},
+    "teacher": {"email": "teacher@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]},
+    "applicant": {"email": "applicant@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]},
 }
 
 

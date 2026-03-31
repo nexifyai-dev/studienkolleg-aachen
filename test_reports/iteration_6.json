@@ -31,10 +31,10 @@
     "frontend": "100% (all UI tests passed)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
-    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
-    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+    "admin": "admin@studienkolleg-aachen.de / ${TEST_ADMIN_PASSWORD}",
+    "staff": "staff@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}",
+    "teacher": "teacher@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}",
+    "applicant": "applicant@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}"
   },
   "seed_data_creation": "4 accounts seeded via seed.py (admin uses ADMIN_PASSWORD, others use SEED_DEV_PASSWORD)",
   "retest_needed": false,
@@ -42,10 +42,10 @@
   "context_for_next_testing_agent": "Phase 3.7c complete. Teacher Dashboard at /staff (auto-routes teacher role). Consent Page at /portal/consents. Onboarding Tour shows once per user (localStorage). nscale AI provider with 4 models. WhatsApp: wa.me/4915208496876. Cost simulator is MOCKED internally.",
   "passed_checks": [
     "Backend: Health endpoint returns OK with email_enabled=true",
-    "Backend: Admin login (admin@studienkolleg-aachen.de / Admin@2026!) - role: superadmin",
-    "Backend: Staff login (staff@studienkolleg-aachen.de / DevSeed@2026!) - role: staff",
-    "Backend: Teacher login (teacher@studienkolleg-aachen.de / DevSeed@2026!) - role: teacher",
-    "Backend: Applicant login (applicant@studienkolleg-aachen.de / DevSeed@2026!) - role: applicant",
+    "Backend: Admin login (admin@studienkolleg-aachen.de / ${TEST_ADMIN_PASSWORD}) - role: superadmin",
+    "Backend: Staff login (staff@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}) - role: staff",
+    "Backend: Teacher login (teacher@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}) - role: teacher",
+    "Backend: Applicant login (applicant@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}) - role: applicant",
     "Backend: Invalid login returns 401",
     "Backend: GET /api/teacher/my-students returns students list (consent-checked)",
     "Backend: GET /api/teacher/assignments returns teacher assignments",

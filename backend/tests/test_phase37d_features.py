@@ -12,10 +12,10 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials from test_credentials.md
-ADMIN_CREDS = {"email": "admin@studienkolleg-aachen.de", "password": "Admin@2026!"}
-STAFF_CREDS = {"email": "staff@studienkolleg-aachen.de", "password": "DevSeed@2026!"}
-TEACHER_CREDS = {"email": "teacher@studienkolleg-aachen.de", "password": "DevSeed@2026!"}
-APPLICANT_CREDS = {"email": "applicant@studienkolleg-aachen.de", "password": "DevSeed@2026!"}
+ADMIN_CREDS = {"email": "admin@studienkolleg-aachen.de", "password": os.environ["TEST_ADMIN_PASSWORD"]}
+STAFF_CREDS = {"email": "staff@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]}
+TEACHER_CREDS = {"email": "teacher@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]}
+APPLICANT_CREDS = {"email": "applicant@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]}
 
 
 class TestHealthAndAuth:

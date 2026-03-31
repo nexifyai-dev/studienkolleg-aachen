@@ -19,7 +19,7 @@ class TestAuth:
     def test_admin_login_success(self):
         r = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
         assert r.status_code == 200
         data = r.json()
@@ -30,7 +30,7 @@ class TestAuth:
     def test_login_invalid_credentials(self):
         r = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": "wrong@example.com",
-            "password": "wrongpass"
+            "password": os.environ["TEST_INVALID_PASSWORD"]
         })
         assert r.status_code == 401
         print("Invalid creds rejected correctly")
@@ -40,7 +40,7 @@ class TestAuth:
         email = f"test_applicant_{int(time.time())}@example.com"
         r = requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": email,
-            "password": "TestPass123!",
+            "password": os.environ["TEST_REGISTER_PASSWORD"],
             "full_name": "Test Applicant",
             "role": "applicant"
         })
@@ -80,7 +80,7 @@ class TestWorkspaces:
         self.session = requests.Session()
         r = self.session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
         assert r.status_code == 200
         # Cookies are saved in session
@@ -102,7 +102,7 @@ class TestDashboardStats:
         self.session = requests.Session()
         self.session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
 
     def test_dashboard_stats(self):
@@ -119,7 +119,7 @@ class TestUsers:
         self.session = requests.Session()
         self.session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
 
     def test_list_users(self):
@@ -140,7 +140,7 @@ class TestApplications:
         self.session = requests.Session()
         self.session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
 
     def test_list_applications(self):
@@ -156,7 +156,7 @@ class TestLogout:
         session = requests.Session()
         session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
         r = session.post(f"{BASE_URL}/api/auth/logout")
         assert r.status_code == 200

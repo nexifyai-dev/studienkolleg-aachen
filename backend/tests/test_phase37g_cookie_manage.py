@@ -20,7 +20,7 @@ class TestPhase37gBackendHealth:
         """Test admin login"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
         assert response.status_code == 200
         data = response.json()
@@ -32,7 +32,7 @@ class TestPhase37gBackendHealth:
         """Test staff login"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": "staff@studienkolleg-aachen.de",
-            "password": "DevSeed@2026!"
+            "password": os.environ["TEST_DEFAULT_PASSWORD"]
         })
         assert response.status_code == 200
         data = response.json()
@@ -43,7 +43,7 @@ class TestPhase37gBackendHealth:
         """Test teacher login"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": "teacher@studienkolleg-aachen.de",
-            "password": "DevSeed@2026!"
+            "password": os.environ["TEST_DEFAULT_PASSWORD"]
         })
         assert response.status_code == 200
         data = response.json()
@@ -54,7 +54,7 @@ class TestPhase37gBackendHealth:
         """Test applicant login"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": "applicant@studienkolleg-aachen.de",
-            "password": "DevSeed@2026!"
+            "password": os.environ["TEST_DEFAULT_PASSWORD"]
         })
         assert response.status_code == 200
         data = response.json()
@@ -65,7 +65,7 @@ class TestPhase37gBackendHealth:
         """Test invalid login is rejected"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": "invalid@example.com",
-            "password": "wrongpassword"
+            "password": os.environ["TEST_INVALID_PASSWORD"]
         })
         assert response.status_code == 401
         print("✓ Invalid login rejected with 401")
@@ -80,7 +80,7 @@ class TestPhase37gAuthenticatedEndpoints:
         session = requests.Session()
         response = session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
         assert response.status_code == 200
         return session
@@ -91,7 +91,7 @@ class TestPhase37gAuthenticatedEndpoints:
         session = requests.Session()
         response = session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "staff@studienkolleg-aachen.de",
-            "password": "DevSeed@2026!"
+            "password": os.environ["TEST_DEFAULT_PASSWORD"]
         })
         assert response.status_code == 200
         return session
@@ -102,7 +102,7 @@ class TestPhase37gAuthenticatedEndpoints:
         session = requests.Session()
         response = session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "applicant@studienkolleg-aachen.de",
-            "password": "DevSeed@2026!"
+            "password": os.environ["TEST_DEFAULT_PASSWORD"]
         })
         assert response.status_code == 200
         return session

@@ -10,13 +10,13 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
 ADMIN_EMAIL = "admin@studienkolleg-aachen.de"
-ADMIN_PASSWORD = "Admin@2026!"
+ADMIN_PASSWORD = os.environ["TEST_ADMIN_PASSWORD"]
 STAFF_EMAIL = "staff@studienkolleg-aachen.de"
-STAFF_PASSWORD = "DevSeed@2026!"
+STAFF_PASSWORD = os.environ["TEST_DEFAULT_PASSWORD"]
 TEACHER_EMAIL = "teacher@studienkolleg-aachen.de"
-TEACHER_PASSWORD = "DevSeed@2026!"
+TEACHER_PASSWORD = os.environ["TEST_DEFAULT_PASSWORD"]
 APPLICANT_EMAIL = "applicant@studienkolleg-aachen.de"
-APPLICANT_PASSWORD = "DevSeed@2026!"
+APPLICANT_PASSWORD = os.environ["TEST_DEFAULT_PASSWORD"]
 
 # Test application ID from context
 TEST_APP_ID = "69c8b7f98fed65b8d953ffb0"

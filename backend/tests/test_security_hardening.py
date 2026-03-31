@@ -11,7 +11,7 @@ import uuid
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
 
 ADMIN_EMAIL = "admin@studienkolleg-aachen.de"
-ADMIN_PASS = "Admin@2026!"
+ADMIN_PASS = os.environ["TEST_ADMIN_PASSWORD"]
 
 UID = uuid.uuid4().hex[:8]
 TEST_APPLICANT_EMAIL = f"TEST_applicant_{UID}@example.com"
@@ -81,7 +81,7 @@ class TestAuthFlows:
         email = f"TEST_reg_{uuid.uuid4().hex[:6]}@example.com"
         r = session.post(f"{BASE_URL}/api/auth/register", json={
             "email": email,
-            "password": "Register@2026!",
+            "password": os.environ["TEST_REGISTER_PASSWORD"],
             "full_name": "Reg Test"
         })
         assert r.status_code == 200
@@ -119,12 +119,12 @@ class TestAuthFlows:
         brute_email = f"TEST_brute_{uuid.uuid4().hex[:6]}@example.com"
         for i in range(5):
             r = session.post(f"{BASE_URL}/api/auth/login", json={
-                "email": brute_email, "password": "WrongPass1!"
+                "email": brute_email, "password": os.environ["TEST_INVALID_PASSWORD"]
             })
             assert r.status_code == 401, f"Attempt {i+1} should be 401"
         # 6th attempt
         r = session.post(f"{BASE_URL}/api/auth/login", json={
-            "email": brute_email, "password": "WrongPass1!"
+            "email": brute_email, "password": os.environ["TEST_INVALID_PASSWORD"]
         })
         assert r.status_code == 429, f"6th attempt should be 429, got {r.status_code}: {r.text}"
         print(f"PASS: brute force lockout after 5 attempts → 429")
@@ -147,7 +147,7 @@ class TestAuthFlows:
         # Step 2: Register with same email → should claim (200) not 409
         r2 = session.post(f"{BASE_URL}/api/auth/register", json={
             "email": lead_email,
-            "password": "LeadClaim@2026!",
+            "password": os.environ["TEST_LEAD_CLAIM_PASSWORD"],
             "full_name": "Lead Claimer"
         })
         assert r2.status_code == 200, f"Lead claiming returned {r2.status_code}: {r2.text}"

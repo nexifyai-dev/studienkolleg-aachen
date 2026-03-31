@@ -26,7 +26,7 @@ def staff_session(session):
     """Staff authenticated session"""
     resp = session.post(f"{BASE_URL}/api/auth/login", json={
         "email": "staff@studienkolleg-aachen.de",
-        "password": "DevSeed@2026!"
+        "password": os.environ["TEST_DEFAULT_PASSWORD"]
     })
     assert resp.status_code == 200, f"Staff login failed: {resp.text}"
     # Copy cookies to a new session
@@ -41,7 +41,7 @@ def applicant_session(session):
     """Applicant authenticated session"""
     resp = session.post(f"{BASE_URL}/api/auth/login", json={
         "email": "applicant@studienkolleg-aachen.de",
-        "password": "DevSeed@2026!"
+        "password": os.environ["TEST_DEFAULT_PASSWORD"]
     })
     assert resp.status_code == 200, f"Applicant login failed: {resp.text}"
     applicant = requests.Session()
@@ -81,7 +81,7 @@ class TestLeadsIngestWithPassword:
             "language_level": "B1",
             "degree_country": "Germany",
             "source": "website_form",
-            "password": "TestPass123!"  # Password provided
+            "password": os.environ["TEST_REGISTER_PASSWORD"]  # Password provided
         }
         resp = session.post(f"{BASE_URL}/api/leads/ingest", json=payload)
         assert resp.status_code == 200, f"Ingest failed: {resp.text}"
@@ -364,7 +364,7 @@ class TestAuthCookiesOnIngest:
             "language_level": "B1",
             "degree_country": "Germany",
             "source": "website_form",
-            "password": "PortalTest123!"
+            "password": os.environ["TEST_PORTAL_PASSWORD"]
         }
         
         # Ingest with password

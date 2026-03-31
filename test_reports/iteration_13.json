@@ -41,10 +41,10 @@
     "frontend": "100% (all UI tests passed)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
-    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
-    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+    "admin": "admin@studienkolleg-aachen.de / ${TEST_ADMIN_PASSWORD}",
+    "staff": "staff@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}",
+    "teacher": "teacher@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}",
+    "applicant": "applicant@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}"
   },
   "seed_data_creation": "Test followups created: TEST_Phase37j: Dokumente nachfragen, TEST_Phase37j: Update test, TEST_Phase37j: Dismiss test. Test message attachments: test_phase37j.pdf, download_test.pdf, staff_test.pdf. Test leads: test_phase37j_*, test_nopass_*, test_portal_access_*",
   "retest_needed": false,

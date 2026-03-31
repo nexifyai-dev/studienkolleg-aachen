@@ -14,11 +14,11 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
 STAFF_EMAIL = "staff@studienkolleg-aachen.de"
-STAFF_PASSWORD = "DevSeed@2026!"
+STAFF_PASSWORD = os.environ["TEST_DEFAULT_PASSWORD"]
 APPLICANT_EMAIL = "applicant@studienkolleg-aachen.de"
-APPLICANT_PASSWORD = "DevSeed@2026!"
+APPLICANT_PASSWORD = os.environ["TEST_DEFAULT_PASSWORD"]
 ADMIN_EMAIL = "admin@studienkolleg-aachen.de"
-ADMIN_PASSWORD = "Admin@2026!"
+ADMIN_PASSWORD = os.environ["TEST_ADMIN_PASSWORD"]
 
 
 class TestHealthAndAuth:

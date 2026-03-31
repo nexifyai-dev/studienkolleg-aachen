@@ -10,11 +10,11 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/') or "https://a
 
 # Test credentials
 CREDENTIALS = {
-    "staff": {"email": "staff@studienkolleg-aachen.de", "password": "DevSeed@2026!"},
-    "applicant": {"email": "applicant@studienkolleg-aachen.de", "password": "DevSeed@2026!"},
-    "partner": {"email": "partner@studienkolleg-aachen.de", "password": "DevSeed@2026!"},
-    "admin": {"email": "admin@studienkolleg-aachen.de", "password": "Admin@2026!"},
-    "teacher": {"email": "teacher@studienkolleg-aachen.de", "password": "DevSeed@2026!"},
+    "staff": {"email": "staff@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]},
+    "applicant": {"email": "applicant@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]},
+    "partner": {"email": "partner@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]},
+    "admin": {"email": "admin@studienkolleg-aachen.de", "password": os.environ["TEST_ADMIN_PASSWORD"]},
+    "teacher": {"email": "teacher@studienkolleg-aachen.de", "password": os.environ["TEST_DEFAULT_PASSWORD"]},
 }
 
 
@@ -104,7 +104,7 @@ class TestLoginAllRoles:
         """Invalid credentials are rejected"""
         response = api_session.post(f"{BASE_URL}/api/auth/login", json={
             "email": "invalid@test.com",
-            "password": "wrongpassword"
+            "password": os.environ["TEST_INVALID_PASSWORD"]
         })
         assert response.status_code == 401
         print("✓ Invalid login correctly rejected")

@@ -33,10 +33,10 @@
     "No [OFFEN] warnings on /portal/financials - shows 'Zahlungsmodul in Vorbereitung' message",
     "Cookie Banner is fully bilingual DE/EN (switches with i18n)",
     "Manage Mode is fully bilingual DE/EN",
-    "Admin login works (admin@studienkolleg-aachen.de / Admin@2026!) - redirects to /staff",
-    "Staff login works (staff@studienkolleg-aachen.de / DevSeed@2026!) - redirects to /staff",
-    "Teacher login works (teacher@studienkolleg-aachen.de / DevSeed@2026!) - redirects to /staff",
-    "Applicant login works (applicant@studienkolleg-aachen.de / DevSeed@2026!) - redirects to /portal",
+    "Admin login works (admin@studienkolleg-aachen.de / ${TEST_ADMIN_PASSWORD}) - redirects to /staff",
+    "Staff login works (staff@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}) - redirects to /staff",
+    "Teacher login works (teacher@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}) - redirects to /staff",
+    "Applicant login works (applicant@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}) - redirects to /portal",
     "Notification Bell visible in Staff Layout (top-right corner)",
     "Notification Bell visible in Applicant Layout (top-right corner)",
     "Mobile Header (390px): Logo, DE/EN switcher, Burger menu all visible and correctly spaced",
@@ -52,10 +52,10 @@
     "frontend": "100% (all UI tests passed)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
-    "staff": "staff@studienkolleg-aachen.de / DevSeed@2026!",
-    "teacher": "teacher@studienkolleg-aachen.de / DevSeed@2026!",
-    "applicant": "applicant@studienkolleg-aachen.de / DevSeed@2026!"
+    "admin": "admin@studienkolleg-aachen.de / ${TEST_ADMIN_PASSWORD}",
+    "staff": "staff@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}",
+    "teacher": "teacher@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}",
+    "applicant": "applicant@studienkolleg-aachen.de / ${TEST_DEFAULT_PASSWORD}"
   },
   "seed_data_creation": "4 accounts seeded via seed.py",
   "retest_needed": false,

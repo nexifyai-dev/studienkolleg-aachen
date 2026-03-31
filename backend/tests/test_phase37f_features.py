@@ -13,10 +13,10 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials from test_credentials.md
 CREDENTIALS = {
-    'admin': {'email': 'admin@studienkolleg-aachen.de', 'password': 'Admin@2026!', 'expected_role': 'superadmin'},
-    'staff': {'email': 'staff@studienkolleg-aachen.de', 'password': 'DevSeed@2026!', 'expected_role': 'staff'},
-    'teacher': {'email': 'teacher@studienkolleg-aachen.de', 'password': 'DevSeed@2026!', 'expected_role': 'teacher'},
-    'applicant': {'email': 'applicant@studienkolleg-aachen.de', 'password': 'DevSeed@2026!', 'expected_role': 'applicant'},
+    'admin': {'email': 'admin@studienkolleg-aachen.de', 'password': os.environ['TEST_ADMIN_PASSWORD'], 'expected_role': 'superadmin'},
+    'staff': {'email': 'staff@studienkolleg-aachen.de', 'password': os.environ['TEST_DEFAULT_PASSWORD'], 'expected_role': 'staff'},
+    'teacher': {'email': 'teacher@studienkolleg-aachen.de', 'password': os.environ['TEST_DEFAULT_PASSWORD'], 'expected_role': 'teacher'},
+    'applicant': {'email': 'applicant@studienkolleg-aachen.de', 'password': os.environ['TEST_DEFAULT_PASSWORD'], 'expected_role': 'applicant'},
 }
 
 
@@ -93,7 +93,7 @@ class TestAuthLogins:
         session = requests.Session()
         response = session.post(
             f"{BASE_URL}/api/auth/login",
-            json={'email': 'invalid@test.com', 'password': 'wrongpassword'}
+            json={'email': 'invalid@test.com', 'password': os.environ['TEST_INVALID_PASSWORD']}
         )
         assert response.status_code == 401, f"Expected 401, got {response.status_code}"
         print("✓ Invalid login correctly rejected with 401")

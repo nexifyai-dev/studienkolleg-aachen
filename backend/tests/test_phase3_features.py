@@ -27,7 +27,7 @@ def admin_session(session):
     """Authenticate as admin and return session with cookies."""
     resp = session.post(f"{BASE_URL}/api/auth/login", json={
         "email": "admin@studienkolleg-aachen.de",
-        "password": "Admin@2026!"
+        "password": os.environ["TEST_ADMIN_PASSWORD"]
     })
     if resp.status_code != 200:
         pytest.skip(f"Admin login failed: {resp.status_code} {resp.text}")
@@ -397,7 +397,7 @@ class TestApplicationNewFields:
         admin_s.headers.update({"Content-Type": "application/json"})
         login_resp = admin_s.post(f"{BASE_URL}/api/auth/login", json={
             "email": "admin@studienkolleg-aachen.de",
-            "password": "Admin@2026!"
+            "password": os.environ["TEST_ADMIN_PASSWORD"]
         })
         if login_resp.status_code == 200:
             app_resp = admin_s.get(f"{BASE_URL}/api/applications/{app_id}")

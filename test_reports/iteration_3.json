@@ -36,7 +36,7 @@
     "frontend": "96% (23/24 checks passed)"
   },
   "test_credentials": {
-    "admin": "admin@studienkolleg-aachen.de / Admin@2026!",
+    "admin": "admin@studienkolleg-aachen.de / ${TEST_ADMIN_PASSWORD}",
     "applicant": "TEST_portal_ui@example.com / Portal@2026!"
   },
   "seed_data_creation": "None in this iteration",

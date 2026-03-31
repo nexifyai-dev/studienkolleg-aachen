@@ -15,7 +15,7 @@ import uuid
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 ADMIN_EMAIL = "admin@studienkolleg-aachen.de"
-ADMIN_PASSWORD = "Admin@2026!"
+ADMIN_PASSWORD = os.environ["TEST_ADMIN_PASSWORD"]
 
 
 # ─── Fixtures ─────────────────────────────────────────────────────────────────

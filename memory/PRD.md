@@ -93,11 +93,11 @@
 
 | Rolle      | E-Mail                                | Passwort        |
 |------------|---------------------------------------|-----------------|
-| superadmin | admin@studienkolleg-aachen.de         | Admin@2026!     |
-| staff      | staff@studienkolleg-aachen.de         | DevSeed@2026!   |
-| teacher    | teacher@studienkolleg-aachen.de       | DevSeed@2026!   |
-| applicant  | applicant@studienkolleg-aachen.de     | DevSeed@2026!   |
-| affiliate  | partner@studienkolleg-aachen.de       | DevSeed@2026!   |
+| superadmin | admin@studienkolleg-aachen.de         | ${TEST_ADMIN_PASSWORD}     |
+| staff      | staff@studienkolleg-aachen.de         | ${TEST_DEFAULT_PASSWORD}   |
+| teacher    | teacher@studienkolleg-aachen.de       | ${TEST_DEFAULT_PASSWORD}   |
+| applicant  | applicant@studienkolleg-aachen.de     | ${TEST_DEFAULT_PASSWORD}   |
+| affiliate  | partner@studienkolleg-aachen.de       | ${TEST_DEFAULT_PASSWORD}   |
 
 ---
 

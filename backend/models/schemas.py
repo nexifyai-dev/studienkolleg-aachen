@@ -1,7 +1,7 @@
 """
 Shared Pydantic schemas and helper utilities.
 """
-from typing import Optional, List
+from typing import Optional, List, Literal
 from pydantic import BaseModel
 
 
@@ -94,6 +94,7 @@ class LeadDocumentUpload(BaseModel):
 
 
 class LeadIngest(BaseModel):
+    intake_type: Literal["structured_application", "contact_form", "email_inquiry"] = "structured_application"
     # Personal data
     full_name: str
     first_name: Optional[str] = None

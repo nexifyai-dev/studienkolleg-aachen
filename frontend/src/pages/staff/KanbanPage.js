@@ -76,6 +76,9 @@ function KanbanCard({ app, latestScreening, onMove, nextStage }) {
       {app.degree_country && (
         <p className="text-slate-400 text-xs">{app.degree_country}</p>
       )}
+      {app.intake_type && (
+        <p className="text-slate-400 text-xs mt-1">Intake: {app.intake_type}</p>
+      )}
 
       {/* AI Screening Badges */}
       <AIBadge screening={latestScreening} />
@@ -113,6 +116,7 @@ function ArchivedSection({ apps }) {
                   <th className="text-left pb-2 pr-4">Bewerber</th>
                   <th className="text-left pb-2 pr-4">Status</th>
                   <th className="text-left pb-2 pr-4">Kurs</th>
+                  <th className="text-left pb-2 pr-4">Intake</th>
                   <th className="text-left pb-2 pr-4">Erstellt</th>
                   <th className="text-left pb-2">Aktion</th>
                 </tr>
@@ -133,6 +137,7 @@ function ArchivedSection({ apps }) {
                       </span>
                     </td>
                     <td className="py-2 pr-4 text-xs text-slate-500">{app.course_type || '–'}</td>
+                    <td className="py-2 pr-4 text-xs text-slate-500">{app.intake_type || 'structured_application'}</td>
                     <td className="py-2 pr-4 text-xs text-slate-400">
                       {app.created_at ? new Date(app.created_at).toLocaleDateString('de-DE') : '–'}
                     </td>

@@ -24,6 +24,7 @@ from services.email import (
     send_document_requested,
     send_status_changed,
     send_teacher_assigned,
+    send_intake_followup,
 )
 from services.notifications import (
     notify_staff_new_application,
@@ -34,6 +35,11 @@ from services.notifications import (
 )
 
 logger = logging.getLogger(__name__)
+INTAKE_LABELS = {
+    "structured_application": {"de": "Strukturierte Bewerbung", "en": "Structured Application"},
+    "contact_form": {"de": "Kontaktformular", "en": "Contact Form"},
+    "email_inquiry": {"de": "E-Mail-Anfrage", "en": "Email Inquiry"},
+}
 
 REQUIRED_DOCUMENT_LABELS_DE = {
     "language_certificate": "Deutsches Sprachzertifikat",
@@ -63,6 +69,7 @@ async def trigger_application_received(
     applicant_name: str,
     applicant_id: str = "",
     course_type: Optional[str] = None,
+    intake_type: str = "structured_application",
 ):
     """
     Ausloeser: Neue Bewerbung/Lead eingegangen.
@@ -72,16 +79,43 @@ async def trigger_application_received(
     """
     try:
         lang = await _get_user_lang(applicant_id) if applicant_id else "de"
-        send_application_received(applicant_email, applicant_name, application_id, lang=lang)
+        send_application_received(applicant_email, applicant_name, application_id, lang=lang, intake_type=intake_type)
+        send_intake_followup(applicant_email, applicant_name, intake_type=intake_type, lang=lang)
+        intake_label = INTAKE_LABELS.get(intake_type, INTAKE_LABELS["structured_application"])
         if applicant_id:
-            await notify_staff_new_application(applicant_name, application_id, triggered_by=applicant_id)
+            await notify_staff_new_application(
+                applicant_name,
+                application_id,
+                triggered_by=applicant_id,
+                intake_type=intake_type,
+            )
         await write_audit_log(
             "automation_application_received",
             "system",
             "application",
             application_id,
-            {"email": applicant_email, "course": course_type, "lang": lang},
+            {"email": applicant_email, "course": course_type, "lang": lang, "intake_type": intake_type},
         )
+        db = get_db()
+        task_title = (
+            f"Intake Follow-up: {intake_label['en']}"
+            if lang == "en" else f"Intake-Nachverfolgung: {intake_label['de']}"
+        )
+        task_description = (
+            f"Review incoming case and continue with intake-specific next steps ({intake_label['en']})."
+            if lang == "en" else f"Eingang prüfen und intake-spezifische nächste Schritte starten ({intake_label['de']})."
+        )
+        await db.tasks.insert_one({
+            "title": task_title,
+            "description": task_description,
+            "application_id": application_id,
+            "status": "open",
+            "priority": "normal",
+            "visibility": "internal",
+            "created_by": "system",
+            "created_at": datetime.now(timezone.utc),
+            "intake_type": intake_type,
+        })
         logger.info(f"[AUTOMATION] application_received: {application_id} lang={lang}")
     except Exception as e:
         logger.error(f"[AUTOMATION] trigger_application_received failed: {e}")
@@ -93,6 +127,7 @@ async def trigger_missing_documents(
     applicant_name: str,
     missing_doc_types: list,
     applicant_id: str = "",
+    intake_type: str = "structured_application",
 ):
     """
     Ausloeser: Pflichtdokumente fehlen.
@@ -114,7 +149,7 @@ async def trigger_missing_documents(
             "system",
             "application",
             application_id,
-            {"missing": missing_doc_types, "email": applicant_email, "lang": lang},
+            {"missing": missing_doc_types, "email": applicant_email, "lang": lang, "intake_type": intake_type},
         )
         logger.info(f"[AUTOMATION] docs_requested: {application_id}, missing: {missing_doc_types}")
     except Exception as e:

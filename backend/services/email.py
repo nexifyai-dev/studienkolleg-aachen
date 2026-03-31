@@ -141,7 +141,13 @@ def send_welcome(to: str, full_name: str, lang: str = "de") -> bool:
     return _send(to, subject, _wrap(content, lang))
 
 
-def send_application_received(to: str, full_name: str, application_id: str, lang: str = "de") -> bool:
+def send_application_received(
+    to: str,
+    full_name: str,
+    application_id: str,
+    lang: str = "de",
+    intake_type: str = "structured_application",
+) -> bool:
     name = full_name or ("Applicant" if lang == "en" else "Bewerber/in")
     ref = application_id[-6:].upper() if application_id else "------"
     app_url = _get_app_url()
@@ -149,7 +155,7 @@ def send_application_received(to: str, full_name: str, application_id: str, lang
     if lang == "en":
         subject = "Application Received – Studienkolleg Aachen"
         content = f"""<h3 style="color:#113655;margin-top:0;font-size:16px">Hello {name},</h3>
-        <p style="color:#475569;line-height:1.7;font-size:14px">We have received your application (Ref: <strong>#{ref}</strong>). Our team will review your documents and respond within 24 hours.</p>
+        <p style="color:#475569;line-height:1.7;font-size:14px">We have received your application (Ref: <strong>#{ref}</strong>). Intake: <strong>{intake_type}</strong>. Our team will review your documents and respond within 24 hours.</p>
         <p style="color:#475569;line-height:1.7;font-size:14px">You can check your application status at any time in your portal.</p>
         {_btn(f'{app_url}/portal', 'Go to Portal')}
         {_divider()}
@@ -157,12 +163,34 @@ def send_application_received(to: str, full_name: str, application_id: str, lang
     else:
         subject = "Bewerbung eingegangen – Studienkolleg Aachen"
         content = f"""<h3 style="color:#113655;margin-top:0;font-size:16px">Hallo {name},</h3>
-        <p style="color:#475569;line-height:1.7;font-size:14px">Deine Bewerbung ist bei uns eingegangen (Ref: <strong>#{ref}</strong>). Unser Team prüft deine Unterlagen und meldet sich innerhalb von 24 Stunden bei dir.</p>
+        <p style="color:#475569;line-height:1.7;font-size:14px">Deine Bewerbung ist bei uns eingegangen (Ref: <strong>#{ref}</strong>). Intake: <strong>{intake_type}</strong>. Unser Team prüft deine Unterlagen und meldet sich innerhalb von 24 Stunden bei dir.</p>
         <p style="color:#475569;line-height:1.7;font-size:14px">Du kannst deinen Bewerbungsstatus jederzeit in deinem Portal einsehen.</p>
         {_btn(f'{app_url}/portal', 'Zum Portal')}
         {_divider()}
         <p style="color:#64748b;font-size:13px">Bei Fragen erreichst du uns unter <a href="mailto:info@stk-aachen.de" style="color:#113655;text-decoration:none">info@stk-aachen.de</a>.</p>"""
 
+    return _send(to, subject, _wrap(content, lang))
+
+
+def send_intake_followup(to: str, full_name: str, intake_type: str, lang: str = "de") -> bool:
+    name = full_name or ("Applicant" if lang == "en" else "Bewerber/in")
+    app_url = _get_app_url()
+    labels = {
+        "structured_application": {"de": "Strukturierte Bewerbung", "en": "Structured Application"},
+        "contact_form": {"de": "Kontaktformular", "en": "Contact Form"},
+        "email_inquiry": {"de": "E-Mail-Anfrage", "en": "Email Inquiry"},
+    }
+    label = labels.get(intake_type, labels["structured_application"])
+    if lang == "en":
+        subject = f"Next Steps for {label['en']} – Studienkolleg Aachen"
+        content = f"""<h3 style="color:#113655;margin-top:0;font-size:16px">Hello {name},</h3>
+        <p style="color:#475569;line-height:1.7;font-size:14px">Thanks for your {label['en']}. We prepared intake-specific next steps in your portal.</p>
+        {_btn(f'{app_url}/portal/journey', 'Open Next Steps')}"""
+    else:
+        subject = f"Nächste Schritte für {label['de']} – Studienkolleg Aachen"
+        content = f"""<h3 style="color:#113655;margin-top:0;font-size:16px">Hallo {name},</h3>
+        <p style="color:#475569;line-height:1.7;font-size:14px">Danke für dein {label['de']}. Wir haben intake-spezifische nächste Schritte in deinem Portal vorbereitet.</p>
+        {_btn(f'{app_url}/portal/journey', 'Nächste Schritte öffnen')}"""
     return _send(to, subject, _wrap(content, lang))
 
 

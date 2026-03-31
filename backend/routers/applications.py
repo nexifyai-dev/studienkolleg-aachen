@@ -24,6 +24,7 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
     query = {}
     workspace_id = request.query_params.get("workspace_id")
     stage = request.query_params.get("stage")
+    intake_type = request.query_params.get("intake_type")
 
     if user["role"] == "applicant":
         # Applicants see only their own
@@ -43,6 +44,8 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
 
     if stage:
         query["current_stage"] = stage
+    if intake_type:
+        query["intake_type"] = intake_type
 
     apps = await db.applications.find(query).sort("last_activity_at", -1).to_list(500)
 
@@ -82,9 +85,14 @@ async def list_applications(request: Request, user: dict = Depends(get_current_u
             wid = app_dict.get("workspace_id")
             if wid and wid in ws_map:
                 app_dict["workspace_name"] = ws_map[wid]
+            app_dict["intake_type"] = app_dict.get("intake_type", "structured_application")
             result.append(app_dict)
     else:
-        result = [to_str_id(a) for a in apps]
+        result = []
+        for app in apps:
+            app_dict = to_str_id(app)
+            app_dict["intake_type"] = app_dict.get("intake_type", "structured_application")
+            result.append(app_dict)
     return result
 
 
@@ -110,6 +118,7 @@ async def create_application(data: ApplicationCreate, user: dict = Depends(get_c
         "created_at": datetime.now(timezone.utc),
         "last_activity_at": datetime.now(timezone.utc),
         "created_by": user["id"],
+        "intake_type": "structured_application",
     }
     result = await db.applications.insert_one(app_doc)
     app_id = str(result.inserted_id)
@@ -152,6 +161,7 @@ async def get_application(app_id: str, user: dict = Depends(get_current_user)):
                 app_dict["workspace_name"] = ws.get("name")
         except Exception:
             pass
+    app_dict["intake_type"] = app_dict.get("intake_type", "structured_application")
     return app_dict
 
 

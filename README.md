@@ -93,7 +93,21 @@ Aktueller Release-Rahmen und Artefakte:
 - [Changelog](CHANGELOG.md)
 - [Projekthistorie](docs/history/project-history.md)
 
-## 7) Dokumentations-Navigation (bidirektional)
+## 7) Wiki-Sync (verbindlich)
+
+Die GitHub-Wiki ist verbindlicher Bestandteil der Projektdokumentation:
+
+- **Wiki-Remote:** `https://github.com/nexifyai-dev/studienkolleg-aachen.wiki.git`
+- **Repo bleibt Primärbasis:** versioniert, reviewbar, auditierbar.
+- **Wiki ist sekundäre Spiegelung:** operative/navigierbare Außensicht.
+- **Sync-Pflicht:** Jede relevante Änderung aktualisiert in derselben PR Repo-Doku + `docs/wiki/` + GitHub-Wiki + `CHANGELOG.md` + `docs/history/project-history.md` + ggf. ADR.
+
+Details:
+
+- [Wiki-Sync-Policy](docs/governance/wiki-sync-policy.md)
+- [Lokale Wiki-Spiegelstruktur](docs/wiki/README.md)
+
+## 8) Dokumentations-Navigation (bidirektional)
 
 - Architektur ↔ Rollen/Flows ↔ AI-Screening ↔ QA/Release ↔ Governance sind gegenseitig verlinkt.
 - ADR-Entscheidungen sind zentral indiziert unter [docs/adr/README.md](docs/adr/README.md).
@@ -101,5 +115,5 @@ Aktueller Release-Rahmen und Artefakte:
 
 ## Dokumentverantwortung
 
-- **Owner:** Platform Architecture + Engineering Lead
-- **Update-Prozess:** Bei jeder PR mit Architektur-, Rollen-, Flow-, QA- oder Governance-Auswirkung muss README gegengeprüft und bei Bedarf aktualisiert werden.
+- **Owner:** Platform Architecture + Engineering Lead (mit Documentation Governance Lead als Wiki Sync Owner)
+- **Update-Prozess:** Bei jeder PR mit Architektur-, Rollen-, Flow-, QA-, Release- oder Governance-Auswirkung muss README gegengeprüft und bei Bedarf aktualisiert werden.

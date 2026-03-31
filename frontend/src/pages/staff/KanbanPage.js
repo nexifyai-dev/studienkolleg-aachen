@@ -2,19 +2,17 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
 import { STAGE_LABELS, STAGE_COLORS } from '../../lib/utils';
+import { WORKFLOW_STATUSES } from '../../constants/workflowStatus';
 import {
   RefreshCw, Brain, AlertTriangle, CheckCircle, FileX,
   Archive, Users, Filter, XCircle, ChevronDown, Search, CheckSquare
 } from 'lucide-react';
 
-// Kanban-Stages (aktive Pipeline)
-const PIPELINE_STAGES = [
-  'lead_new', 'in_review', 'pending_docs',
-  'interview_scheduled', 'conditional_offer', 'offer_sent', 'enrolled',
-];
+// Kanban-Stages (kanonischer Workflow)
+const PIPELINE_STAGES = WORKFLOW_STATUSES;
 
 // Abgeschlossene/Inaktive States – in separatem Archiv-Tab
-const ARCHIVED_STAGES = ['declined', 'on_hold', 'archived', 'dormant'];
+const ARCHIVED_STAGES = ['studienkolleg_enrollment_completed', 'alternative_path_advisory', 'vocational_training_recommended', 'declined', 'on_hold', 'archived', 'dormant'];
 
 // Anabin-Badge Farben
 const ANABIN_BADGE = {

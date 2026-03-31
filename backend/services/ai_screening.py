@@ -206,14 +206,14 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
 
 def _suggest_stage(local_summary: dict, formal_precheck: dict) -> str:
     if local_summary["formal_result"] == "documents_missing":
-        return "pending_docs"
+        return "documents_requested"
     if local_summary["formal_result"] in {"language_gap", "manual_review_required"}:
-        return "in_review"
+        return "school_degree_assessed"
     if formal_precheck["status"] == "critical":
-        return "on_hold"
+        return "alternative_path_advisory"
     if formal_precheck["status"] == "unclear":
-        return "in_review"
-    return "interview_scheduled"
+        return "school_degree_assessed"
+    return "language_course_recommended"
 
 
 def _suggest_next_actions(

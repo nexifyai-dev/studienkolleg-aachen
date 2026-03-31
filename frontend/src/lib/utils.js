@@ -14,6 +14,15 @@ export function formatCurrency(amount, currency = 'EUR') {
 }
 
 export const STAGE_LABELS = {
+  information_request: 'Informationsanfrage',
+  documents_requested: 'Dokumente angefordert',
+  school_degree_assessed: 'Schulabschluss bewertet',
+  language_course_recommended: 'Sprachkurs empfohlen',
+  language_course_booked: 'Sprachkurs gebucht',
+  studienkolleg_seat_reserved: 'Studienkolleg-Platz reserviert',
+  studienkolleg_enrollment_completed: 'Studienkolleg-Einschreibung abgeschlossen',
+  alternative_path_advisory: 'Alternativpfad-Beratung',
+  vocational_training_recommended: 'Berufsausbildung empfohlen',
   lead_new: 'Neue Anfrage',
   contacted: 'Kontaktiert',
   in_review: 'In Bearbeitung',
@@ -36,6 +45,15 @@ export const STAGE_LABELS = {
 };
 
 export const STAGE_COLORS = {
+  information_request: 'bg-primary/10 text-primary',
+  documents_requested: 'bg-amber-100 text-amber-700',
+  school_degree_assessed: 'bg-primary/10 text-primary',
+  language_course_recommended: 'bg-primary/10 text-primary',
+  language_course_booked: 'bg-primary/10 text-primary',
+  studienkolleg_seat_reserved: 'bg-primary/10 text-primary',
+  studienkolleg_enrollment_completed: 'bg-emerald-100 text-emerald-700',
+  alternative_path_advisory: 'bg-slate-100 text-slate-600',
+  vocational_training_recommended: 'bg-slate-100 text-slate-600',
   lead_new: 'bg-primary/10 text-primary',
   contacted: 'bg-primary/10 text-primary',
   in_review: 'bg-primary/10 text-primary',

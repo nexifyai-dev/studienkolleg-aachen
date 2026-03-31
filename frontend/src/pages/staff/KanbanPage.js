@@ -6,6 +6,7 @@ import {
   RefreshCw, Brain, AlertTriangle, CheckCircle, FileX,
   Archive, Users, Filter, XCircle, ChevronDown, Search, CheckSquare
 } from 'lucide-react';
+import { handleApiError } from '../../lib/errorHandling';
 
 // Kanban-Stages (aktive Pipeline)
 const PIPELINE_STAGES = [
@@ -186,12 +187,18 @@ export default function KanbanPage() {
           try {
             const sr = await apiClient.get(`/api/applications/${app.id}/ai-screenings`, { withCredentials: true });
             if (sr.data?.length) screeningMap[app.id] = sr.data[0];
-          } catch {}
+          } catch (error) {
+            handleApiError(error, { context: `staff.kanban.loadScreening.${app.id}`, suppressToast: true });
+          }
         })
       );
       setScreenings(screeningMap);
-    } catch {}
-    finally { setLoading(false); }
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.kanban.load',
+        toastMessage: 'Kanban-Daten konnten nicht geladen werden',
+      });
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -200,7 +207,12 @@ export default function KanbanPage() {
     try {
       await apiClient.put(`/api/applications/${appId}`, { current_stage: newStage }, { withCredentials: true });
       setApplications(prev => prev.map(a => a.id === appId ? { ...a, current_stage: newStage } : a));
-    } catch {}
+    } catch (error) {
+      handleApiError(error, {
+        context: 'staff.kanban.moveApplication',
+        toastMessage: `Statuswechsel zu ${STAGE_LABELS[newStage] || newStage} fehlgeschlagen`,
+      });
+    }
   };
 
   const clearStageFilter = () => {

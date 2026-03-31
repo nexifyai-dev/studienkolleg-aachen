@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: markdown-credential-scan
+        name: markdown-credential-scan
+        entry: python3 scripts/check_markdown_credentials.py
+        language: system
+        pass_filenames: false
+        files: \.md$

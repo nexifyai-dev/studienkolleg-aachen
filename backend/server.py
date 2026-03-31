@@ -21,7 +21,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config import FRONTEND_URL, APP_URL
+from config import FRONTEND_URL, APP_URL, LEGACY_EMERGENT_LLM_KEY
 from database import connect, disconnect
 from seed import seed_workspaces, seed_admin
 
@@ -105,6 +105,10 @@ async def startup():
     await connect()
     await seed_workspaces()
     await seed_admin()
+
+    if LEGACY_EMERGENT_LLM_KEY:
+        logger.warning("[CONFIG] Legacy env var EMERGENT_LLM_KEY is set. It is ignored for production AI; use DEEPSEEK_API_KEY only.")
+
     logger.info("W2G Platform API v1.1.0 started successfully")
 
 

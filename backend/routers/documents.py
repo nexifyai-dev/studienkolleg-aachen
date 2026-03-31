@@ -19,7 +19,7 @@ from models.schemas import DocumentStatusUpdate, to_str_id
 from services.audit import write_audit_log
 from services.storage import (
     storage, build_storage_key, sanitize_filename,
-    validate_upload, ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES
+    preflight_validate_upload, derive_document_status
 )
 
 router = APIRouter(prefix="/api", tags=["documents"])
@@ -63,19 +63,18 @@ async def upload_document(app_id: str, request: Request, user: dict = Depends(ge
     file_data_b64 = body.get("file_data")  # base64-encoded binary (optional in MVP)
 
     file_bytes = None
+    technical_validation = None
     if file_data_b64:
         try:
             file_bytes = base64.b64decode(file_data_b64)
         except Exception:
             raise HTTPException(status_code=400, detail="Ungültige Datei-Kodierung (erwartet Base64)")
-        try:
-            validate_upload(filename, len(file_bytes), content_type)
-        except ValueError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        technical_validation = preflight_validate_upload(filename, content_type, file_bytes)
 
     storage_key = build_storage_key(app_id, doc_type, filename)
+    status = derive_document_status(bool(file_bytes), technical_validation)
 
-    if file_bytes:
+    if file_bytes and status == "uploaded":
         await storage().upload(storage_key, file_bytes, content_type)
 
     doc = {
@@ -84,12 +83,13 @@ async def upload_document(app_id: str, request: Request, user: dict = Depends(ge
         "filename": filename,
         "content_type": content_type,
         "file_size": len(file_bytes) if file_bytes else None,
-        "status": "uploaded",
+        "status": status,
         "uploaded_by": user["id"],
         "uploaded_at": datetime.now(timezone.utc),
         "visibility": "private",
-        "storage_key": storage_key,  # internal only – never returned to client
+        "storage_key": storage_key if status == "uploaded" else None,  # internal only – never returned to client
         "has_binary": bool(file_bytes),
+        "technical_validation": technical_validation,
     }
     result = await db.documents.insert_one(doc)
     doc_id = str(result.inserted_id)
@@ -119,8 +119,9 @@ async def upload_document(app_id: str, request: Request, user: dict = Depends(ge
     return {
         "id": doc_id, "application_id": app_id,
         "document_type": doc_type, "filename": filename,
-        "status": "uploaded", "uploaded_at": doc["uploaded_at"].isoformat(),
+        "status": status, "uploaded_at": doc["uploaded_at"].isoformat(),
         "has_binary": doc["has_binary"],
+        "technical_validation": technical_validation,
     }
 
 

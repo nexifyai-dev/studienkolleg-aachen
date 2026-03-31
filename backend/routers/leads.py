@@ -15,7 +15,10 @@ from database import get_db
 from config import JWT_SECRET, JWT_ALGORITHM, ACCESS_TOKEN_TTL_MINUTES, REFRESH_TOKEN_TTL_DAYS, COOKIE_SECURE, COOKIE_SAMESITE
 from models.schemas import LeadIngest, to_str_id
 from services.audit import write_audit_log
-from services.storage import storage, build_storage_key, sanitize_filename, validate_upload
+from services.storage import (
+    storage, build_storage_key, sanitize_filename,
+    preflight_validate_upload, derive_document_status,
+)
 from services.automation import trigger_application_received, trigger_missing_documents
 from services.ai_screening import REQUIRED_DOCUMENT_TYPES
 
@@ -138,14 +141,20 @@ async def ingest_lead(data: LeadIngest):
             for doc_upload in data.documents:
                 try:
                     file_bytes = None
+                    technical_validation = None
+                    filename = sanitize_filename(doc_upload.filename or doc_upload.document_type)
                     if doc_upload.file_data:
                         file_bytes = base64.b64decode(doc_upload.file_data)
-                        validate_upload(doc_upload.filename, len(file_bytes), doc_upload.content_type)
+                        technical_validation = preflight_validate_upload(
+                            filename,
+                            doc_upload.content_type,
+                            file_bytes,
+                        )
 
-                    filename = sanitize_filename(doc_upload.filename or doc_upload.document_type)
                     storage_key = build_storage_key(application_id, doc_upload.document_type, filename)
+                    status = derive_document_status(bool(file_bytes), technical_validation)
 
-                    if file_bytes:
+                    if file_bytes and status == "uploaded":
                         await storage().upload(storage_key, file_bytes, doc_upload.content_type)
 
                     doc = {
@@ -154,20 +163,26 @@ async def ingest_lead(data: LeadIngest):
                         "filename": filename,
                         "content_type": doc_upload.content_type,
                         "file_size": len(file_bytes) if file_bytes else None,
-                        "status": "uploaded",
+                        "status": status,
                         "uploaded_by": user_id,
                         "uploaded_at": datetime.now(timezone.utc),
                         "visibility": "private",
-                        "storage_key": storage_key,
+                        "storage_key": storage_key if status == "uploaded" else None,
                         "has_binary": bool(file_bytes),
+                        "technical_validation": technical_validation,
                     }
                     doc_result = await db.documents.insert_one(doc)
                     doc_id = str(doc_result.inserted_id)
                     await write_audit_log(
                         "document_uploaded", user_id, "document", doc_id,
-                        {"doc_type": doc_upload.document_type, "source": "lead_form"}
+                        {
+                            "doc_type": doc_upload.document_type,
+                            "source": "lead_form",
+                            "status": status,
+                        }
                     )
-                    uploaded_doc_types.append(doc_upload.document_type)
+                    if status == "uploaded":
+                        uploaded_doc_types.append(doc_upload.document_type)
                 except Exception as e:
                     logger.warning(f"[LEADS] Doc upload failed for {doc_upload.document_type}: {e}")
 

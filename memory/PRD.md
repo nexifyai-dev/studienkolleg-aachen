@@ -89,15 +89,21 @@
 
 ---
 
-## Zugangsdaten
+## Zugriff & Testkonten (sanitized)
 
-| Rolle      | E-Mail                                | Passwort        |
-|------------|---------------------------------------|-----------------|
-| superadmin | admin@studienkolleg-aachen.de         | Admin@2026!     |
-| staff      | staff@studienkolleg-aachen.de         | DevSeed@2026!   |
-| teacher    | teacher@studienkolleg-aachen.de       | DevSeed@2026!   |
-| applicant  | applicant@studienkolleg-aachen.de     | DevSeed@2026!   |
-| affiliate  | partner@studienkolleg-aachen.de       | DevSeed@2026!   |
+> **Wichtig:** Keine produktiven oder seed-basierten Passwörter im Repository dokumentieren.
+> Alle Zugangsdaten liegen ausschließlich im internen Secret-Management (Vault/Password Manager).
+
+| Rolle      | Benutzerkennung (Beispiel)       | Passwortquelle |
+|------------|----------------------------------|----------------|
+| superadmin | `<superadmin_login_identifier>`  | Vault-Eintrag  |
+| staff      | `<staff_login_identifier>`       | Vault-Eintrag  |
+| teacher    | `<teacher_login_identifier>`     | Vault-Eintrag  |
+| applicant  | `<applicant_login_identifier>`   | Vault-Eintrag  |
+| affiliate  | `<affiliate_login_identifier>`   | Vault-Eintrag  |
+
+**Nicht-versionierte Betriebsdoku:** internes Runbook im geschützten System unter  
+`Security Operations / Runbooks / Credential Access (W2G Platform)`
 
 ---
 

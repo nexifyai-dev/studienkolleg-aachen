@@ -1,0 +1,38 @@
+name: Release Go-Live Gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "release/golive_checklist.yaml"
+      - "scripts/check_golive_gate.py"
+      - ".github/workflows/release-golive-gate.yml"
+
+jobs:
+  go-live-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install gate dependencies
+        run: pip install pyyaml
+
+      - name: Enforce go-live gate
+        run: python scripts/check_golive_gate.py --file release/golive_checklist.yaml --check go-live
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: go-live-gate
+    if: ${{ needs.go-live-gate.result == 'success' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Deployment unlocked by Go-Live-Gate
+        run: echo "All mandatory criteria passed. Run production deployment here."

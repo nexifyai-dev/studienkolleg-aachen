@@ -1,5 +1,8 @@
 ## Go-Live Blocker – W2G Platform
 
+> Hinweis (30. März 2026): Die maschinenlesbare Fassung für das Release-Gate liegt in `release/golive_checklist.yaml`.
+> Änderungen am Go/No-Go-Status nur dort pflegen; diese Datei bleibt als Kontext-/Lesefassung bestehen.
+
 Stand: 29. März 2026
 Status: Foundation live, NICHT produktionsreif ohne Auflösung der Blocker unten.
 

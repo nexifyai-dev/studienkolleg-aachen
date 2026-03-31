@@ -1,0 +1,190 @@
+{
+  "matrix_id": "screening_rule_matrix",
+  "matrix_semver": "1.0.0",
+  "active_version": "1.0.0",
+  "deprecated_versions": [
+    "0.9.0"
+  ],
+  "versioned_rule_sets": {
+    "1.0.0": {
+      "label": "Default rule set for formal precheck",
+      "source": {
+        "pflichtenheft": "PH-SCREENING-2026-03",
+        "drive_document_id": "1SkA_rulebook_screening_local_v1"
+      },
+      "course_rule_matrix": {
+        "M-Course": {
+          "language_min": "B1",
+          "required_docs": ["language_certificate", "highschool_diploma", "passport"]
+        },
+        "T-Course": {
+          "language_min": "B1",
+          "required_docs": ["language_certificate", "highschool_diploma", "passport"]
+        },
+        "W-Course": {
+          "language_min": "B1",
+          "required_docs": ["language_certificate", "highschool_diploma", "passport"]
+        },
+        "M/T-Course": {
+          "language_min": "B1",
+          "required_docs": ["language_certificate", "highschool_diploma", "passport"]
+        },
+        "Language Course": {
+          "language_min": "A1",
+          "required_docs": ["passport"]
+        }
+      },
+      "anabin_country_hints": {
+        "h_plus": ["deutschland", "österreich", "schweiz", "usa", "kanada", "australien", "großbritannien", "frankreich", "niederlande", "belgien", "schweden", "norwegen", "dänemark", "finnland", "japan", "südkorea", "neuseeland", "united states", "canada", "united kingdom", "france", "netherlands", "austria", "switzerland", "sweden", "norway", "denmark", "finland", "south korea", "australia", "new zealand"],
+        "h": ["china", "indien", "brasilien", "türkei", "russland", "ukraine", "ägypten", "marokko", "tunesien", "iran", "vietnam", "thailand", "mexico", "argentinien", "kolumbien", "chile", "indonesia", "malaysia", "india", "brazil", "turkey", "russia", "egypt", "morocco", "tunisia", "argentina", "colombia"],
+        "d": ["afghanistan", "irak", "syrien", "libyen", "somalia", "jemen", "eritrea", "äthiopien", "nigeria", "ghana", "kamerun", "senegal", "mali", "niger", "burkina faso", "demokratische republik kongo", "iraq", "syria", "libya", "yemen", "ethiopia", "cameroon"]
+      },
+      "rules": [
+        {
+          "rule_id": "docs_required_uploaded",
+          "evaluation_key": "required_documents_complete",
+          "description": "Alle kursspezifischen Pflichtdokumente sind mit prüfbarem Status vorhanden.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2026-03",
+            "drive_document_id": "1SkA_rulebook_screening_local_v1"
+          },
+          "scope": "formal_precheck",
+          "severity": "critical",
+          "next_action_mapping": {
+            "pass": "proceed_to_language_check",
+            "fail": "request_missing_documents"
+          }
+        },
+        {
+          "rule_id": "language_min_met",
+          "evaluation_key": "language_minimum_met",
+          "description": "Das deklarierte Sprachlevel erfüllt die Mindestanforderung des Kurstyps.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2026-03",
+            "drive_document_id": "1SkA_rulebook_screening_local_v1"
+          },
+          "scope": "formal_precheck",
+          "severity": "critical",
+          "next_action_mapping": {
+            "pass": "proceed_to_country_classification",
+            "fail": "request_language_proof_or_language_course"
+          }
+        },
+        {
+          "rule_id": "degree_country_classified",
+          "evaluation_key": "degree_country_classified",
+          "description": "Das Herkunftsland ist in der lokalen Referenz klassifiziert.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2026-03",
+            "drive_document_id": "1SkA_rulebook_screening_local_v1"
+          },
+          "scope": "formal_precheck",
+          "severity": "warning",
+          "next_action_mapping": {
+            "pass": "proceed_to_interview_or_consultation",
+            "fail": "staff_manual_review"
+          }
+        }
+      ],
+      "manual_only_rules": [
+        {
+          "rule_id": "anabin_external_database_verification",
+          "description": "Externer Anabin-Abgleich ist verpflichtend für finale Staff-Entscheidung.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2026-03",
+            "drive_document_id": "1SkA_rulebook_screening_local_v1"
+          },
+          "scope": "staff_final_decision",
+          "severity": "critical",
+          "next_action_mapping": {
+            "required": "document_manual_reference_check"
+          }
+        }
+      ]
+    },
+    "0.9.0": {
+      "label": "Legacy baseline for backward compatibility",
+      "source": {
+        "pflichtenheft": "PH-SCREENING-2025-11",
+        "drive_document_id": "1SkA_rulebook_screening_legacy"
+      },
+      "course_rule_matrix": {
+        "M-Course": {
+          "language_min": "B1",
+          "required_docs": ["language_certificate", "highschool_diploma", "passport"]
+        },
+        "Language Course": {
+          "language_min": "A1",
+          "required_docs": ["passport"]
+        }
+      },
+      "anabin_country_hints": {
+        "h_plus": ["deutschland", "usa", "united states"],
+        "h": ["india", "indien"],
+        "d": ["afghanistan", "syria", "syrien"]
+      },
+      "rules": [
+        {
+          "rule_id": "docs_required_uploaded",
+          "evaluation_key": "required_documents_complete",
+          "description": "Legacy docs completeness.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2025-11",
+            "drive_document_id": "1SkA_rulebook_screening_legacy"
+          },
+          "scope": "formal_precheck",
+          "severity": "critical",
+          "next_action_mapping": {
+            "pass": "proceed_to_language_check",
+            "fail": "request_missing_documents"
+          }
+        },
+        {
+          "rule_id": "language_min_met",
+          "evaluation_key": "language_minimum_met",
+          "description": "Legacy language check.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2025-11",
+            "drive_document_id": "1SkA_rulebook_screening_legacy"
+          },
+          "scope": "formal_precheck",
+          "severity": "critical",
+          "next_action_mapping": {
+            "pass": "proceed_to_country_classification",
+            "fail": "request_language_proof_or_language_course"
+          }
+        },
+        {
+          "rule_id": "degree_country_classified",
+          "evaluation_key": "degree_country_classified",
+          "description": "Legacy country classification.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2025-11",
+            "drive_document_id": "1SkA_rulebook_screening_legacy"
+          },
+          "scope": "formal_precheck",
+          "severity": "warning",
+          "next_action_mapping": {
+            "pass": "proceed_to_interview_or_consultation",
+            "fail": "staff_manual_review"
+          }
+        }
+      ],
+      "manual_only_rules": [
+        {
+          "rule_id": "anabin_external_database_verification",
+          "description": "Legacy manual verification remains required.",
+          "source": {
+            "pflichtenheft": "PH-SCREENING-2025-11",
+            "drive_document_id": "1SkA_rulebook_screening_legacy"
+          },
+          "scope": "staff_final_decision",
+          "severity": "critical",
+          "next_action_mapping": {
+            "required": "document_manual_reference_check"
+          }
+        }
+      ]
+    }
+  }
+}

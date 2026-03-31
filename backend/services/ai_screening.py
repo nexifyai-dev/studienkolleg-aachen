@@ -131,6 +131,7 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
     )
 
     precheck_status = "ok" if local_summary["formal_result"] == "precheck_passed" else "action_required"
+    matrix_version = local_summary.get("reference_basis", {}).get("version")
 
     return {
         "screening_id": str(uuid.uuid4()),
@@ -198,6 +199,7 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
         "language_level_ok": language_check["ok"],
         "next_actions": next_actions,
         "reference_basis": local_summary["reference_basis"],
+        "rule_matrix_version": matrix_version,
         "decision_note": "Regelbasierte Vorprüfung + KI-Empfehlung via DeepSeek. Keine bindende Entscheidung. Staff-Review erforderlich.",
     }
 

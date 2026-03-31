@@ -1,31 +1,115 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  build:
-
+  frontend:
+    name: Frontend Build & Test
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    defaults:
+      run:
+        working-directory: frontend
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Prepare frontend artifact directory
+        run: mkdir -p ../artifacts/frontend
+
+      - name: Install frontend dependencies
+        run: |
+          set -o pipefail
+          npm ci 2>&1 | tee ../artifacts/frontend/npm-ci.log
+
+      - name: Build frontend
+        run: |
+          set -o pipefail
+          npm run build --if-present 2>&1 | tee ../artifacts/frontend/build.log
+
+      - name: Test frontend
+        env:
+          CI: true
+        run: |
+          set -o pipefail
+          npm test -- --watchAll=false 2>&1 | tee ../artifacts/frontend/test.log
+
+      - name: Upload frontend artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-ci-artifacts
+          path: artifacts/frontend
+          retention-days: 14
+
+  backend:
+    name: Backend Lint, Imports, Syntax & Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Prepare backend artifact directory
+        run: mkdir -p ../artifacts/backend
+
+      - name: Install backend dependencies
+        run: |
+          set -o pipefail
+          python -m pip install --upgrade pip 2>&1 | tee ../artifacts/backend/pip-upgrade.log
+          pip install -r requirements.txt 2>&1 | tee ../artifacts/backend/pip-install.log
+
+      - name: Lint backend (flake8)
+        run: |
+          set -o pipefail
+          flake8 . 2>&1 | tee ../artifacts/backend/flake8.log
+
+      - name: Import checks
+        run: |
+          set -o pipefail
+          PYTHONPATH=. python - <<'PY' 2>&1 | tee ../artifacts/backend/import-check.log
+          import server
+          import services.ai_screening
+          import services.deepseek_provider
+          print("Backend import checks passed.")
+          PY
+
+      - name: Syntax checks
+        run: |
+          set -o pipefail
+          python -m compileall -q . 2>&1 | tee ../artifacts/backend/compileall.log
+
+      - name: Run targeted backend tests
+        run: |
+          set -o pipefail
+          PYTHONPATH=. pytest \
+            tests/test_storage_backend_selection.py \
+            tests/test_screening_rule_matrix.py \
+            -q \
+            --junitxml=../artifacts/backend/pytest-report.xml \
+            2>&1 | tee ../artifacts/backend/pytest.log
+
+      - name: Upload backend artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-ci-artifacts
+          path: artifacts/backend
+          retention-days: 14

@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
+import { LOGIN_PATH } from '../../constants/routes';
 import { LayoutDashboard, Users, Link2, Settings, LogOut } from 'lucide-react';
 
 export default function PartnerLayout() {
@@ -11,7 +12,7 @@ export default function PartnerLayout() {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
+    navigate(LOGIN_PATH);
   };
 
   const navItems = [

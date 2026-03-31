@@ -23,6 +23,31 @@ from services.ai_screening import run_ai_screening
 router = APIRouter(prefix="/api", tags=["ai_screening"])
 
 
+async def _persist_document_analysis(db, app_id: str, screening_id: str, document_analysis: dict):
+    """Persist extraction/evidence per document for traceable precheck outputs."""
+    for item in (document_analysis or {}).get("documents", []):
+        doc_id = item.get("document_id")
+        if not doc_id:
+            continue
+        try:
+            await db.documents.update_one(
+                {"_id": ObjectId(doc_id), "application_id": app_id},
+                {
+                    "$set": {
+                        "analysis.extraction": item.get("core_fields", {}),
+                        "analysis.suitability": item.get("suitability", {}),
+                        "analysis.category": item.get("category"),
+                        "analysis.evidence": item.get("evidence", []),
+                        "analysis.last_screening_id": screening_id,
+                        "analysis.updated_at": datetime.now(timezone.utc),
+                    }
+                },
+            )
+        except Exception:
+            # Non-blocking: screening output keeps evidence payload even if persistence fails.
+            continue
+
+
 @router.post("/applications/{app_id}/ai-screen")
 async def start_ai_screening(
     app_id: str,
@@ -68,6 +93,9 @@ async def start_ai_screening(
 
     # KI-Prüfung durchführen
     result = await run_ai_screening(app_dict, applicant, docs, messages)
+
+    # Dokumentanalyse dokumentbezogen speichern (nicht entscheidend für den Ablauf)
+    await _persist_document_analysis(db, app_id, result.get("screening_id"), result.get("document_analysis"))
 
     # In DB speichern
     result_to_save = {

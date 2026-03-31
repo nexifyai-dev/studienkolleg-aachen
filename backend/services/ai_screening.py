@@ -8,6 +8,7 @@ import logging
 import uuid
 from datetime import datetime, timezone
 
+from services.document_analysis import analyze_documents_for_screening
 from services.screening_rules import REQUIRED_DOCUMENT_TYPES, evaluate_screening_criteria
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,8 @@ async def run_ai_screening(
     """
     from services.deepseek_provider import chat_completion, is_enabled
 
-    local_summary = evaluate_screening_criteria(application, applicant, docs)
+    document_analysis = analyze_documents_for_screening(application, applicant, docs)
+    local_summary = evaluate_screening_criteria(application, applicant, docs, document_analysis=document_analysis)
     completeness = local_summary["completeness"]
     anabin_info = local_summary["anabin_assessment"]
     language_check = local_summary["language_level_check"]
@@ -131,6 +133,7 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
     )
 
     precheck_status = "ok" if local_summary["formal_result"] == "precheck_passed" else "action_required"
+    verification_category = local_summary.get("verification_category", "manual_review_required")
     matrix_version = local_summary.get("reference_basis", {}).get("version")
 
     return {
@@ -147,6 +150,7 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
             "language_level_check": language_check,
         },
         "evidence": local_summary["evidence"],
+        "document_analysis": document_analysis,
         "criteria_checked": local_summary["criteria_checked"],
         "criteria_failed": local_summary["criteria_failed"],
         "criteria_missing": local_summary["criteria_missing"],
@@ -190,6 +194,7 @@ WICHTIG: Alle Entscheidungen sind Empfehlungen. Finale Entscheidung trifft das S
             },
         },
         "precheck_status": precheck_status,
+        "verification_category": verification_category,
         "ai_report": ai_report,
         "ai_error": ai_error,
         "suggested_stage": suggested_stage,

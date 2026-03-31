@@ -22,6 +22,19 @@ REQUIRED_DOC_LABELS = {
 }
 
 
+
+def _resolve_verification_category(formal_result: str, formal_precheck_status: str, document_category: str) -> str:
+    if formal_result == "manual_review_required":
+        return "manual_review_required"
+    if formal_precheck_status == "critical" or document_category == "critical":
+        return "critical"
+    if formal_precheck_status == "unclear" or document_category == "unclear":
+        return "unclear"
+    if formal_result == "precheck_passed" and document_category == "technically_verified":
+        return "technically_verified"
+    return "plausible"
+
+
 @lru_cache(maxsize=1)
 def _load_rule_matrix_file() -> dict:
     with RULE_MATRIX_FILE.open("r", encoding="utf-8") as f:
@@ -251,6 +264,7 @@ def evaluate_screening_criteria(
     applicant: dict,
     docs: list,
     matrix_version: Optional[str] = None,
+    document_analysis: Optional[dict] = None,
 ) -> dict:
     resolved_version, rule_set, versioning_payload = _resolve_rule_set(matrix_version)
     course_rule_matrix = rule_set.get("course_rule_matrix", {})
@@ -288,6 +302,10 @@ def evaluate_screening_criteria(
 
     risk_flags = list(dict.fromkeys(formal_precheck["risks"] + formal_precheck["open_points"]))
 
+    analyzed_documents = (document_analysis or {}).get("documents", [])
+    document_overall_category = (document_analysis or {}).get("overall_category", "manual_review_required")
+    verification_category = _resolve_verification_category(formal_result, formal_precheck["status"], document_overall_category)
+
     return {
         "applicant_id": applicant.get("id") or application.get("applicant_id"),
         "completeness": completeness,
@@ -301,13 +319,15 @@ def evaluate_screening_criteria(
         "risk_flags": risk_flags,
         "suggested_next_step": suggested_next_step,
         "manual_only_rules": rule_set.get("manual_only_rules", []),
+        "verification_category": verification_category,
+        "document_overall_category": document_overall_category,
         "evidence": {
             "application": {
                 "course_type": application.get("course_type"),
                 "degree_country": application.get("degree_country"),
                 "language_level": application.get("language_level"),
             },
-            "documents": completeness["evidence"],
+            "documents": analyzed_documents or completeness["evidence"],
             "formal_precheck": formal_precheck["evidence"],
         },
         "reference_basis": {

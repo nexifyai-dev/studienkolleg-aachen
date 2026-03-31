@@ -4,6 +4,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from services.ai_screening import _suggest_stage
+from services.document_analysis import analyze_documents_for_screening
 from services.screening_rules import (
     _build_formal_precheck,
     _check_completeness,
@@ -74,3 +75,33 @@ def test_deprecated_version_is_still_resolvable_for_backwards_compatibility():
     assert result["reference_basis"]["version"] == "0.9.0"
     assert "0.9.0" in result["reference_basis"]["deprecated_versions"]
     assert result["formal_result"] == "precheck_passed"
+
+
+def test_evidence_documents_contains_document_analysis_payload():
+    application = {"course_type": "M-Course", "degree_country": "Deutschland", "language_level": "B1", "date_of_birth": "2002-01-01"}
+    applicant = {"id": "abc", "full_name": "Erika Mustermann"}
+    docs = [
+        {
+            "id": "doc1",
+            "document_type": "passport",
+            "status": "approved",
+            "filename": "passport.jpg",
+            "content_type": "image/jpeg",
+            "extracted_text": "Passport Erika Mustermann 2002-01-01 issued by authority",
+        },
+        {"id": "doc2", "document_type": "highschool_diploma", "status": "approved", "extracted_text": "Diploma Erika Mustermann issued by school 2020-06-30"},
+        {"id": "doc3", "document_type": "language_certificate", "status": "approved", "extracted_text": "TELC B1 Erika Mustermann exam 2023-05-02 issued by Goethe"},
+    ]
+
+    doc_analysis = analyze_documents_for_screening(application, applicant, docs)
+    result = evaluate_screening_criteria(application, applicant, docs, document_analysis=doc_analysis)
+
+    assert result["evidence"]["documents"]
+    assert "core_fields" in result["evidence"]["documents"][0]
+    assert result["verification_category"] in {
+        "technically_verified",
+        "plausible",
+        "unclear",
+        "critical",
+        "manual_review_required",
+    }

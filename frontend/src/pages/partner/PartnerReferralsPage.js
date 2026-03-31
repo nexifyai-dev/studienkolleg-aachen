@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import apiClient from '../../lib/apiClient';
-import { Users, Loader2, Search, Filter } from 'lucide-react';
+import { Users, Loader2, Filter } from 'lucide-react';
 import { STAGE_LABELS, STAGE_COLORS, formatDate } from '../../lib/utils';
+import { FilterBar, SearchBar, EmptyState } from '../../components/shared/crmPatterns';
 
 export default function PartnerReferralsPage() {
   const { t } = useTranslation();
@@ -38,17 +39,8 @@ export default function PartnerReferralsPage() {
         <p className="text-slate-500 text-sm mt-1">{t('partner.referrals_desc')}</p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between flex-wrap gap-2">
-        <div className="relative">
-          <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
-          <input
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder={t('partner.col_name')}
-            className="border border-slate-200 rounded-sm pl-8 pr-2.5 py-2 text-xs focus:outline-none focus:border-primary w-56"
-            data-testid="partner-referrals-search"
-          />
-        </div>
+      <FilterBar testId="partner-referrals-filter">
+        <SearchBar value={query} onChange={e => setQuery(e.target.value)} placeholder={t('partner.col_name')} testId='partner-referrals-search' className='w-56' />
         <div className="flex items-center gap-2">
           <Filter size={14} className="text-slate-400" />
           <select
@@ -63,14 +55,10 @@ export default function PartnerReferralsPage() {
             ))}
           </select>
         </div>
-      </div>
+      </FilterBar>
 
       {visibleReferrals.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-sm p-8 text-center" data-testid="partner-referrals-empty">
-          <Users size={32} className="text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm">{referrals.length === 0 ? t('partner.no_referrals') : 'Keine Treffer für den aktuellen Filter.'}</p>
-          <p className="text-xs text-slate-400 mt-1">{t('partner.no_referrals_hint')}</p>
-        </div>
+        <EmptyState icon={Users} title={referrals.length === 0 ? t('partner.no_referrals') : 'Keine Treffer für den aktuellen Filter.'} hint={t('partner.no_referrals_hint')} testId='partner-referrals-empty' />
       ) : (
         <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
           <table className="w-full text-sm" data-testid="partner-referrals-table">

@@ -142,6 +142,31 @@ Das System braucht zwei Designmodi innerhalb einer Designfamilie:
 5. applicantseitig keine administrative Überfrachtung
 6. Partner-Branding nur innerhalb definierter White-Label-Container
 
+## Verbindliches CRM-Pattern-Set (Implementierungsregel)
+
+Für alle Operativseiten in `admin`, `portal`, `partner`, `staff` gilt ab sofort ein gemeinsames Pattern-Set:
+
+1. **SearchBar**  
+   - links Icon, einzeilige Suche, einheitliche Fokusdarstellung (`focus:ring-primary/20`, `focus:border-primary`).
+2. **FilterBar**  
+   - Container für Tabs/Selects/Suche, stets als kompakte Toolbar auf weißem Card-Hintergrund.
+3. **SelectionBar**  
+   - zeigt Auswahlanzahl + Toggle für sichtbare Datensätze.
+4. **BulkActions**  
+   - getrenntes Aktionsband mit Sicherheitskontext (Beschreibung + deaktivierte Buttons ohne Auswahl).
+5. **QuickActions**  
+   - schnelle Primärpfade als konsistente Aktionskarten (kein Sonderlayout pro Seite).
+6. **ActivityPanel**  
+   - standardisierter Historien-/Verlaufsblock mit klarer Überschrift.
+7. **RecordHeader** (Detailseiten)  
+   - Pflicht-Metadaten in gleicher Reihenfolge: **Status**, **Owner**, **Letzte Aktivität**, **Nächste Aktion**.
+8. **Empty/Error/Focus-Zustände**  
+   - EmptyState: Icon + kurzer Titel + optionaler Hint.  
+   - ErrorState: roter Hinweisblock mit Icon, ohne versteckte Fehler.  
+   - Fokuszustände: keine one-off focus styles, nur zentraler Standard.
+
+Diese Regeln sind verbindlich und haben Vorrang vor seitenindividuellen One-off-UI-Abweichungen.
+
 ## Qualitätsregeln
 
 1. keine abgeschnittenen Logos / inkonsistente Markennutzung

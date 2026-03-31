@@ -9,6 +9,7 @@ import {
   Phone, Mail, MessageCircle, Users, GraduationCap, Trash2,
   Edit3, Save, X, Send, StickyNote, History, CalendarClock, Plus
 } from 'lucide-react';
+import { RecordHeader } from '../../components/shared/crmPatterns';
 
 /* ═══════ Followup / Wiedervorlage Panel ═══════ */
 function FollowupPanel({ appId }) {
@@ -576,14 +577,20 @@ export default function ApplicantDetailPage() {
 
   return (
     <div className="space-y-4 animate-fade-in" data-testid="applicant-detail-page">
-      {/* Header */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <Link to="/staff/kanban" className="text-slate-400 hover:text-primary transition-colors" data-testid="back-to-kanban"><ArrowLeft size={18} /></Link>
-        <h1 className="text-xl font-heading font-bold text-primary">{app.applicant?.full_name || 'Bewerber'}</h1>
-        <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-sm ${STAGE_COLORS[app.current_stage] || 'bg-slate-100 text-slate-600'}`}>
-          {STAGE_LABELS[app.current_stage] || app.current_stage}
-        </span>
-      </div>
+      <RecordHeader
+        title={app.applicant?.full_name || 'Bewerber'}
+        status={STAGE_LABELS[app.current_stage] || app.current_stage}
+        owner={app.owner_name || app.assigned_to_name || 'Staff-Team'}
+        lastActivity={app.updated_at ? new Date(app.updated_at).toLocaleString('de-DE') : '–'}
+        nextAction={app.followup_reason || 'Status prüfen und nächsten Schritt setzen'}
+        backAction={<Link to="/staff/kanban" className="text-slate-400 hover:text-primary transition-colors" data-testid="back-to-kanban"><ArrowLeft size={18} /></Link>}
+        quickActions={(
+          <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-sm ${STAGE_COLORS[app.current_stage] || 'bg-slate-100 text-slate-600'}`}>
+            {STAGE_LABELS[app.current_stage] || app.current_stage}
+          </span>
+        )}
+        testId="applicant-record-header"
+      />
 
       {/* Quick Actions Bar */}
       <div className="flex flex-wrap gap-2">

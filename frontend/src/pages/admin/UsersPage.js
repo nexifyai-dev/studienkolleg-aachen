@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../lib/apiClient';
 import { ROLE_LABELS, formatDate } from '../../lib/utils';
-import { UserPlus, RefreshCw, UserCheck, UserX, Search, Copy, CheckSquare } from 'lucide-react';
+import { UserPlus, RefreshCw, UserCheck, UserX, Copy } from 'lucide-react';
 import { formatApiError } from '../../contexts/AuthContext';
+import { FilterBar, SearchBar, SelectionBar, BulkActions, ErrorState } from '../../components/shared/crmPatterns';
 
 const STAFF_ROLES = ['superadmin', 'admin', 'staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
 const INVITABLE_ROLES = ['staff', 'accounting_staff', 'agency_admin', 'agency_agent', 'affiliate'];
@@ -122,7 +123,7 @@ export default function UsersPage() {
           <p className="text-slate-500 text-xs mb-4">
             Generiere einen Einladungslink. Der neue Mitarbeiter setzt sein eigenes Passwort.
           </p>
-          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+          <ErrorState message={error} testId="invite-error" />
           {inviteResult ? (
             <div className="bg-slate-50 border border-slate-200 rounded-sm p-4 text-sm" data-testid="invite-result">
               <p className="font-medium text-slate-800 mb-1">Einladungslink erstellt:</p>
@@ -169,8 +170,7 @@ export default function UsersPage() {
         </div>
       )}
 
-      {/* Filter-Tabs */}
-      <div className="flex items-center justify-between flex-wrap gap-2" data-testid="users-filter-tabs">
+      <FilterBar testId="users-filter-tabs">
         <div className="flex items-center gap-2">
         {[
           { key: 'all', label: `Alle (${users.length})` },
@@ -188,35 +188,12 @@ export default function UsersPage() {
           </button>
         ))}
         </div>
-        <div className="relative">
-          <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
-          <input
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="Name, E-Mail, Rolle…"
-            className="border border-slate-200 rounded-sm pl-8 pr-2.5 py-2 text-xs focus:outline-none focus:border-primary w-56"
-            data-testid="users-search"
-          />
-        </div>
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <span>{selectedUserIds.length} ausgewählt</span>
-          <button
-            onClick={() => setSelectedUserIds(allVisibleSelected ? [] : displayUserIds)}
-            className="inline-flex items-center gap-1 border border-slate-200 rounded-sm px-2 py-1 hover:bg-slate-50"
-            data-testid="users-select-visible-btn"
-          >
-            <CheckSquare size={12} />
-            {allVisibleSelected ? 'Auswahl aufheben' : 'Sichtbare auswählen'}
-          </button>
-        </div>
-      </div>
+        <SearchBar value={query} onChange={e => setQuery(e.target.value)} placeholder="Name, E-Mail, Rolle…" testId="users-search" className="w-56" />
+        <SelectionBar selectedCount={selectedUserIds.length} onToggleAll={() => setSelectedUserIds(allVisibleSelected ? [] : displayUserIds)} allSelected={allVisibleSelected} testId="users-select-visible-btn" />
+      </FilterBar>
 
-      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between gap-3 flex-wrap" data-testid="users-bulk-actions">
-        <p className="text-xs text-slate-500">
-          Bulk-Aktion für aktive/deaktivierte Nutzer (Superadmins werden automatisch ausgeschlossen).
-        </p>
-        <div className="flex items-center gap-2">
-          <button
+      <BulkActions testId="users-bulk-actions" description="Bulk-Aktion für aktive/deaktivierte Nutzer (Superadmins werden automatisch ausgeschlossen).">
+        <button
             onClick={() => runBulkActive(true)}
             disabled={!selectedUserIds.length || bulkUpdating}
             className="text-xs border border-primary/30 text-primary rounded-sm px-3 py-1.5 hover:bg-primary/5 disabled:opacity-50"
@@ -232,8 +209,7 @@ export default function UsersPage() {
           >
             Deaktivieren
           </button>
-        </div>
-      </div>
+      </BulkActions>
 
       {/* Tabelle */}
       <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">

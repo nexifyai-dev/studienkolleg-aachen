@@ -20,6 +20,7 @@ REQUIRED_DOC_LABELS = {
     "highschool_diploma": "Schulzeugnis / Hochschulzugangsberechtigung",
     "passport": "Reisepass / Personalausweis",
 }
+MIN_CLASSIFICATION_CONFIDENCE = 0.6
 
 
 @lru_cache(maxsize=1)
@@ -136,17 +137,37 @@ def _check_completeness(docs: list, course_type: Optional[str], course_rule_matr
     evidence = []
 
     for doc in docs:
+        classified_type = doc.get("classified_type")
         doc_type = doc.get("document_type")
-        if not doc_type:
+        if not classified_type:
+            evidence.append(
+                {
+                    "declared_document_type": doc_type,
+                    "classified_type": None,
+                    "classification_confidence": float(doc.get("classification_confidence") or 0.0),
+                    "quality_ok": False,
+                    "type_mismatch": bool(doc.get("type_mismatch")),
+                    "status": doc.get("status", "unknown"),
+                    "bucket": _doc_status_bucket(doc.get("status")),
+                    "source": "document_classification_missing",
+                }
+            )
             continue
+        confidence = float(doc.get("classification_confidence") or 0.0)
+        quality_ok = confidence >= MIN_CLASSIFICATION_CONFIDENCE
         status_bucket = _doc_status_bucket(doc.get("status"))
-        uploaded_types.setdefault(doc_type, set()).add(status_bucket)
+        if quality_ok:
+            uploaded_types.setdefault(classified_type, set()).add(status_bucket)
         evidence.append(
             {
-                "document_type": doc_type,
+                "declared_document_type": doc_type,
+                "classified_type": classified_type,
+                "classification_confidence": confidence,
+                "quality_ok": quality_ok,
+                "type_mismatch": bool(doc.get("type_mismatch")),
                 "status": doc.get("status", "unknown"),
                 "bucket": status_bucket,
-                "source": "uploaded_document_metadata",
+                "source": "document_classification",
             }
         )
 

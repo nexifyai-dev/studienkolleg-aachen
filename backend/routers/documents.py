@@ -21,6 +21,7 @@ from services.storage import (
     storage, build_storage_key, sanitize_filename,
     validate_upload, ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES
 )
+from services.document_classification import classify_document
 
 router = APIRouter(prefix="/api", tags=["documents"])
 
@@ -91,6 +92,7 @@ async def upload_document(app_id: str, request: Request, user: dict = Depends(ge
         "storage_key": storage_key,  # internal only – never returned to client
         "has_binary": bool(file_bytes),
     }
+    doc.update(classify_document(doc, declared_type=doc_type))
     result = await db.documents.insert_one(doc)
     doc_id = str(result.inserted_id)
 
@@ -121,6 +123,9 @@ async def upload_document(app_id: str, request: Request, user: dict = Depends(ge
         "document_type": doc_type, "filename": filename,
         "status": "uploaded", "uploaded_at": doc["uploaded_at"].isoformat(),
         "has_binary": doc["has_binary"],
+        "classified_type": doc.get("classified_type"),
+        "classification_confidence": doc.get("classification_confidence"),
+        "type_mismatch": doc.get("type_mismatch"),
     }
 
 

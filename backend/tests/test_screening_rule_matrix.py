@@ -15,7 +15,7 @@ from services.screening_rules import (
 
 def test_completeness_is_course_specific_language_course():
     docs = [
-        {"document_type": "passport", "status": "approved"},
+        {"document_type": "passport", "classified_type": "passport", "classification_confidence": 0.92, "status": "approved"},
     ]
     result = _check_completeness(docs, "Language Course", {"Language Course": {"required_docs": ["passport"]}})
     assert result["complete"] is True
@@ -52,9 +52,9 @@ def test_evaluate_uses_active_matrix_version_and_metadata():
         application={"course_type": "M-Course", "degree_country": "Deutschland", "language_level": "B1"},
         applicant={"id": "abc"},
         docs=[
-            {"document_type": "language_certificate", "status": "approved"},
-            {"document_type": "highschool_diploma", "status": "approved"},
-            {"document_type": "passport", "status": "approved"},
+            {"document_type": "language_certificate", "classified_type": "language_certificate", "classification_confidence": 0.9, "status": "approved"},
+            {"document_type": "highschool_diploma", "classified_type": "highschool_diploma", "classification_confidence": 0.9, "status": "approved"},
+            {"document_type": "passport", "classified_type": "passport", "classification_confidence": 0.9, "status": "approved"},
         ],
     )
 
@@ -67,7 +67,7 @@ def test_deprecated_version_is_still_resolvable_for_backwards_compatibility():
     result = evaluate_screening_criteria(
         application={"course_type": "Language Course", "degree_country": "USA", "language_level": "A1"},
         applicant={"id": "legacy"},
-        docs=[{"document_type": "passport", "status": "approved"}],
+        docs=[{"document_type": "passport", "classified_type": "passport", "classification_confidence": 0.95, "status": "approved"}],
         matrix_version="0.9.0",
     )
 

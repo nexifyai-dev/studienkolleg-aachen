@@ -18,6 +18,7 @@ from services.audit import write_audit_log
 from services.storage import storage, build_storage_key, sanitize_filename, validate_upload
 from services.automation import trigger_application_received, trigger_missing_documents
 from services.ai_screening import REQUIRED_DOCUMENT_TYPES
+from services.document_classification import classify_document
 
 router = APIRouter(prefix="/api/leads", tags=["leads"])
 logger = logging.getLogger(__name__)
@@ -161,6 +162,7 @@ async def ingest_lead(data: LeadIngest):
                         "storage_key": storage_key,
                         "has_binary": bool(file_bytes),
                     }
+                    doc.update(classify_document(doc, declared_type=doc_upload.document_type))
                     doc_result = await db.documents.insert_one(doc)
                     doc_id = str(doc_result.inserted_id)
                     await write_audit_log(

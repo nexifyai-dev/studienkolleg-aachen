@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import apiClient from '../../lib/apiClient';
 import { FileText, Upload, CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
+import { QuickActions, EmptyState } from '../../components/shared/crmPatterns';
 import { formatDate } from '../../lib/utils';
 
 
@@ -57,7 +58,7 @@ export default function DocumentsPage() {
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="documents-page">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-heading font-bold text-primary">{t('portal.documents')}</h1>
           <p className="text-slate-500 text-sm mt-1">{t('portal.docs_management')}</p>
@@ -109,18 +110,21 @@ export default function DocumentsPage() {
         </div>
       )}
 
+      <QuickActions testId="docs-quick-actions">
+        {apps[0] && (
+          <button onClick={() => setShowUpload(!showUpload)} data-testid="docs-upload-quick" className="flex items-center gap-2 bg-white border border-slate-200 rounded-sm p-3 text-sm hover:border-primary/30">
+            <Upload size={16} className="text-primary" /> {t('portal.upload_doc')}
+          </button>
+        )}
+      </QuickActions>
+
       {/* Documents list */}
       {docs.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-sm p-8 text-center" data-testid="docs-empty">
-          <FileText size={32} className="text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm">{t('portal.no_docs')}</p>
-          {apps[0] ? (
-            <p className="text-xs text-slate-400 mt-2">{t('portal.doc_click_upload')}</p>
-          ) : (
-            <div className="mt-4">
-              <p className="text-xs text-slate-500 mb-3">{t('portal.doc_start_application')}</p>
-              <a href="/apply" className="bg-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-primary-hover transition-colors inline-block"
-                data-testid="docs-apply-link">{t('portal.doc_apply_link')}</a>
+        <div>
+          <EmptyState icon={FileText} title={t('portal.no_docs')} hint={apps[0] ? t('portal.doc_click_upload') : t('portal.doc_start_application')} testId="docs-empty" />
+          {!apps[0] && (
+            <div className="mt-3 text-center">
+              <a href="/apply" className="bg-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-primary-hover transition-colors inline-block" data-testid="docs-apply-link">{t('portal.doc_apply_link')}</a>
             </div>
           )}
         </div>

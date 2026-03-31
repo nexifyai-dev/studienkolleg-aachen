@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import apiClient from '../../lib/apiClient';
-import { Users, BookOpen, Shield, Clock, CheckCircle, AlertCircle, Mail, Phone, Search } from 'lucide-react';
+import { Users, BookOpen, Shield, Clock, CheckCircle, Mail, Phone } from 'lucide-react';
+
+import { FilterBar, SearchBar, EmptyState, ErrorState } from '../../components/shared/crmPatterns';
 
 export default function TeacherDashboard() {
   const { user } = useAuth();
@@ -90,11 +92,7 @@ export default function TeacherDashboard() {
         </div>
       </div>
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-sm p-3 flex items-center gap-2 text-red-700 text-sm" data-testid="teacher-error">
-          <AlertCircle size={16} /> {error}
-        </div>
-      )}
+      <ErrorState message={error} testId="teacher-error" />
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -138,16 +136,8 @@ export default function TeacherDashboard() {
       </div>
 
       {/* Student List */}
-      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between flex-wrap gap-2" data-testid="teacher-filter-bar">
-        <div className="relative">
-          <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
-          <input
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="Lernende suchen…"
-            className="border border-slate-200 rounded-sm pl-8 pr-2.5 py-2 text-xs focus:outline-none focus:border-primary w-60"
-          />
-        </div>
+      <FilterBar testId="teacher-filter-bar">
+        <SearchBar value={query} onChange={e => setQuery(e.target.value)} placeholder="Lernende suchen…" testId="teacher-search" className="w-60" />
         <select
           value={stageFilter}
           onChange={e => setStageFilter(e.target.value)}
@@ -158,18 +148,10 @@ export default function TeacherDashboard() {
             <option key={stage} value={stage}>{stageLabels[stage] || stage}</option>
           ))}
         </select>
-      </div>
+      </FilterBar>
 
       {visibleStudents.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-sm p-10 text-center" data-testid="teacher-empty">
-          <BookOpen size={32} className="text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm">
-            {students.length === 0
-              ? 'Keine Lernenden zugewiesen oder keine aktive Einwilligung vorhanden.'
-              : 'Keine Treffer für die aktuelle Suche/Filterung.'}
-          </p>
-          <p className="text-xs text-slate-400 mt-1">Zuweisungen werden durch das Staff-Team vorgenommen.</p>
-        </div>
+        <EmptyState icon={BookOpen} title={students.length === 0 ? 'Keine Lernenden zugewiesen oder keine aktive Einwilligung vorhanden.' : 'Keine Treffer für die aktuelle Suche/Filterung.'} hint="Zuweisungen werden durch das Staff-Team vorgenommen." testId="teacher-empty" />
       ) : (
         <div className="bg-white border border-slate-200 rounded-sm" data-testid="teacher-student-list">
           <div className="p-4 border-b border-slate-100">

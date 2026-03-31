@@ -6,6 +6,7 @@ import {
   Paperclip, Download, FileText, MessageSquare, History, Send,
   Edit3, Save, User
 } from 'lucide-react';
+import { FilterBar, SearchBar, BulkActions, EmptyState } from '../../components/shared/crmPatterns';
 
 const PRIORITY_LABELS = { high: 'Hoch', normal: 'Normal', low: 'Niedrig' };
 const STATUS_LABELS = { open: 'Offen', in_progress: 'In Bearbeitung', done: 'Erledigt' };
@@ -433,8 +434,7 @@ export default function StaffTasksPage() {
         </div>
       )}
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-3 flex-wrap">
+      <FilterBar testId="task-filter-bar">
         <div className="flex items-center gap-1 bg-slate-100 rounded-sm p-1">
           {[
             { key: 'open', label: 'Offen', count: openCount },
@@ -453,16 +453,10 @@ export default function StaffTasksPage() {
           <option value="all">Alle Prioritaeten</option>
           <option value="high">Hoch</option><option value="normal">Normal</option><option value="low">Niedrig</option>
         </select>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Suche: Titel, Beschreibung, Zuweisung, Status..."
-          className="text-xs border border-slate-200 rounded-sm px-2 py-1.5 w-72 focus:outline-none focus:border-primary"
-          data-testid="task-search-input"
-        />
-      </div>
+        <SearchBar value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Suche: Titel, Beschreibung, Zuweisung, Status..." testId="task-search-input" className="w-72" />
+      </FilterBar>
 
-      <div className="bg-white border border-slate-200 rounded-sm p-3 flex items-center justify-between gap-3 flex-wrap">
+      <BulkActions testId="task-bulk-actions" description="Sammelaktionen nur für aktuell gefilterte Aufgaben.">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSelectedTaskIds(selectedTaskIds.length === filtered.length ? [] : filtered.map(t => t.id))}
@@ -497,15 +491,12 @@ export default function StaffTasksPage() {
             Sammelaktion: Status setzen
           </button>
         </div>
-      </div>
+      </BulkActions>
 
       {/* Task List */}
       <div className="space-y-2">
         {filtered.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-sm p-8 text-center text-slate-400">
-            <CheckSquare size={28} className="mx-auto mb-2" />
-            <p className="text-sm">Keine Aufgaben in dieser Ansicht</p>
-          </div>
+          <EmptyState icon={CheckSquare} title="Keine Aufgaben in dieser Ansicht" testId="tasks-empty" />
         ) : (
           filtered.map(task => (
             <div key={task.id} onClick={() => setSelectedTask(task)}

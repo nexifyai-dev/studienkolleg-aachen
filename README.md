@@ -29,7 +29,9 @@ Die Plattform ist keine einzelne Website, sondern ein kombiniertes Produkt aus:
 ├── backend/
 ├── frontend/
 ├── memory/
-└── docs/
+├── docs/
+├── CONTRIBUTING.md
+└── .github/
 ```
 
 ### Kurz erklärt
@@ -38,6 +40,8 @@ Die Plattform ist keine einzelne Website, sondern ein kombiniertes Produkt aus:
 - `frontend/` – React-App mit Routing, Layouts, AuthContext und Produktseiten
 - `memory/` – ältere Wissensartefakte, die schrittweise in `docs/` überführt werden
 - `docs/` – kanonische Dokumentation für Architektur, Rollen, Datenmodell, Operations und Entwicklung
+- `CONTRIBUTING.md` – Regeln für Beiträge und Doku-Pflege
+- `.github/` – PR-Governance, Templates und Repo-Metastruktur
 
 ## Einstieg für neue Entwickler
 
@@ -49,18 +53,30 @@ Die Plattform ist keine einzelne Website, sondern ein kombiniertes Produkt aus:
 - [System Architecture](docs/01-architecture/system-architecture.md)
 - [User Roles](docs/02-product/user-roles.md)
 
-### 2. Lokal starten
+### 2. Kern-Domänen verstehen
+
+- [Auth and RBAC](docs/03-backend/auth-and-rbac.md)
+- [Applications Domain](docs/03-backend/applications.md)
+- [Documents Domain](docs/03-backend/documents.md)
+- [Leads Domain](docs/03-backend/leads.md)
+- [Tasks Domain](docs/03-backend/tasks.md)
+- [Messaging Domain](docs/03-backend/messaging.md)
+- [Workspaces Domain](docs/03-backend/workspaces.md)
+- [Frontend Auth and Session](docs/04-frontend/auth-and-session.md)
+
+### 3. Lokal starten und betreiben
 
 - [Local Setup](docs/07-development/local-setup.md)
 - [Environment Variables](docs/06-operations/environment-variables.md)
 - [Storage](docs/06-operations/storage.md)
-
-### 3. Operative / produktionsnahe Themen
-
+- [Deployment](docs/06-operations/deployment.md)
 - [Go-live Checklist](docs/06-operations/go-live-checklist.md)
-- [Auth and RBAC](docs/03-backend/auth-and-rbac.md)
-- [Applications Domain](docs/03-backend/applications.md)
-- [Documents Domain](docs/03-backend/documents.md)
+
+### 4. Mitwirken
+
+- [Contributing](CONTRIBUTING.md)
+- [Docs Maintenance](docs/07-development/docs-maintenance.md)
+- [ADR-0001: Docs-as-code](docs/08-decisions/adr-0001-docs-as-code.md)
 
 ## Lokaler Schnellstart
 
@@ -111,10 +127,4 @@ Siehe auch: [ADR-0001: Docs-as-code](docs/08-decisions/adr-0001-docs-as-code.md)
 - Keine Secrets oder produktiven Zugangsdaten ins Repository schreiben
 - Änderungen an Rollen, Env, Routing, Datenmodell oder Betriebslogik sollten die Docs mitziehen
 - `memory/PRD.md` und `memory/GO_LIVE_BLOCKERS.md` bleiben vorerst erhalten, werden aber durch `docs/` abgelöst
-
-## Nächste sinnvolle Doku-Ausbaustufen
-
-- Leads, Tasks, Messaging und Workspaces als weitere Domänenseiten
-- Deployment-Dokumentation
-- ADRs für Auth-/Storage-/Partnermodell
-- PR-Checklisten für Doku-Pflege
+- Bitte das PR-Template und `CONTRIBUTING.md` für strukturierte Änderungen verwenden

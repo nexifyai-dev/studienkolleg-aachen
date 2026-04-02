@@ -29,19 +29,28 @@ Die Dokumentation soll das System entlang seiner echten Wissensachsen erklären:
 - [System Architecture](./01-architecture/system-architecture.md)
 - [User Roles](./02-product/user-roles.md)
 
-### Backend / Frontend
+### Backend
 
 - [Backend Domain Map](./03-backend/backend-domain-map.md)
 - [Auth and RBAC](./03-backend/auth-and-rbac.md)
 - [Applications Domain](./03-backend/applications.md)
 - [Documents Domain](./03-backend/documents.md)
+- [Leads Domain](./03-backend/leads.md)
+- [Tasks Domain](./03-backend/tasks.md)
+- [Messaging Domain](./03-backend/messaging.md)
+- [Workspaces Domain](./03-backend/workspaces.md)
+
+### Frontend
+
 - [Frontend Routing](./04-frontend/frontend-routing.md)
+- [Frontend Auth and Session](./04-frontend/auth-and-session.md)
 
 ### Daten und Betrieb
 
 - [Data Model](./05-data/data-model.md)
 - [Environment Variables](./06-operations/environment-variables.md)
 - [Storage](./06-operations/storage.md)
+- [Deployment](./06-operations/deployment.md)
 - [Go-live Checklist](./06-operations/go-live-checklist.md)
 
 ### Entwicklung und Governance
@@ -49,19 +58,17 @@ Die Dokumentation soll das System entlang seiner echten Wissensachsen erklären:
 - [Local Setup](./07-development/local-setup.md)
 - [Docs Maintenance](./07-development/docs-maintenance.md)
 - [ADR-0001: Docs-as-code](./08-decisions/adr-0001-docs-as-code.md)
+- [Contributing](../CONTRIBUTING.md)
 
 ## Übergangsstatus von `memory/`
 
 Die Dateien unter `memory/` bleiben vorerst als historische bzw. Übergangsquellen erhalten. Die langfristige Source of Truth ist jedoch `docs/`.
 
-## Nächste Ausbaustufen
+## Weiterer sinnvoller Ausbau
 
 Sinnvolle nächste Ergänzungen:
 
-- `03-backend/leads.md`
-- `03-backend/tasks.md`
-- `03-backend/messaging.md`
-- `03-backend/workspaces.md`
-- `04-frontend/auth-and-session.md`
-- `06-operations/deployment.md`
-- weitere ADRs für Auth, Storage und Partnerlogik
+- tiefere Domänenseiten für Notifications, Partner, Teacher, Followups, Export
+- Deployment-/Release-Dokumentation mit realer Zielumgebung
+- weitere ADRs für Auth, Storage, Partner- und Workspace-Strategie
+- ggf. später ein gerendertes Doku-Frontend auf Basis derselben Markdown-Struktur

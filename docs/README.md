@@ -1,6 +1,6 @@
 # W2G Platform Docs
 
-Dieses Verzeichnis ist die versionierte, technische Dokumentation des Repositories `studienkolleg-aachen`.
+Dieses Verzeichnis ist die kanonische, versionierte Dokumentation des Repositories `studienkolleg-aachen`.
 
 ## Ziel
 
@@ -16,44 +16,52 @@ Die Dokumentation soll das System entlang seiner echten Wissensachsen erklären:
 
 1. **Docs-as-code**: Die Dokumentation lebt im Repository und wird zusammen mit Codeänderungen gepflegt.
 2. **Code bleibt die Primärquelle**: Die Docs erklären Zusammenhänge, sie duplizieren nicht jede Implementierungszeile.
-3. **Architektur vor Dateilisten**: Seiten sollen mentale Modelle liefern, nicht nur Pfade aufzählen.
+3. **Architektur vor Dateilisten**: Seiten sollen mentale Modelle liefern.
 4. **Betriebsrelevanz**: Änderungen an Rollen, APIs, Env-Variablen, Datenmodell oder Deploy-Verhalten müssen hier nachvollziehbar sein.
 5. **Sichere Inhalte**: Keine echten Secrets, produktiven Zugangsdaten oder sensitiven Betriebswerte dokumentieren.
 
 ## Einstieg
 
+### Überblick
+
+- [Product Overview](./00-overview/product-overview.md)
 - [Repository Map](./00-overview/repository-map.md)
 - [System Architecture](./01-architecture/system-architecture.md)
 - [User Roles](./02-product/user-roles.md)
+
+### Backend / Frontend
+
 - [Backend Domain Map](./03-backend/backend-domain-map.md)
+- [Auth and RBAC](./03-backend/auth-and-rbac.md)
+- [Applications Domain](./03-backend/applications.md)
+- [Documents Domain](./03-backend/documents.md)
 - [Frontend Routing](./04-frontend/frontend-routing.md)
+
+### Daten und Betrieb
+
 - [Data Model](./05-data/data-model.md)
+- [Environment Variables](./06-operations/environment-variables.md)
+- [Storage](./06-operations/storage.md)
 - [Go-live Checklist](./06-operations/go-live-checklist.md)
+
+### Entwicklung und Governance
+
+- [Local Setup](./07-development/local-setup.md)
 - [Docs Maintenance](./07-development/docs-maintenance.md)
+- [ADR-0001: Docs-as-code](./08-decisions/adr-0001-docs-as-code.md)
 
-## Informationsquellen im aktuellen Repo
+## Übergangsstatus von `memory/`
 
-Die erste Version dieser Dokumentation basiert insbesondere auf:
-
-- `memory/PRD.md`
-- `memory/GO_LIVE_BLOCKERS.md`
-- `backend/server.py`
-- `backend/config.py`
-- `backend/database.py`
-- `backend/seed.py`
-- `backend/models/schemas.py`
-- `frontend/src/App.js`
-- `frontend/src/contexts/AuthContext.js`
-- `frontend/src/lib/apiClient.js`
+Die Dateien unter `memory/` bleiben vorerst als historische bzw. Übergangsquellen erhalten. Die langfristige Source of Truth ist jedoch `docs/`.
 
 ## Nächste Ausbaustufen
 
-Die Struktur ist bewusst so angelegt, dass im nächsten Schritt weitere Detailseiten ergänzt werden können, z. B.:
+Sinnvolle nächste Ergänzungen:
 
-- `03-backend/auth-and-rbac.md`
-- `03-backend/applications.md`
-- `03-backend/documents.md`
+- `03-backend/leads.md`
+- `03-backend/tasks.md`
 - `03-backend/messaging.md`
-- `06-operations/environment-variables.md`
-- `06-operations/storage.md`
-- `08-decisions/adr-*.md`
+- `03-backend/workspaces.md`
+- `04-frontend/auth-and-session.md`
+- `06-operations/deployment.md`
+- weitere ADRs für Auth, Storage und Partnerlogik

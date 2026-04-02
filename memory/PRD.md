@@ -1,3 +1,19 @@
+# Hinweis
+
+Dieses Dokument bleibt vorerst als historisches / Übergangsartefakt im Repository.
+
+Die kanonische, weiter gepflegte Dokumentation liegt jetzt unter `docs/`, insbesondere:
+
+- `docs/00-overview/product-overview.md`
+- `docs/01-architecture/system-architecture.md`
+- `docs/02-product/user-roles.md`
+- `docs/03-backend/`
+- `docs/06-operations/go-live-checklist.md`
+
+Der Inhalt unten bleibt erhalten, sollte aber perspektivisch nicht mehr als alleinige Source of Truth verwendet werden.
+
+---
+
 # W2G Platform – PRD (Product Requirements Document)
 
 ## Projektübersicht
@@ -89,15 +105,14 @@
 
 ---
 
-## Zugangsdaten
+## Seed-Zugänge
 
-| Rolle      | E-Mail                                | Passwort        |
-|------------|---------------------------------------|-----------------|
-| superadmin | admin@studienkolleg-aachen.de         | Admin@2026!     |
-| staff      | staff@studienkolleg-aachen.de         | DevSeed@2026!   |
-| teacher    | teacher@studienkolleg-aachen.de       | DevSeed@2026!   |
-| applicant  | applicant@studienkolleg-aachen.de     | DevSeed@2026!   |
-| affiliate  | partner@studienkolleg-aachen.de       | DevSeed@2026!   |
+Entwicklungs- und Seed-Accounts werden über `backend/seed.py` und die Umgebungsvariablen gesteuert.
+
+Wichtig:
+- keine Passwörter in Dokumentation oder Repo festhalten
+- Seed-Accounts nur über lokale / sichere Env-Konfiguration erzeugen
+- produktive Zugangsdaten niemals versionieren
 
 ---
 

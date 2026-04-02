@@ -1,3 +1,18 @@
+# Hinweis
+
+Dieses Dokument bleibt vorerst als historisches / Übergangsartefakt im Repository.
+
+Die laufend gepflegte operative Dokumentation liegt jetzt primär unter:
+
+- `docs/06-operations/go-live-checklist.md`
+- `docs/06-operations/environment-variables.md`
+- `docs/06-operations/storage.md`
+- `docs/07-development/local-setup.md`
+
+Der Inhalt unten bleibt als Zustandsdokument erhalten.
+
+---
+
 ## Go-Live Blocker – W2G Platform
 
 Stand: 29. März 2026

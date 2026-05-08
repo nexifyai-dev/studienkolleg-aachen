@@ -1,0 +1,1195 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "courses": "Kurse",
+    "services": "Services",
+    "contact": "Kontakt",
+    "apply": "Jetzt bewerben",
+    "login": "Anmelden",
+    "portal": "Zum Portal",
+    "knowledge": "Wissen",
+    "booking": "Termine"
+  },
+  "hero": {
+    "badge": "Studienkolleg Aachen",
+    "headline_1": "Dein Weg nach",
+    "headline_2": "klar, digital begleitet.",
+    "sub": "Studienkolleg, Sprachkurse und Karriereprogramme in einem System. Von der Bewerbung bis zur Immatrikulation – strukturiert, transparent und ohne Prozesschaos.",
+    "cta_primary": "Jetzt bewerben",
+    "cta_secondary": "Kostenlose Beratung buchen",
+    "trust": "Über 50 Nationen. Persönliche Begleitung. Sicherer Dokumentenprozess.",
+    "stat_graduates": "2.800+ Absolventen",
+    "stat_countries": "45+ Länder",
+    "headline_accent": "Deutschland",
+    "headline_dash": "–"
+  },
+  "courses": {
+    "title": "Unsere Kurse",
+    "sub": "Alle Kurse bereiten auf die offizielle Feststellungsprüfung (FSP) vor.",
+    "t_course": {
+      "name": "T-Kurs",
+      "desc": "Für technische Studiengänge: Maschinenbau, Elektrotechnik, Mathematik, Physik."
+    },
+    "m_course": {
+      "name": "M-Kurs",
+      "desc": "Für Medizin, Zahnmedizin, Biologie, Biochemie, Pharmazie."
+    },
+    "w_course": {
+      "name": "W-Kurs",
+      "desc": "Für Wirtschaft, BWL, Informatik, Tourismus, Sozialwissenschaften, Jura."
+    },
+    "mt_course": {
+      "name": "M/T-Kurs",
+      "desc": "Kombiniert T- und M-Kurs für technische und medizinische Studiengänge."
+    },
+    "view_all": "Alle Kurse ansehen"
+  },
+  "courses_page": {
+    "hero_title": "Unsere Kurse",
+    "hero_sub": "Alle Kurse bereiten auf die offizielle Feststellungsprüfung (FSP) vor.",
+    "fsp_notice": "Alle Kurse bereiten auf die FSP vor. Die Berechtigung zur Teilnahme wird durch die zuständige Bezirksregierung entschieden. Das Studienkolleg begleitet dich durch den gesamten Prozess.",
+    "main_title": "Studienvorbereitende Schwerpunktkurse",
+    "main_desc": "Alle Kurse laufen über zwei Semester und schließen mit der Feststellungsprüfung (FSP) ab – dem Eintrittsticket für deutsche Hochschulen.",
+    "duration_label": "Dauer",
+    "schedule_label": "Unterricht",
+    "subjects_label": "Schwerpunktfächer",
+    "lang_title": "Sprachkurse vor dem Studienkolleg",
+    "lang_desc": "Wenn dein Deutschniveau noch unter B1 liegt, bieten wir vorgelagerte Intensivkurse an.",
+    "lang_level": "Niveau",
+    "lang_weeks": "Wochen",
+    "lang_hours": "Std./Woche",
+    "lang_note": "Kurse können je nach Nachfrage kombiniert oder flexibel gebucht werden.",
+    "starts_title": "Nächste Kursstarts",
+    "starts_note": "Genauere Termine nach individueller Absprache. Frühzeitige Bewerbung empfohlen.",
+    "cta_title": "Welcher Kurs passt zu dir?",
+    "cta_desc": "Wir helfen dir bei der Kursauswahl und begleiten dich von der ersten Anfrage bis zur Zulassung.",
+    "cta_apply": "Jetzt bewerben",
+    "cta_contact": "Beratungsgespräch anfragen",
+    "course_cards": {
+      "t": {
+        "label": "Technik & Naturwissenschaften",
+        "for": "Für angehende Ingenieure und Naturwissenschaftler",
+        "fsp": "Feststellungsprüfung Technik"
+      },
+      "m": {
+        "label": "Medizin & Biowissenschaften",
+        "for": "Für angehende Mediziner und Biowissenschaftler",
+        "fsp": "Feststellungsprüfung Medizin/Bio"
+      },
+      "w": {
+        "label": "Wirtschaft & Sozialwissenschaften",
+        "for": "Für angehende Wirtschafts- und Sozialwissenschaftler",
+        "fsp": "Feststellungsprüfung Wirtschaft"
+      },
+      "mt": {
+        "label": "Kombination Medizin + Technik",
+        "for": "Für Studierende mit breitem Fächerinteresse",
+        "fsp": "Feststellungsprüfung M+T"
+      },
+      "deutsch": {
+        "label": "Deutsch A1-C1 Intensivkurse",
+        "for": "Fuer internationale Studierende aller Fachrichtungen",
+        "fsp": "DSH / TestDaF Vorbereitung"
+      }
+    },
+    "lang_req": "Mindest B1 Deutsch",
+    "expand_btn": "Geeignete Studienbereiche",
+    "levels": {
+      "A1": {
+        "label": "Anfänger",
+        "desc": "Keine Vorkenntnisse – strukturierter Einstieg."
+      },
+      "A2": {
+        "label": "Grundstufe",
+        "desc": "Aufbau auf A1, Alltagskommunikation."
+      },
+      "B1": {
+        "label": "Mittelstufe",
+        "desc": "Voraussetzung für Studienkolleg-Kurse."
+      },
+      "B2": {
+        "label": "Obermittelstufe",
+        "desc": "Flüssige Kommunikation, komplexe Texte."
+      },
+      "C1": {
+        "label": "Fortgeschritten",
+        "desc": "Studiumsreifes Deutsch, DSH-Vorbereitung."
+      }
+    },
+    "lang_badge": "Sprachkurs",
+    "lang_course_title": "Deutsch A1–C1",
+    "lang_course_desc": "Unsere Sprachkurse bereiten sprachlich auf das Studienkolleg oder das deutsche Studium vor. B1 ist die Mindestvoraussetzung für alle studienvorbereitenden Kurse.",
+    "lang_course_btn": "Sprachkurs anfragen",
+    "semester_running": "Läuft",
+    "semester_open": "Offen",
+    "semester_soon": "Bald",
+    "semester_start": "Kursstart",
+    "hero_badge": "Studienkolleg-Kurse",
+    "section_label": "Schwerpunktkurse"
+  },
+  "services": {
+    "title": "Unsere Services",
+    "visa": {
+      "name": "Visaunterstützung",
+      "desc": "Wir helfen bei allen notwendigen Visa-Dokumenten und Übersetzungen."
+    },
+    "housing": {
+      "name": "Unterkunft",
+      "desc": "Möblierte Unterkunftslösungen in Aachen – bereit vor deiner Ankunft."
+    },
+    "mentoring": {
+      "name": "Mentoring & Begleitung",
+      "desc": "Persönliche Berater, Check-ins und Orientierungsunterstützung."
+    },
+    "documents": {
+      "name": "Zeugnisanerkennung",
+      "desc": "Wir begleiten den Anerkennungsprozess deiner Schulzeugnisse."
+    },
+    "uni": {
+      "name": "Uni-Bewerbungscoaching",
+      "desc": "Von der Kurswahl bis zum uni-assist – wir begleiten dich."
+    },
+    "insurance": {
+      "name": "Krankenversicherung",
+      "desc": "Vollversicherung, die Visa- und Hochschulanforderungen erfüllt."
+    }
+  },
+  "services_page": {
+    "hero_title": "Unsere Services",
+    "hero_sub": "Wir begleiten dich von der Bewerbung bis zur Zulassung – und darüber hinaus.",
+    "location_title": "Dein Studienort: Aachen",
+    "location_desc": "Aachen liegt im Dreiländereck Deutschland–Belgien–Niederlande und ist Heimat einer der technisch renommiertesten Hochschulen Europas: der RWTH Aachen. Internationales Umfeld, kurze Wege, hervorragende Studieninfrastruktur.",
+    "process_title": "Wie wir dich begleiten",
+    "process_desc": "Von der ersten Kontaktaufnahme bis zum erfolgreichen Kursabschluss.",
+    "cta_title": "Bereit loszulegen?",
+    "cta_desc": "Bewirb dich jetzt und erhalte innerhalb von 24 Stunden eine persönliche Rückmeldung.",
+    "cta_apply": "Jetzt bewerben",
+    "cta_contact": "Beratung anfragen",
+    "steps": {
+      "apply": {
+        "title": "Bewerben",
+        "desc": "Online-Formular ausfüllen – in 10 Minuten erledigt."
+      },
+      "check": {
+        "title": "Prüfung",
+        "desc": "Wir prüfen deine Unterlagen und melden uns innerhalb von 24 Stunden."
+      },
+      "confirm": {
+        "title": "Bestätigung",
+        "desc": "Kursplatz gesichert. Zugang zum Portal. Visum-Support startet."
+      },
+      "start": {
+        "title": "Kursstart",
+        "desc": "Ankunft, Einführung, Unterricht – wir sind von Anfang an dabei."
+      }
+    }
+  },
+  "contact_page": {
+    "title": "Kontakt",
+    "sub": "Wir sind für dich da – persönlich, schnell und zuverlässig.",
+    "standort_label": "Studienkolleg / Way2Germany",
+    "location_name": "Standort",
+    "phone_label": "Telefon",
+    "email_label": "E-Mail",
+    "whatsapp_label": "WhatsApp",
+    "hours_label": "Bürozeiten",
+    "hours_value": "Mo–Fr: 9:00 – 17:00 Uhr",
+    "office_note": "Unterricht, Beratung, Way2Germany Office",
+    "registered_label": "Gesellschaftssitz",
+    "privacy_notice": "Deine Kontaktdaten werden ausschließlich zur Bearbeitung deiner Anfrage verwendet.",
+    "cta_apply_title": "Jetzt bewerben",
+    "cta_apply_desc": "Starte deine Bewerbung mit dem vollständigen Online-Formular. Wir melden uns innerhalb von 24 Stunden.",
+    "cta_apply_btn": "Jetzt bewerben →",
+    "whatsapp_title": "Direkter WhatsApp-Kontakt",
+    "whatsapp_desc": "Schnelle Fragen, Dokument-Checks oder Terminabstimmung – wir antworten werktags innerhalb weniger Stunden.",
+    "whatsapp_btn": "WhatsApp öffnen",
+    "legal_link_note": "Rechtliche Angaben gemäß § 5 TMG –",
+    "impressum_link": "Impressum",
+    "privacy_link": "Datenschutzerklärung"
+  },
+  "legal_page": {
+    "impressum": "Impressum",
+    "agb": "Allgemeine Geschäftsbedingungen",
+    "privacy": "Datenschutzerklärung",
+    "company_heading": "Angaben gemäß § 5 TMG",
+    "office_heading": "Unterrichts- und Beratungsstandort",
+    "registered_seat": "Eingetragener Gesellschaftssitz",
+    "company_label": "Unternehmen",
+    "rep_label": "Vertretung",
+    "contact_label": "Kontakt",
+    "registry_label": "Registereintrag",
+    "office_note": "Dieser Standort wird für Unterricht, Beratung und den Bewerberempfang genutzt. Er ist nicht identisch mit dem eingetragenen Gesellschaftssitz.",
+    "contact_faq": "Fragen zu unseren Rechtsdokumenten?",
+    "review_note": "",
+    "de_only_note": "Diese Rechtsdokumente sind ausschließlich in deutscher Sprache rechtlich bindend."
+  },
+  "apply": {
+    "title": "Jetzt bewerben",
+    "sub": "Starte deinen Weg. Wir melden uns innerhalb von 24 Stunden.",
+    "name": "Vollständiger Name",
+    "email": "E-Mail-Adresse",
+    "phone": "Telefon / WhatsApp",
+    "country": "Herkunftsland",
+    "area": "Gewünschter Bereich",
+    "start": "Gewünschter Starttermin",
+    "level": "Deutschkenntnisse",
+    "submit": "Bewerbung absenden",
+    "success": "Deine Bewerbung wurde eingereicht. Wir kontaktieren dich bald.",
+    "privacy": "Mit dem Absenden stimmst du unserer Datenschutzerklärung zu.",
+    "success_title": "Bewerbung eingegangen!",
+    "success_msg1": "Deine Bewerbung und Dokumente wurden erfolgreich übermittelt.",
+    "success_msg2": "Wir prüfen deine Unterlagen und melden uns innerhalb von 24 Stunden bei dir.",
+    "back_link": "Zurück zur Startseite",
+    "docs_title": "Pflichtdokumente hochladen",
+    "docs_desc": "Alle drei Dokumente sind für die Bearbeitung deiner Bewerbung erforderlich. Erlaubte Formate: PDF, JPG, PNG, WEBP (max. 10 MB je Datei).",
+    "drag_drop": "Datei hier ablegen oder",
+    "browse": "klicken zum Auswählen",
+    "file_types": "PDF, JPG, PNG, WEBP – max. 10 MB",
+    "step1": "Persönliche Angaben",
+    "step2": "Kursauswahl",
+    "step3": "Dokumente",
+    "combo_label": "Kombination mit weiterem Kurs möglich?",
+    "course_type_label": "Gewünschter Kurs",
+    "degree_country_label": "Land deines letzten Schulabschlusses",
+    "language_level_label": "Aktuelles Deutschniveau",
+    "motivation_label": "Motivationsschreiben (optional)",
+    "motivation_placeholder": "Kurze Vorstellung: Warum Studienkolleg Aachen? Was möchtest du studieren?",
+    "next_btn": "Weiter",
+    "back_btn": "Zurück",
+    "personal_data": "Persönliche Daten",
+    "firstname": "Vorname",
+    "lastname": "Nachname",
+    "dob": "Geburtsdatum",
+    "country_placeholder": "z. B. Indien, Ägypten…",
+    "phone_placeholder": "+49 …",
+    "study_details": "Studiendetails",
+    "course_select_placeholder": "-- Kurs auswählen --",
+    "semester_label": "Gewünschtes Startsemester",
+    "semester_placeholder": "-- Semester auswählen --",
+    "german_level_label": "Aktuelles Deutschniveau",
+    "german_level_placeholder": "-- Niveau auswählen --",
+    "degree_country_placeholder": "z. B. Indien, Ägypten, China…",
+    "notes_label": "Nachricht / Anmerkungen",
+    "notes_placeholder": "Weitere Informationen, Fragen oder besondere Umstände…",
+    "privacy_agree": "Mit dem Absenden stimmst du unserer",
+    "privacy_link": "Datenschutzerklärung",
+    "agb_link": "AGB",
+    "and": "und den",
+    "zu": "zu.",
+    "submit_btn": "Bewerbung mit Dokumenten absenden",
+    "submitting": "Wird übermittelt…",
+    "error_missing_docs": "Bitte lade alle Pflichtdokumente hoch:",
+    "error_file_too_large": "ist zu groß (max. 10 MB).",
+    "error_generic": "Fehler beim Absenden. Bitte versuche es erneut.",
+    "error_privacy": "Bitte akzeptiere die Datenschutzbestimmungen und AGB.",
+    "error_password_short": "Passwort muss mindestens 8 Zeichen haben.",
+    "error_password_mismatch": "Passwörter stimmen nicht überein.",
+    "account_title": "Portal-Zugang erstellen",
+    "account_desc": "Erstelle direkt deinen Portalzugang, um den Bewerbungsstatus zu verfolgen, Dokumente nachzureichen und mit dem Team zu kommunizieren.",
+    "password_label": "Passwort",
+    "password_confirm_label": "Passwort bestätigen",
+    "file_size_display": "KB",
+    "file_too_large_label": "Datei zu groß (max. 10 MB)",
+    "courses": {
+      "t": "T-Kurs – Technik (Maschinenbau, Elektrotechnik, Mathematik, Physik)",
+      "m": "M-Kurs – Medizin (Medizin, Zahnmedizin, Biologie, Pharmazie)",
+      "w": "W-Kurs – Wirtschaft (BWL, Informatik, Sozialwissenschaften, Jura)",
+      "mt": "M/T-Kurs – Kombi Medizin + Technik",
+      "lang": "Sprachkurs (A1–C1 Deutschvorbereitung)"
+    },
+    "combos": {
+      "none": "Keine Kombination",
+      "t": "Zusätzlich T-Kurs",
+      "m": "Zusätzlich M-Kurs",
+      "w": "Zusätzlich W-Kurs"
+    },
+    "semesters": {
+      "ws2526": "Wintersemester 2025/26",
+      "ss26": "Sommersemester 2026",
+      "ws2627": "Wintersemester 2026/27",
+      "ss27": "Sommersemester 2027",
+      "ws2728": "Wintersemester 2027/28"
+    },
+    "levels": {
+      "A1": "A1 – Keine oder sehr geringe Kenntnisse",
+      "A2": "A2 – Grundkenntnisse",
+      "B1": "B1 – Mittelstufe (für Studienkolleg erforderlich)",
+      "B2": "B2 – Obermittelstufe",
+      "C1": "C1 – Fortgeschritten",
+      "C2": "C2 – Muttersprachliches Niveau"
+    },
+    "doc_labels": {
+      "language_certificate": "Deutsches Sprachzertifikat",
+      "highschool_diploma": "Schulzeugnis / Abschlusszeugnis",
+      "passport": "Reisepass"
+    },
+    "doc_descs": {
+      "language_certificate": "Zertifikat über aktuelle Deutschkenntnisse (z. B. Goethe, TELC, DSH, TestDaF)",
+      "highschool_diploma": "Letztes Zeugnis / Hochschulzugangsberechtigung aus dem Herkunftsland",
+      "passport": "Gültiger Reisepass (Personalausweis wird für EU-Bürger akzeptiert)"
+    }
+  },
+  "home": {
+    "team_label": "Leitung",
+    "team_name": "Laura Saboor",
+    "team_role": "Managing Director · Way2Germany",
+    "team_quote": "Ich glaube an Bildung als Schlüssel zur Veränderung. Jeder junge Mensch, der den Mut hat, ins Ausland zu gehen, verdient professionelle Begleitung – von der ersten Anfrage bis zum ersten Vorlesungstag.",
+    "team_bio": "Als Gründerin von Way2Germany verbindet Laura Saboor jahrelange Erfahrung im internationalen Bildungsmanagement mit einem tiefen Verständnis für die Herausforderungen internationaler Studierender. Unter ihrer Leitung hat das Studienkolleg Aachen über 2.800 Absolventen aus 45+ Ländern erfolgreich begleitet.",
+    "team_cta": "Kontakt aufnehmen",
+    "campus_label": "Campus Life",
+    "campus_title": "Mehr als nur ein Kurs –\n ein Erlebnis",
+    "campus_desc": "Echte Momente aus unserem Studienkolleg in Aachen: Unterricht, Workshops, Beratung und Gemeinschaft.",
+    "campus_img_klasse": "Intensiver Unterricht in kleinen Gruppen",
+    "campus_img_docs": "Workshop: Studienstart in Deutschland",
+    "campus_img_health": "Gesundheitssystem erklärt",
+    "campus_img_handshake_badge": "Partnerschaft",
+    "campus_img_handshake_text": "Zusammenarbeit auf Augenhöhe – direkt am Studienkolleg",
+    "campus_img_motivation": "Bewerbungstraining: Motivationsschreiben",
+    "reels_label": "Kurzvideos",
+    "reels_title": "Studienkolleg hautnah",
+    "reels_desc": "Kurze Videos unserer Studierenden und Dozenten – direkt vom Campus.",
+    "segments_label": "Unsere Bereiche",
+    "segments_title": "Was wir anbieten",
+    "segments_desc": "Von der Studienvorbereitung bis zur Karriereberatung – wähle deinen Pfad.",
+    "video_label": "Einblicke",
+    "video_title": "Lerne das Studienkolleg Aachen kennen",
+    "video_desc_header": "Zwei Videos geben dir einen authentischen Eindruck – von unserem Campus und unseren Services.",
+    "video_imagevideo_title": "Imagevideo – Das Studienkolleg Aachen",
+    "video_services_title": "Services – Unser Leistungsangebot",
+    "programs_label": "Programme",
+    "programs_title": "Unsere Kurse",
+    "programs_desc": "Vier spezialisierte Kurse – zugeschnitten auf dein Studienziel.",
+    "stats_label": "In Zahlen",
+    "stats_title": "Nachweisbare Ergebnisse",
+    "stats_desc": "Zahlen, die unser Engagement und unsere Qualität widerspiegeln.",
+    "video_desc": "Wir begleiten internationale Bewerber von der ersten Anfrage bis zum Studienplatz – persönlich, digital und mit voller Transparenz in jedem Schritt.",
+    "video_bullets": [
+      "Offizielle Vorbereitung auf die Feststellungsprüfung (FSP)",
+      "Persönliche Beratung und Begleitung auf Deutsch und Englisch",
+      "Digitales Portal für Dokumente, Status und Kommunikation",
+      "Unterkunft, Visum-Support und Versicherungslösungen"
+    ],
+    "services_sub": "Alles aus einer Hand – von der Beratung bis zum ersten Semester.",
+    "process_title": "So funktioniert der Prozess",
+    "process_desc": "Von der Anfrage bis zum Studienkolleg – digital, transparent, persönlich.",
+    "process_steps": [
+      {
+        "step": "01",
+        "title": "Bewerbung einreichen",
+        "desc": "Fülle das vollständige Formular aus und lade deine Pflichtdokumente hoch. Wir melden uns innerhalb von 24 Stunden."
+      },
+      {
+        "step": "02",
+        "title": "KI-gestützte Vorprüfung",
+        "desc": "Unser System prüft automatisch die Vollständigkeit deiner Unterlagen und bereitet die Staffbewertung vor."
+      },
+      {
+        "step": "03",
+        "title": "Portalzugang & Statusverfolgung",
+        "desc": "Du erhältst dein persönliches Portal mit klarem Aufgaben-Dashboard und direktem Kontakt zum Team."
+      },
+      {
+        "step": "04",
+        "title": "Zulassung & Start",
+        "desc": "Nach Prüfung und individuellem Angebot erhältst du deinen Zulassungsbescheid und startest ins Studienkolleg."
+      }
+    ],
+    "partner_text": "Seit Jahren vertrauenswürdiger Partner für internationale Studierende auf dem Weg nach Deutschland.",
+    "faq_more": "Weitere Fragen?",
+    "faq_contact": "Kontakt aufnehmen",
+    "cta_title": "Bereit für dein",
+    "cta_title_accent": "Studium in Deutschland?",
+    "cta_desc": "Bewirb dich jetzt mit deinen Unterlagen und erhalte innerhalb von 24 Stunden eine Rückmeldung.",
+    "cta_consultation": "Kostenlose Beratung",
+    "segments": {
+      "studienkolleg": {
+        "label": "Studienkolleg",
+        "desc": "Staatlich anerkannte Vorbereitung auf dein Studium in Deutschland."
+      },
+      "sprachkurse": {
+        "label": "Sprachkurse",
+        "desc": "Deutsch von A1 bis C1 – intensiv, effizient und zertifiziert."
+      },
+      "pflege": {
+        "label": "Pflege & Medizin",
+        "desc": "Anerkennung und Einstieg in den deutschen Gesundheitssektor."
+      },
+      "arbeit": {
+        "label": "Arbeit & Karriere",
+        "desc": "Berufsanerkennung, Jobvermittlung und Karriereberatung."
+      },
+      "partner": {
+        "label": "Partner werden",
+        "desc": "Agenturen und Institutionen – kooperieren Sie mit uns."
+      }
+    },
+    "programs": {
+      "t": {
+        "badge": "T-Kurs",
+        "title": "Technischer Kurs",
+        "desc": "Mathematik, Physik, Deutsch – für technische und ingenieurwissenschaftliche Studiengänge.",
+        "duration": "2 Semester",
+        "start": "Sommer 2026"
+      },
+      "m": {
+        "badge": "M-Kurs",
+        "title": "Medizinischer Kurs",
+        "desc": "Biologie, Chemie, Physik – für medizinische und naturwissenschaftliche Studiengänge.",
+        "duration": "2 Semester",
+        "start": "Sommer 2026"
+      },
+      "w": {
+        "badge": "W-Kurs",
+        "title": "Wirtschaftskurs",
+        "desc": "Mathematik, VWL, BWL – für wirtschafts- und sozialwissenschaftliche Studiengänge.",
+        "duration": "2 Semester",
+        "start": "Winter 2026"
+      },
+      "de": {
+        "badge": "Intensiv",
+        "title": "Deutsch Intensiv",
+        "desc": "Von A1 bis B2 in kompakten Modulen. Online oder in Aachen.",
+        "duration": "8–12 Wochen",
+        "start": "Laufend"
+      }
+    },
+    "stats_items": [
+      {
+        "suffix": "+",
+        "label": "Erfolgreiche Absolventen"
+      },
+      {
+        "suffix": "%",
+        "label": "Bestehensquote"
+      },
+      {
+        "suffix": "+",
+        "label": "Partnerländer"
+      },
+      {
+        "suffix": "+",
+        "label": "Jahre Erfahrung"
+      }
+    ],
+    "trust_items": [
+      {
+        "title": "Staatlich anerkannt",
+        "desc": "Akkreditierte Programme mit offizieller Anerkennung."
+      },
+      {
+        "title": "International vernetzt",
+        "desc": "Partnerschaften mit Universitäten und Agenturen weltweit."
+      },
+      {
+        "title": "Nachweisbare Erfolge",
+        "desc": "94% Bestehensquote und über 2.800 Absolventen."
+      },
+      {
+        "title": "Persönliche Betreuung",
+        "desc": "Individuelle Beratung von der Bewerbung bis zur Immatrikulation."
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Sarah M.",
+        "country": "Marokko",
+        "text": "Das Studienkolleg hat mir die Tür zu meinem Traumstudium geöffnet. Die Betreuung war hervorragend.",
+        "course": "T-Kurs 2024"
+      },
+      {
+        "name": "Ahmed K.",
+        "country": "Ägypten",
+        "text": "In nur 8 Monaten von B1 auf C1 – die Lehrer sind fantastisch und das System ist perfekt organisiert.",
+        "course": "Deutsch Intensiv"
+      },
+      {
+        "name": "Li Wei",
+        "country": "China",
+        "text": "Die Online-Bewerbung war unkompliziert und ich hatte innerhalb von 48 Stunden eine Zusage.",
+        "course": "M-Kurs 2025"
+      }
+    ],
+    "reels": {
+      "w-kurs": {
+        "title": "W-Kurs",
+        "desc": "Wirtschaft studieren in Deutschland",
+        "badge": "Programm"
+      },
+      "benefits": {
+        "title": "5 Vorteile",
+        "desc": "Das bietet dir das Studienkolleg Aachen",
+        "badge": "Top 5"
+      },
+      "pedro": {
+        "title": "Pedro aus Brasilien",
+        "desc": "Mein Weg ans Studienkolleg",
+        "badge": "Student Story"
+      },
+      "international": {
+        "title": "Unsere Studierenden",
+        "desc": "Aus aller Welt nach Aachen",
+        "badge": "Community"
+      },
+      "m-kurs": {
+        "title": "M-Kurs",
+        "desc": "Medizin & Naturwissenschaften",
+        "badge": "Programm"
+      },
+      "vokabeln": {
+        "title": "Deutsch lernen",
+        "desc": "Vokabeln rund um die Schule",
+        "badge": "Sprache"
+      },
+      "tipps": {
+        "title": "5 Tipps",
+        "desc": "Schneller Deutsch lernen",
+        "badge": "Tipps"
+      },
+      "fsp": {
+        "title": "Die FSP erklaert",
+        "desc": "Die wichtigste Pruefung fuer dein Studium",
+        "badge": "Pruefung"
+      },
+      "wohnheim": {
+        "title": "Dein Zuhause",
+        "desc": "Studentenwohnheim-Tour Aachen",
+        "badge": "Campus Life"
+      }
+    },
+    "duration_label": "Dauer",
+    "start_label": "Start",
+    "steps": [
+      {
+        "title": "Online bewerben",
+        "desc": "Lade deine Dokumente hoch und erhalte in 48h eine erste Rückmeldung."
+      },
+      {
+        "title": "Dokumente prüfen",
+        "desc": "Unser KI-gestütztes System analysiert deine Unterlagen und erstellt dein Profil."
+      },
+      {
+        "title": "Kurs beginnen",
+        "desc": "Starte dein Studienkolleg oder deinen Sprachkurs – vor Ort oder online."
+      },
+      {
+        "title": "Studium aufnehmen",
+        "desc": "Mit dem Feststellungsbescheid direkt an deutschen Hochschulen einschreiben."
+      }
+    ],
+    "faqs": [
+      {
+        "q": "Welche Voraussetzungen brauche ich?",
+        "a": "Du benötigst einen Schulabschluss, der in deinem Heimatland zum Studium berechtigt, sowie Deutschkenntnisse auf mindestens B1-Niveau. Für manche Kurse reicht auch A2."
+      },
+      {
+        "q": "Was kostet das Studienkolleg?",
+        "a": "Die Gebühren variieren je nach Kurs. Sprachkurse beginnen ab 1.200 EUR, Studienkolleg-Programme ab 3.500 EUR pro Semester. Ratenzahlung ist möglich."
+      },
+      {
+        "q": "Wie lange dauert das Programm?",
+        "a": "Das Studienkolleg dauert in der Regel zwei Semester (ca. 10 Monate). Sprachkurse dauern je nach Startlevel 8–16 Wochen."
+      },
+      {
+        "q": "Erhalte ich ein Visum?",
+        "a": "Ja. Nach der Einschreibung erhältst du alle notwendigen Dokumente für deinen Visumsantrag. Wir unterstützen dich beim gesamten Prozess."
+      },
+      {
+        "q": "Kann ich mich online bewerben?",
+        "a": "Ja, der gesamte Bewerbungsprozess ist digital. Du lädst deine Dokumente hoch und erhältst innerhalb von 48 Stunden eine erste Rückmeldung."
+      }
+    ],
+    "all_programs_link": "Alle Programme ansehen",
+    "video_titles": {
+      "imagevideo": "Imagevideo – Das Studienkolleg Aachen",
+      "services": "Services – Unser Leistungsangebot"
+    },
+    "trust_label": "Warum wir",
+    "trust_title": "Vertrauen durch Ergebnisse",
+    "trusted_by": "Vertraut von",
+    "testimonials_label": "Stimmen"
+  },
+  "trust": {
+    "title": "Warum Studienkolleg Aachen?",
+    "items": {
+      "recognized": {
+        "title": "Anerkannter Weg",
+        "desc": "Offizielle Vorbereitung auf die Feststellungsprüfung."
+      },
+      "allinone": {
+        "title": "Alles aus einer Hand",
+        "desc": "Sprache. Visa. Unterkunft. Uni-Bewerbung. Du lernst – wir kümmern uns."
+      },
+      "community": {
+        "title": "Internationale Community",
+        "desc": "Studierende aus über 50 Nationen. Interkulturelles Coaching."
+      },
+      "central": {
+        "title": "Zentral in Aachen",
+        "desc": "Das einzige Studienkolleg im Herzen von Aachen."
+      }
+    }
+  },
+  "faq": {
+    "title": "Häufige Fragen",
+    "items": [
+      {
+        "q": "Benötige ich Deutschkenntnisse auf B1-Niveau?",
+        "a": "Für den direkten Einstieg ins Studienkolleg ist B1 erforderlich. Bei geringerem Niveau bieten wir vorgelagerte Sprachkurse an."
+      },
+      {
+        "q": "Kann ich die FSP garantiert ablegen?",
+        "a": "Nein. Die finale Entscheidung über die FSP-Berechtigung trifft die zuständige Bezirksregierung. Wir bereiten dich optimal vor und begleiten deinen Antrag."
+      },
+      {
+        "q": "Was passiert nach meiner Bewerbung?",
+        "a": "Nach Eingang deiner Bewerbung meldet sich unser Team innerhalb von 24 Stunden. Du erhältst Zugang zu deinem persönlichen Portal."
+      },
+      {
+        "q": "Helft ihr beim Visum?",
+        "a": "Ja. Wir unterstützen bei der Vorbereitung aller notwendigen Visa-Unterlagen und arbeiten mit verlässlichen Partnern zusammen."
+      },
+      {
+        "q": "Gibt es Online-Kurse?",
+        "a": "Im ersten Semester ist ein Teilzeit-Online-Anteil möglich. Die Details hängen von deinem Programm ab."
+      },
+      {
+        "q": "Was kosten die Kurse?",
+        "a": "Die Kosten hängen vom individuellen Fall ab: Kurswahl, Startzeitpunkt, Zusatzleistungen und persönlicher Situation. Pauschalpreise können wir nicht nennen. Nach Eingang deiner Bewerbung erhältst du ein individuelles Angebot."
+      }
+    ],
+    "contact_link": "Kontaktiere uns direkt.",
+    "still_questions": "Noch Fragen?"
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "location": "Standort & Kontakt",
+    "address_office": "Theaterstraße 30–32, 52062 Aachen",
+    "address_office_note": "Unterricht / Beratung / Way2Germany",
+    "address_legal": "Theaterstraße 24 · 52062 Aachen",
+    "address_legal_label": "Gesellschaftssitz",
+    "phone": "+49 241 990 322 92",
+    "email": "info@stk-aachen.de",
+    "legal": "Impressum",
+    "privacy": "Datenschutz",
+    "agb": "AGB",
+    "cookie_settings": "Cookie-Einstellungen",
+    "legal_nav": "Rechtliches",
+    "copyright": "W2G Academy GmbH · Amtsgericht Aachen HRB 23610",
+    "rights": "Alle Rechte vorbehalten.",
+    "col_programs": "Programm",
+    "col_services": "Services",
+    "link_visa": "Visa & Einreise",
+    "link_housing": "Unterkunft",
+    "link_insurance": "Versicherung",
+    "link_knowledge": "Wissensdatenbank",
+    "link_booking": "Beratungstermin",
+    "link_contact": "Kontakt",
+    "link_german": "Deutsch-Intensiv",
+    "link_semesters": "Semestertermine"
+  },
+  "auth": {
+    "login_title": "Anmelden",
+    "back_to_site": "← Zurück zur Website",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "login_btn": "Anmelden",
+    "forgot_pw": "Passwort vergessen?",
+    "no_account": "Noch kein Konto?",
+    "register_link": "Jetzt bewerben",
+    "register_title": "Konto erstellen",
+    "name": "Vollständiger Name",
+    "register_btn": "Registrieren",
+    "have_account": "Bereits ein Konto?",
+    "login_link": "Anmelden",
+    "login_subtitle": "Melde dich in deinem Portal an",
+    "forgot_title": "Passwort vergessen",
+    "forgot_subtitle": "Wir senden dir einen Link zum Zurücksetzen",
+    "forgot_success_title": "E-Mail gesendet",
+    "forgot_success_msg": "Wenn diese E-Mail-Adresse existiert, wurde ein Reset-Link gesendet. Bitte prüfe auch deinen Spam-Ordner.",
+    "forgot_submit": "Reset-Link senden",
+    "back_to_login": "Zurück zur Anmeldung"
+  },
+  "portal": {
+    "dashboard": "Dashboard",
+    "journey": "Bewerbungsstatus",
+    "documents": "Dokumente",
+    "messages": "Nachrichten",
+    "financials": "Rechnungen",
+    "settings": "Einstellungen",
+    "welcome": "Willkommen zurück",
+    "next_step": "Dein nächster Schritt",
+    "no_tasks": "Aktuell keine offene Aufgabe.",
+    "no_docs": "Noch keine Dokumente hochgeladen.",
+    "upload_doc": "Dokument hochladen",
+    "logout": "Abmelden",
+    "consents": "Einwilligungen",
+    "current_status": "Dein aktueller Status",
+    "application_id": "Bewerbung",
+    "no_application_title": "Noch keine Bewerbung",
+    "no_application_desc": "Starte jetzt deinen Bewerbungsprozess.",
+    "apply_now": "Jetzt bewerben",
+    "docs_label": "Dokumente",
+    "messages_label": "Nachrichten",
+    "invoices_label": "Rechnungen",
+    "tasks_label": "Aufgaben",
+    "upload_action": "Dokument hochladen",
+    "upload_action_desc": "Lade deine Unterlagen sicher hoch",
+    "send_message": "Nachricht senden",
+    "send_message_desc": "Direkt mit dem Team kommunizieren",
+    "support_channel": "Support-Kanal",
+    "no_messages": "Noch keine Nachrichten",
+    "first_message_hint": "Schreibe deine erste Nachricht an das Team",
+    "write_message": "Nachricht schreiben...",
+    "file_too_large": "Datei zu groß (max. {{max}} MB)",
+    "journey_progress": "Dein aktueller Bewerbungsfortschritt",
+    "no_active_application": "Noch keine aktive Bewerbung.",
+    "current_stage": "Aktueller Status",
+    "direct_team_contact": "Direkter Kontakt mit dem Team",
+    "docs_management": "Sichere Dokumentenverwaltung",
+    "doc_upload_title": "Dokument hochladen",
+    "doc_type_label": "Dokumenttyp",
+    "doc_type_passport": "Reisepass / Ausweis",
+    "doc_type_school": "Schulzeugnis / Abschluss",
+    "doc_type_language": "Sprachzertifikat",
+    "doc_type_photo": "Lichtbild",
+    "doc_type_birth": "Geburtsurkunde",
+    "doc_type_other": "Sonstiges",
+    "doc_filename_label": "Dateiname",
+    "doc_filename_placeholder": "z. B. reisepass_max_mustermann.pdf",
+    "doc_uploading": "Wird hochgeladen…",
+    "doc_upload_btn": "Hochladen",
+    "doc_cancel": "Abbrechen",
+    "doc_click_upload": "Klicke auf 'Dokument hochladen' um zu beginnen.",
+    "doc_start_application": "Um Dokumente hochzuladen, starte zunächst deine Bewerbung.",
+    "doc_apply_link": "Jetzt bewerben →",
+    "doc_rejection_reason": "Ablehnungsgrund",
+    "doc_status_uploaded": "Hochgeladen",
+    "doc_status_in_review": "In Prüfung",
+    "doc_status_approved": "Akzeptiert",
+    "doc_status_rejected": "Abgelehnt",
+    "doc_status_missing": "Fehlt",
+    "financials_title": "Rechnungen & Zahlungen",
+    "financials_sub": "Übersicht deiner Rechnungen",
+    "financials_loading": "Rechnungen werden geladen...",
+    "financials_error": "Rechnungen konnten nicht geladen werden.",
+    "financials_empty": "Keine Rechnungen vorhanden",
+    "financials_empty_hint": "Rechnungen erscheinen hier, sobald sie ausgestellt wurden.",
+    "invoice_number": "Rechnungsnr.",
+    "invoice_description": "Beschreibung",
+    "invoice_amount": "Betrag",
+    "invoice_status": "Status",
+    "invoice_due_date": "Fälligkeitsdatum",
+    "invoice_created_at": "Erstellt am",
+    "invoice_detail": "Rechnungsdetail",
+    "invoice_status_draft": "Entwurf",
+    "invoice_status_sent": "Versendet",
+    "invoice_status_paid": "Bezahlt",
+    "invoice_status_overdue": "Überfällig",
+    "invoice_status_cancelled": "Storniert",
+    "settings_title": "Einstellungen",
+    "settings_sub": "Dein Profil und Präferenzen",
+    "settings_profile": "Profildaten",
+    "settings_saved": "Gespeichert",
+    "settings_name": "Vollständiger Name",
+    "settings_email_readonly": "E-Mail (nicht änderbar)",
+    "settings_language": "Bevorzugte Sprache",
+    "settings_save": "Speichern",
+    "role_applicant": "Bewerber",
+    "steps": {
+      "lead_new": "Deine Bewerbung ist eingegangen. Wir melden uns in Kürze.",
+      "contacted": "Wir haben dich kontaktiert. Bitte antworte auf unsere Nachrichten.",
+      "docs_requested": "Bitte lade die angeforderten Dokumente hoch.",
+      "docs_received": "Deine Dokumente sind eingegangen. Wir prüfen sie.",
+      "docs_review": "Deine Dokumente werden aktuell geprüft. Bitte habe etwas Geduld.",
+      "invoice_open": "Du hast eine offene Rechnung. Bitte prüfe deine Zahlungen.",
+      "payment_received": "Deine Zahlung ist bestätigt. Nächste Schritte folgen.",
+      "process_next": "Wir begleiten dich zu den nächsten Schritten (Visum, Kurs, Bewerbung).",
+      "completed": "Dein Prozess ist abgeschlossen. Herzlichen Glückwunsch!",
+      "default": "Warte auf die nächste Information von uns."
+    }
+  },
+  "staff": {
+    "kanban": "Kanban Board",
+    "applicants": "Bewerber",
+    "documents": "Dokumente",
+    "tasks": "Aufgaben",
+    "reports": "Berichte",
+    "invoices": "Rechnungen",
+    "invoices_title": "Rechnungsverwaltung",
+    "invoices_sub": "Rechnungen erstellen und verwalten",
+    "invoices_loading": "Rechnungen werden geladen...",
+    "invoices_error": "Fehler beim Laden der Rechnungen.",
+    "invoices_empty": "Noch keine Rechnungen erstellt",
+    "invoices_empty_hint": "Erstelle eine Rechnung für einen Bewerber.",
+    "invoice_create": "Neue Rechnung",
+    "invoice_create_title": "Rechnung erstellen",
+    "invoice_applicant": "Bewerber",
+    "invoice_select_applicant": "Bewerber auswählen",
+    "invoice_description": "Beschreibung",
+    "invoice_amount": "Betrag (EUR)",
+    "invoice_due_date": "Fälligkeitsdatum",
+    "invoice_save": "Rechnung erstellen",
+    "invoice_saving": "Wird erstellt...",
+    "invoice_created_success": "Rechnung erstellt",
+    "invoice_updated_success": "Rechnung aktualisiert",
+    "invoice_change_status": "Status ändern",
+    "invoice_total": "Gesamt",
+    "invoice_open_count": "Offene Rechnungen",
+    "invoice_paid_count": "Bezahlte Rechnungen",
+    "invoice_filter_all": "Alle",
+    "invoice_filter_draft": "Entwurf",
+    "invoice_filter_sent": "Versendet",
+    "invoice_filter_paid": "Bezahlt",
+    "invoice_filter_overdue": "Überfällig",
+    "invoice_filter_cancelled": "Storniert"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "Nutzer",
+    "workspaces": "Bereiche",
+    "audit": "Audit Logs"
+  },
+  "partner": {
+    "dashboard": "Dashboard",
+    "referrals": "Vermittlungen",
+    "referral_link": "Empfehlungslink",
+    "settings": "Einstellungen",
+    "welcome": "Willkommen",
+    "overview": "Übersicht deiner Vermittlungen",
+    "total_referrals": "Gesamt Vermittlungen",
+    "active_referrals": "Aktive Vermittlungen",
+    "enrolled": "Eingeschrieben",
+    "quick_actions": "Schnellzugriff",
+    "view_referrals": "Vermittlungen anzeigen",
+    "view_referrals_desc": "Alle vermittelten Bewerber einsehen",
+    "get_link": "Empfehlungslink abrufen",
+    "get_link_desc": "Link zum Teilen mit Interessenten",
+    "referrals_desc": "Alle von dir vermittelten Bewerber",
+    "no_referrals": "Noch keine Vermittlungen",
+    "no_referrals_hint": "Teile deinen Empfehlungslink, um Bewerber zu vermitteln.",
+    "col_name": "Name",
+    "col_course": "Kurs",
+    "col_status": "Status",
+    "col_date": "Datum",
+    "referral_link_desc": "Teile diesen Link mit Interessenten",
+    "your_link": "Dein persönlicher Empfehlungslink",
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "link_hint": "Bewerbungen über diesen Link werden automatisch deinem Konto zugeordnet.",
+    "org_name": "Organisationsname",
+    "settings_desc": "Profil und Einstellungen"
+  },
+  "seo": {
+    "home_title": "Studienkolleg Aachen – Dein Weg zum Studium in Deutschland",
+    "home_desc": "Studienkolleg Aachen / Way2Germany: Vorbereitung auf die Feststellungsprüfung (FSP), Sprachkurse, Visum-Support und persönliche Begleitung für internationale Studierende.",
+    "courses_title": "Kurse – Studienkolleg Aachen",
+    "courses_desc": "T-Kurs, M-Kurs, W-Kurs, M/T-Kurs und Sprachkurse A1–C1: Alle Kurse zur Vorbereitung auf die Feststellungsprüfung am Studienkolleg Aachen.",
+    "services_title": "Services – Studienkolleg Aachen",
+    "services_desc": "Visum-Support, Unterkunft, Mentoring, Zeugnisanerkennung, Uni-Bewerbungscoaching und Krankenversicherung – alles aus einer Hand.",
+    "contact_title": "Kontakt – Studienkolleg Aachen",
+    "contact_desc": "Kontaktiere das Team von Studienkolleg Aachen / Way2Germany: Theaterstraße 30–32, 52062 Aachen. Telefon, E-Mail, WhatsApp.",
+    "apply_title": "Jetzt bewerben – Studienkolleg Aachen",
+    "apply_desc": "Online-Bewerbung für das Studienkolleg Aachen. Bewerbungsformular ausfüllen, Dokumente hochladen und innerhalb von 24 Stunden Rückmeldung erhalten.",
+    "legal_title": "Impressum – W2G Academy GmbH",
+    "legal_desc": "Impressum der W2G Academy GmbH, Betreiberin von Studienkolleg Aachen / Way2Germany. Angaben gemäß § 5 TMG.",
+    "privacy_title": "Datenschutzerklärung – Studienkolleg Aachen",
+    "privacy_desc": "Datenschutzerklärung der W2G Academy GmbH gemäß DSGVO für die Plattform Studienkolleg Aachen / Way2Germany.",
+    "agb_title": "AGB – Studienkolleg Aachen",
+    "agb_desc": "Allgemeine Geschäftsbedingungen der W2G Academy GmbH für das Studienkolleg Aachen / Way2Germany.",
+    "login_title": "Anmelden",
+    "login_desc": "Anmeldung zum Portal von Studienkolleg Aachen / Way2Germany.",
+    "portal_title": "Bewerberportal",
+    "portal_desc": "Dein persönliches Portal: Bewerbungsstatus, Dokumente, Nachrichten und mehr.",
+    "booking_title": "Termin buchen – Studienkolleg Aachen",
+    "booking_desc": "Buchen Sie eine kostenlose Beratung oder ein Bewerbungsgespräch."
+  },
+  "staff": {
+    "dashboard": {
+      "title": "Dashboard",
+      "overview": "Uebersicht",
+      "new_applications": "Neue Bewerbungen",
+      "pending_docs": "Offene Dokumente",
+      "open_tasks": "Offene Aufgaben",
+      "open_invoices": "Offene Rechnungen",
+      "recent_activity": "Letzte Aktivitaeten",
+      "quick_actions": "Schnellaktionen",
+      "action_needed": "Handlungsbedarf",
+      "no_actions": "Keine Aktionen noetig.",
+      "total_applicants": "Bewerber gesamt",
+      "by_stage": "Nach Status",
+      "by_source": "Nach Quelle",
+      "revenue": "Umsatz",
+      "paid": "Bezahlt",
+      "outstanding": "Ausstehend",
+      "view_all": "Alle anzeigen",
+      "new_application": "Neue Bewerbung",
+      "new_task": "Neue Aufgabe",
+      "new_invoice": "Neue Rechnung",
+      "new_message": "Neue Nachricht"
+    },
+    "cases": {
+      "title": "Fallliste",
+      "search_placeholder": "Suche nach Name, E-Mail, Bewerbernr...",
+      "all_stages": "Alle Status",
+      "total": "Gesamt",
+      "applicant": "Bewerber",
+      "stage": "Status",
+      "source": "Quelle",
+      "last_activity": "Letzte Aktivitaet",
+      "actions": "Aktionen",
+      "no_cases": "Keine Faelle gefunden.",
+      "open_case": "Fall oeffnen"
+    },
+    "tasks": {
+      "title": "Aufgaben",
+      "create": "Aufgabe erstellen",
+      "edit": "Bearbeiten",
+      "delete": "Loeschen",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "task_title": "Titel",
+      "description": "Beschreibung",
+      "assigned_to": "Zugewiesen an",
+      "due_date": "Faelligkeitsdatum",
+      "priority": "Prioritaet",
+      "status": "Status",
+      "notes": "Notizen",
+      "add_note": "Notiz hinzufuegen",
+      "open": "Offen",
+      "in_progress": "In Bearbeitung",
+      "completed": "Erledigt",
+      "overdue": "Ueberfaellig",
+      "filter_all": "Alle Aufgaben",
+      "filter_mine": "Meine Aufgaben",
+      "filter_open": "Offen",
+      "filter_overdue": "Ueberfaellig",
+      "normal": "Normal",
+      "high": "Hoch",
+      "urgent": "Dringend",
+      "applicant": "Bewerber",
+      "created_at": "Erstellt",
+      "no_tasks": "Keine Aufgaben gefunden.",
+      "today": "Heute",
+      "this_week": "Diese Woche",
+      "this_month": "Dieser Monat"
+    },
+    "invoices": {
+      "title": "Rechnungen",
+      "create": "Rechnung erstellen",
+      "edit": "Bearbeiten",
+      "delete": "Loeschen",
+      "send": "Versenden",
+      "download_pdf": "PDF herunterladen",
+      "invoice_number": "Rechnungsnr.",
+      "applicant": "Bewerber",
+      "applicant_number": "Bewerbernr.",
+      "amount": "Betrag",
+      "status": "Status",
+      "due_date": "Faelligkeitsdatum",
+      "created": "Erstellt",
+      "draft": "Entwurf",
+      "sent": "Versendet",
+      "paid": "Bezahlt",
+      "overdue": "Ueberfaellig",
+      "cancelled": "Storniert",
+      "all": "Alle",
+      "filter_status": "Status",
+      "no_invoices": "Keine Rechnungen gefunden.",
+      "description": "Beschreibung",
+      "items": "Positionen",
+      "subtotal": "Zwischensumme",
+      "total": "Gesamtbetrag",
+      "notes": "Hinweise",
+      "mark_paid": "Als bezahlt markieren",
+      "mark_sent": "Als versendet markieren"
+    },
+    "messaging": {
+      "title": "Nachrichten",
+      "new_conversation": "Neue Konversation",
+      "search_placeholder": "Konversationen suchen...",
+      "no_conversations": "Noch keine Konversationen.",
+      "no_messages": "Keine Nachrichten in dieser Konversation.",
+      "send": "Senden",
+      "type_message": "Nachricht eingeben...",
+      "applicant": "Bewerber",
+      "staff": "Mitarbeiter",
+      "system": "System",
+      "channel": "Kanal",
+      "portal": "Portal",
+      "email": "E-Mail",
+      "last_message": "Letzte Nachricht",
+      "unread": "Ungelesen",
+      "all": "Alle",
+      "inbox": "Posteingang"
+    },
+    "documents": {
+      "title": "Dokumente",
+      "review": "Pruefen",
+      "approve": "Genehmigen",
+      "reject": "Ablehnen",
+      "revalidate": "Erneut pruefen",
+      "download": "Herunterladen",
+      "preview": "Vorschau",
+      "status": "Status",
+      "type": "Typ",
+      "uploaded": "Hochgeladen",
+      "approved": "Genehmigt",
+      "rejected": "Abgelehnt",
+      "in_review": "In Pruefung",
+      "needs_review": "Pruefung noetig",
+      "applicant": "Bewerber",
+      "no_documents": "Keine Dokumente gefunden."
+    },
+    "detail": {
+      "case_file": "Fallakte",
+      "applicant_data": "Bewerberdaten",
+      "course_type": "Kurstyp",
+      "applicant_no": "Bew.-Nr.",
+      "semester": "Semester",
+      "language_level": "Sprachniveau",
+      "country_degree": "Herkunftsland",
+      "date_of_birth": "Geburtsdatum",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "source": "Quelle",
+      "created": "Erstellt",
+      "status_change": "Status aendern",
+      "activity": "Aktivitaet",
+      "communication": "Kommunikation",
+      "send_email": "E-Mail senden",
+      "add_note": "Notiz hinzufuegen",
+      "create_task": "Aufgabe erstellen",
+      "create_invoice": "Rechnung erstellen",
+      "ai_screening": "KI-Pruefung",
+      "start_screening": "Pruefung starten",
+      "documents": "Dokumente",
+      "tasks": "Aufgaben",
+      "invoices": "Rechnungen",
+      "notes": "Notizen",
+      "history": "Verlauf",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "close": "Schliessen",
+      "confirm": "Bestaetigen",
+      "subject": "Betreff",
+      "message": "Nachricht"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin-Dashboard",
+      "system_overview": "Systemuebersicht",
+      "users": "Benutzer",
+      "applications": "Bewerbungen",
+      "invoices": "Rechnungen",
+      "tasks": "Aufgaben",
+      "messages": "Nachrichten",
+      "documents": "Dokumente",
+      "recent_audit": "Letzte Audit-Ereignisse",
+      "system_settings": "Systemeinstellungen"
+    },
+    "users": {
+      "title": "Benutzerverwaltung",
+      "invite": "Benutzer einladen",
+      "edit": "Bearbeiten",
+      "deactivate": "Deaktivieren",
+      "role": "Rolle",
+      "status": "Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "knowledge": {
+      "title": "Wissensbasis",
+      "search": "Suchen...",
+      "add_entry": "Eintrag hinzufuegen",
+      "country": "Land",
+      "category": "Kategorie",
+      "requirements": "Anforderungen"
+    }
+  },
+  "layout": {
+    "staff_portal": "Staff Portal",
+    "teacher_portal": "Teacher Portal",
+    "applicant_portal": "Bewerberportal",
+    "admin_portal": "Admin Portal",
+    "partner_portal": "Partner Portal",
+    "staff": {
+      "dashboard": "Dashboard",
+      "kanban": "Kanban",
+      "cases": "Fallliste",
+      "tasks": "Aufgaben",
+      "documents": "Dokumente",
+      "invoices": "Rechnungen",
+      "messages": "Nachrichten",
+      "reporting": "Reporting",
+      "oracle": "Oracle"
+    },
+    "teacher": {
+      "dashboard": "Dashboard",
+      "students": "Lernende",
+      "messages": "Nachrichten",
+      "more": "Mehr"
+    },
+    "applicant": {
+      "dashboard": "Dashboard",
+      "status": "Status",
+      "tasks": "Aufgaben",
+      "documents": "Dokumente",
+      "messages": "Nachrichten",
+      "financials": "Rechnungen",
+      "appointments": "Termine",
+      "more": "Mehr"
+    },
+    "applicant_mobile": {
+      "home": "Home",
+      "tasks": "Aufgaben",
+      "docs": "Docs",
+      "chat": "Chat",
+      "more": "Mehr"
+    },
+    "admin": {
+      "dashboard": "Dashboard",
+      "cases": "Faelle",
+      "users": "Nutzer",
+      "partners": "Partner",
+      "knowledge": "Wissen",
+      "jobs": "Jobs",
+      "rules": "Regeln",
+      "audit": "Audit",
+      "reports": "Reports",
+      "settings": "Einstellungen"
+    },
+    "partner": {
+      "dashboard": "Dashboard",
+      "referrals": "Leads / Bewerber",
+      "tracking": "Provisionen",
+      "messages": "Nachrichten",
+      "settings": "Einstellungen"
+    }
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten.",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Loeschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "close": "Schliessen",
+    "confirm": "Bestaetigen",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "export": "Exportieren",
+    "back": "Zurueck",
+    "next": "Weiter",
+    "previous": "Zurueck",
+    "yes": "Ja",
+    "no": "Nein",
+    "none": "Keine",
+    "all": "Alle",
+    "no_data": "Keine Daten verfuegbar.",
+    "actions": "Aktionen"
+  }
+}

@@ -1,0 +1,188 @@
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Bell, Check, CheckCheck, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import apiClient from '../../lib/apiClient';
+
+function timeAgo(dateStr, lang) {
+  const now = new Date();
+  const d = new Date(dateStr);
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return lang === 'en' ? 'just now' : 'gerade eben';
+  if (diff < 3600) {
+    const m = Math.floor(diff / 60);
+    return lang === 'en' ? `${m}m ago` : `vor ${m} Min.`;
+  }
+  if (diff < 86400) {
+    const h = Math.floor(diff / 3600);
+    return lang === 'en' ? `${h}h ago` : `vor ${h} Std.`;
+  }
+  const days = Math.floor(diff / 86400);
+  return lang === 'en' ? `${days}d ago` : `vor ${days} T.`;
+}
+
+export default function NotificationBell() {
+  const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const ref = useRef(null);
+  const lang = i18n.language || 'de';
+
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const res = await apiClient.get('/api/notifications/unread-count');
+      setUnreadCount(res.data.count || 0);
+    } catch {}
+  }, []);
+
+  const fetchNotifications = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.get('/api/notifications?limit=20');
+      setNotifications(res.data || []);
+    } catch {}
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchUnreadCount();
+    const interval = setInterval(fetchUnreadCount, 30000);
+    return () => clearInterval(interval);
+  }, [fetchUnreadCount]);
+
+  useEffect(() => {
+    if (open) fetchNotifications();
+  }, [open, fetchNotifications]);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const markRead = async (id) => {
+    try {
+      await apiClient.patch(`/api/notifications/${id}/read`);
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch {}
+  };
+
+  const markAllRead = async () => {
+    try {
+      await apiClient.patch('/api/notifications/read-all');
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setUnreadCount(0);
+    } catch {}
+  };
+
+  const handleClick = (notif) => {
+    if (!notif.read) markRead(notif.id);
+    if (notif.link) {
+      navigate(notif.link);
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(!open)}
+        data-testid="notification-bell"
+        className="relative p-2 rounded-md hover:bg-[var(--color-surface-sunken)] transition-colors"
+        aria-label="Notifications"
+      >
+        <Bell size={20} className="text-[var(--color-text-secondary)]" />
+        {unreadCount > 0 && (
+          <span
+            data-testid="notification-badge"
+            className="absolute -top-0.5 -right-0.5 bg-[var(--color-danger)] text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1"
+          >
+            {unreadCount > 99 ? '99+' : unreadCount}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div
+          data-testid="notification-dropdown"
+          className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-[var(--radius-md)] shadow-lg border border-[var(--color-divider)] z-[9999] max-h-[420px] flex flex-col"
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-divider-subtle)]">
+            <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">
+              {lang === 'en' ? 'Notifications' : 'Benachrichtigungen'}
+            </h3>
+            <div className="flex items-center gap-2">
+              {unreadCount > 0 && (
+                <button
+                  onClick={markAllRead}
+                  data-testid="mark-all-read-btn"
+                  className="text-xs text-primary hover:underline flex items-center gap-1"
+                >
+                  <CheckCheck size={14} />
+                  {lang === 'en' ? 'Mark all read' : 'Alle gelesen'}
+                </button>
+              )}
+              <button onClick={() => setOpen(false)} className="text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)]">
+                <X size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* List */}
+          <div className="overflow-y-auto flex-1">
+            {loading && notifications.length === 0 && (
+              <div className="p-6 text-center text-[var(--color-text-tertiary)] text-sm">
+                {lang === 'en' ? 'Loading...' : 'Laden...'}
+              </div>
+            )}
+            {!loading && notifications.length === 0 && (
+              <div className="p-6 text-center text-[var(--color-text-tertiary)] text-sm" data-testid="no-notifications">
+                {lang === 'en' ? 'No notifications' : 'Keine Benachrichtigungen'}
+              </div>
+            )}
+            {notifications.map(notif => (
+              <div
+                key={notif.id}
+                onClick={() => handleClick(notif)}
+                data-testid={`notification-item-${notif.id}`}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(notif); }}
+                className={`w-full text-left px-4 py-3 border-b border-[var(--color-divider-subtle)] hover:bg-[var(--color-surface-elevated)] transition-colors flex items-start gap-3 cursor-pointer ${
+                  !notif.read ? 'bg-[var(--color-info-bg)]/40' : ''
+                }`}
+              >
+                <div className={`mt-0.5 w-2 h-2 rounded-full flex-shrink-0 ${
+                  notif.read ? 'bg-transparent' : 'bg-primary'
+                }`} />
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm leading-tight ${notif.read ? 'text-[var(--color-text-secondary)]' : 'text-[var(--color-text-primary)] font-medium'}`}>
+                    {notif.title}
+                  </p>
+                  <p className="text-xs text-[var(--color-text-tertiary)] mt-0.5 truncate">{notif.message}</p>
+                  <p className="text-[10px] text-[var(--color-text-tertiary)] mt-1">{timeAgo(notif.created_at, lang)}</p>
+                </div>
+                {!notif.read && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); markRead(notif.id); }}
+                    className="text-[var(--color-text-tertiary)] hover:text-primary flex-shrink-0 mt-1"
+                    title={lang === 'en' ? 'Mark as read' : 'Als gelesen markieren'}
+                  >
+                    <Check size={14} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

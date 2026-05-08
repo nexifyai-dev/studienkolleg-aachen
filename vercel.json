@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend && yarn install && yarn build",
+  "outputDirectory": "frontend/build",
+  "functions": {
+    "api/index.py": {
+      "runtime": "@vercel/python",
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.py" }
+  ]
+}

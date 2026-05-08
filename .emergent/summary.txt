@@ -1,0 +1,147 @@
+<analysis>**original_problem_statement**: 
+Der User forderte ursprünglich die Behebung des Invoice-Creation-Bugs (P0). Im Verlauf der Sitzung wurden weitreichende Funktionserweiterungen durchgeführt: Implementierung von KI-gestützter E-Mail-Generierung mit dynamischer Vorlagenauswahl und intelligenter Spracherkennung (aus dem Nachrichtenkontext), Einführung benutzerspezifischer Signaturen, Bereinigung der -Datei für das Deployment, Hinzufügen einer Vercel-Serverless-Konfiguration (, ) und ein vollständiger Wechsel aller LLM-Services auf ein einziges Modell ( via OpenRouter).
+PRODUCT REQUIREMENTS: Voll funktionsfähige, berechenbare Plattform. Alle KI-Funktionen müssen exakte Systemdaten (Oracle) nutzen und kontextabhängig in der korrekten Sprache antworten. Der Code muss deployment-ready für Vercel (Frontend/Serverless Backend) oder Hostinger VPS sein.
+
+**User's preferred language**: German (Deutsch)
+INSTRUCT NEXT AGENT: Du MUSST die Sprache des Nutzers automatisch erkennen und AUSSCHLIESSLICH auf Deutsch antworten. Der User hat zudem einen massiven UNIVERSAL AUTONOMOUS OPERATING PROMPT (Nachricht 155) übergeben: Du musst eine streng analytische, DACH-orientierte, rollenbasierte Arbeitsweise annehmen (z.B. BACKEND ENGINEER, DEBUGGING SPECIALIST). Hinterfrage Aufgaben auf ihren echten Zweck und arbeite absolut regresssionsfrei. 
+
+**what currently exists?** 
+Ein voll funktionsfähiges Full-Stack-CRM für das Studienkolleg Aachen (React, FastAPI, MongoDB). Der CSRF-Schutz ist aktiv. E-Mails laufen über SMTP. Lokales Storage ist aktiv. Sämtliche KI-Interaktionen (Support Chat, Brain Assistent, E-Mail-Generierung, Oracle, Document Validation) sind zentralisiert und nutzen ausschließlich  via OpenRouter (inklusive Wrapper für alte nscale-Aufrufe). Das System ist nun für ein Vercel-Serverless-Deployment vorbereitet ( und  existieren).
+
+**Last working item**: 
+    - Last item agent was working: Untersuchung eines potenziellen Fehlers im Support-Chat (W2G Assistent) *nach dem Deployment*. Der User testete den Chat im produktiven Umfeld mit der Eingabe rgergergew und erhielt die Antwort: Es tut mir leid, aber Ihre Eingabe konnte ich leider nicht verstehen.... Der Agent hat ein  gesendet, um zu klären, ob dies ein gewünschtes Verhalten der KI auf unsinnigen Text ist oder ein Deployment-Fehler (z.B. fehlende OpenRouter-API-Keys im Production-Environment).
+    - Status: BLOCKED (Warten auf User-Antwort / Verifikation des Production-Environments)
+    - Agent Testing Done: N (Agent wartet auf User-Input)
+    - Which testing method agent to use? backend testing via curl (Prüfung von  und Logs)
+    - User Testing Done: Y (User hat in der deployed Version getestet)
+
+**All Pending/In progress Issue list**: 
+  Issue 1: Support Chat Verhalten im Deployed Environment (P0)
+     - Attempted fixes: Bisher nur  gesendet, um den Kontext der Live-Umgebung zu klären.
+     - Next debug checklist:  und  prüfen. Klären: Ist die Antwort (Es tut mir leid...) ein korrekter LLM-Fallback für unsinnige Eingaben oder fängt das Backend einen HTTP 500 (fehlender API-Key in Vercel/Hostinger) ab und wirft diese Standardmeldung im Frontend? Production  Variablen prüfen.
+     - Why fix this issue and what will be achieved with the fix? Der Support Chat muss in der Live-Umgebung fehlerfrei mit dem DeepSeek V4 Modell kommunizieren.
+     - Status: BLOCKED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix? backend via curl
+     - Blocked on other issue: None
+
+  Issue 2: Google Kalender Integration (P1)
+     - Attempted fixes: Keine.
+     - Next debug checklist: Evaluieren, wo und wie der Google Kalender angebunden wird (StaffAppointmentsPage / Backend Calendar API).
+     - Why fix this issue and what will be achieved with the fix? Lang erwartete Kundenanforderung.
+     - Status: NOT STARTED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix? Both
+     - Blocked on other issue: None
+
+  Issue 3: Erweiterte Reports (P2)
+     - Attempted fixes: Keine.
+     - Next debug checklist:  und Frontend  erweitern (Umsatz pro Mitarbeiter, nach Datum).
+     - Status: NOT STARTED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix? Both
+     - Blocked on other issue: None
+
+**In progress Task List**: 
+  Task 1: Vercel / Hostinger Deployment Abschluss (P1)
+     - Where to resume: Klären, ob der User das System nun auf Vercel Serverless oder dem Hostinger VPS (Ubuntu) hostet, und sicherstellen, dass die Environment-Variablen (, etc.) dort korrekt injiziert wurden.
+     - What will be achieved with this? Go-Live der Plattform.
+     - Status: BLOCKED (User testet aktuell)
+     - Should Test frontend/backend/both after fix? Both
+     - Blocked on something: User-Entscheidung / Live-Env-Variablen.
+
+**Upcoming and Future Tasks**
+    Upcoming Tasks:
+    - Task 1: Google Kalender Integration (P1)
+    - Task 2: Erweiterte Reports (P2)
+    
+    Future Tasks:
+    - Task 3: PWA Integration (Manifest, Service Worker) (P3)
+    - Task 4: WhatsApp API Integration für Bewerber-Benachrichtigungen (P3)
+    - Task 5: SSR/SEO Optimierung (P3)
+    - Task 6: Kanban-Ansicht und Fallliste zusammenführen (P3)
+
+**Completed work in this session**
+- Invoice Creation Bug () behoben (DONE)
+- KI-E-Mail-Generierung mit Vorlagen (8 Kategorien) und benutzerspezifischen Signaturen (DONE)
+- Automatische Spracherkennung aus dem E-Mail-Kontext (DONE)
+- Oracle Service komplett überarbeitet für exakte und korrekte Datenzählung für die KI (DONE)
+- Deployment-Vorbereitung (Vercel config  &  erstellt,  bereinigt) (DONE)
+- Vollständige Konsolidierung aller LLM-Funktionen auf  via OpenRouter (DONE)
+
+**Earlier issues found/mentioned but not fixed**
+  - Keine systemkritischen Bugs offen (Testing Agent Iteration 105 zeigte 100% Pass für UI und gängige Backend-Flows).
+
+**Known issue recurrence from previous fork**
+  - Issue recurrence in previous fork: None
+  - Recurrence count: 0
+  - Status: RESOLVED
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+React, FastAPI, MongoDB, Vercel Serverless (Python Runtime), DeepSeek-V4-Flash via OpenRouter, System-Prompt-Design (Universal Autonomous Prompt).
+
+**key DB schema**
+  - : Speichert importierte IMAP Mails (Spracherkennung greift hierauf zu)
+  - :  wird automatisch berechnet.
+  - Benutzer-Signaturen werden individuell in der DB gepflegt.
+
+**changes in tech stack**
+  - **KI-Modell-Wechsel:** Alle nscale/minimax/gemini Modelle wurden entfernt. Das gesamte System (Support Chat, Brain, E-Mail, Oracle) nutzt **ausschließlich**  über OpenRouter.  wurde in einen Wrapper für  umgewandelt.
+  - **Deployment:** Vercel-Serverless-Logik () eingeführt.
+
+**All files of reference** 
+  -  (Aktueller Bug nach Deployment)
+  -  (Neuer LLM-Kern)
+  -  (Wrapper)
+  -  &  (Deployment)
+
+**Areas that need refactoring**:
+  - Keine. Wrapper-Pattern für LLMs wurde in dieser Sitzung bereits aufgeräumt.
+
+**key api endpoints**
+  -  (Public Chat - Aktuell im Fokus)
+  -  (E-Mail Generierung)
+
+**Critical Info for New Agent** 
+  - **UNIVERSAL AUTONOMOUS OPERATING PROMPT BEACHTEN:** (Siehe User Message 155). Du musst als hochgradig professioneller, DACH-orientierter Agent arbeiten. Analysiere das Ziel hinter jeder Frage. Liefere keine halben Lösungen. Keine One-Off UIs ohne Systemlogik.
+  - Das System ist bereit für das Deployment (Vercel oder VPS). Fehler, die nach dem Deployment auftreten, sind höchstwahrscheinlich auf fehlende oder fehlerhafte Environment-Variablen im Live-System (, , etc.) zurückzuführen.
+  - Die gesamte KI läuft jetzt über . Der  wird nicht mehr direkt abgefragt/genutzt.
+
+**documents and test reports created in this job** 
+  -  bis  (105: 100% Pass)
+  -  (Geupdatet)
+
+**Last 10 User Messages and any pending HUMAN messages** 
+ - (User) Zeigt Vercel-Build-Error ().
+ - (User) Fragt Kann ich nicht alles auf vercel laufen lassen? und Und wenn ich alles hier hoste?.
+ - (User) Fordert Deployment-Check und Auflistung aller Secrets.
+ - (Agent) Repariert  und listet alle Environment-Keys auf.
+ - (User) Fordert, ALLE LLM Modelle exklusiv auf  über OpenRouter umzustellen.
+ - (Agent) Führt dies durch (für Brain & Mail).
+ - (User) Fragt: Hast du die auch bei der Auftragsprüfung eingebaut?.
+ - (Agent) Refactort  zu einem Wrapper und führt finalen Systemtest (Iteration 105) durch.
+ - (User) PENDING HUMAN MESSAGE: Meldet, dass im W2G Support Chat Nach dem deployed bei der Eingabe rgergergew die KI mit Es tut mir leid... antwortet.
+
+**Project Health Check:**
+  - Broken: Deployed Environment W2G Chat (Vermutlich Env-Var Issue in Live)
+  - Mocked: Keine
+
+**3rd Party Integrations** 
+  - OpenRouter API (deepseek/deepseek-v4-flash) — User API Key
+  - Stripe (Payments) — User API Key
+  - Strato SMTP — User Credentials
+
+**Testing status**
+  - Testing agent used after significant changes: YES (Iteration 105)
+  - Troubleshoot agent used after agent stuck in loop: NO
+  - Test files created: 
+  - Known regressions: Keine im lokalen Code, nur Issues im produktiven Deployment.
+
+**Credentials to test flow:**
+  
+
+**What agent forgot to execute**
+  Der Agent hat das  bezüglich des Chat-Verhaltens nach dem Deployment nicht abgewartet. Er muss klären, ob es sich bei dem Chat-Verhalten um einen korrekten Fallback des DeepSeek-Modells handelt (da rgergergew Quatsch ist) oder ob die API im Live-System blockiert wird und ein harter Fehler im Frontend als freundliche Nachricht gerendert wird.</analysis>

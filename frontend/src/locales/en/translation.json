@@ -1,0 +1,1195 @@
+{
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "services": "Services",
+    "contact": "Contact",
+    "apply": "Apply Now",
+    "login": "Sign In",
+    "portal": "Go to Portal",
+    "knowledge": "Knowledge",
+    "booking": "Booking"
+  },
+  "hero": {
+    "badge": "Studienkolleg Aachen",
+    "headline_1": "Your Path to",
+    "headline_2": "clear, digitally guided.",
+    "sub": "Studienkolleg, language courses and career programs in one system. From application to enrollment – structured, transparent and without process chaos.",
+    "cta_primary": "Apply Now",
+    "cta_secondary": "Book Free Consultation",
+    "trust": "50+ nations. Personal guidance. Secure document process.",
+    "stat_graduates": "2,800+ Graduates",
+    "stat_countries": "45+ Countries",
+    "headline_accent": "Germany",
+    "headline_dash": "–"
+  },
+  "courses": {
+    "title": "Our Courses",
+    "sub": "All courses prepare for the official Feststellungsprüfung (FSP) university entrance exam.",
+    "t_course": {
+      "name": "T-Course",
+      "desc": "For technical programs: Engineering, Mathematics, Physics, Computer Science."
+    },
+    "m_course": {
+      "name": "M-Course",
+      "desc": "For Medicine, Dentistry, Biology, Biochemistry, Pharmaceutics."
+    },
+    "w_course": {
+      "name": "W-Course",
+      "desc": "For Economics, Business, Informatics, Law, Social Sciences."
+    },
+    "mt_course": {
+      "name": "M/T-Course",
+      "desc": "Combines T and M courses for both technical and medical programs."
+    },
+    "view_all": "View All Courses"
+  },
+  "courses_page": {
+    "hero_title": "Our Courses",
+    "hero_sub": "All courses prepare for the official Feststellungsprüfung (FSP) university entrance exam.",
+    "fsp_notice": "All courses prepare for the FSP. Eligibility is determined by the responsible regional authority. The Studienkolleg guides you through the entire process.",
+    "main_title": "University Preparatory Courses",
+    "main_desc": "All courses run for two semesters and conclude with the Feststellungsprüfung (FSP) – the gateway to German universities.",
+    "duration_label": "Duration",
+    "schedule_label": "Classes",
+    "subjects_label": "Core Subjects",
+    "lang_title": "Language Courses Before Studienkolleg",
+    "lang_desc": "If your German level is below B1, we offer intensive preparatory language courses.",
+    "lang_level": "Level",
+    "lang_weeks": "Weeks",
+    "lang_hours": "Hrs/week",
+    "lang_note": "Courses can be combined or booked flexibly depending on demand.",
+    "starts_title": "Upcoming Course Starts",
+    "starts_note": "Exact dates by individual arrangement. Early application recommended.",
+    "cta_title": "Which course fits you?",
+    "cta_desc": "We help you choose the right course and guide you from your first inquiry to enrollment.",
+    "cta_apply": "Apply Now",
+    "cta_contact": "Request Consultation",
+    "course_cards": {
+      "t": {
+        "label": "Engineering & Natural Sciences",
+        "for": "For aspiring engineers and natural scientists",
+        "fsp": "FSP – Technical Track"
+      },
+      "m": {
+        "label": "Medicine & Life Sciences",
+        "for": "For aspiring doctors and life scientists",
+        "fsp": "FSP – Medicine/Biology Track"
+      },
+      "w": {
+        "label": "Business & Social Sciences",
+        "for": "For aspiring business and social science students",
+        "fsp": "FSP – Business Track"
+      },
+      "mt": {
+        "label": "Medicine + Engineering Combined",
+        "for": "For students with broad interdisciplinary interest",
+        "fsp": "FSP – M+T Combined Track"
+      },
+      "deutsch": {
+        "label": "German A1-C1 Intensive Courses",
+        "for": "For international students of all disciplines",
+        "fsp": "DSH / TestDaF Preparation"
+      }
+    },
+    "lang_req": "Min. B1 German",
+    "expand_btn": "Suitable Study Programs",
+    "levels": {
+      "A1": {
+        "label": "Beginner",
+        "desc": "No prior knowledge required – structured entry."
+      },
+      "A2": {
+        "label": "Elementary",
+        "desc": "Builds on A1, everyday communication."
+      },
+      "B1": {
+        "label": "Intermediate",
+        "desc": "Minimum requirement for Studienkolleg courses."
+      },
+      "B2": {
+        "label": "Upper Intermediate",
+        "desc": "Fluent communication, complex texts."
+      },
+      "C1": {
+        "label": "Advanced",
+        "desc": "Academic-level German, DSH preparation."
+      }
+    },
+    "lang_badge": "Language Course",
+    "lang_course_title": "German A1–C1",
+    "lang_course_desc": "Our language courses prepare you linguistically for the Studienkolleg or German university. B1 is the minimum requirement for all preparatory courses.",
+    "lang_course_btn": "Inquire About Language Course",
+    "semester_running": "Running",
+    "semester_open": "Open",
+    "semester_soon": "Soon",
+    "semester_start": "Course start",
+    "hero_badge": "Studienkolleg Courses",
+    "section_label": "Focus Courses"
+  },
+  "services": {
+    "title": "Our Services",
+    "visa": {
+      "name": "Visa Support",
+      "desc": "We assist with all necessary visa documents and translations."
+    },
+    "housing": {
+      "name": "Housing",
+      "desc": "Furnished accommodation solutions in Aachen – ready before your arrival."
+    },
+    "mentoring": {
+      "name": "Mentoring & Guidance",
+      "desc": "Personal advisors, check-ins and orientation support."
+    },
+    "documents": {
+      "name": "Credential Recognition",
+      "desc": "We guide you through the recognition process for your school certificates."
+    },
+    "uni": {
+      "name": "University Application Coaching",
+      "desc": "From course selection to uni-assist – we guide you through it."
+    },
+    "insurance": {
+      "name": "Health Insurance",
+      "desc": "Comprehensive insurance meeting visa and university requirements."
+    }
+  },
+  "services_page": {
+    "hero_title": "Our Services",
+    "hero_sub": "We guide you from application to admission – and beyond.",
+    "location_title": "Your Study City: Aachen",
+    "location_desc": "Aachen is located at the tri-border region of Germany, Belgium and the Netherlands – home to RWTH Aachen, one of Europe's most prestigious technical universities. International environment, short distances, excellent academic infrastructure.",
+    "process_title": "How We Support You",
+    "process_desc": "From first contact to successful course completion.",
+    "cta_title": "Ready to Start?",
+    "cta_desc": "Apply now and receive a personal response within 24 hours.",
+    "cta_apply": "Apply Now",
+    "cta_contact": "Request Consultation",
+    "steps": {
+      "apply": {
+        "title": "Apply",
+        "desc": "Fill in the online form – done in 10 minutes."
+      },
+      "check": {
+        "title": "Review",
+        "desc": "We review your documents and respond within 24 hours."
+      },
+      "confirm": {
+        "title": "Confirmation",
+        "desc": "Course place secured. Portal access. Visa support begins."
+      },
+      "start": {
+        "title": "Course Start",
+        "desc": "Arrival, orientation, classes – we are with you from day one."
+      }
+    }
+  },
+  "contact_page": {
+    "title": "Contact",
+    "sub": "We are here for you – personal, fast and reliable.",
+    "standort_label": "Studienkolleg / Way2Germany",
+    "location_name": "Location",
+    "phone_label": "Phone",
+    "email_label": "Email",
+    "whatsapp_label": "WhatsApp",
+    "hours_label": "Office Hours",
+    "hours_value": "Mon–Fri: 9:00 am – 5:00 pm",
+    "office_note": "Teaching, Consulting, Way2Germany Office",
+    "registered_label": "Registered Office",
+    "privacy_notice": "Your contact data is used exclusively to process your inquiry.",
+    "cta_apply_title": "Apply Now",
+    "cta_apply_desc": "Start your application with the full online form. We respond within 24 hours.",
+    "cta_apply_btn": "Apply Now →",
+    "whatsapp_title": "Direct WhatsApp Contact",
+    "whatsapp_desc": "Quick questions, document checks or scheduling – we typically respond within a few hours on weekdays.",
+    "whatsapp_btn": "Open WhatsApp",
+    "legal_link_note": "Legal information pursuant to § 5 TMG –",
+    "impressum_link": "Legal Notice",
+    "privacy_link": "Privacy Policy"
+  },
+  "legal_page": {
+    "impressum": "Legal Notice (Impressum)",
+    "agb": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "company_heading": "Company Information (§ 5 TMG)",
+    "office_heading": "Teaching & Consulting Location",
+    "registered_seat": "Registered Business Address",
+    "company_label": "Company",
+    "rep_label": "Representative",
+    "contact_label": "Contact",
+    "registry_label": "Commercial Register",
+    "office_note": "This location is used for teaching, consulting and applicant reception. It is not identical to the registered business address.",
+    "contact_faq": "Questions about our legal documents?",
+    "review_note": "",
+    "de_only_note": "These legal documents are legally binding in German only. The English version is provided for orientation purposes only and does not constitute a legally binding translation."
+  },
+  "apply": {
+    "title": "Apply Now",
+    "sub": "Start your journey. We respond within 24 hours.",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone / WhatsApp",
+    "country": "Country of Origin",
+    "area": "Desired Area",
+    "start": "Desired Start Date",
+    "level": "German Language Level",
+    "submit": "Submit Application",
+    "success": "Your application has been submitted. We will contact you soon.",
+    "privacy": "By submitting, you agree to our privacy policy.",
+    "success_title": "Application Received!",
+    "success_msg1": "Your application and documents have been submitted successfully.",
+    "success_msg2": "We will review your documents and get back to you within 24 hours.",
+    "back_link": "Back to Home",
+    "docs_title": "Upload Required Documents",
+    "docs_desc": "All three documents are required to process your application. Allowed formats: PDF, JPG, PNG, WEBP (max. 10 MB per file).",
+    "drag_drop": "Drop file here or",
+    "browse": "click to select",
+    "file_types": "PDF, JPG, PNG, WEBP – max. 10 MB",
+    "step1": "Personal Information",
+    "step2": "Course Selection",
+    "step3": "Documents",
+    "combo_label": "Would you like to combine with another course?",
+    "course_type_label": "Desired Course Type",
+    "degree_country_label": "Country of Last School Diploma",
+    "language_level_label": "Current German Level",
+    "motivation_label": "Motivation Letter (optional)",
+    "motivation_placeholder": "Brief introduction: Why Studienkolleg Aachen? What do you want to study?",
+    "next_btn": "Continue",
+    "back_btn": "Back",
+    "personal_data": "Personal Information",
+    "firstname": "First Name",
+    "lastname": "Last Name",
+    "dob": "Date of Birth",
+    "country_placeholder": "e.g. India, Egypt…",
+    "phone_placeholder": "+49 …",
+    "study_details": "Study Details",
+    "course_select_placeholder": "-- Select Course --",
+    "semester_label": "Desired Start Semester",
+    "semester_placeholder": "-- Select Semester --",
+    "german_level_label": "Current German Level",
+    "german_level_placeholder": "-- Select Level --",
+    "degree_country_placeholder": "e.g. India, Egypt, China…",
+    "notes_label": "Message / Notes",
+    "notes_placeholder": "Additional information, questions or special circumstances…",
+    "privacy_agree": "By submitting, you agree to our",
+    "privacy_link": "Privacy Policy",
+    "agb_link": "Terms & Conditions",
+    "and": "and the",
+    "zu": ".",
+    "submit_btn": "Submit Application with Documents",
+    "submitting": "Submitting…",
+    "error_missing_docs": "Please upload all required documents:",
+    "error_file_too_large": "is too large (max. 10 MB).",
+    "error_generic": "Submission failed. Please try again.",
+    "error_privacy": "Please accept the privacy policy and terms of service.",
+    "error_password_short": "Password must be at least 8 characters.",
+    "error_password_mismatch": "Passwords do not match.",
+    "account_title": "Create Portal Access",
+    "account_desc": "Create your portal account to track your application status, submit documents and communicate with the team.",
+    "password_label": "Password",
+    "password_confirm_label": "Confirm Password",
+    "file_size_display": "KB",
+    "file_too_large_label": "File too large (max. 10 MB)",
+    "courses": {
+      "t": "T-Course – Technical (Engineering, Electrical Engineering, Mathematics, Physics)",
+      "m": "M-Course – Medical (Medicine, Dentistry, Biology, Pharmacy)",
+      "w": "W-Course – Business (Economics, Informatics, Social Sciences, Law)",
+      "mt": "M/T-Course – Combined Medicine + Technical",
+      "lang": "Language Course (A1–C1 German Preparation)"
+    },
+    "combos": {
+      "none": "No combination",
+      "t": "Additionally T-Course",
+      "m": "Additionally M-Course",
+      "w": "Additionally W-Course"
+    },
+    "semesters": {
+      "ws2526": "Winter Semester 2025/26",
+      "ss26": "Summer Semester 2026",
+      "ws2627": "Winter Semester 2026/27",
+      "ss27": "Summer Semester 2027",
+      "ws2728": "Winter Semester 2027/28"
+    },
+    "levels": {
+      "A1": "A1 – No or very little knowledge",
+      "A2": "A2 – Basic knowledge",
+      "B1": "B1 – Intermediate (required for Studienkolleg)",
+      "B2": "B2 – Upper Intermediate",
+      "C1": "C1 – Advanced",
+      "C2": "C2 – Native-level proficiency"
+    },
+    "doc_labels": {
+      "language_certificate": "German Language Certificate",
+      "highschool_diploma": "School Diploma / Graduation Certificate",
+      "passport": "Passport"
+    },
+    "doc_descs": {
+      "language_certificate": "Certificate of current German proficiency (e.g. Goethe, TELC, DSH, TestDaF)",
+      "highschool_diploma": "Last diploma / university entrance qualification from your home country",
+      "passport": "Valid passport (ID card accepted for EU citizens)"
+    }
+  },
+  "home": {
+    "team_label": "Leadership",
+    "team_name": "Laura Saboor",
+    "team_role": "Managing Director · Way2Germany",
+    "team_quote": "I believe in education as the key to transformation. Every young person with the courage to go abroad deserves professional guidance – from the first inquiry to the first lecture day.",
+    "team_bio": "As the founder of Way2Germany, Laura Saboor combines years of experience in international education management with a deep understanding of the challenges facing international students. Under her leadership, the Studienkolleg Aachen has successfully supported over 2,800 graduates from 45+ countries.",
+    "team_cta": "Get in touch",
+    "campus_label": "Campus Life",
+    "campus_title": "More than just a course –\n an experience",
+    "campus_desc": "Real moments from our Studienkolleg in Aachen: classes, workshops, counseling and community.",
+    "campus_img_klasse": "Intensive teaching in small groups",
+    "campus_img_docs": "Workshop: Starting your studies in Germany",
+    "campus_img_health": "Healthcare system explained",
+    "campus_img_handshake_badge": "Partnership",
+    "campus_img_handshake_text": "Collaboration at eye level – right at the Studienkolleg",
+    "campus_img_motivation": "Application training: Motivation letter",
+    "reels_label": "Short Videos",
+    "reels_title": "Studienkolleg Up Close",
+    "reels_desc": "Short videos from our students and lecturers – straight from the campus.",
+    "segments_label": "Our Areas",
+    "segments_title": "What We Offer",
+    "segments_desc": "From university preparation to career counseling – choose your path.",
+    "video_label": "Insights",
+    "video_title": "Discover Studienkolleg Aachen",
+    "video_desc_header": "Two videos give you an authentic impression – of our campus and our services.",
+    "video_imagevideo_title": "Image Video – The Studienkolleg Aachen",
+    "video_services_title": "Services – Our Service Portfolio",
+    "programs_label": "Programs",
+    "programs_title": "Our Courses",
+    "programs_desc": "Four specialized courses – tailored to your study goal.",
+    "stats_label": "By the Numbers",
+    "stats_title": "Proven Results",
+    "stats_desc": "Numbers that reflect our commitment and quality.",
+    "video_desc": "We guide international applicants from the first inquiry to university admission – personal, digital and with full transparency at every step.",
+    "video_bullets": [
+      "Official preparation for the Feststellungsprüfung (FSP)",
+      "Personal guidance and support in German and English",
+      "Digital portal for documents, status and communication",
+      "Housing, visa support and insurance solutions"
+    ],
+    "services_sub": "Everything from one source – from consultation to the first semester.",
+    "process_title": "How the Process Works",
+    "process_desc": "From inquiry to Studienkolleg – digital, transparent, personal.",
+    "process_steps": [
+      {
+        "step": "01",
+        "title": "Submit Application",
+        "desc": "Complete the full form and upload your required documents. We will respond within 24 hours."
+      },
+      {
+        "step": "02",
+        "title": "AI-Assisted Pre-Screening",
+        "desc": "Our system automatically checks document completeness and prepares the staff evaluation."
+      },
+      {
+        "step": "03",
+        "title": "Portal Access & Status Tracking",
+        "desc": "You receive your personal portal with a clear task dashboard and direct contact with the team."
+      },
+      {
+        "step": "04",
+        "title": "Admission & Start",
+        "desc": "After review and a personal offer, you receive your admission letter and begin at the Studienkolleg."
+      }
+    ],
+    "partner_text": "A trusted partner for international students on their way to Germany for years.",
+    "faq_more": "More questions?",
+    "faq_contact": "Get in touch",
+    "cta_title": "Ready for your",
+    "cta_title_accent": "Studies in Germany?",
+    "cta_desc": "Apply now with your documents and receive a response within 24 hours.",
+    "cta_consultation": "Free Consultation",
+    "segments": {
+      "studienkolleg": {
+        "label": "Studienkolleg",
+        "desc": "State-recognized preparation for your studies in Germany."
+      },
+      "sprachkurse": {
+        "label": "Language Courses",
+        "desc": "German from A1 to C1 – intensive, efficient and certified."
+      },
+      "pflege": {
+        "label": "Healthcare & Medicine",
+        "desc": "Recognition and entry into the German healthcare sector."
+      },
+      "arbeit": {
+        "label": "Work & Career",
+        "desc": "Professional recognition, job placement and career counseling."
+      },
+      "partner": {
+        "label": "Become a Partner",
+        "desc": "Agencies and institutions – partner with us."
+      }
+    },
+    "programs": {
+      "t": {
+        "badge": "T-Course",
+        "title": "Technical Course",
+        "desc": "Mathematics, Physics, German – for technical and engineering programs.",
+        "duration": "2 Semesters",
+        "start": "Summer 2026"
+      },
+      "m": {
+        "badge": "M-Course",
+        "title": "Medical Course",
+        "desc": "Biology, Chemistry, Physics – for medical and natural science programs.",
+        "duration": "2 Semesters",
+        "start": "Summer 2026"
+      },
+      "w": {
+        "badge": "W-Course",
+        "title": "Business Course",
+        "desc": "Mathematics, Economics, Business – for business and social science programs.",
+        "duration": "2 Semesters",
+        "start": "Winter 2026"
+      },
+      "de": {
+        "badge": "Intensive",
+        "title": "German Intensive",
+        "desc": "From A1 to B2 in compact modules. Online or in Aachen.",
+        "duration": "8–12 Weeks",
+        "start": "Ongoing"
+      }
+    },
+    "stats_items": [
+      {
+        "suffix": "+",
+        "label": "Successful Graduates"
+      },
+      {
+        "suffix": "%",
+        "label": "Pass Rate"
+      },
+      {
+        "suffix": "+",
+        "label": "Partner Countries"
+      },
+      {
+        "suffix": "+",
+        "label": "Years of Experience"
+      }
+    ],
+    "trust_items": [
+      {
+        "title": "State Recognized",
+        "desc": "Accredited programs with official recognition."
+      },
+      {
+        "title": "Internationally Connected",
+        "desc": "Partnerships with universities and agencies worldwide."
+      },
+      {
+        "title": "Proven Results",
+        "desc": "94% pass rate and over 2,800 graduates."
+      },
+      {
+        "title": "Personal Support",
+        "desc": "Individual counseling from application to enrollment."
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Sarah M.",
+        "country": "Morocco",
+        "text": "The Studienkolleg opened the door to my dream studies. The support was outstanding.",
+        "course": "T-Course 2024"
+      },
+      {
+        "name": "Ahmed K.",
+        "country": "Egypt",
+        "text": "From B1 to C1 in just 8 months – the teachers are fantastic and the system is perfectly organized.",
+        "course": "German Intensive"
+      },
+      {
+        "name": "Li Wei",
+        "country": "China",
+        "text": "The online application was straightforward and I had a confirmation within 48 hours.",
+        "course": "M-Course 2025"
+      }
+    ],
+    "reels": {
+      "w-kurs": {
+        "title": "W-Course",
+        "desc": "Study Business in Germany",
+        "badge": "Program"
+      },
+      "benefits": {
+        "title": "5 Benefits",
+        "desc": "What Studienkolleg Aachen offers you",
+        "badge": "Top 5"
+      },
+      "pedro": {
+        "title": "Pedro from Brazil",
+        "desc": "My Path to the Studienkolleg",
+        "badge": "Student Story"
+      },
+      "international": {
+        "title": "Our Students",
+        "desc": "From all over the world to Aachen",
+        "badge": "Community"
+      },
+      "m-kurs": {
+        "title": "M-Course",
+        "desc": "Medicine & Natural Sciences",
+        "badge": "Program"
+      },
+      "vokabeln": {
+        "title": "Learn German",
+        "desc": "School vocabulary basics",
+        "badge": "Language"
+      },
+      "tipps": {
+        "title": "5 Tips",
+        "desc": "Learn German Faster",
+        "badge": "Tips"
+      },
+      "fsp": {
+        "title": "FSP Explained",
+        "desc": "The most important exam for your studies",
+        "badge": "Exam"
+      },
+      "wohnheim": {
+        "title": "Your Home",
+        "desc": "Student Dormitory Tour Aachen",
+        "badge": "Campus Life"
+      }
+    },
+    "duration_label": "Duration",
+    "start_label": "Start",
+    "steps": [
+      {
+        "title": "Apply Online",
+        "desc": "Upload your documents and receive initial feedback within 48 hours."
+      },
+      {
+        "title": "Document Review",
+        "desc": "Our AI-powered system analyzes your documents and creates your profile."
+      },
+      {
+        "title": "Start Your Course",
+        "desc": "Begin your Studienkolleg or language course – on-site or online."
+      },
+      {
+        "title": "Begin Your Studies",
+        "desc": "Enroll directly at German universities with your Feststellungsbescheid."
+      }
+    ],
+    "faqs": [
+      {
+        "q": "What are the requirements?",
+        "a": "You need a school-leaving certificate that qualifies you for university in your home country, and German language skills at B1 level minimum. For some courses, A2 is sufficient."
+      },
+      {
+        "q": "How much does the Studienkolleg cost?",
+        "a": "Fees vary depending on the course. Language courses start from EUR 1,200, Studienkolleg programs from EUR 3,500 per semester. Installment plans are available."
+      },
+      {
+        "q": "How long does the program take?",
+        "a": "The Studienkolleg typically lasts two semesters (approx. 10 months). Language courses take 8–16 weeks depending on your starting level."
+      },
+      {
+        "q": "Will I get a visa?",
+        "a": "Yes. After enrollment, you will receive all necessary documents for your visa application. We support you throughout the entire process."
+      },
+      {
+        "q": "Can I apply online?",
+        "a": "Yes, the entire application process is digital. Upload your documents and receive initial feedback within 48 hours."
+      }
+    ],
+    "all_programs_link": "View All Programs",
+    "video_titles": {
+      "imagevideo": "Image Video – Studienkolleg Aachen",
+      "services": "Services – Our Portfolio"
+    },
+    "trust_label": "Why Us",
+    "trust_title": "Trust Through Results",
+    "trusted_by": "Trusted by",
+    "testimonials_label": "Voices"
+  },
+  "trust": {
+    "title": "Why Studienkolleg Aachen?",
+    "items": {
+      "recognized": {
+        "title": "Recognized Pathway",
+        "desc": "Official preparation for the Feststellungsprüfung (FSP)."
+      },
+      "allinone": {
+        "title": "All-in-One Support",
+        "desc": "Language. Visa. Housing. University application. You study – we handle the rest."
+      },
+      "community": {
+        "title": "International Community",
+        "desc": "Students from 50+ nations. Intercultural coaching."
+      },
+      "central": {
+        "title": "Central Location",
+        "desc": "The only Studienkolleg in the heart of Aachen."
+      }
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      {
+        "q": "Do I need German at B1 level?",
+        "a": "For direct enrollment, B1 is required. If your level is lower, we offer preparatory language courses."
+      },
+      {
+        "q": "Is the FSP exam guaranteed?",
+        "a": "No. The final decision is made by the responsible regional authority. We prepare you and support your application."
+      },
+      {
+        "q": "What happens after I apply?",
+        "a": "Our team contacts you within 24 hours and you get access to your personal portal."
+      },
+      {
+        "q": "Do you help with the visa?",
+        "a": "Yes. We support all necessary visa documentation in collaboration with reliable partners."
+      },
+      {
+        "q": "Are there online courses?",
+        "a": "Partial online attendance is possible in the first semester for some programs."
+      },
+      {
+        "q": "How much do the courses cost?",
+        "a": "Costs depend on your individual case: course selection, start date, additional services and personal situation. We cannot quote flat rates. After receiving your application, you will receive a personal offer."
+      }
+    ],
+    "contact_link": "Contact us directly.",
+    "still_questions": "Still have questions?"
+  },
+  "footer": {
+    "contact": "Contact",
+    "location": "Location & Contact",
+    "address_office": "Theaterstraße 30–32, 52062 Aachen",
+    "address_office_note": "Teaching / Consulting / Way2Germany",
+    "address_legal": "Theaterstraße 24 · 52062 Aachen",
+    "address_legal_label": "Registered Office",
+    "phone": "+49 241 990 322 92",
+    "email": "info@stk-aachen.de",
+    "legal": "Legal Notice",
+    "privacy": "Privacy Policy",
+    "agb": "Terms",
+    "cookie_settings": "Cookie Settings",
+    "legal_nav": "Legal",
+    "copyright": "W2G Academy GmbH · Amtsgericht Aachen HRB 23610",
+    "rights": "All rights reserved.",
+    "col_programs": "Programs",
+    "col_services": "Services",
+    "link_visa": "Visa & Entry",
+    "link_housing": "Accommodation",
+    "link_insurance": "Insurance",
+    "link_knowledge": "Knowledge Base",
+    "link_booking": "Book Consultation",
+    "link_contact": "Contact",
+    "link_german": "German Intensive",
+    "link_semesters": "Semester Dates"
+  },
+  "auth": {
+    "login_title": "Sign In",
+    "back_to_site": "← Back to website",
+    "email": "Email",
+    "password": "Password",
+    "login_btn": "Sign In",
+    "forgot_pw": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "register_link": "Apply Now",
+    "register_title": "Create Account",
+    "name": "Full Name",
+    "register_btn": "Register",
+    "have_account": "Already have an account?",
+    "login_link": "Sign In",
+    "login_subtitle": "Sign in to your portal",
+    "forgot_title": "Forgot Password",
+    "forgot_subtitle": "We will send you a reset link",
+    "forgot_success_title": "Email Sent",
+    "forgot_success_msg": "If this email address exists, a reset link has been sent. Please also check your spam folder.",
+    "forgot_submit": "Send Reset Link",
+    "back_to_login": "Back to Sign In"
+  },
+  "portal": {
+    "dashboard": "Dashboard",
+    "journey": "Application Status",
+    "documents": "Documents",
+    "messages": "Messages",
+    "financials": "Financials",
+    "settings": "Settings",
+    "welcome": "Welcome back",
+    "next_step": "Your next step",
+    "no_tasks": "No open tasks right now.",
+    "no_docs": "No documents uploaded yet.",
+    "upload_doc": "Upload Document",
+    "logout": "Sign Out",
+    "consents": "Consents",
+    "current_status": "Your current status",
+    "application_id": "Application",
+    "no_application_title": "No application yet",
+    "no_application_desc": "Start your application process now.",
+    "apply_now": "Apply now",
+    "docs_label": "Documents",
+    "messages_label": "Messages",
+    "invoices_label": "Invoices",
+    "tasks_label": "Tasks",
+    "upload_action": "Upload document",
+    "upload_action_desc": "Securely upload your documents",
+    "send_message": "Send message",
+    "send_message_desc": "Communicate directly with the team",
+    "support_channel": "Support channel",
+    "no_messages": "No messages yet",
+    "first_message_hint": "Write your first message to the team",
+    "write_message": "Write a message...",
+    "file_too_large": "File too large (max. {{max}} MB)",
+    "journey_progress": "Your current application progress",
+    "no_active_application": "No active application yet.",
+    "current_stage": "Current status",
+    "direct_team_contact": "Direct contact with the team",
+    "docs_management": "Secure document management",
+    "doc_upload_title": "Upload document",
+    "doc_type_label": "Document type",
+    "doc_type_passport": "Passport / ID",
+    "doc_type_school": "School diploma / Certificate",
+    "doc_type_language": "Language certificate",
+    "doc_type_photo": "Photo",
+    "doc_type_birth": "Birth certificate",
+    "doc_type_other": "Other",
+    "doc_filename_label": "Filename",
+    "doc_filename_placeholder": "e.g. passport_john_doe.pdf",
+    "doc_uploading": "Uploading…",
+    "doc_upload_btn": "Upload",
+    "doc_cancel": "Cancel",
+    "doc_click_upload": "Click 'Upload Document' to get started.",
+    "doc_start_application": "To upload documents, start your application first.",
+    "doc_apply_link": "Apply now →",
+    "doc_rejection_reason": "Rejection reason",
+    "doc_status_uploaded": "Uploaded",
+    "doc_status_in_review": "In review",
+    "doc_status_approved": "Approved",
+    "doc_status_rejected": "Rejected",
+    "doc_status_missing": "Missing",
+    "financials_title": "Invoices & Payments",
+    "financials_sub": "Overview of your invoices",
+    "financials_loading": "Loading invoices...",
+    "financials_error": "Could not load invoices.",
+    "financials_empty": "No invoices available",
+    "financials_empty_hint": "Invoices will appear here once they are issued.",
+    "invoice_number": "Invoice No.",
+    "invoice_description": "Description",
+    "invoice_amount": "Amount",
+    "invoice_status": "Status",
+    "invoice_due_date": "Due date",
+    "invoice_created_at": "Created",
+    "invoice_detail": "Invoice detail",
+    "invoice_status_draft": "Draft",
+    "invoice_status_sent": "Sent",
+    "invoice_status_paid": "Paid",
+    "invoice_status_overdue": "Overdue",
+    "invoice_status_cancelled": "Cancelled",
+    "settings_title": "Settings",
+    "settings_sub": "Your profile and preferences",
+    "settings_profile": "Profile data",
+    "settings_saved": "Saved",
+    "settings_name": "Full name",
+    "settings_email_readonly": "Email (read-only)",
+    "settings_language": "Preferred language",
+    "settings_save": "Save",
+    "role_applicant": "Applicant",
+    "steps": {
+      "lead_new": "Your application has been received. We will get back to you shortly.",
+      "contacted": "We have contacted you. Please respond to our messages.",
+      "docs_requested": "Please upload the requested documents.",
+      "docs_received": "Your documents have been received. We are reviewing them.",
+      "docs_review": "Your documents are currently being reviewed. Please be patient.",
+      "invoice_open": "You have an open invoice. Please check your payments.",
+      "payment_received": "Your payment is confirmed. Next steps follow.",
+      "process_next": "We are guiding you to the next steps (visa, course, application).",
+      "completed": "Your process is complete. Congratulations!",
+      "default": "Waiting for the next information from us."
+    }
+  },
+  "staff": {
+    "kanban": "Kanban Board",
+    "applicants": "Applicants",
+    "documents": "Documents",
+    "tasks": "Tasks",
+    "reports": "Reports",
+    "invoices": "Invoices",
+    "invoices_title": "Invoice Management",
+    "invoices_sub": "Create and manage invoices",
+    "invoices_loading": "Loading invoices...",
+    "invoices_error": "Error loading invoices.",
+    "invoices_empty": "No invoices created yet",
+    "invoices_empty_hint": "Create an invoice for an applicant.",
+    "invoice_create": "New Invoice",
+    "invoice_create_title": "Create Invoice",
+    "invoice_applicant": "Applicant",
+    "invoice_select_applicant": "Select applicant",
+    "invoice_description": "Description",
+    "invoice_amount": "Amount (EUR)",
+    "invoice_due_date": "Due date",
+    "invoice_save": "Create Invoice",
+    "invoice_saving": "Creating...",
+    "invoice_created_success": "Invoice created",
+    "invoice_updated_success": "Invoice updated",
+    "invoice_change_status": "Change status",
+    "invoice_total": "Total",
+    "invoice_open_count": "Open invoices",
+    "invoice_paid_count": "Paid invoices",
+    "invoice_filter_all": "All",
+    "invoice_filter_draft": "Draft",
+    "invoice_filter_sent": "Sent",
+    "invoice_filter_paid": "Paid",
+    "invoice_filter_overdue": "Overdue",
+    "invoice_filter_cancelled": "Cancelled"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "Users",
+    "workspaces": "Workspaces",
+    "audit": "Audit Logs"
+  },
+  "partner": {
+    "dashboard": "Dashboard",
+    "referrals": "Referrals",
+    "referral_link": "Referral Link",
+    "settings": "Settings",
+    "welcome": "Welcome",
+    "overview": "Overview of your referrals",
+    "total_referrals": "Total Referrals",
+    "active_referrals": "Active Referrals",
+    "enrolled": "Enrolled",
+    "quick_actions": "Quick Actions",
+    "view_referrals": "View Referrals",
+    "view_referrals_desc": "See all referred applicants",
+    "get_link": "Get Referral Link",
+    "get_link_desc": "Link to share with prospective students",
+    "referrals_desc": "All applicants referred by you",
+    "no_referrals": "No referrals yet",
+    "no_referrals_hint": "Share your referral link to start referring applicants.",
+    "col_name": "Name",
+    "col_course": "Course",
+    "col_status": "Status",
+    "col_date": "Date",
+    "referral_link_desc": "Share this link with prospective students",
+    "your_link": "Your personal referral link",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "link_hint": "Applications via this link will be automatically attributed to your account.",
+    "org_name": "Organization Name",
+    "settings_desc": "Profile and settings"
+  },
+  "seo": {
+    "home_title": "Studienkolleg Aachen – Your Path to University in Germany",
+    "home_desc": "Studienkolleg Aachen / Way2Germany: Preparation for the Feststellungsprüfung (FSP), language courses, visa support and personal guidance for international students.",
+    "courses_title": "Courses – Studienkolleg Aachen",
+    "courses_desc": "T-Course, M-Course, W-Course, M/T-Course and language courses A1–C1: All courses preparing for the Feststellungsprüfung at Studienkolleg Aachen.",
+    "services_title": "Services – Studienkolleg Aachen",
+    "services_desc": "Visa support, housing, mentoring, credential recognition, university application coaching and health insurance – all from one source.",
+    "contact_title": "Contact – Studienkolleg Aachen",
+    "contact_desc": "Contact the team at Studienkolleg Aachen / Way2Germany: Theaterstraße 30–32, 52062 Aachen. Phone, email, WhatsApp.",
+    "apply_title": "Apply Now – Studienkolleg Aachen",
+    "apply_desc": "Online application for Studienkolleg Aachen. Fill out the form, upload documents and receive a response within 24 hours.",
+    "legal_title": "Legal Notice – W2G Academy GmbH",
+    "legal_desc": "Legal notice of W2G Academy GmbH, operator of Studienkolleg Aachen / Way2Germany. Information pursuant to § 5 TMG.",
+    "privacy_title": "Privacy Policy – Studienkolleg Aachen",
+    "privacy_desc": "Privacy policy of W2G Academy GmbH in accordance with GDPR for the platform Studienkolleg Aachen / Way2Germany.",
+    "agb_title": "Terms & Conditions – Studienkolleg Aachen",
+    "agb_desc": "Terms and conditions of W2G Academy GmbH for Studienkolleg Aachen / Way2Germany.",
+    "login_title": "Sign In",
+    "login_desc": "Sign in to your Studienkolleg Aachen / Way2Germany portal.",
+    "portal_title": "Applicant Portal",
+    "portal_desc": "Your personal portal: application status, documents, messages and more.",
+    "booking_title": "Book Appointment – Studienkolleg Aachen",
+    "booking_desc": "Book a free consultation or application interview."
+  },
+  "staff": {
+    "dashboard": {
+      "title": "Dashboard",
+      "overview": "Overview",
+      "new_applications": "New Applications",
+      "pending_docs": "Pending Documents",
+      "open_tasks": "Open Tasks",
+      "open_invoices": "Open Invoices",
+      "recent_activity": "Recent Activity",
+      "quick_actions": "Quick Actions",
+      "action_needed": "Action Needed",
+      "no_actions": "No actions needed right now.",
+      "total_applicants": "Total Applicants",
+      "by_stage": "By Stage",
+      "by_source": "By Source",
+      "revenue": "Revenue",
+      "paid": "Paid",
+      "outstanding": "Outstanding",
+      "view_all": "View All",
+      "new_application": "New Application",
+      "new_task": "New Task",
+      "new_invoice": "New Invoice",
+      "new_message": "New Message"
+    },
+    "cases": {
+      "title": "Cases",
+      "search_placeholder": "Search by name, email, applicant no...",
+      "all_stages": "All Stages",
+      "total": "Total",
+      "applicant": "Applicant",
+      "stage": "Stage",
+      "source": "Source",
+      "last_activity": "Last Activity",
+      "actions": "Actions",
+      "no_cases": "No cases found.",
+      "open_case": "Open Case"
+    },
+    "tasks": {
+      "title": "Tasks",
+      "create": "Create Task",
+      "edit": "Edit Task",
+      "delete": "Delete Task",
+      "save": "Save",
+      "cancel": "Cancel",
+      "task_title": "Title",
+      "description": "Description",
+      "assigned_to": "Assigned to",
+      "due_date": "Due Date",
+      "priority": "Priority",
+      "status": "Status",
+      "notes": "Notes",
+      "add_note": "Add Note",
+      "open": "Open",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "overdue": "Overdue",
+      "filter_all": "All Tasks",
+      "filter_mine": "My Tasks",
+      "filter_open": "Open",
+      "filter_overdue": "Overdue",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent",
+      "applicant": "Applicant",
+      "created_at": "Created",
+      "no_tasks": "No tasks found.",
+      "today": "Today",
+      "this_week": "This Week",
+      "this_month": "This Month"
+    },
+    "invoices": {
+      "title": "Invoices",
+      "create": "Create Invoice",
+      "edit": "Edit Invoice",
+      "delete": "Delete Invoice",
+      "send": "Send",
+      "download_pdf": "Download PDF",
+      "invoice_number": "Invoice No.",
+      "applicant": "Applicant",
+      "applicant_number": "Applicant No.",
+      "amount": "Amount",
+      "status": "Status",
+      "due_date": "Due Date",
+      "created": "Created",
+      "draft": "Draft",
+      "sent": "Sent",
+      "paid": "Paid",
+      "overdue": "Overdue",
+      "cancelled": "Cancelled",
+      "all": "All",
+      "filter_status": "Status",
+      "no_invoices": "No invoices found.",
+      "description": "Description",
+      "items": "Items",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "notes": "Notes",
+      "mark_paid": "Mark as Paid",
+      "mark_sent": "Mark as Sent"
+    },
+    "messaging": {
+      "title": "Messages",
+      "new_conversation": "New Conversation",
+      "search_placeholder": "Search conversations...",
+      "no_conversations": "No conversations yet.",
+      "no_messages": "No messages in this conversation.",
+      "send": "Send",
+      "type_message": "Type your message...",
+      "applicant": "Applicant",
+      "staff": "Staff",
+      "system": "System",
+      "channel": "Channel",
+      "portal": "Portal",
+      "email": "Email",
+      "last_message": "Last message",
+      "unread": "Unread",
+      "all": "All",
+      "inbox": "Inbox"
+    },
+    "documents": {
+      "title": "Documents",
+      "review": "Review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "revalidate": "Re-validate",
+      "download": "Download",
+      "preview": "Preview",
+      "status": "Status",
+      "type": "Type",
+      "uploaded": "Uploaded",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "in_review": "In Review",
+      "needs_review": "Needs Review",
+      "applicant": "Applicant",
+      "no_documents": "No documents found."
+    },
+    "detail": {
+      "case_file": "Case File",
+      "applicant_data": "Applicant Data",
+      "course_type": "Course Type",
+      "applicant_no": "Appl. No.",
+      "semester": "Semester",
+      "language_level": "Language Level",
+      "country_degree": "Country of Degree",
+      "date_of_birth": "Date of Birth",
+      "email": "Email",
+      "phone": "Phone",
+      "source": "Source",
+      "created": "Created",
+      "status_change": "Change Status",
+      "activity": "Activity",
+      "communication": "Communication",
+      "send_email": "Send Email",
+      "add_note": "Add Note",
+      "create_task": "Create Task",
+      "create_invoice": "Create Invoice",
+      "ai_screening": "AI Screening",
+      "start_screening": "Start Screening",
+      "documents": "Documents",
+      "tasks": "Tasks",
+      "invoices": "Invoices",
+      "notes": "Notes",
+      "history": "History",
+      "save": "Save",
+      "cancel": "Cancel",
+      "close": "Close",
+      "confirm": "Confirm",
+      "subject": "Subject",
+      "message": "Message"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "system_overview": "System Overview",
+      "users": "Users",
+      "applications": "Applications",
+      "invoices": "Invoices",
+      "tasks": "Tasks",
+      "messages": "Messages",
+      "documents": "Documents",
+      "recent_audit": "Recent Audit Events",
+      "system_settings": "System Settings"
+    },
+    "users": {
+      "title": "User Management",
+      "invite": "Invite User",
+      "edit": "Edit",
+      "deactivate": "Deactivate",
+      "role": "Role",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "knowledge": {
+      "title": "Knowledge Base",
+      "search": "Search...",
+      "add_entry": "Add Entry",
+      "country": "Country",
+      "category": "Category",
+      "requirements": "Requirements"
+    }
+  },
+  "layout": {
+    "staff_portal": "Staff Portal",
+    "teacher_portal": "Teacher Portal",
+    "applicant_portal": "Applicant Portal",
+    "admin_portal": "Admin Portal",
+    "partner_portal": "Partner Portal",
+    "staff": {
+      "dashboard": "Dashboard",
+      "kanban": "Kanban",
+      "cases": "Cases",
+      "tasks": "Tasks",
+      "documents": "Documents",
+      "invoices": "Invoices",
+      "messages": "Messages",
+      "reporting": "Reporting",
+      "oracle": "Oracle"
+    },
+    "teacher": {
+      "dashboard": "Dashboard",
+      "students": "Students",
+      "messages": "Messages",
+      "more": "More"
+    },
+    "applicant": {
+      "dashboard": "Dashboard",
+      "status": "Status",
+      "tasks": "Tasks",
+      "documents": "Documents",
+      "messages": "Messages",
+      "financials": "Invoices",
+      "appointments": "Appointments",
+      "more": "More"
+    },
+    "applicant_mobile": {
+      "home": "Home",
+      "tasks": "Tasks",
+      "docs": "Docs",
+      "chat": "Chat",
+      "more": "More"
+    },
+    "admin": {
+      "dashboard": "Dashboard",
+      "cases": "Cases",
+      "users": "Users",
+      "partners": "Partners",
+      "knowledge": "Knowledge",
+      "jobs": "Jobs",
+      "rules": "Rules",
+      "audit": "Audit",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "partner": {
+      "dashboard": "Dashboard",
+      "referrals": "Leads / Referrals",
+      "tracking": "Commissions",
+      "messages": "Messages",
+      "settings": "Settings"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred.",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "close": "Close",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "export": "Export",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "none": "None",
+    "all": "All",
+    "no_data": "No data available.",
+    "actions": "Actions"
+  }
+}

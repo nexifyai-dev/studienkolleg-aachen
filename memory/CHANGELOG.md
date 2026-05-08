@@ -1,0 +1,53 @@
+# CHANGELOG
+
+## 2026-04-06 – v1.4.0: Production-Readiness Sprint
+
+### Security Headers Middleware
+- X-Content-Type-Options: nosniff
+- X-Frame-Options: DENY
+- X-XSS-Protection: 1; mode=block
+- Referrer-Policy: strict-origin-when-cross-origin
+- Permissions-Policy: camera=(), microphone=(), geolocation=()
+- Strict-Transport-Security: max-age=31536000 (bei HTTPS)
+- Testing: iteration_83, alle 6 Headers verifiziert
+
+### DSGVO-Endpunkte
+- GET /api/system/gdpr/user-data/{id}: Vollstaendiger Datenexport (7 Kategorien)
+- POST /api/system/gdpr/anonymize/{id}: Nutzer-Anonymisierung mit Admin-Schutz
+- Rechnungsdaten bleiben (Aufbewahrungspflicht), Namen werden anonymisiert
+
+### Admin-Settings & Screening-Regeln
+- GET/PUT /api/system/settings: Systemweite Einstellungen
+- Admin-Rules-Seite: 8 konfigurierbare Screening-Regeln + Custom Rules
+- Audit-Logging bei jeder Settings-Aenderung
+
+### Frontend: Alle Stubs zu funktionalen Seiten
+- TeacherStudentsPage: Studenten-Liste mit Suche, Status, Navigation (99 LOC)
+- TeacherStudentDetailPage: Vollstaendiges Studentenprofil (111 LOC)
+- AdminRulesPage: Screening-Regeln mit Toggles, Selects, Custom Rules (166 LOC)
+- StaffReportingPage: KPI-Cards, Pipeline-Chart, CSV-Export (132 LOC)
+- PartnerTrackingPage: Performance-Dashboard mit Monatsuebersicht (104 LOC)
+- PartnerSettingsPage: Profil + Passwort-Aenderung (107 LOC)
+- PartnerLinkPage: Empfehlungslink mit Copy-Button (62 LOC)
+- PartnerMessagesPage: 3-Spalten-Messaging (118 LOC)
+
+### Business Logic
+- Stage-Effects-Engine (Auto-Tasks, Auto-Close)
+- Payment → Stage-Advance
+- Document-Rejection → Applicant-Notification
+- Duplicate-Merge Endpoint
+- 3-stufiges Mahnwesen (Scheduler)
+- State Machine (10 Stages)
+- Rate-Limiting pro Endpunkt
+
+### Testing: 92 Tests, 100% Pass Rate
+- iteration_81: 11/11 (State Machine + Rate-Limiting)
+- iteration_82: 11/11 (Stage Effects + Merge)
+- iteration_83: 21/21 (Security + GDPR + alle Pages)
+
+## 2026-04-05 – Systemanalyse A-L
+- 739-Zeilen-Report, 27 Gaps identifiziert
+
+## 2026-04-04 – v1.3.0: RustFS S3 + Stripe + Batch-Screening
+
+## 2026-04-02 – Visual Root-Cause-Rebuild

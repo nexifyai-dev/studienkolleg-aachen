@@ -1,0 +1,280 @@
+"""
+Leads router – public ingest endpoint.
+No authentication required (public-facing form submission).
+Duplicate detection prevents double-entries.
+Bewerbung + Registrierung gekoppelt: Optional password creates portal account.
+
+ZWEI-PHASEN-UPLOAD:
+  Phase 1: POST /api/leads/upload-temp  (Multipart, einzelne Datei -> upload_token)
+  Phase 2: POST /api/leads/ingest       (JSON, leichter Payload mit upload_tokens)
+"""
+import base64
+import bcrypt
+import jwt
+import uuid
+import logging
+from datetime import datetime, timezone, timedelta
+from fastapi import APIRouter, UploadFile, File, Form, Request
+from fastapi.responses import JSONResponse
+from database import get_db, get_next_applicant_number
+from config import JWT_SECRET, JWT_ALGORITHM, ACCESS_TOKEN_TTL_MINUTES, REFRESH_TOKEN_TTL_DAYS, COOKIE_SECURE, COOKIE_SAMESITE
+from models.schemas import LeadIngest, to_str_id
+from services.audit import write_audit_log
+from services.storage import storage, build_storage_key, sanitize_filename, validate_upload
+from services.automation import trigger_application_received, trigger_missing_documents
+from services.ai_screening import REQUIRED_DOCUMENT_TYPES
+
+router = APIRouter(prefix="/api/leads", tags=["leads"])
+logger = logging.getLogger(__name__)
+from rate_limiter import limiter
+
+
+def _hash(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+
+def _access_token(user_id: str, email: str, role: str) -> str:
+    return jwt.encode(
+        {"sub": user_id, "email": email, "role": role, "type": "access",
+         "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_TTL_MINUTES)},
+        JWT_SECRET, algorithm=JWT_ALGORITHM,
+    )
+
+
+def _refresh_token(user_id: str) -> str:
+    return jwt.encode(
+        {"sub": user_id, "type": "refresh",
+         "exp": datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_TTL_DAYS)},
+        JWT_SECRET, algorithm=JWT_ALGORITHM,
+    )
+
+
+@router.post("/upload-temp")
+@limiter.limit("20/minute")
+async def upload_temp_document(
+    request: Request,
+    file: UploadFile = File(...),
+    document_type: str = Form("other"),
+):
+    """
+    Phase 1: Einzelne Datei vorab hochladen (Multipart/Form-Data).
+    Gibt einen upload_token zurueck, der in Phase 2 referenziert wird.
+    Max 15 MB pro Datei. Token ist 2 Stunden gueltig.
+    """
+    MAX_SIZE = 15 * 1024 * 1024
+    content = await file.read()
+    if len(content) > MAX_SIZE:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=413, detail="Datei zu gross (max 15 MB)")
+
+    filename = sanitize_filename(file.filename or "dokument")
+    content_type = file.content_type or "application/octet-stream"
+    validate_upload(filename, len(content), content_type)
+
+    token = str(uuid.uuid4())
+    temp_key = f"temp/{token}/{filename}"
+
+    await storage().upload(temp_key, content, content_type)
+
+    db = get_db()
+    await db.temp_uploads.insert_one({
+        "token": token,
+        "filename": filename,
+        "content_type": content_type,
+        "file_size": len(content),
+        "storage_key": temp_key,
+        "document_type": document_type,
+        "created_at": datetime.now(timezone.utc),
+        "used": False,
+    })
+
+    logger.info(f"[LEADS] Temp upload: {filename} ({len(content)} bytes) -> {token}")
+    return {"upload_token": token, "filename": filename, "size": len(content)}
+
+
+@router.post("/ingest")
+@limiter.limit("15/minute")
+async def ingest_lead(data: LeadIngest, request: Request):
+    db = get_db()
+    email = data.email.lower().strip()
+
+    full_name = data.full_name
+    if not full_name and data.first_name:
+        full_name = f"{data.first_name} {data.last_name or ''}".strip()
+
+    existing_user = await db.users.find_one({"email": email})
+    duplicate_flag = bool(existing_user)
+    user_id = None
+    password_hash = _hash(data.password) if data.password and len(data.password) >= 8 else None
+
+    if existing_user:
+        user_id = str(existing_user["_id"])
+        # Claim account: set password if not yet set
+        if password_hash and not existing_user.get("password_hash"):
+            await db.users.update_one(
+                {"_id": existing_user["_id"]},
+                {"$set": {
+                    "password_hash": password_hash,
+                    "full_name": full_name or existing_user.get("full_name"),
+                    "claimed_at": datetime.now(timezone.utc),
+                }},
+            )
+        await write_audit_log("lead_duplicate_flagged", "system", "lead", user_id, {"email": email})
+    else:
+        lang = data.language_pref if data.language_pref in ("de", "en") else "de"
+        user_doc = {
+            "email": email,
+            "full_name": full_name,
+            "first_name": data.first_name,
+            "last_name": data.last_name,
+            "phone": data.phone,
+            "country": data.country,
+            "date_of_birth": data.date_of_birth,
+            "role": "applicant",
+            "language_pref": lang,
+            "active": True,
+            "created_at": datetime.now(timezone.utc),
+        }
+        if password_hash:
+            user_doc["password_hash"] = password_hash
+        result = await db.users.insert_one(user_doc)
+        user_id = str(result.inserted_id)
+
+    # Workspace auflösen
+    area = data.area_interest.replace("-", "_")
+    workspace = await db.workspaces.find_one({"area": area})
+    if not workspace:
+        workspace = await db.workspaces.find_one({"slug": "studienkolleg"})
+    workspace_id = str(workspace["_id"]) if workspace else None
+
+    existing_app = None
+    if workspace_id:
+        existing_app = await db.applications.find_one({
+            "applicant_id": user_id,
+            "workspace_id": workspace_id,
+            "current_stage": {"$nin": ["completed", "archived"]},
+        })
+
+    application_id = None
+    if not existing_app and workspace_id:
+        app_doc = {
+            "applicant_id": user_id,
+            "workspace_id": workspace_id,
+            "current_stage": "lead_new",
+            "source": data.source,
+            "course_type": data.course_type,
+            "desired_start": data.desired_start,
+            "combo_option": data.combo_option,
+            "language_level": data.language_level,
+            "degree_country": data.degree_country,
+            "date_of_birth": data.date_of_birth,
+            "notes": data.notes,
+            "priority": "normal",
+            "duplicate_flag": duplicate_flag,
+            "referral_code": data.referral_code,
+            "applicant_number": await get_next_applicant_number(),
+            "created_at": datetime.now(timezone.utc),
+            "last_activity_at": datetime.now(timezone.utc),
+        }
+        result = await db.applications.insert_one(app_doc)
+        application_id = str(result.inserted_id)
+        await write_audit_log(
+            "lead_created", "system", "application", application_id,
+            {"source": data.source, "email": email, "duplicate": duplicate_flag,
+             "course": data.course_type, "degree_country": data.degree_country}
+        )
+
+        # Inline document uploads (Base64 oder upload_token)
+        uploaded_doc_types = []
+        if data.documents:
+            for doc_upload in data.documents:
+                try:
+                    file_bytes = None
+                    actual_filename = sanitize_filename(doc_upload.filename or doc_upload.document_type)
+                    actual_content_type = doc_upload.content_type
+
+                    # Variante A: upload_token (zweistufiger Upload)
+                    if doc_upload.upload_token:
+                        temp = await db.temp_uploads.find_one({"token": doc_upload.upload_token, "used": False})
+                        if temp:
+                            temp_key = temp["storage_key"]
+                            file_bytes = await storage().download(temp_key)
+                            actual_filename = temp.get("filename", actual_filename)
+                            actual_content_type = temp.get("content_type", actual_content_type)
+                            await db.temp_uploads.update_one(
+                                {"token": doc_upload.upload_token},
+                                {"$set": {"used": True, "used_at": datetime.now(timezone.utc)}}
+                            )
+                            # Temp-Datei loeschen (wird an finalen Ort kopiert)
+                            try:
+                                await storage().delete(temp_key)
+                            except Exception:
+                                pass
+                        else:
+                            logger.warning(f"[LEADS] upload_token ungueltig: {doc_upload.upload_token}")
+                            continue
+
+                    # Variante B: Base64 (Legacy / direkt)
+                    elif doc_upload.file_data:
+                        file_bytes = base64.b64decode(doc_upload.file_data)
+                        validate_upload(actual_filename, len(file_bytes), actual_content_type)
+
+                    storage_key = build_storage_key(application_id, doc_upload.document_type, actual_filename)
+
+                    if file_bytes:
+                        await storage().upload(storage_key, file_bytes, actual_content_type)
+
+                    doc = {
+                        "application_id": application_id,
+                        "document_type": doc_upload.document_type,
+                        "filename": actual_filename,
+                        "content_type": actual_content_type,
+                        "file_size": len(file_bytes) if file_bytes else None,
+                        "status": "uploaded",
+                        "uploaded_by": user_id,
+                        "uploaded_at": datetime.now(timezone.utc),
+                        "visibility": "private",
+                        "storage_key": storage_key,
+                        "has_binary": bool(file_bytes),
+                    }
+                    doc_result = await db.documents.insert_one(doc)
+                    doc_id = str(doc_result.inserted_id)
+                    await write_audit_log(
+                        "document_uploaded", user_id, "document", doc_id,
+                        {"doc_type": doc_upload.document_type, "source": "lead_form"}
+                    )
+                    uploaded_doc_types.append(doc_upload.document_type)
+                except Exception as e:
+                    logger.warning(f"[LEADS] Doc upload failed for {doc_upload.document_type}: {e}")
+
+        missing_types = [t for t in REQUIRED_DOCUMENT_TYPES if t not in uploaded_doc_types]
+        await trigger_application_received(application_id, email, full_name, applicant_id=user_id, course_type=data.course_type)
+        if missing_types:
+            await trigger_missing_documents(application_id, email, full_name, missing_types, applicant_id=user_id)
+
+    # Welcome email – Sprache aus Formular uebernehmen
+    if password_hash:
+        from services.email import send_welcome
+        user_lang = data.language_pref if data.language_pref in ("de", "en") else "de"
+        send_welcome(email, full_name, lang=user_lang)
+
+    # Build response – set auth cookies if password was provided
+    response_data = {
+        "success": True,
+        "user_id": user_id,
+        "application_id": application_id,
+        "duplicate_flag": duplicate_flag,
+        "message": "Deine Bewerbung ist eingegangen. Wir melden uns innerhalb von 24 Stunden.",
+    }
+
+    if password_hash:
+        response_data["account_created"] = True
+        access = _access_token(user_id, email, "applicant")
+        refresh = _refresh_token(user_id)
+        resp = JSONResponse(content=response_data)
+        common = dict(httponly=True, secure=COOKIE_SECURE, samesite=COOKIE_SAMESITE, path="/")
+        resp.set_cookie("access_token", access, max_age=ACCESS_TOKEN_TTL_MINUTES * 60, **common)
+        resp.set_cookie("refresh_token", refresh, max_age=REFRESH_TOKEN_TTL_DAYS * 86400, **common)
+        return resp
+
+    return response_data

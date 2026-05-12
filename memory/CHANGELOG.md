@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-05-12 – v1.4.1: Storage-Default auf Emergent (Production-Hotfix)
+- `STORAGE_BACKEND` Default in `/app/backend/config.py` von `local` auf `emergent` umgestellt
+- Damit funktioniert persistenter Object-Storage in Production OHNE manuelle Env-Var
+- `get_storage_backend()` mit Schutz-Fallback: warnt + loggt Fehler bei fehlendem `EMERGENT_LLM_KEY`
+- Behebt finalen Live-Bug: "Datei im Speicher nicht gefunden" für neu hochgeladene PDFs
+
 ## 2026-04-06 – v1.4.0: Production-Readiness Sprint
 
 ### Security Headers Middleware

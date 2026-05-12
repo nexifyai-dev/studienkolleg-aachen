@@ -280,6 +280,13 @@ def get_storage_backend():
     """Factory: returns the active storage backend based on config."""
     from config import STORAGE_BACKEND, LOCAL_STORAGE_PATH, S3_ENDPOINT
     if STORAGE_BACKEND == "emergent":
+        if not os.environ.get("EMERGENT_LLM_KEY"):
+            logger.error(
+                "[STORAGE] STORAGE_BACKEND=emergent but EMERGENT_LLM_KEY is missing. "
+                "Falling back to LOCAL ephemeral storage – uploads will be lost on redeploy!"
+            )
+            return LocalStorageBackend(LOCAL_STORAGE_PATH)
+        logger.info("[STORAGE] Using Emergent persistent object storage")
         return EmergentStorageBackend()
     if STORAGE_BACKEND in ("s3", "minio") and S3_ENDPOINT:
         return S3StorageBackend()

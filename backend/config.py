@@ -41,7 +41,7 @@ EMAIL_ENABLED: bool = bool(RESEND_API_KEY) or bool(os.environ.get("SMTP_HOST"))
 
 # ─── Storage ─────────────────────────────────────────────────────────────────
 # [OFFEN] S3/MinIO credentials must be set before binary file uploads are active.
-STORAGE_BACKEND: str = os.environ.get("STORAGE_BACKEND", "local")  # local | s3 | minio
+STORAGE_BACKEND: str = os.environ.get("STORAGE_BACKEND", "emergent")  # local | s3 | minio | emergent
 S3_ENDPOINT: str = os.environ.get("S3_ENDPOINT", "")
 S3_ACCESS_KEY: str = os.environ.get("S3_ACCESS_KEY", "")
 S3_SECRET_KEY: str = os.environ.get("S3_SECRET_KEY", "")

@@ -1,5 +1,5 @@
 # W2G Platform – PRD
-# 26.04.2026 | v4.7.0 (Pre-Live)
+# 12.05.2026 | v1.4.2 (Go-Live Ready)
 
 ## Kernprodukt
 Voll funktionsfaehiges Full-Stack-CRM fuer das Studienkolleg Aachen (React, FastAPI, MongoDB).
@@ -51,14 +51,23 @@ Bewerber-Verwaltung, Kommunikation (Portal/E-Mail/WhatsApp), Dokumenten-Manageme
 - (frei formulieren): Ohne Vorlage
 
 ## Verbleibend
+- [ ] **GO-LIVE TODO**: User muss "Save to Github" + "Deploy" ausführen, damit Storage-Fix (emergent default) live ist
 - [ ] Google Kalender Integration (P1)
 - [ ] Erweiterte Reports (P2)
 - [ ] PWA Integration (P3)
 - [ ] WhatsApp API Integration (P3)
 - [ ] SSR/SEO Optimierung (P3)
 - [ ] Kanban-Ansicht zusammenfuehren (P3)
-- [ ] Dokumentation (README, CHANGELOG, ADRs)
-- [ ] Backend-Tests (pytest)
+
+## Go-Live Status (12.05.2026)
+- [x] STORAGE_BACKEND Default = 'emergent' (config.py) – Code fertig, Preview verifiziert
+- [x] Schutz-Fallback bei fehlendem EMERGENT_LLM_KEY (services/storage.py)
+- [x] Admin-Endpoint POST /api/system/seed-demo-data + UI-Buttons in /admin/settings
+- [x] Live-DB komplett bereinigt (clean-demo-data ausgeführt 12.05.)
+- [x] Preview-DB komplett bereinigt
+- [x] Regression-Test bestanden (iteration_107): 25/26 Backend PASS, 100% Frontend PASS, 0 JS-Errors
+- [ ] **OFFEN: Live-Deployment ausgeführt** → vom User durchzuführen (`Save to Github` → `Deploy`)
+- [ ] **OFFEN: Live-Verifikation** nach Deploy: /api/health soll storage_backend='emergent' zeigen
 
 ## Technischer Stack
 - Frontend: React + Shadcn/UI + Tailwind
@@ -66,7 +75,7 @@ Bewerber-Verwaltung, Kommunikation (Portal/E-Mail/WhatsApp), Dokumenten-Manageme
 - KI: OpenRouter (deepseek/deepseek-v4-flash fuer ALLE Aufgaben)
 - Vision: nscale Llama-4-Scout (Dokument-Bildanalyse, separat)
 - Payments: Stripe (Live)
-- Storage: Lokal (/app/storage)
+- Storage: Emergent Object Storage (persistent, EmergentStorageBackend via integrations.emergentagent.com/objstore)
 - E-Mail: SMTP (Strato)
 
 ## Datenbank-Collections

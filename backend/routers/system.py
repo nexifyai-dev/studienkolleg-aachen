@@ -224,6 +224,170 @@ async def clean_demo_data(user: dict = Depends(require_roles(*ADMIN_ROLES))):
     }
 
 
+# ─── DEMO SEED (Admin only) ───────────────────────────────────────────────────
+# Re-creates 12 realistic demo applicants + 5 staff tasks for presentation/demo
+# usage. Idempotent: existing users with the same email are updated, not
+# duplicated. Designed for one-click re-seeding via the admin UI after a
+# clean-demo-data wipe.
+
+_DEMO_APPLICANTS = [
+    {"full_name": "Amira El-Khoury", "email": "amira.elkhoury@gmail.com", "country": "Libanon", "phone": "+961 71 234567"},
+    {"full_name": "Yusuf Demir", "email": "yusuf.demir@hotmail.com", "country": "Türkei", "phone": "+90 532 1234567"},
+    {"full_name": "Fatima Benali", "email": "fatima.benali@yahoo.com", "country": "Marokko", "phone": "+212 6 12345678"},
+    {"full_name": "Chen Wei", "email": "chen.wei@outlook.com", "country": "China", "phone": "+86 138 1234 5678"},
+    {"full_name": "Nguyen Thi Lan", "email": "ntlan.nguyen@gmail.com", "country": "Vietnam", "phone": "+84 91 234 5678"},
+    {"full_name": "Mohammad Reza Hosseini", "email": "m.hosseini@gmail.com", "country": "Iran", "phone": "+98 912 345 6789"},
+    {"full_name": "Priya Sharma", "email": "priya.sharma@gmail.com", "country": "Indien", "phone": "+91 98765 43210"},
+    {"full_name": "Carlos Mendoza", "email": "c.mendoza@hotmail.com", "country": "Kolumbien", "phone": "+57 310 1234567"},
+    {"full_name": "Olga Petrov", "email": "olga.petrov@mail.ru", "country": "Russland", "phone": "+7 916 123 4567"},
+    {"full_name": "Samuel Okafor", "email": "samuel.okafor@gmail.com", "country": "Nigeria", "phone": "+234 803 1234567"},
+    {"full_name": "Lina Al-Rashid", "email": "lina.alrashid@gmail.com", "country": "Irak", "phone": "+964 770 1234567"},
+    {"full_name": "Ahmed Hassan", "email": "applicant@studienkolleg-aachen.de", "country": "Ägypten", "phone": "+20 100 1234567"},
+]
+
+_DEMO_STAGES_DISTRIBUTION = [
+    ("lead_new", 3),
+    ("in_review", 2),
+    ("pending_docs", 2),
+    ("interview_scheduled", 1),
+    ("conditional_offer", 1),
+    ("offer_sent", 1),
+    ("enrolled", 1),
+]
+
+_DEMO_TASKS = [
+    {"title": "Unterlagen von Amira El-Khoury prüfen", "description": "Zeugnis-Übersetzung und Sprachnachweis kontrollieren", "priority": "high", "status": "open"},
+    {"title": "Beratungsgespräch Yusuf Demir planen", "description": "Termin für Online-Beratung koordinieren", "priority": "medium", "status": "open"},
+    {"title": "Einschreibebestätigung versenden", "description": "Offizielle Bestätigung an Chen Wei senden", "priority": "high", "status": "in_progress"},
+    {"title": "Sprachtest-Ergebnis nachverfolgen", "description": "B2-Nachweis von Fatima Benali anfordern", "priority": "medium", "status": "open"},
+    {"title": "Visum-Unterstützungsschreiben erstellen", "description": "Für Mohammad Reza Hosseini vorbereiten", "priority": "high", "status": "open"},
+]
+
+
+@system_router.post("/system/seed-demo-data")
+async def seed_demo_data(user: dict = Depends(require_roles(*ADMIN_ROLES))):
+    """Re-seed 12 realistic demo applicants + 5 staff tasks for the live demo.
+
+    Idempotent: if a demo email already exists, its profile and application
+    are updated instead of duplicated. Returns a per-step summary.
+
+    Admin-only.
+    """
+    import os
+    import random
+    from datetime import timedelta
+    import bcrypt
+
+    db = get_db()
+    seed_pw = os.environ.get("SEED_DEV_PASSWORD", "DevSeed@2026!")
+    now = datetime.now(timezone.utc)
+
+    # Workspace anchor
+    ws = await db.workspaces.find_one({"slug": "studienkolleg"}) or await db.workspaces.find_one()
+    ws_id = str(ws["_id"]) if ws else None
+
+    # Stage pool – distribute applicants across pipeline stages
+    stage_pool: list = []
+    for stage, count in _DEMO_STAGES_DISTRIBUTION:
+        stage_pool.extend([stage] * count)
+    random.shuffle(stage_pool)
+
+    summary = {"users_created": 0, "users_updated": 0, "applications_created": 0, "applications_updated": 0, "tasks_created": 0}
+
+    for i, demo in enumerate(_DEMO_APPLICANTS):
+        existing = await db.users.find_one({"email": demo["email"]})
+        if existing:
+            await db.users.update_one(
+                {"_id": existing["_id"]},
+                {"$set": {
+                    "full_name": demo["full_name"],
+                    "country": demo.get("country", ""),
+                    "phone": demo.get("phone", ""),
+                    "active": True,
+                    "role": "applicant",
+                }},
+            )
+            user_id = str(existing["_id"])
+            summary["users_updated"] += 1
+        else:
+            pw_hash = bcrypt.hashpw(seed_pw.encode(), bcrypt.gensalt()).decode()
+            res = await db.users.insert_one({
+                "email": demo["email"],
+                "full_name": demo["full_name"],
+                "password_hash": pw_hash,
+                "role": "applicant",
+                "active": True,
+                "country": demo.get("country", ""),
+                "phone": demo.get("phone", ""),
+                "language_pref": "de",
+                "created_at": now - timedelta(days=random.randint(5, 45)),
+                "seeded": True,
+            })
+            user_id = str(res.inserted_id)
+            summary["users_created"] += 1
+
+        stage = stage_pool[i % len(stage_pool)] if stage_pool else "lead_new"
+        days_ago = random.randint(1, 30)
+
+        existing_app = await db.applications.find_one({"applicant_id": user_id})
+        if existing_app:
+            await db.applications.update_one(
+                {"_id": existing_app["_id"]},
+                {"$set": {
+                    "current_stage": stage,
+                    "last_activity_at": now - timedelta(days=random.randint(0, 3)),
+                }},
+            )
+            summary["applications_updated"] += 1
+        else:
+            await db.applications.insert_one({
+                "applicant_id": user_id,
+                "workspace_id": ws_id,
+                "current_stage": stage,
+                "source": random.choice(["website_form", "partner_referral", "direct_inquiry"]),
+                "priority": random.choice(["normal", "normal", "high"]),
+                "created_at": now - timedelta(days=days_ago),
+                "last_activity_at": now - timedelta(days=random.randint(0, 3)),
+            })
+            summary["applications_created"] += 1
+
+    # Demo tasks (only seed if none of the demo titles already exist)
+    staff = await db.users.find_one({"role": "staff"})
+    staff_id = str(staff["_id"]) if staff else None
+    existing_task_titles = {t["title"] for t in _DEMO_TASKS}
+    have = await db.tasks.count_documents({"title": {"$in": list(existing_task_titles)}})
+    if have == 0 and staff_id:
+        for t in _DEMO_TASKS:
+            await db.tasks.insert_one({
+                "title": t["title"],
+                "description": t["description"],
+                "priority": t["priority"],
+                "status": t["status"],
+                "assigned_to": staff_id,
+                "created_by": staff_id,
+                "workspace_id": ws_id,
+                "created_at": now - timedelta(days=random.randint(1, 7)),
+                "due_date": (now + timedelta(days=random.randint(1, 14))).strftime("%Y-%m-%d"),
+                "history": [],
+                "notes": [],
+            })
+            summary["tasks_created"] += 1
+
+    # Final counts
+    summary["total_applications"] = await db.applications.count_documents({})
+    summary["total_users"] = await db.users.count_documents({})
+    summary["total_tasks"] = await db.tasks.count_documents({})
+
+    return {
+        "status": "ok",
+        "performed_by": user.get("email"),
+        "performed_at": now.isoformat(),
+        "summary": summary,
+    }
+
+
+
+
 @system_router.get("/system/monitoring")
 async def system_monitoring(user: dict = Depends(require_roles(*ADMIN_ROLES))):
     """Umfassendes System-Monitoring fuer Admins."""

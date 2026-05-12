@@ -2,9 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api-hooks';
-import { Activity, AlertTriangle, CheckCircle, Clock, Server, Loader2, Shield, Settings2, Database } from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle, Clock, Server, Loader2, Shield, Settings2, Database, Sparkles } from 'lucide-react';
 import { PageScaffold } from '../../components/layout/PageScaffold';
 import { Card, CardContent } from '../../components/ui/card';
+import { toast } from 'sonner';
 import { getLang } from '../../lib/utils';
 
 function useSystemMonitoring() {
@@ -233,6 +234,80 @@ export default function AdminSettingsPage() {
           </CardContent>
         </Card>
       )}
+
+      <DemoDataControls />
     </PageScaffold>
+  );
+}
+
+function DemoDataControls() {
+  const [busy, setBusy] = React.useState(null);
+  const [result, setResult] = React.useState(null);
+
+  const handleSeed = async () => {
+    if (!window.confirm('Demo-Daten wiederherstellen?\n\nLegt 12 realistische Test-Bewerber + 5 Aufgaben an. Bestehende Demo-Accounts werden aktualisiert, nicht dupliziert.')) return;
+    setBusy('seed');
+    try {
+      const r = await api.post('/system/seed-demo-data');
+      setResult(r.data?.summary || r.data);
+      toast.success(`Demo-Daten erstellt: ${r.data?.summary?.users_created || 0} neue Bewerber, ${r.data?.summary?.tasks_created || 0} neue Aufgaben`);
+    } catch (e) {
+      toast.error(e?.response?.data?.detail || 'Seed fehlgeschlagen');
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handleClean = async () => {
+    if (!window.confirm('ACHTUNG: ALLE operativen Daten löschen?\n\n(Bewerbungen, Tasks, Dokumente, Rechnungen, Audit-Logs, …)\n\nNur Dev-Accounts und Stammdaten bleiben erhalten.')) return;
+    setBusy('clean');
+    try {
+      const r = await api.post('/system/clean-demo-data');
+      setResult(r.data?.summary || r.data);
+      toast.success('Datenbank bereinigt');
+    } catch (e) {
+      toast.error(e?.response?.data?.detail || 'Bereinigung fehlgeschlagen');
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <Card data-testid="demo-data-controls">
+      <CardContent className="px-5 py-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Sparkles size={14} className="text-[var(--color-primary)]" />
+          <span className="text-xs font-semibold text-[var(--color-text-primary)]">Demo-Daten & Datenbank-Reset</span>
+        </div>
+        <p className="text-xs text-[var(--color-text-tertiary)] mb-3">
+          Für Live-Präsentationen: 12 Demo-Bewerber mit verschiedenen Pipeline-Stadien + 5 realistische Staff-Aufgaben in einem Klick erzeugen.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={handleSeed}
+            disabled={!!busy}
+            data-testid="seed-demo-data-button"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[var(--color-primary)] rounded-[var(--radius-sm)] disabled:opacity-50 hover:opacity-90 transition-opacity"
+          >
+            {busy === 'seed' ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
+            Demo-Daten wiederherstellen
+          </button>
+          <button
+            onClick={handleClean}
+            disabled={!!busy}
+            data-testid="clean-demo-data-button"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-[var(--color-danger)] border border-[var(--color-danger)] rounded-[var(--radius-sm)] disabled:opacity-50 hover:bg-[var(--color-danger-bg)] transition-colors"
+          >
+            {busy === 'clean' ? <Loader2 size={14} className="animate-spin" /> : null}
+            Alle operativen Daten löschen
+          </button>
+        </div>
+        {result && (
+          <pre className="mt-3 text-[11px] text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] p-2 rounded overflow-x-auto" data-testid="demo-data-result">
+            {JSON.stringify(result, null, 2)}
+          </pre>
+        )}
+      </CardContent>
+    </Card>
   );
 }

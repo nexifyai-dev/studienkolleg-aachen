@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-05-12 – v1.4.2: Demo-Daten-Restore-Endpunkt
+- Neuer Admin-Endpunkt `POST /api/system/seed-demo-data`: legt 12 realistische Demo-Bewerber (Libanon, Türkei, Marokko, China, Vietnam, Iran, Indien, Kolumbien, Russland, Nigeria, Irak, Ägypten) verteilt über 7 Pipeline-Stadien + 5 Staff-Tasks an
+- Idempotent: bestehende Demo-E-Mails werden aktualisiert statt dupliziert
+- UI-Buttons in `/admin/settings` ("Demo-Daten wiederherstellen" + "Alle operativen Daten löschen")
+- Lokal getestet: 11 neue Bewerber + 1 Update + 5 Tasks in einem Klick
+
 ## 2026-05-12 – v1.4.1: Storage-Default auf Emergent (Production-Hotfix)
 - `STORAGE_BACKEND` Default in `/app/backend/config.py` von `local` auf `emergent` umgestellt
 - Damit funktioniert persistenter Object-Storage in Production OHNE manuelle Env-Var

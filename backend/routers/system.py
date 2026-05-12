@@ -125,13 +125,16 @@ system_router = APIRouter(prefix="/api", tags=["system"])
 
 @system_router.get("/health")
 async def health():
-    from config import EMAIL_ENABLED, STORAGE_BACKEND
+    from config import EMAIL_ENABLED
+    from services.storage import storage
+    # Report the ACTUAL backend in use (after override logic), not just the env var
+    backend_name = type(storage()).__name__.replace("StorageBackend", "").lower() or "unknown"
     return {
         "status": "ok",
         "service": "W2G Platform API",
-        "version": "1.4.0",
+        "version": "1.4.2",
         "email_enabled": EMAIL_ENABLED,
-        "storage_backend": STORAGE_BACKEND,
+        "storage_backend": backend_name,
     }
 
 

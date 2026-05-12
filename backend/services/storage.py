@@ -277,24 +277,40 @@ class EmergentStorageBackend:
 
 
 def get_storage_backend():
-    """Factory: returns the active storage backend based on config."""
+    """Factory: returns the active storage backend based on config.
+
+    Important: when EMERGENT_LLM_KEY is available we ALWAYS prefer Emergent
+    persistent storage, even if STORAGE_BACKEND is left at the legacy 'local'
+    default in the production environment. Local container storage is
+    ephemeral and was the source of the "Datei im Speicher nicht gefunden"
+    bug after every redeploy. Explicit S3/MinIO config still wins.
+    """
     from config import STORAGE_BACKEND, LOCAL_STORAGE_PATH, S3_ENDPOINT
-    if STORAGE_BACKEND == "emergent":
-        if not os.environ.get("EMERGENT_LLM_KEY"):
-            logger.error(
-                "[STORAGE] STORAGE_BACKEND=emergent but EMERGENT_LLM_KEY is missing. "
-                "Falling back to LOCAL ephemeral storage – uploads will be lost on redeploy!"
-            )
-            return LocalStorageBackend(LOCAL_STORAGE_PATH)
-        logger.info("[STORAGE] Using Emergent persistent object storage")
-        return EmergentStorageBackend()
+    has_emergent_key = bool(os.environ.get("EMERGENT_LLM_KEY"))
+
+    # Explicit S3/MinIO config always wins
     if STORAGE_BACKEND in ("s3", "minio") and S3_ENDPOINT:
         return S3StorageBackend()
-    elif STORAGE_BACKEND == "local":
+
+    # Prefer Emergent persistent storage whenever we have the key
+    if has_emergent_key:
+        if STORAGE_BACKEND not in ("emergent", "local", ""):
+            logger.warning(
+                f"[STORAGE] STORAGE_BACKEND={STORAGE_BACKEND!r} unknown – using Emergent storage anyway."
+            )
+        logger.info("[STORAGE] Using Emergent persistent object storage")
+        return EmergentStorageBackend()
+
+    # No Emergent key available – fall back to local with a loud warning
+    if STORAGE_BACKEND == "local" or STORAGE_BACKEND == "":
+        logger.warning(
+            "[STORAGE] EMERGENT_LLM_KEY missing – falling back to LOCAL ephemeral storage. "
+            "Uploads will be lost on every container redeploy!"
+        )
         return LocalStorageBackend(LOCAL_STORAGE_PATH)
-    else:
-        logger.warning("[STORAGE] No storage backend configured – using metadata-only mode.")
-        return MetadataOnlyBackend()
+
+    logger.warning("[STORAGE] No storage backend configured – using metadata-only mode.")
+    return MetadataOnlyBackend()
 
 
 # Singleton instance

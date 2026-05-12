@@ -19,8 +19,10 @@ export default function LoginPage() {
     setError('');
     try {
       const user = await login(form.email, form.password);
-      const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff', 'teacher'];
-      if (staffRoles.includes(user.role)) navigate('/staff');
+      const adminRoles = ['superadmin', 'admin'];
+      const staffRoles = ['staff', 'accounting_staff', 'teacher'];
+      if (adminRoles.includes(user.role)) navigate('/admin');
+      else if (staffRoles.includes(user.role)) navigate('/staff');
       else if (user.role === 'affiliate') navigate('/partner');
       else navigate('/portal');
     } catch (err) {

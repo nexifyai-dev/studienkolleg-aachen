@@ -82,7 +82,9 @@ function PublicRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return null;
   if (user) {
-    const staffRoles = ['superadmin', 'admin', 'staff', 'accounting_staff', 'teacher'];
+    const adminRoles = ['superadmin', 'admin'];
+    const staffRoles = ['staff', 'accounting_staff', 'teacher'];
+    if (adminRoles.includes(user.role)) return <Navigate to="/admin" replace />;
     if (staffRoles.includes(user.role)) return <Navigate to="/staff" replace />;
     if (['affiliate', 'agency_admin', 'agency_agent'].includes(user.role)) return <Navigate to="/partner" replace />;
     return <Navigate to="/portal" replace />;

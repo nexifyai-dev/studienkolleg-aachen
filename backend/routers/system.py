@@ -2,11 +2,12 @@
 Audit & system routers: audit logs, dashboard stats, health, consent, notifications.
 """
 from datetime import datetime, timezone
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from database import get_db
 from deps import get_current_user, require_roles, ADMIN_ROLES, STAFF_ROLES
 from models.schemas import ConsentCapture, to_str_id
 from bson import ObjectId
+import os
 
 # ─── Audit Router ─────────────────────────────────────────────────────────────
 audit_router = APIRouter(prefix="/api", tags=["audit"])
@@ -549,3 +550,266 @@ async def anonymize_user(user_id: str, user: dict = Depends(require_roles(*ADMIN
     await write_audit_log("gdpr_anonymized", user["id"], "user", user_id, {"reason": "DSGVO Art. 17"})
 
     return {"message": f"Nutzer {user_id} anonymisiert", "anon_name": anon_name}
+
+
+
+# ─── Admin Analytics ──────────────────────────────────────────────────────────
+
+@system_router.get("/admin/analytics")
+async def admin_analytics(
+    range: str = "30d",
+    user: dict = Depends(require_roles(*ADMIN_ROLES)),
+):
+    """Rich analytics for the admin reports page.
+
+    Returns revenue trends, applicant trends, conversion rate, top countries
+    and source distribution. Designed to power charts without any
+    client-side aggregation.
+
+    Query: range ∈ {7d, 30d, 90d, 12m, all}
+    """
+    from datetime import timedelta
+    db = get_db()
+    now = datetime.now(timezone.utc)
+
+    # Date window
+    range_map = {
+        "7d": timedelta(days=7),
+        "30d": timedelta(days=30),
+        "90d": timedelta(days=90),
+        "12m": timedelta(days=365),
+    }
+    delta = range_map.get(range)
+    since = (now - delta) if delta else datetime(2000, 1, 1, tzinfo=timezone.utc)
+
+    # ─── Revenue (paid invoices) ────────────────────────────────────────────
+    revenue_total = 0.0
+    revenue_paid_count = 0
+    revenue_outstanding = 0.0
+    revenue_outstanding_count = 0
+    try:
+        async for inv in db.invoices.find({}):
+            amt = float(inv.get("amount") or 0)
+            status = inv.get("status") or "draft"
+            if status == "paid":
+                revenue_total += amt
+                revenue_paid_count += 1
+            elif status in ("sent", "overdue"):
+                revenue_outstanding += amt
+                revenue_outstanding_count += 1
+    except Exception:
+        pass
+
+    # ─── Revenue trend (last 12 months) ─────────────────────────────────────
+    revenue_trend: list = []
+    try:
+        for i in range(11, -1, -1):
+            month_start = (now.replace(day=1) - timedelta(days=i * 30)).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            next_month = (month_start + timedelta(days=32)).replace(day=1)
+            cursor = db.invoices.find({
+                "status": "paid",
+                "$or": [
+                    {"paid_at": {"$gte": month_start, "$lt": next_month}},
+                    {"created_at": {"$gte": month_start, "$lt": next_month}},
+                ],
+            })
+            month_total = 0.0
+            async for inv in cursor:
+                month_total += float(inv.get("amount") or 0)
+            revenue_trend.append({
+                "month": month_start.strftime("%Y-%m"),
+                "label": month_start.strftime("%b %y"),
+                "revenue": round(month_total, 2),
+            })
+    except Exception:
+        revenue_trend = []
+
+    # ─── Applicant trend (last 8 weeks) ─────────────────────────────────────
+    applicant_trend: list = []
+    try:
+        for i in range(7, -1, -1):
+            week_end = now - timedelta(days=i * 7)
+            week_start = week_end - timedelta(days=7)
+            count = await db.applications.count_documents({
+                "created_at": {"$gte": week_start, "$lt": week_end},
+            })
+            applicant_trend.append({
+                "week": week_start.strftime("%Y-%m-%d"),
+                "label": week_start.strftime("%d.%m"),
+                "count": count,
+            })
+    except Exception:
+        applicant_trend = []
+
+    # ─── Conversion rate (Lead → Enrolled) ──────────────────────────────────
+    total_apps_in_range = await db.applications.count_documents({"created_at": {"$gte": since}})
+    enrolled_in_range = await db.applications.count_documents({
+        "current_stage": "enrolled",
+        "created_at": {"$gte": since},
+    })
+    conversion = round((enrolled_in_range / total_apps_in_range * 100), 1) if total_apps_in_range else 0.0
+
+    # ─── Source distribution ────────────────────────────────────────────────
+    source_pipeline = [
+        {"$match": {"created_at": {"$gte": since}}},
+        {"$group": {"_id": "$source", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+    ]
+    sources = []
+    try:
+        async for r in db.applications.aggregate(source_pipeline):
+            sources.append({"source": r["_id"] or "unknown", "count": r["count"]})
+    except Exception:
+        pass
+
+    # ─── Top countries (applicant origin) ───────────────────────────────────
+    country_pipeline = [
+        {"$lookup": {
+            "from": "users",
+            "let": {"aid": "$applicant_id"},
+            "pipeline": [
+                {"$match": {"$expr": {"$eq": [{"$toString": "$_id"}, "$$aid"]}}},
+            ],
+            "as": "applicant",
+        }},
+        {"$unwind": {"path": "$applicant", "preserveNullAndEmptyArrays": True}},
+        {"$match": {"created_at": {"$gte": since}}},
+        {"$group": {"_id": "$applicant.country", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 10},
+    ]
+    countries = []
+    try:
+        async for r in db.applications.aggregate(country_pipeline):
+            countries.append({"country": r["_id"] or "Unbekannt", "count": r["count"]})
+    except Exception:
+        pass
+
+    # ─── Pipeline (in range) ────────────────────────────────────────────────
+    pipeline_stages = [
+        "lead_new", "in_review", "pending_docs", "interview_scheduled",
+        "conditional_offer", "offer_sent", "enrolled", "declined", "on_hold",
+    ]
+    pipeline_counts = {}
+    for stage in pipeline_stages:
+        pipeline_counts[stage] = await db.applications.count_documents({
+            "current_stage": stage,
+            "created_at": {"$gte": since},
+        })
+
+    # ─── New applicants in range ────────────────────────────────────────────
+    new_applicants_count = await db.applications.count_documents({"created_at": {"$gte": since}})
+
+    return {
+        "range": range,
+        "generated_at": now.isoformat(),
+        "kpis": {
+            "revenue_total": round(revenue_total, 2),
+            "revenue_paid_count": revenue_paid_count,
+            "revenue_outstanding": round(revenue_outstanding, 2),
+            "revenue_outstanding_count": revenue_outstanding_count,
+            "new_applicants": new_applicants_count,
+            "total_applications_in_range": total_apps_in_range,
+            "enrolled_in_range": enrolled_in_range,
+            "conversion_rate": conversion,
+        },
+        "revenue_trend": revenue_trend,
+        "applicant_trend": applicant_trend,
+        "sources": sources,
+        "countries": countries,
+        "pipeline": pipeline_counts,
+    }
+
+
+# ─── Staff Management ─────────────────────────────────────────────────────────
+
+_STAFF_ROLE_LIST = ("superadmin", "admin", "staff", "accounting_staff", "teacher")
+
+
+@system_router.get("/admin/staff")
+async def list_staff(user: dict = Depends(require_roles(*ADMIN_ROLES))):
+    """Returns staff users only (no applicants/partners) with per-user
+    performance counters used by the admin staff page.
+    """
+    db = get_db()
+    items: list = []
+    async for u in db.users.find({"role": {"$in": list(_STAFF_ROLE_LIST)}}):
+        uid = str(u["_id"])
+        tasks_open = await db.tasks.count_documents({"assigned_to": uid, "status": "open"})
+        tasks_done = await db.tasks.count_documents({"assigned_to": uid, "status": "completed"})
+        invoices_created = await db.invoices.count_documents({"created_by": uid})
+        last_login = None
+        try:
+            login_doc = await db.audit_logs.find_one(
+                {"action": "user_login", "actor_id": uid},
+                sort=[("occurred_at", -1)],
+            )
+            if login_doc and login_doc.get("occurred_at"):
+                ts = login_doc["occurred_at"]
+                last_login = ts.isoformat() if hasattr(ts, "isoformat") else str(ts)
+        except Exception:
+            pass
+
+        items.append({
+            "id": uid,
+            "email": u.get("email"),
+            "full_name": u.get("full_name"),
+            "role": u.get("role"),
+            "phone": u.get("phone"),
+            "active": u.get("active", True),
+            "created_at": (u.get("created_at").isoformat() if hasattr(u.get("created_at"), "isoformat") else u.get("created_at")),
+            "stats": {
+                "tasks_open": tasks_open,
+                "tasks_done": tasks_done,
+                "invoices_created": invoices_created,
+            },
+            "last_login": last_login,
+        })
+
+    # Sort by role priority, then name
+    role_order = {r: i for i, r in enumerate(_STAFF_ROLE_LIST)}
+    items.sort(key=lambda x: (role_order.get(x["role"], 99), (x["full_name"] or "").lower()))
+    return items
+
+
+@system_router.post("/admin/staff/{user_id}/reset-password")
+async def reset_staff_password(
+    user_id: str,
+    user: dict = Depends(require_roles(*ADMIN_ROLES)),
+):
+    """Generate a new password-reset token for a staff user. Admin can copy
+    the resulting link and forward it to the user.
+    """
+    import secrets
+    db = get_db()
+    try:
+        target = await db.users.find_one({"_id": ObjectId(user_id)})
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungültige User-ID")
+    if not target:
+        raise HTTPException(status_code=404, detail="Nutzer nicht gefunden")
+    if target.get("role") not in _STAFF_ROLE_LIST:
+        raise HTTPException(status_code=403, detail="Nur Staff-Accounts dürfen so resetet werden")
+
+    token = secrets.token_urlsafe(32)
+    expires_at = datetime.now(timezone.utc) + __import__("datetime").timedelta(hours=24)
+    await db.password_reset_tokens.insert_one({
+        "user_id": user_id,
+        "token": token,
+        "expires_at": expires_at,
+        "created_by": user["id"],
+        "created_at": datetime.now(timezone.utc),
+        "used": False,
+    })
+    from services.audit import write_audit_log
+    await write_audit_log("admin_password_reset", user["id"], "user", user_id)
+
+    base = os.environ.get("APP_BASE_URL", "")
+    reset_url = f"{base}/auth/reset-password?token={token}" if base else f"/auth/reset-password?token={token}"
+    return {
+        "status": "ok",
+        "reset_url": reset_url,
+        "token": token,
+        "expires_at": expires_at.isoformat(),
+        "expires_in_hours": 24,
+    }

@@ -54,6 +54,8 @@ import AdminKnowledgePage from './pages/admin/AdminKnowledgePage';
 import AdminJobsPage from './pages/admin/AdminJobsPage';
 import AdminRulesPage from './pages/admin/AdminRulesPage';
 import AdminReportsPage from './pages/admin/AdminReportsPage';
+import AdminStaffPage from './pages/admin/AdminStaffPage';
+import AdminFinancePage from './pages/admin/AdminFinancePage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import PartnerLayout from './components/layout/PartnerLayout';
 import PartnerDashboardPage from './pages/partner/PartnerDashboardPage';
@@ -179,6 +181,8 @@ export default function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="cases" element={<AdminCasesPage />} />
             <Route path="users" element={<UsersPage />} />
+            <Route path="staff" element={<AdminStaffPage />} />
+            <Route path="finance" element={<AdminFinancePage />} />
             <Route path="partners" element={<AdminPartnersPage />} />
             <Route path="knowledge" element={<AdminKnowledgePage />} />
             <Route path="jobs" element={<AdminJobsPage />} />

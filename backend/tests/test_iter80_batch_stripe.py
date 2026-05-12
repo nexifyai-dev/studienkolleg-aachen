@@ -17,7 +17,7 @@ import requests
 import os
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://invoice-fix-31.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://live-demo-fix.preview.emergentagent.com').rstrip('/')
 
 # Test credentials
 STAFF_EMAIL = "staff@studienkolleg-aachen.de"
@@ -173,7 +173,7 @@ class TestStripePayment:
         """POST /api/payments/checkout - Create checkout session for sent invoice"""
         resp = staff_session.post(f"{BASE_URL}/api/payments/checkout", json={
             "invoice_number": TEST_INVOICE_SENT,
-            "origin_url": "https://invoice-fix-31.preview.emergentagent.com"
+            "origin_url": "https://live-demo-fix.preview.emergentagent.com"
         })
         
         # Could be 200 (success) or 503 (Stripe not configured) or 400 (already paid)

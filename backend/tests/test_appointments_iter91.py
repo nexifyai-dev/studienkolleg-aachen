@@ -19,7 +19,7 @@ APPLICANT_PASSWORD = os.environ.get("SEED_DEV_PASSWORD", "DevSeed@2026!")
 STAFF_EMAIL = "staff@studienkolleg-aachen.de"
 STAFF_PASSWORD = os.environ.get("SEED_DEV_PASSWORD", "DevSeed@2026!")
 
-BASE_URL = os.environ.get("APP_URL", "https://invoice-fix-31.preview.emergentagent.com").rstrip('/')
+BASE_URL = os.environ.get("APP_URL", "https://live-demo-fix.preview.emergentagent.com").rstrip('/')
 
 
 class TestAppointmentsAPI:

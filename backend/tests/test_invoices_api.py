@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://invoice-fix-31.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://live-demo-fix.preview.emergentagent.com')
 
 # Test credentials
 STAFF_EMAIL = "staff@studienkolleg-aachen.de"

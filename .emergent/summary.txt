@@ -1,54 +1,32 @@
 <analysis>**original_problem_statement**: 
-Der User forderte ursprünglich die Behebung des Invoice-Creation-Bugs (P0). Im Verlauf der Sitzung wurden weitreichende Funktionserweiterungen durchgeführt: Implementierung von KI-gestützter E-Mail-Generierung mit dynamischer Vorlagenauswahl und intelligenter Spracherkennung (aus dem Nachrichtenkontext), Einführung benutzerspezifischer Signaturen, Bereinigung der -Datei für das Deployment, Hinzufügen einer Vercel-Serverless-Konfiguration (, ) und ein vollständiger Wechsel aller LLM-Services auf ein einziges Modell ( via OpenRouter).
-PRODUCT REQUIREMENTS: Voll funktionsfähige, berechenbare Plattform. Alle KI-Funktionen müssen exakte Systemdaten (Oracle) nutzen und kontextabhängig in der korrekten Sprache antworten. Der Code muss deployment-ready für Vercel (Frontend/Serverless Backend) oder Hostinger VPS sein.
+Der User benötigte eine finale Vorbereitung und Bug-Fixes für eine wichtige Live-Präsentation um 17:00 Uhr. Probleme umfassten eine blockierte PDF-Vorschau (Iframe-Sicherheit), instabile Logins auf mobilen Geräten (Cross-Site-Cookie-Blockierung) und verlorene Datei-Uploads nach jedem Deployment (ephemerer Container-Storage).
+PRODUCT REQUIREMENTS: Voll funktionsfähige, berechenbare Plattform für das Studienkolleg Aachen. Die Plattform muss als produktives Demo-System mit einer sauberen Datenbank fungieren. Datei-Uploads müssen persistent sein. Alle Authentifizierungen müssen auf Mobilgeräten stabil via First-Party-Cookies laufen.
 
 **User's preferred language**: German (Deutsch)
-INSTRUCT NEXT AGENT: Du MUSST die Sprache des Nutzers automatisch erkennen und AUSSCHLIESSLICH auf Deutsch antworten. Der User hat zudem einen massiven UNIVERSAL AUTONOMOUS OPERATING PROMPT (Nachricht 155) übergeben: Du musst eine streng analytische, DACH-orientierte, rollenbasierte Arbeitsweise annehmen (z.B. BACKEND ENGINEER, DEBUGGING SPECIALIST). Hinterfrage Aufgaben auf ihren echten Zweck und arbeite absolut regresssionsfrei. 
+INSTRUCT NEXT AGENT: Du MUSST die Sprache des Nutzers automatisch erkennen und AUSSCHLIESSLICH auf Deutsch antworten. Übernimm eine hochprofessionelle, lösungsorientierte und analytische Rolle.
 
 **what currently exists?** 
-Ein voll funktionsfähiges Full-Stack-CRM für das Studienkolleg Aachen (React, FastAPI, MongoDB). Der CSRF-Schutz ist aktiv. E-Mails laufen über SMTP. Lokales Storage ist aktiv. Sämtliche KI-Interaktionen (Support Chat, Brain Assistent, E-Mail-Generierung, Oracle, Document Validation) sind zentralisiert und nutzen ausschließlich  via OpenRouter (inklusive Wrapper für alte nscale-Aufrufe). Das System ist nun für ein Vercel-Serverless-Deployment vorbereitet ( und  existieren).
+Ein voll funktionsfähiges Full-Stack-CRM (React, FastAPI, MongoDB) für das Studienkolleg Aachen mit angebundener Custom-Domain. Die App verwendet nun ein dynamisches API-Routing (), um API-Aufrufe bei gleicher Origin auf relative Pfade umzustellen (löst ITP/3rd-Party-Cookie-Probleme). Das Backend ist für den persistenten Emergent Object Storage via  konfiguriert (ersetzt den ephemeren lokalen Speicher). Ein Admin-Endpunkt zur Datenbank-Bereinigung () existiert für Demo-Vorbereitungen.
 
 **Last working item**: 
-    - Last item agent was working: Untersuchung eines potenziellen Fehlers im Support-Chat (W2G Assistent) *nach dem Deployment*. Der User testete den Chat im produktiven Umfeld mit der Eingabe rgergergew und erhielt die Antwort: Es tut mir leid, aber Ihre Eingabe konnte ich leider nicht verstehen.... Der Agent hat ein  gesendet, um zu klären, ob dies ein gewünschtes Verhalten der KI auf unsinnigen Text ist oder ein Deployment-Fehler (z.B. fehlende OpenRouter-API-Keys im Production-Environment).
-    - Status: BLOCKED (Warten auf User-Antwort / Verifikation des Production-Environments)
-    - Agent Testing Done: N (Agent wartet auf User-Input)
-    - Which testing method agent to use? backend testing via curl (Prüfung von  und Logs)
-    - User Testing Done: Y (User hat in der deployed Version getestet)
+    - Last item agent was working: Anpassung des  auf  im Live-System. Der Agent hat den Code für den Emergent Object Storage erfolgreich implementiert und im Preview-Environment getestet. Nach dem Deployment auf Production hat der User jedoch vergessen, die Environment-Variable  in den Production-Settings auf der Emergent-Plattform zu setzen. Der Agent hat via  darauf hingewiesen.
+    - Status: USER VERIFICATION PENDING
+    - Agent Testing Done: Y (im Preview-Environment vollständig verifiziert)
+    - Which testing method agent to use? manual testing by curl (Prüfung von  im Live-System, um zu sehen ob  aktiv ist).
+    - User Testing Done: N 
 
 **All Pending/In progress Issue list**: 
-  Issue 1: Support Chat Verhalten im Deployed Environment (P0)
-     - Attempted fixes: Bisher nur  gesendet, um den Kontext der Live-Umgebung zu klären.
-     - Next debug checklist:  und  prüfen. Klären: Ist die Antwort (Es tut mir leid...) ein korrekter LLM-Fallback für unsinnige Eingaben oder fängt das Backend einen HTTP 500 (fehlender API-Key in Vercel/Hostinger) ab und wirft diese Standardmeldung im Frontend? Production  Variablen prüfen.
-     - Why fix this issue and what will be achieved with the fix? Der Support Chat muss in der Live-Umgebung fehlerfrei mit dem DeepSeek V4 Modell kommunizieren.
-     - Status: BLOCKED
-     - Is recurring issue? N
-     - Should Test frontend/backend/both after fix? backend via curl
-     - Blocked on other issue: None
-
-  Issue 2: Google Kalender Integration (P1)
-     - Attempted fixes: Keine.
-     - Next debug checklist: Evaluieren, wo und wie der Google Kalender angebunden wird (StaffAppointmentsPage / Backend Calendar API).
-     - Why fix this issue and what will be achieved with the fix? Lang erwartete Kundenanforderung.
-     - Status: NOT STARTED
-     - Is recurring issue? N
-     - Should Test frontend/backend/both after fix? Both
-     - Blocked on other issue: None
-
-  Issue 3: Erweiterte Reports (P2)
-     - Attempted fixes: Keine.
-     - Next debug checklist:  und Frontend  erweitern (Umsatz pro Mitarbeiter, nach Datum).
-     - Status: NOT STARTED
-     - Is recurring issue? N
-     - Should Test frontend/backend/both after fix? Both
+  Issue 1: Live-System nutzt weiterhin ephemeren (lokalen) Storage (P0)
+     - Attempted fixes: Code wurde bereits auf  umgestellt und deployed. Fix scheitert aktuell im Live-System, da die  Env-Variable vom User in den Production-Settings nicht angepasst wurde.
+     - Next debug checklist: Warten auf Antwort des Users. Nach Bestätigung  auf den Live  Endpoint machen, um zu prüfen, ob  nun  zurückgibt.
+     - Why fix this issue and what will be achieved with the fix? Verhindert, dass hochgeladene PDFs (z.B. Sprachzertifikate) beim nächsten Container-Neustart/Deployment gelöscht werden und zu Datei im Speicher nicht gefunden-Fehlern führen.
+     - Status: USER VERIFICATION PENDING
+     - Is recurring issue? Y (trat mehrfach auf, da das Architektur-Verständnis bezüglich ephemerem Storage fehlte)
+     - Should Test frontend/backend/both after fix? backend (via curl)
      - Blocked on other issue: None
 
 **In progress Task List**: 
-  Task 1: Vercel / Hostinger Deployment Abschluss (P1)
-     - Where to resume: Klären, ob der User das System nun auf Vercel Serverless oder dem Hostinger VPS (Ubuntu) hostet, und sicherstellen, dass die Environment-Variablen (, etc.) dort korrekt injiziert wurden.
-     - What will be achieved with this? Go-Live der Plattform.
-     - Status: BLOCKED (User testet aktuell)
-     - Should Test frontend/backend/both after fix? Both
-     - Blocked on something: User-Entscheidung / Live-Env-Variablen.
+  Keine laufenden Code-Tasks. Das System wartet lediglich auf den Env-Var-Fix im Live-System.
 
 **Upcoming and Future Tasks**
     Upcoming Tasks:
@@ -62,15 +40,13 @@ Ein voll funktionsfähiges Full-Stack-CRM für das Studienkolleg Aachen (React, 
     - Task 6: Kanban-Ansicht und Fallliste zusammenführen (P3)
 
 **Completed work in this session**
-- Invoice Creation Bug () behoben (DONE)
-- KI-E-Mail-Generierung mit Vorlagen (8 Kategorien) und benutzerspezifischen Signaturen (DONE)
-- Automatische Spracherkennung aus dem E-Mail-Kontext (DONE)
-- Oracle Service komplett überarbeitet für exakte und korrekte Datenzählung für die KI (DONE)
-- Deployment-Vorbereitung (Vercel config  &  erstellt,  bereinigt) (DONE)
-- Vollständige Konsolidierung aller LLM-Funktionen auf  via OpenRouter (DONE)
+- PDF-Vorschau-Fix (Iframe-Blockierung):  wurde für Dokument-Routen entfernt und durch  ersetzt (DONE)
+- Demo-Daten-Cleanup: Script () und Admin-API-Endpunkt zur Bereinigung aller Fake-Daten für die Live-Präsentation erstellt (DONE)
+- Fix für instabile Logins auf Smartphones: Cross-Site-Cookie-Blockierungen (ITP) gelöst durch Einführung von  für dynamisches relatives API-Routing (DONE)
+- Persistenter Object Storage: Integration von  für Uploads, um den flüchtigen lokalen Speicher zu ersetzen (DONE)
 
 **Earlier issues found/mentioned but not fixed**
-  - Keine systemkritischen Bugs offen (Testing Agent Iteration 105 zeigte 100% Pass für UI und gängige Backend-Flows).
+  - Keine.
 
 **Known issue recurrence from previous fork**
   - Issue recurrence in previous fork: None
@@ -81,67 +57,74 @@ Ein voll funktionsfähiges Full-Stack-CRM für das Studienkolleg Aachen (React, 
 
 
 **Key Technical Concepts**
-React, FastAPI, MongoDB, Vercel Serverless (Python Runtime), DeepSeek-V4-Flash via OpenRouter, System-Prompt-Design (Universal Autonomous Prompt).
+React, FastAPI, MongoDB, Emergent Object Storage (), First-Party Cookies via relative URLs, CSP Header für Iframes.
 
 **key DB schema**
-  - : Speichert importierte IMAP Mails (Spracherkennung greift hierauf zu)
-  - :  wird automatisch berechnet.
-  - Benutzer-Signaturen werden individuell in der DB gepflegt.
+  - Keine Änderungen am DB-Schema.
 
 **changes in tech stack**
-  - **KI-Modell-Wechsel:** Alle nscale/minimax/gemini Modelle wurden entfernt. Das gesamte System (Support Chat, Brain, E-Mail, Oracle) nutzt **ausschließlich**  über OpenRouter.  wurde in einen Wrapper für  umgewandelt.
-  - **Deployment:** Vercel-Serverless-Logik () eingeführt.
+  -  wurde implementiert für anhaltenden Datei-Speicher (Object Storage).
+  - Das Frontend greift nicht mehr statisch auf eine gehostete Backend-URL über Env-Vars zurück, sondern ermittelt dynamisch die Origin für 1st-Party-Cookies.
 
 **All files of reference** 
-  -  (Aktueller Bug nach Deployment)
-  -  (Neuer LLM-Kern)
-  -  (Wrapper)
-  -  &  (Deployment)
+  - 
+  - 
+  - 
 
 **Areas that need refactoring**:
-  - Keine. Wrapper-Pattern für LLMs wurde in dieser Sitzung bereits aufgeräumt.
+  - Optional: Die Frontend-Seiten wurden sehr flächendeckend mit Suchen/Ersetzen auf  migriert. Bei Gelegenheit auf saubere Import-Ordnung prüfen.
 
 **key api endpoints**
-  -  (Public Chat - Aktuell im Fokus)
-  -  (E-Mail Generierung)
+  -  (liefert u.a. das aktuelle )
+  -  (Admin-only, löscht alle Mock-Bewerber-Daten via Double-Submit CSRF)
+  - 
 
 **Critical Info for New Agent** 
-  - **UNIVERSAL AUTONOMOUS OPERATING PROMPT BEACHTEN:** (Siehe User Message 155). Du musst als hochgradig professioneller, DACH-orientierter Agent arbeiten. Analysiere das Ziel hinter jeder Frage. Liefere keine halben Lösungen. Keine One-Off UIs ohne Systemlogik.
-  - Das System ist bereit für das Deployment (Vercel oder VPS). Fehler, die nach dem Deployment auftreten, sind höchstwahrscheinlich auf fehlende oder fehlerhafte Environment-Variablen im Live-System (, , etc.) zurückzuführen.
-  - Die gesamte KI läuft jetzt über . Der  wird nicht mehr direkt abgefragt/genutzt.
+  - **Environment-Trennung beachten:** Der Agent hat im *Preview* gearbeitet. Der User testet und präsentiert im *Live/Production* Environment (Custom Domain). Alle Änderungen am Code müssen vom User via Save to Github und Deploy auf das Live-System übertragen werden.
+  - Das letzte Problem ist absolut isoliert auf das Live-Environment zurückzuführen: Die Variable  muss dort zwingend auf  gesetzt werden, da sonst standardmäßig der lokale (ephemere) Pfad verwendet wird. Kläre dies mit dem User!
+  - Nachdem der User die Variable im Live-System gesetzt hat, empfehle ihm einen Test-Upload (PDF) und anschließend einen erneuten Aufruf des  Endpunkts, falls zwischenzeitlich wieder fehlerhafte Metadata-Einträge ohne korrespondierende Storage-Files entstanden sind.
 
 **documents and test reports created in this job** 
-  -  bis  (105: 100% Pass)
-  -  (Geupdatet)
+  - 
+  - 
 
 **Last 10 User Messages and any pending HUMAN messages** 
- - (User) Zeigt Vercel-Build-Error ().
- - (User) Fragt Kann ich nicht alles auf vercel laufen lassen? und Und wenn ich alles hier hoste?.
- - (User) Fordert Deployment-Check und Auflistung aller Secrets.
- - (Agent) Repariert  und listet alle Environment-Keys auf.
- - (User) Fordert, ALLE LLM Modelle exklusiv auf  über OpenRouter umzustellen.
- - (Agent) Führt dies durch (für Brain & Mail).
- - (User) Fragt: Hast du die auch bei der Auftragsprüfung eingebaut?.
- - (Agent) Refactort  zu einem Wrapper und führt finalen Systemtest (Iteration 105) durch.
- - (User) PENDING HUMAN MESSAGE: Meldet, dass im W2G Support Chat Nach dem deployed bei der Eingabe rgergergew die KI mit Es tut mir leid... antwortet.
+ - (User) Meldet, dass mobile Logins instabil sind.
+ - (Agent) Fixt das Cookie-Problem mit .
+ - (User) Deployed fertig
+ - (Agent) Prüft Live-System, bestätigt Login-Fix, fordert Testlauf mit neuem PDF-Upload.
+ - (User) Meldet:  bei neuem Zertifikat.
+ - (Agent) Erkennt, dass der lokale Container-Storage flüchtig ist. Erfragt, ob S3/Emergent Storage genutzt werden soll (Option B).
+ - (User) Option B
+ - (Agent) Integriert Emergent Storage, testet lokal erfolgreich, fordert Re-Deploy + Setzen der Env-Var .
+ - (User) [System Notif: deployed to production] gepusht und deployed
+ - (Agent) PENDING HUMAN MESSAGE: Teilt dem User mit, dass das Production-Environment unter  immer noch  anzeigt. Bittet den User via , die Environment-Variable in den Dashboard-Settings manuell anzupassen.
 
 **Project Health Check:**
-  - Broken: Deployed Environment W2G Chat (Vermutlich Env-Var Issue in Live)
+  - Broken: Live-System Datei-Upload (Nur Env-Var Konfigurationsfehler in Production, Code funktioniert)
   - Mocked: Keine
 
 **3rd Party Integrations** 
-  - OpenRouter API (deepseek/deepseek-v4-flash) — User API Key
-  - Stripe (Payments) — User API Key
-  - Strato SMTP — User Credentials
+  - OpenRouter API (deepseek/deepseek-v4-flash) — Uses User API Key
+  - Emergent Object Storage — Uses Emergent LLM Key ()
+  - Stripe (Payments) — Uses User API Key
+  - Strato SMTP/IMAP — Uses User Credentials
 
 **Testing status**
-  - Testing agent used after significant changes: YES (Iteration 105)
+  - Testing agent used after significant changes: YES (Iteration 106)
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: 
-  - Known regressions: Keine im lokalen Code, nur Issues im produktiven Deployment.
+  - Known regressions: Keine im Code, nur Deployment-Misskonfiguration im Live-System.
 
 **Credentials to test flow:**
-  
+  Verfügbar in  (Admin:  / , Staff:  / )
 
 **What agent forgot to execute**
-  Der Agent hat das  bezüglich des Chat-Verhaltens nach dem Deployment nicht abgewartet. Er muss klären, ob es sich bei dem Chat-Verhalten um einen korrekten Fallback des DeepSeek-Modells handelt (da rgergergew Quatsch ist) oder ob die API im Live-System blockiert wird und ein harter Fehler im Frontend als freundliche Nachricht gerendert wird.</analysis>
+  Der Agent hat alles ausgeführt und sogar proaktiv auf das Live-System referenziert. Die Blockade liegt auf Seiten des Users (Aktualisierung der Produktionsvariablen).
+
+**Debugging checklist for current issue**
+    Issue: Production verwendet lokal ephemeren Speicher anstelle von Emergent Storage
+    Frontend files to check: Keine
+    Backend files to check:  (Health Check Endpoint)
+    Database to check: Keine
+    </analysis>

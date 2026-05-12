@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/') or "https://invoice-fix-31.preview.emergentagent.com"
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/') or "https://live-demo-fix.preview.emergentagent.com"
 
 # Test credentials
 CREDENTIALS = {

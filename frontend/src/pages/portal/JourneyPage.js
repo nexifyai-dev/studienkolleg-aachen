@@ -76,7 +76,7 @@ export default function JourneyPage() {
                             isComplete
                               ? 'bg-[var(--color-primary)] shadow-sm'
                               : isCurrent
-                                ? 'bg-white border-[3px] border-[var(--color-primary)] shadow-md shadow-[var(--color-primary)]/20'
+                                ? 'bg-white border-[3px] border-[var(--color-primary)] shadow-md shadow-[rgba(10,25,47,0.2)]'
                                 : 'bg-[var(--color-surface-sunken)] border-2 border-[var(--color-divider)]'
                           }`}>
                             {isComplete ? (

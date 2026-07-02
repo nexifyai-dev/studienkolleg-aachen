@@ -435,16 +435,16 @@ def _get_integration_status() -> dict:
     """Integrations-Status ohne Secrets zu leaken."""
     import os
     stripe_key = os.environ.get("STRIPE_API_KEY", "")
-    openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
+    deepseek_key = os.environ.get("DEEPSEEK_API_KEY", "")
     nscale_key = os.environ.get("NSCALE_API_KEY", "")
     resend_key = os.environ.get("RESEND_API_KEY", "")
     return {
         "stripe_active": bool(stripe_key and stripe_key.startswith("sk_")),
         "stripe_mode": "live" if stripe_key.startswith("sk_live_") else "test" if stripe_key.startswith("sk_test_") else "unconfigured",
-        "ai_provider": "openrouter" if openrouter_key else ("nscale" if nscale_key else "none"),
-        "ai_active": bool(openrouter_key or nscale_key),
+        "ai_provider": "deepseek" if deepseek_key else ("nscale" if nscale_key else "none"),
+        "ai_active": bool(deepseek_key or nscale_key),
         "email_active": bool(resend_key) or os.environ.get("EMAIL_ENABLED", "").lower() == "true",
-        "storage_active": os.environ.get("STORAGE_BACKEND", "") in ("s3", "rustfs") or bool(os.environ.get("S3_ENDPOINT")),
+        "storage_active": os.environ.get("STORAGE_BACKEND", "") in ("s3", "rustfs", "emergent") or bool(os.environ.get("S3_ENDPOINT")),
     }
 
 

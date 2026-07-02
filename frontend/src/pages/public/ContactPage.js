@@ -101,13 +101,13 @@ export default function ContactPage() {
                 </div>
 
                 {/* Gesellschaftssitz */}
-                <div className="p-5 rounded-[8px] border border-[var(--color-primary)]/8" style={{ boxShadow: '0 2px 8px rgba(17,54,85,0.03)' }}>
-                  <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[var(--color-primary)]/60 mb-3">
+                <div className="p-5 rounded-[8px] border border-[rgba(10,25,47,0.08)]" style={{ boxShadow: '0 2px 8px rgba(17,54,85,0.03)' }}>
+                  <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[rgba(10,25,47,0.6)] mb-3">
                     {t('contact_page.registered_label')}
                   </p>
                   <p className="text-[14px] font-bold text-[var(--color-primary-dark)] mb-1">W2G Academy GmbH</p>
                   <p className="text-[13px] text-[var(--color-text-secondary)]">Theaterstraße 24 · 52062 Aachen</p>
-                  <p className="text-[11px] text-[var(--color-text-secondary)]/60 mt-1">HRB 23610 · Amtsgericht Aachen</p>
+                  <p className="text-[11px] text-[rgba(71,85,105,0.6)] mt-1">HRB 23610 · Amtsgericht Aachen</p>
                 </div>
               </div>
 
@@ -131,7 +131,7 @@ export default function ContactPage() {
                 </div>
 
                 {/* WhatsApp CTA */}
-                <div className="p-6 lg:p-8 rounded-[8px] border border-[var(--color-primary)]/8" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
+                <div className="p-6 lg:p-8 rounded-[8px] border border-[rgba(10,25,47,0.08)]" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
                   <h2 className="text-[20px] font-bold text-[var(--color-primary-dark)] mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
                     {t('contact_page.whatsapp_title')}
                   </h2>
@@ -147,7 +147,7 @@ export default function ContactPage() {
                 </div>
 
                 {/* Beratungstermin CTA */}
-                <div className="p-6 lg:p-8 rounded-[8px] border border-[var(--color-primary)]/8" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
+                <div className="p-6 lg:p-8 rounded-[8px] border border-[rgba(10,25,47,0.08)]" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
                   <h2 className="text-[20px] font-bold text-[var(--color-primary-dark)] mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
                     {isEN ? 'Book a Consultation' : 'Beratungstermin buchen'}
                   </h2>
@@ -163,7 +163,7 @@ export default function ContactPage() {
                 </div>
 
                 {/* Rechtliche Links */}
-                <div className="pt-4 border-t border-[var(--color-primary)]/6">
+                <div className="pt-4 border-t border-[rgba(10,25,47,0.06)]">
                   <p className="text-[12px] text-[var(--color-text-secondary)]">
                     {t('contact_page.legal_link_note')}{' '}
                     <Link to="/legal" className="font-semibold hover:underline" style={{ color: 'var(--color-primary)' }}>{t('contact_page.impressum_link')}</Link>

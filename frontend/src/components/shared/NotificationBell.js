@@ -156,7 +156,7 @@ export default function NotificationBell() {
                 tabIndex={0}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(notif); }}
                 className={`w-full text-left px-4 py-3 border-b border-[var(--color-divider-subtle)] hover:bg-[var(--color-surface-elevated)] transition-colors flex items-start gap-3 cursor-pointer ${
-                  !notif.read ? 'bg-[var(--color-info-bg)]/40' : ''
+                  !notif.read ? 'bg-[rgba(239,246,255,0.4)]' : ''
                 }`}
               >
                 <div className={`mt-0.5 w-2 h-2 rounded-full flex-shrink-0 ${

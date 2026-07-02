@@ -54,7 +54,7 @@ function RequestModal({ onClose, onCreated, lang }) {
             <div className="grid grid-cols-2 gap-2">
               {presets.map((p, i) => (
                 <button key={i} onClick={() => { setTitle(p.t); setDesc(p.d); }}
-                  className={`text-left p-2.5 border rounded-[var(--radius-sm)] text-xs transition-all ${title === p.t ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5' : 'border-[var(--color-divider)] hover:border-[var(--color-primary)]/40'}`}
+                  className={`text-left p-2.5 border rounded-[var(--radius-sm)] text-xs transition-all ${title === p.t ? 'border-[var(--color-primary)] bg-[rgba(10,25,47,0.05)]' : 'border-[var(--color-divider)] hover:border-[rgba(10,25,47,0.4)]'}`}
                   data-testid={`preset-${i}`}>
                   {p.t}
                 </button>
@@ -164,7 +164,7 @@ export default function ApplicantTasksPage() {
               <div className="min-w-0 flex-1">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
                   <h2 className="text-base font-semibold text-[var(--color-text-primary)]">{task.title}</h2>
-                  <span className="w2g-badge bg-[var(--color-primary)]/8 text-[var(--color-primary)]">{STATUS_LABELS[task.status] || task.status}</span>
+                  <span className="w2g-badge bg-[rgba(10,25,47,0.08)] text-[var(--color-primary)]">{STATUS_LABELS[task.status] || task.status}</span>
                   {task.priority === 'high' ? <span className="w2g-badge bg-[var(--color-danger-bg)] text-[var(--color-danger)]">{lang === 'de' ? 'Dringend' : 'Urgent'}</span> : null}
                 </div>
                 <p className="text-sm text-[var(--color-text-secondary)]">{task.description || (lang === 'de' ? 'Diese Aufgabe ist fuer deinen weiteren Prozessschritt relevant.' : 'This task is relevant for your next process step.')}</p>

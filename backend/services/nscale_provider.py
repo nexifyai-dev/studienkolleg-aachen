@@ -1,5 +1,5 @@
 """
-AI Provider – Alle KI-Funktionen via OpenRouter (deepseek/deepseek-v4-flash).
+AI Provider – Alle KI-Funktionen via DeepSeek (deepseek-chat).
 
 Wrapper um openrouter_provider fuer Abwaertskompatibilitaet.
 Alle alten Imports (from services.nscale_provider import ...) funktionieren weiter.

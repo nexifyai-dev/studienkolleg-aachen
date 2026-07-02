@@ -88,7 +88,7 @@ export function SupportConversationPanel({
             <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-text-tertiary)]">Konversationen</p>
           </div>
           <div className="p-4">
-            <button type="button" className="flex w-full items-start gap-3 rounded-[var(--radius-lg)] bg-[var(--color-primary)]/6 px-4 py-4 text-left" data-testid={`${testId}-support-thread`}>
+            <button type="button" className="flex w-full items-start gap-3 rounded-[var(--radius-lg)] bg-[rgba(10,25,47,0.06)] px-4 py-4 text-left" data-testid={`${testId}-support-thread`}>
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-primary)] text-white">
                 <MessageSquare size={16} />
               </div>
@@ -106,7 +106,7 @@ export function SupportConversationPanel({
             <p className="text-xs text-[var(--color-text-secondary)]">Antwortweg für Status-, Dokument- und Abrechnungsfragen</p>
           </div>
 
-          <div className="min-h-[460px] space-y-3 overflow-y-auto bg-[var(--color-surface-elevated)]/70 px-5 py-4" data-testid={`${testId}-messages`}>
+          <div className="min-h-[460px] space-y-3 overflow-y-auto bg-[rgba(250,251,252,0.7)] px-5 py-4" data-testid={`${testId}-messages`}>
             {loading ? (
               <div className="flex h-full items-center justify-center text-[var(--color-text-tertiary)]"><Loader2 size={20} className="animate-spin" /></div>
             ) : messages.length === 0 ? (

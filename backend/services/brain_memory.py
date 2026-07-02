@@ -4,7 +4,7 @@ Brain Memory Service – Persistente KI-Gedächtnisschicht für das gesamte W2G-
 Architektur:
 - mem0 OSS als Memory-Framework
 - MongoDB als Backend-Store (kein externes Qdrant nötig)
-- OpenRouter deepseek/deepseek-v4-flash als LLM fuer Memory-Extraktion + Antworten
+- DeepSeek (deepseek-chat) als LLM fuer Memory-Extraktion + Antworten
 - 4 Memory-Ebenen:
   1. entity_memory:       Pro Bewerber/Staff – Fakten, Präferenzen, Historie
   2. institutional_memory: Globale Policies, Standardprozesse, Studienkolleg-Wissen
@@ -38,13 +38,13 @@ CATEGORIES = {
 
 
 async def _get_openrouter_client():
-    """OpenRouter-Client fuer Memory-Extraktion."""
-    api_key = os.environ.get("OPENROUTER_API_KEY", "")
+    """DeepSeek-Client fuer Memory-Extraktion."""
+    api_key = os.environ.get("DEEPSEEK_API_KEY", "")
     if not api_key:
         return None
     from openai import AsyncOpenAI
     return AsyncOpenAI(
-        base_url="https://openrouter.ai/api/v1",
+        base_url="https://api.deepseek.com",
         api_key=api_key,
     )
 
@@ -57,7 +57,7 @@ async def extract_facts(text: str, context_type: str = "general") -> list:
 
     try:
         response = await client.chat.completions.create(
-            model="deepseek/deepseek-v4-flash",
+            model="deepseek-chat",
             messages=[
                 {"role": "system", "content": f"""Du bist ein Fakten-Extraktor fuer ein Studienkolleg-CRM.
 Extrahiere ALLE relevanten Fakten aus dem folgenden Text.
@@ -332,7 +332,7 @@ DEIN CHARAKTER:
 - Halte Antworten kompakt – maximal 3-4 Absaetze
 - Wenn du etwas nicht weisst, sag es direkt"""
 
-    model = "deepseek/deepseek-v4-flash"
+    model = "deepseek-chat"
     try:
         response = await client.chat.completions.create(
             model=model,

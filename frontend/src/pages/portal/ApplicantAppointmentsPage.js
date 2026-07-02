@@ -104,14 +104,14 @@ export default function ApplicantAppointmentsPage() {
       {/* KPI Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="w2g-card" data-testid="kpi-next-apt">
-          <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-primary)]/8 text-[var(--color-primary)]"><CalendarDays size={16} /></div>
+          <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[rgba(10,25,47,0.08)] text-[var(--color-primary)]"><CalendarDays size={16} /></div>
           <p className="text-xs uppercase tracking-wider text-[var(--color-text-tertiary)]">{L.next}</p>
           <p className="mt-1 text-sm font-semibold text-[var(--color-text-primary)]">
             {upcoming[0] ? `${upcoming[0].date} ${upcoming[0].time || ''}` : L.noApt}
           </p>
         </div>
         <div className="w2g-card" data-testid="kpi-total-apts">
-          <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-primary)]/8 text-[var(--color-primary)]"><Clock size={16} /></div>
+          <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[rgba(10,25,47,0.08)] text-[var(--color-primary)]"><Clock size={16} /></div>
           <p className="text-xs uppercase tracking-wider text-[var(--color-text-tertiary)]">{L.total}</p>
           <p className="mt-1 text-sm font-semibold text-[var(--color-text-primary)]">{appointments.filter(a => a.status !== 'cancelled').length}</p>
         </div>
@@ -296,7 +296,7 @@ function BookingModal({ lang, initialDate, onClose, onBooked }) {
                     {Object.entries(TYPE_L).map(([key, label]) => (
                       <button key={key} onClick={() => setForm(f => ({ ...f, type: key }))}
                         className={`px-3 py-2.5 rounded-[var(--radius-md)] border text-sm font-medium transition-all ${
-                          form.type === key ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5 text-[var(--color-primary)]' : 'border-[var(--color-divider)] text-[var(--color-text-secondary)]'
+                          form.type === key ? 'border-[var(--color-primary)] bg-[rgba(10,25,47,0.05)] text-[var(--color-primary)]' : 'border-[var(--color-divider)] text-[var(--color-text-secondary)]'
                         }`} data-testid={`booking-type-${key}`}>{label}</button>
                     ))}
                   </div>

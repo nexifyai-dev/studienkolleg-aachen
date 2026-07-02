@@ -82,7 +82,7 @@ export default function ServicesPage() {
                 const Icon = SERVICE_ICONS[key];
                 const link = SERVICE_LINKS[key];
                 return (
-                  <div key={key} className={`p-6 lg:p-8 rounded-[8px] border border-[var(--color-primary)]/8 transition-all duration-300 hover:border-[var(--color-primary)]/15 group ${stagger(gridVis)}`}
+                  <div key={key} className={`p-6 lg:p-8 rounded-[8px] border border-[rgba(10,25,47,0.08)] transition-all duration-300 hover:border-[rgba(10,25,47,0.15)] group ${stagger(gridVis)}`}
                     style={{ ...staggerDelay(idx), boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}
                     id={`service-${key}`}
                     data-testid={`service-card-${key}`}>
@@ -124,7 +124,7 @@ export default function ServicesPage() {
               <div className={`lg:col-span-7 ${stagger(locVis)}`} style={staggerDelay(1)}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-6 h-[2px]" style={{ background: 'var(--color-accent)' }} />
-                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">
                     {isEN ? 'Location' : 'Standort'}
                   </span>
                 </div>
@@ -177,7 +177,7 @@ export default function ServicesPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {PROCESS_STEPS.map((step, idx) => (
-                <div key={step.num} className={`p-6 rounded-[8px] border border-[var(--color-primary)]/6 ${stagger(procVis)}`}
+                <div key={step.num} className={`p-6 rounded-[8px] border border-[rgba(10,25,47,0.06)] ${stagger(procVis)}`}
                   style={staggerDelay(idx)} data-testid={`process-step-${step.num}`}>
                   <span className="text-[28px] font-extrabold mb-4 block"
                     style={{ color: 'var(--color-accent)', fontFamily: 'var(--font-heading)' }}>

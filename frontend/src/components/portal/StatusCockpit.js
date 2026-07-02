@@ -46,7 +46,7 @@ export default function StatusCockpit({ stage, applicationId, lang = 'de' }) {
       <CardContent className="pt-5 space-y-4">
         {/* Zustaendigkeit */}
         <div className="flex items-start gap-3" data-testid="status-responsibility">
-          <div className={`w-8 h-8 rounded-[var(--radius-sm)] flex items-center justify-center shrink-0 ${isApplicantAction ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]' : 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]'}`}>
+          <div className={`w-8 h-8 rounded-[var(--radius-sm)] flex items-center justify-center shrink-0 ${isApplicantAction ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]' : 'bg-[rgba(10,25,47,0.1)] text-[var(--color-primary)]'}`}>
             {isApplicantAction ? <User size={16} /> : <Users size={16} />}
           </div>
           <div>

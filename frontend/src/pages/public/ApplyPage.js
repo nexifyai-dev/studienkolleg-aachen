@@ -31,7 +31,7 @@ function FileDropZone({ docKey, file, onFileChange, onClear, t }) {
         <span className="ml-1 text-xs text-[var(--color-text-tertiary)] font-normal">({t(`apply.doc_descs.${docKey}`)})</span>
       </label>
       {file ? (
-        <div className={`flex items-center gap-3 border rounded-[var(--radius-sm)] px-4 py-3 ${sizeOk ? 'border-[var(--color-primary)]/30 bg-[var(--color-primary)]/5' : 'border-[var(--color-danger-border)] bg-[var(--color-danger-bg)]'}`}
+        <div className={`flex items-center gap-3 border rounded-[var(--radius-sm)] px-4 py-3 ${sizeOk ? 'border-[rgba(10,25,47,0.3)] bg-[rgba(10,25,47,0.05)]' : 'border-[var(--color-danger-border)] bg-[var(--color-danger-bg)]'}`}
           data-testid={`file-selected-${docKey}`}>
           <FileText size={18} className={sizeOk ? 'text-[var(--color-primary)]' : 'text-[var(--color-danger)]'} />
           <div className="flex-1 min-w-0">
@@ -46,7 +46,7 @@ function FileDropZone({ docKey, file, onFileChange, onClear, t }) {
         <div onDragOver={e => { e.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)}
           onDrop={handleDrop} onClick={() => inputRef.current?.click()}
           className={`border-2 border-dashed rounded-[var(--radius-sm)] px-4 py-5 text-center cursor-pointer transition-all ${
-            dragging ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5' : 'border-[var(--color-divider)] hover:border-[var(--color-primary)]/60 hover:bg-[var(--color-surface-elevated)]'
+            dragging ? 'border-[var(--color-primary)] bg-[rgba(10,25,47,0.05)]' : 'border-[var(--color-divider)] hover:border-[rgba(10,25,47,0.6)] hover:bg-[var(--color-surface-elevated)]'
           }`} data-testid={`file-drop-${docKey}`}>
           <Upload size={20} className="mx-auto text-[var(--color-text-tertiary)] mb-2" />
           <p className="text-sm text-[var(--color-text-secondary)]">{t('apply.drag_drop')} <span className="text-[var(--color-primary)] font-medium">{t('apply.browse')}</span></p>
@@ -160,7 +160,7 @@ export default function ApplyPage() {
         <main className="pt-16">
           <div className="w2g-section-narrow py-10 sm:py-16">
             <div className="w2g-card p-8 sm:p-10 text-center max-w-2xl mx-auto" data-testid="apply-success">
-              <div className="w-16 h-16 bg-[var(--color-primary)]/10 rounded-full flex items-center justify-center mx-auto mb-5">
+              <div className="w-16 h-16 bg-[rgba(10,25,47,0.1)] rounded-full flex items-center justify-center mx-auto mb-5">
                 <CheckCircle size={32} className="text-[var(--color-primary)]" />
               </div>
               <h2 className="w2g-heading-md mb-3">{t('apply.success_title')}</h2>
@@ -191,7 +191,7 @@ export default function ApplyPage() {
         </section>
 
         {/* Guidance Bar */}
-        <div className="border-b border-[var(--color-divider-subtle)] bg-[var(--color-surface-elevated)]/80">
+        <div className="border-b border-[var(--color-divider-subtle)] bg-[rgba(250,251,252,0.8)]">
           <div className="w2g-section-narrow py-4">
             <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-[var(--color-text-secondary)]">
               <span className="flex items-center gap-1.5"><Clock size={13} className="text-[var(--color-primary)]" />{isDE ? 'ca. 10 Min. Bearbeitungszeit' : 'approx. 10 min. completion time'}</span>

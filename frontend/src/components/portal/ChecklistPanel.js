@@ -8,10 +8,10 @@ import { Badge } from '../ui/badge';
 
 const ICONS = { FileText, AlertTriangle, Clock, CheckCircle, User, CreditCard, HelpCircle, GraduationCap };
 const STATUS_STYLES = {
-  missing: 'border-[var(--color-danger-border)] bg-[var(--color-danger-bg)]/50',
-  action_needed: 'border-[var(--color-warning-border)] bg-[var(--color-warning-bg)]/50',
+  missing: 'border-[var(--color-danger-border)] bg-[rgba(254,242,242,0.5)]',
+  action_needed: 'border-[var(--color-warning-border)] bg-[rgba(255,251,235,0.5)]',
   in_progress: 'border-[var(--color-divider)] bg-[var(--color-surface-elevated)]',
-  done: 'border-[var(--color-success-border)] bg-[var(--color-success-bg)]/30',
+  done: 'border-[var(--color-success-border)] bg-[rgba(236,253,245,0.3)]',
 };
 const ICON_COLORS = {
   missing: 'text-[var(--color-danger)]',
@@ -58,7 +58,7 @@ export default function ChecklistPanel({ items, lang = 'de' }) {
             const Icon = ICONS[item.icon] || FileText;
             return (
               <Link key={item.key} to={item.path || '#'}
-                className={`flex items-center gap-3 p-3 rounded-[var(--radius-sm)] border transition-colors hover:border-[var(--color-primary)]/30 ${STATUS_STYLES[item.status] || ''}`}
+                className={`flex items-center gap-3 p-3 rounded-[var(--radius-sm)] border transition-colors hover:border-[rgba(10,25,47,0.3)] ${STATUS_STYLES[item.status] || ''}`}
                 data-testid={`checklist-${item.key}`}>
                 <Icon size={16} className={ICON_COLORS[item.status] || 'text-[var(--color-text-tertiary)]'} />
                 <div className="flex-1 min-w-0">

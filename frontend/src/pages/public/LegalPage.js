@@ -55,7 +55,7 @@ const DATENSCHUTZ_SECTIONS = [
 function AccordionSection({ title, content, defaultOpen = false, sectionIdx }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border border-[var(--color-primary)]/8 rounded-[4px] overflow-hidden" data-section-idx={sectionIdx}
+    <div className="border border-[rgba(10,25,47,0.08)] rounded-[4px] overflow-hidden" data-section-idx={sectionIdx}
       style={{ boxShadow: open ? '0 2px 12px rgba(17,54,85,0.04)' : 'none' }}>
       <button onClick={() => setOpen(!open)}
         className={`w-full flex items-center justify-between px-5 py-4 text-left transition-colors ${open ? 'bg-[var(--color-surface-elevated)]' : 'hover:bg-[var(--color-surface-elevated)]'}`}
@@ -64,7 +64,7 @@ function AccordionSection({ title, content, defaultOpen = false, sectionIdx }) {
         {open ? <ChevronUp size={16} className="text-[var(--color-text-tertiary)] shrink-0" /> : <ChevronDown size={16} className="text-[var(--color-text-tertiary)] shrink-0" />}
       </button>
       {open && (
-        <div className="px-5 pb-5 border-t border-[var(--color-primary)]/5">
+        <div className="px-5 pb-5 border-t border-[rgba(10,25,47,0.05)]">
           <div className="pt-4 space-y-1.5">
             {content.split('\n').map((line, i) => {
               if (line.trim() === '') return <div key={i} className="h-3" />;
@@ -83,7 +83,7 @@ function ImpressumContent({ t, isEN }) {
   return (
     <div data-testid="legal-content-impressum" className="space-y-6">
       {/* Gesellschaftssitz */}
-      <div className="rounded-[4px] border border-[var(--color-primary)]/8 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
+      <div className="rounded-[4px] border border-[rgba(10,25,47,0.08)] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
         <div className="px-6 py-3" style={{ background: 'linear-gradient(135deg, var(--color-primary-dark), var(--color-primary))' }}>
           <h2 className="text-[13px] font-semibold text-white tracking-[0.02em]">{t('legal_page.company_heading')}</h2>
         </div>
@@ -119,14 +119,14 @@ function ImpressumContent({ t, isEN }) {
       </div>
 
       {/* Unterrichtsstandort */}
-      <div className="rounded-[4px] border border-[var(--color-primary)]/8 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
+      <div className="rounded-[4px] border border-[rgba(10,25,47,0.08)] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
         <div className="px-6 py-3" style={{ background: 'linear-gradient(135deg, var(--color-primary-dark), var(--color-primary))' }}>
           <h2 className="text-[13px] font-semibold text-white tracking-[0.02em]">{t('legal_page.office_heading')}</h2>
         </div>
         <div className="px-6 py-5">
           <p className="text-[var(--color-primary-dark)] font-semibold text-[14px]">Studienkolleg Aachen / Way2Germany</p>
           <p className="text-[var(--color-text-secondary)] text-[13px] mt-1">Theaterstrasse 30–32, 52062 Aachen</p>
-          <p className="text-[11px] text-[var(--color-text-tertiary)] mt-3 pt-3 border-t border-[var(--color-primary)]/5">{t('legal_page.office_note')}</p>
+          <p className="text-[11px] text-[var(--color-text-tertiary)] mt-3 pt-3 border-t border-[rgba(10,25,47,0.05)]">{t('legal_page.office_note')}</p>
         </div>
       </div>
 
@@ -245,7 +245,7 @@ export default function LegalPage({ type = 'legal' }) {
 
             {/* EN Notice */}
             {isEN && (
-              <div className="mb-8 flex items-start gap-3 p-4 rounded-[4px] border border-[var(--color-primary)]/8"
+              <div className="mb-8 flex items-start gap-3 p-4 rounded-[4px] border border-[rgba(10,25,47,0.08)]"
                 style={{ background: 'var(--color-surface-elevated)' }}>
                 <span className="text-[10px] font-bold text-[var(--color-text-tertiary)] mt-0.5 shrink-0">i</span>
                 <p className="text-[12px] text-[var(--color-text-secondary)]">{t('legal_page.de_only_note')}</p>
@@ -284,12 +284,12 @@ export default function LegalPage({ type = 'legal' }) {
             </div>
 
             {/* Print + Contact */}
-            <div className="mt-12 pt-6 border-t border-[var(--color-primary)]/8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="mt-12 pt-6 border-t border-[rgba(10,25,47,0.08)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <p className="text-[var(--color-text-tertiary)] text-[12px]">
                 {t('legal_page.contact_faq')} – <a href="mailto:info@stk-aachen.de" className="hover:underline" style={{ color: 'var(--color-primary)' }}>info@stk-aachen.de</a>
               </p>
               <button onClick={() => window.print()}
-                className="inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold rounded-[4px] border border-[var(--color-primary)]/10 text-[var(--color-text-secondary)] hover:border-[var(--color-primary)]/25 hover:text-[var(--color-primary-dark)] transition-all self-start"
+                className="inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold rounded-[4px] border border-[rgba(10,25,47,0.1)] text-[var(--color-text-secondary)] hover:border-[rgba(10,25,47,0.25)] hover:text-[var(--color-primary-dark)] transition-all self-start"
                 data-testid="legal-print-btn">
                 <Printer size={13} /> {isEN ? 'Print / PDF' : 'Drucken / PDF'}
               </button>

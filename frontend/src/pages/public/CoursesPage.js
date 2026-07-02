@@ -118,7 +118,7 @@ export default function CoursesPage() {
             <div className={`mb-12 lg:mb-16 max-w-[560px] ${stagger(coursesVis, 0)}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 h-[2px]" style={{ background: 'var(--color-accent)' }} />
-                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">
+                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">
                   {t('courses_page.section_label', 'Schwerpunktkurse')}
                 </span>
               </div>
@@ -140,7 +140,7 @@ export default function CoursesPage() {
                   <div key={slug} className={`group ${stagger(coursesVis, idx)}`} style={staggerDelay(idx)}
                     id={`course-${slug}`}
                     data-testid={`course-detail-${slug}`}>
-                    <div className="p-5 sm:p-6 lg:p-8 rounded-[8px] border border-[var(--color-primary)]/8 transition-all duration-300 hover:border-[var(--color-primary)]/15 overflow-hidden"
+                    <div className="p-5 sm:p-6 lg:p-8 rounded-[8px] border border-[rgba(10,25,47,0.08)] transition-all duration-300 hover:border-[rgba(10,25,47,0.15)] overflow-hidden"
                       style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
                       <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
                         <div className="flex items-start gap-3 min-w-0">
@@ -195,7 +195,7 @@ export default function CoursesPage() {
                         </>
                       )}
 
-                      <div className="pt-4 border-t border-[var(--color-primary)]/6 flex items-center justify-between">
+                      <div className="pt-4 border-t border-[rgba(10,25,47,0.06)] flex items-center justify-between">
                         <p className="text-[12px] text-[var(--color-text-secondary)]">{t(`courses_page.course_cards.${slug}.fsp`)}</p>
                         <Link to="/apply" className="text-[13px] font-semibold flex items-center gap-1 transition-all hover:gap-2"
                           style={{ color: 'var(--color-primary)' }} data-testid={`course-apply-${slug}`}>
@@ -217,7 +217,7 @@ export default function CoursesPage() {
               <div className={`lg:col-span-5 ${stagger(langVis, 0)}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-6 h-[2px]" style={{ background: 'var(--color-accent)' }} />
-                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">
                     {t('courses_page.lang_badge')}
                   </span>
                 </div>
@@ -236,7 +236,7 @@ export default function CoursesPage() {
               </div>
               <div className={`lg:col-span-7 space-y-3 ${stagger(langVis, 1)}`} style={staggerDelay(1)}>
                 {LANG_LEVELS.map((item, idx) => (
-                  <div key={item.level} className="flex items-start sm:items-center gap-4 sm:gap-5 p-4 rounded-[4px] bg-white border border-[var(--color-primary)]/6"
+                  <div key={item.level} className="flex items-start sm:items-center gap-4 sm:gap-5 p-4 rounded-[4px] bg-white border border-[rgba(10,25,47,0.06)]"
                     style={{ boxShadow: '0 1px 4px rgba(17,54,85,0.03)' }} data-testid={`lang-level-${item.level}`}>
                     <span className="text-[18px] sm:text-[20px] font-extrabold w-[40px] sm:w-[48px] shrink-0" style={{ color: 'var(--color-accent)', fontFamily: 'var(--font-heading)' }}>
                       {item.level}
@@ -265,7 +265,7 @@ export default function CoursesPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {SEMESTERS.map((s, idx) => (
                 <div key={s.sem} className={`p-5 rounded-[4px] border transition-all ${
-                  s.status === 'open' ? 'border-[var(--color-accent)]/30 bg-[rgba(212,175,55,0.03)]' : 'border-[var(--color-primary)]/6'
+                  s.status === 'open' ? 'border-[rgba(196,155,62,0.3)] bg-[rgba(212,175,55,0.03)]' : 'border-[rgba(10,25,47,0.06)]'
                 } ${stagger(semVis, idx)}`} style={staggerDelay(idx)}
                   data-testid={`semester-${s.sem.replace(/\s+/g, '-').toLowerCase()}`}>
                   <div className="flex items-center justify-between mb-3">

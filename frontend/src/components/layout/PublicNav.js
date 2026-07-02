@@ -31,8 +31,8 @@ export default function PublicNav() {
 
   const isHome = location.pathname === '/';
   const navBg = scrolled
-    ? 'bg-white/95 backdrop-blur-md border-b border-[var(--color-primary)]/8'
-    : isHome ? 'bg-transparent' : 'bg-white border-b border-[var(--color-primary)]/8';
+    ? 'bg-white/95 backdrop-blur-md border-b border-[rgba(10,25,47,0.08)]'
+    : isHome ? 'bg-transparent' : 'bg-white border-b border-[rgba(10,25,47,0.08)]';
   const textColor = scrolled || !isHome ? 'text-[var(--color-primary-dark)]' : 'text-white';
   const textMuted = scrolled || !isHome ? 'text-[var(--color-text-secondary)]' : 'text-white/60';
 
@@ -101,14 +101,14 @@ export default function PublicNav() {
         <div className="flex md:hidden items-center gap-2">
           <button type="button" onClick={() => i18n.changeLanguage(i18n.language === 'de' ? 'en' : 'de')}
             className={`text-[11px] font-bold px-2.5 py-1.5 rounded-[3px] border ${
-              scrolled || !isHome ? 'border-[var(--color-primary)]/10 text-[var(--color-primary-dark)]' : 'border-white/15 text-white'
+              scrolled || !isHome ? 'border-[rgba(10,25,47,0.1)] text-[var(--color-primary-dark)]' : 'border-white/15 text-white'
             }`}
             data-testid="public-mobile-language-toggle">
             {i18n.language === 'de' ? 'EN' : 'DE'}
           </button>
           <button onClick={() => setOpen(!open)}
             className={`w-9 h-9 flex items-center justify-center rounded-[3px] border ${
-              scrolled || !isHome ? 'border-[var(--color-primary)]/10' : 'border-white/15'
+              scrolled || !isHome ? 'border-[rgba(10,25,47,0.1)]' : 'border-white/15'
             }`}
             data-testid="nav-mobile-toggle">
             {open ? <X size={18} className={textColor} /> : <Menu size={18} className={textColor} />}
@@ -118,7 +118,7 @@ export default function PublicNav() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="bg-white border-t border-[var(--color-primary)]/8 px-6 py-4 md:hidden" data-testid="public-mobile-nav">
+        <div className="bg-white border-t border-[rgba(10,25,47,0.08)] px-6 py-4 md:hidden" data-testid="public-mobile-nav">
           <div className="space-y-1">
             {links.map((link) => (
               <Link key={link.href} to={link.href} onClick={() => setOpen(false)}

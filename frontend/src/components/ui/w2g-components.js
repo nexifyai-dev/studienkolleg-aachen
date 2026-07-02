@@ -15,7 +15,7 @@ const BTN_VARIANTS = {
   primary: `${BTN_BASE} text-[var(--color-primary-dark)] hover:scale-[1.02]`,
   secondary: `${BTN_BASE} border-2 hover:scale-[1.01]`,
   ghost: `${BTN_BASE} hover:bg-[var(--color-surface-elevated)]`,
-  outline: `${BTN_BASE} border-2 border-[var(--color-primary)]/15 text-[var(--color-primary-dark)] hover:border-[var(--color-primary)]/30`,
+  outline: `${BTN_BASE} border-2 border-[rgba(10,25,47,0.15)] text-[var(--color-primary-dark)] hover:border-[rgba(10,25,47,0.3)]`,
   'outline-light': `${BTN_BASE} border-2 border-white/15 text-white/80 hover:border-white/30 hover:text-white`,
 };
 
@@ -53,7 +53,7 @@ export function SectionLabel({ children, light = false }) {
   return (
     <div className="flex items-center gap-3 mb-6">
       <div className="w-6 h-[2px]" style={{ background: 'var(--color-accent)' }} />
-      <span className={`text-[11px] font-semibold tracking-[0.2em] uppercase ${light ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]/60'}`}>
+      <span className={`text-[11px] font-semibold tracking-[0.2em] uppercase ${light ? 'text-[var(--color-accent)]' : 'text-[rgba(10,25,47,0.6)]'}`}>
         {children}
       </span>
     </div>
@@ -87,7 +87,7 @@ export function Section({ children, dark = false, className = '', padding = 'py-
 /* ─── CARD ────────────────────────────────────────────────────────────── */
 export function W2GCard({ children, className = '', hover = true, padding = 'p-6 sm:p-8' }) {
   return (
-    <div className={`rounded-[8px] border border-[var(--color-primary)]/8 bg-white overflow-hidden ${padding} ${hover ? 'transition-all duration-300 hover:border-[var(--color-primary)]/15 hover:-translate-y-0.5' : ''} ${className}`}
+    <div className={`rounded-[8px] border border-[rgba(10,25,47,0.08)] bg-white overflow-hidden ${padding} ${hover ? 'transition-all duration-300 hover:border-[rgba(10,25,47,0.15)] hover:-translate-y-0.5' : ''} ${className}`}
       style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
       {children}
     </div>

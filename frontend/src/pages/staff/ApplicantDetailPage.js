@@ -102,7 +102,7 @@ function StageProgressBar({ currentStage, onStageClick }) {
                 isCurrent
                   ? 'bg-[var(--color-primary)] text-white shadow-md z-10'
                   : isPast
-                  ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/20'
+                  ? 'bg-[rgba(10,25,47,0.1)] text-[var(--color-primary)] hover:bg-[rgba(10,25,47,0.2)]'
                   : 'bg-[var(--color-surface-elevated)] text-[var(--color-text-tertiary)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-secondary)]'
               }`}
               data-testid={`progress-stage-${stage}`}
@@ -110,10 +110,10 @@ function StageProgressBar({ currentStage, onStageClick }) {
               <span className={`block text-[11px] font-bold leading-tight ${isCurrent ? '' : isFuture ? 'opacity-60' : ''}`}>
                 {getStageLabel(stage, "de")}
               </span>
-              <span className={`block text-[8px] mt-0.5 ${isCurrent ? 'text-white/70' : isPast ? 'text-[var(--color-primary)]/50' : 'text-[var(--color-text-tertiary)]/50'}`}>
+              <span className={`block text-[8px] mt-0.5 ${isCurrent ? 'text-white/70' : isPast ? 'text-[rgba(10,25,47,0.5)]' : 'text-[rgba(148,163,184,0.5)]'}`}>
                 {isPast ? 'Abgeschlossen' : isCurrent ? 'Aktuell' : `Schritt ${idx + 1}`}
               </span>
-              {isPast && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[var(--color-primary)]/40" />}
+              {isPast && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[rgba(10,25,47,0.4)]" />}
               {isCurrent && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/50" />}
             </button>
           );
@@ -209,7 +209,7 @@ function TasksPopupContent({ appId, applicantName }) {
       </div>
 
       {showCreate && (
-        <Card className="border-[var(--color-primary)]/30" data-testid="tasks-popup-form">
+        <Card className="border-[rgba(10,25,47,0.3)]" data-testid="tasks-popup-form">
           <CardContent className="pt-4 space-y-3">
             <div>
               <label className="w2g-label">Titel</label>
@@ -245,7 +245,7 @@ function TasksPopupContent({ appId, applicantName }) {
         <div className="space-y-2">
           {tasks.length === 0 && <p className="text-center text-xs text-[var(--color-text-tertiary)] py-4">Keine Aufgaben vorhanden</p>}
           {tasks.map(t => (
-            <div key={t.id} className="flex items-center gap-3 p-3 border border-[var(--color-divider-subtle)] rounded-[var(--radius-sm)] hover:border-[var(--color-primary)]/30 transition-colors" data-testid={`task-popup-item-${t.id}`}>
+            <div key={t.id} className="flex items-center gap-3 p-3 border border-[var(--color-divider-subtle)] rounded-[var(--radius-sm)] hover:border-[rgba(10,25,47,0.3)] transition-colors" data-testid={`task-popup-item-${t.id}`}>
               <button onClick={() => toggleStatus(t)} className={`shrink-0 ${t.status === 'done' ? 'text-[var(--color-success)]' : 'text-[var(--color-text-tertiary)] hover:text-[var(--color-primary)]'}`} data-testid={`task-toggle-${t.id}`}>
                 <CheckCircle size={16} />
               </button>
@@ -292,7 +292,7 @@ function InvoicesPopupContent({ applicantId, appId, applicantName, onCreateNew }
         <div className="space-y-2">
           {invoices.length === 0 && <p className="text-center text-xs text-[var(--color-text-tertiary)] py-4">Keine Rechnungen vorhanden</p>}
           {invoices.map(inv => (
-            <div key={inv.id || inv.invoice_number} className="flex items-center justify-between p-3 border border-[var(--color-divider-subtle)] rounded-[var(--radius-sm)] hover:border-[var(--color-primary)]/30 transition-colors" data-testid={`invoice-popup-item-${inv.invoice_number}`}>
+            <div key={inv.id || inv.invoice_number} className="flex items-center justify-between p-3 border border-[var(--color-divider-subtle)] rounded-[var(--radius-sm)] hover:border-[rgba(10,25,47,0.3)] transition-colors" data-testid={`invoice-popup-item-${inv.invoice_number}`}>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium text-[var(--color-text-primary)]">{inv.invoice_number}</p>
                 <p className="text-[10px] text-[var(--color-text-tertiary)] mt-0.5">{inv.description || 'Keine Beschreibung'}</p>
@@ -384,7 +384,7 @@ function FollowupsPopupContent({ appId }) {
         <button onClick={() => setShowCreate(!showCreate)} className="w2g-btn-primary text-xs" data-testid="followup-popup-create"><Plus size={12} /> Neue Wiedervorlage</button>
       </div>
       {showCreate && (
-        <Card className="border-[var(--color-primary)]/30">
+        <Card className="border-[rgba(10,25,47,0.3)]">
           <CardContent className="pt-4 space-y-3">
             <input type="date" value={form.due_date} onChange={e => setForm(f => ({ ...f, due_date: e.target.value }))} className="w2g-input w-full text-sm" data-testid="followup-popup-date" />
             <input value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} placeholder="Grund / Aktion..." className="w2g-input w-full text-sm" data-testid="followup-popup-reason" />
@@ -403,7 +403,7 @@ function FollowupsPopupContent({ appId }) {
             <span className="text-[10px] text-[var(--color-text-tertiary)] shrink-0 tabular-nums">{f.due_date}</span>
             {f.status !== 'done' && (
               <>
-                <button onClick={() => markDone(f.id)} className="text-[var(--color-success)] hover:text-[var(--color-success)]/80" title="Erledigt"><CheckCircle size={14} /></button>
+                <button onClick={() => markDone(f.id)} className="text-[var(--color-success)] hover:text-[rgba(5,150,105,0.8)]" title="Erledigt"><CheckCircle size={14} /></button>
                 <button onClick={() => dismiss(f.id)} className="text-[var(--color-text-tertiary)] hover:text-[var(--color-danger)]" title="Entfernen"><Trash2 size={14} /></button>
               </>
             )}
@@ -437,7 +437,7 @@ function HistoryPopupContent({ appId }) {
       {logs.length === 0 && <p className="text-center text-xs text-[var(--color-text-tertiary)] py-4">Keine Aktivitaeten vorhanden</p>}
       {logs.map((l, i) => (
         <div key={l.id || i} className="flex items-start gap-3 py-2 border-b border-[var(--color-divider-subtle)] last:border-0">
-          <div className="w-2 h-2 rounded-full bg-[var(--color-primary)]/40 mt-1.5 shrink-0" />
+          <div className="w-2 h-2 rounded-full bg-[rgba(10,25,47,0.4)] mt-1.5 shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-xs text-[var(--color-text-primary)]">{actionLabels[l.action] || l.action}</p>
             {l.details && <p className="text-[10px] text-[var(--color-text-tertiary)] mt-0.5">{typeof l.details === 'string' ? l.details : JSON.stringify(l.details)}</p>}
@@ -719,11 +719,11 @@ export default function ApplicantDetailPage() {
       <Card style={{ borderLeft: '4px solid var(--color-primary)' }} data-testid="case-header">
         <CardContent className="py-3.5">
           <div className="flex items-center gap-4 flex-wrap">
-            <Link to="/staff/kanban" className="w-9 h-9 rounded-[var(--radius-sm)] flex items-center justify-center bg-[var(--color-surface-sunken)] hover:bg-[var(--color-primary)]/10 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-all" data-testid="back-to-kanban"><ArrowLeft size={16} /></Link>
+            <Link to="/staff/kanban" className="w-9 h-9 rounded-[var(--radius-sm)] flex items-center justify-center bg-[var(--color-surface-sunken)] hover:bg-[rgba(10,25,47,0.1)] text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-all" data-testid="back-to-kanban"><ArrowLeft size={16} /></Link>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)' }}>{app.applicant?.full_name || 'Bewerber'}</h1>
-                {app.applicant_number && <span className="text-xs font-mono tracking-wide px-2 py-0.5 rounded-[var(--radius-xs)] bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-bold" data-testid="applicant-number-badge">{app.applicant_number}</span>}
+                {app.applicant_number && <span className="text-xs font-mono tracking-wide px-2 py-0.5 rounded-[var(--radius-xs)] bg-[rgba(10,25,47,0.1)] text-[var(--color-primary)] font-bold" data-testid="applicant-number-badge">{app.applicant_number}</span>}
                 <Badge variant="default" data-testid="case-stage-badge">{getStageLabel(app.current_stage, "de")}</Badge>
               </div>
               <div className="flex items-center gap-3 mt-1 text-[11px] text-[var(--color-text-secondary)] flex-wrap">
@@ -784,7 +784,7 @@ export default function ApplicantDetailPage() {
                 const canPreview = doc.has_binary && (doc.content_type === 'application/pdf' || doc.filename?.endsWith('.pdf') || doc.content_type?.startsWith('image/'));
                 return (
                   <li key={doc.id}
-                    className={`border rounded-[var(--radius-sm)] p-3 cursor-pointer transition-colors ${doc.staff_decision_required ? 'border-[var(--color-warning-border)] bg-[var(--color-warning-bg)]/50' : 'border-[var(--color-divider-subtle)] hover:border-[var(--color-primary)]/30'}`}
+                    className={`border rounded-[var(--radius-sm)] p-3 cursor-pointer transition-colors ${doc.staff_decision_required ? 'border-[var(--color-warning-border)] bg-[rgba(255,251,235,0.5)]' : 'border-[var(--color-divider-subtle)] hover:border-[rgba(10,25,47,0.3)]'}`}
                     onDoubleClick={() => canPreview && setPreviewDoc(doc)}
                     title="Doppelklick zum Oeffnen"
                     data-testid={`doc-${doc.id}`}>
@@ -993,7 +993,7 @@ function QualificationPathPanel({ applicationId, lang }) {
 
   const PATH_COLORS = {
     direktstudium: 'border-l-[var(--color-success)] bg-[var(--color-success-bg)]',
-    studienkolleg: 'border-l-[var(--color-primary)] bg-[var(--color-primary)]/5',
+    studienkolleg: 'border-l-[var(--color-primary)] bg-[rgba(10,25,47,0.05)]',
     feststellungspruefung: 'border-l-[var(--color-info)] bg-[var(--color-info-bg)]',
     testas: 'border-l-[var(--color-accent)] bg-[var(--color-accent-muted)]',
     sprachkurs_zuerst: 'border-l-[var(--color-warning)] bg-[var(--color-warning-bg)]',
@@ -1054,7 +1054,7 @@ function QualificationPathPanel({ applicationId, lang }) {
             <ol className="space-y-1">
               {(lang === 'de' ? path.next_steps_de : path.next_steps_en || []).map((step, i) => (
                 <li key={i} className="flex items-start gap-2 text-xs text-[var(--color-text-secondary)]">
-                  <span className="w-4 h-4 shrink-0 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center text-[9px] font-bold mt-0.5">{i + 1}</span>
+                  <span className="w-4 h-4 shrink-0 rounded-full bg-[rgba(10,25,47,0.1)] text-[var(--color-primary)] flex items-center justify-center text-[9px] font-bold mt-0.5">{i + 1}</span>
                   {step}
                 </li>
               ))}

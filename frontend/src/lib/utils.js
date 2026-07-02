@@ -76,7 +76,7 @@ export const STAGE_COLORS = {
   docs_review: 'bg-[var(--color-info-bg)] text-[var(--color-info)]',
   interview_scheduled: 'bg-[var(--color-info-bg)] text-[var(--color-info)]',
   conditional_offer: 'bg-[var(--color-info-bg)] text-[var(--color-info)]',
-  offer_sent: 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]',
+  offer_sent: 'bg-[rgba(10,25,47,0.1)] text-[var(--color-primary)]',
   enrolled: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
   invoice_open: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
   payment_received: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',

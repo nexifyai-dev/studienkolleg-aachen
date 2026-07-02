@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
               : 'Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zuruecksetzen deines Passworts.'}
           </p>
         </div>
-        <div className="relative z-10 pt-8 border-t border-white/8">
+        <div className="relative z-10 pt-8 border-t border-white/10">
           <p className="text-[11px] text-white/25">
             &copy; {new Date().getFullYear()} W2G Academy GmbH
           </p>

@@ -326,7 +326,7 @@ export default function AdminStaffPage() {
                     </div>
                   </td>
                   <td>
-                    <span className="w2g-badge bg-[#113655]/8 text-[var(--color-primary)]">{ROLE_LABELS[u.role] || u.role}</span>
+                    <span className="w2g-badge bg-[#113655]/10 text-[var(--color-primary)]">{ROLE_LABELS[u.role] || u.role}</span>
                   </td>
                   <td className="text-xs text-[var(--color-text-secondary)]">
                     <div>{u.email}</div>

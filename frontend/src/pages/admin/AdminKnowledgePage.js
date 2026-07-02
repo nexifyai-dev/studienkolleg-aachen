@@ -9,12 +9,12 @@ import { API } from '../../lib/apiBase';
 
 /* ─── Konstanten ──────────────────────────────────────────────── */
 const CATEGORY_CONFIG = {
-  'H+':       { label: 'H+ (Hohe Anerkennung)', color: 'text-[var(--color-success)]', bg: 'bg-[var(--color-success-bg)]', border: 'border-[var(--color-success-border)]/60' },
-  'H':        { label: 'H (Bedingt anerkennbar)', color: 'text-[var(--color-info)]', bg: 'bg-[var(--color-info-bg)]', border: 'border-[var(--color-info-border)]/60' },
-  'H+-':      { label: 'H+- (Eingeschraenkt)', color: 'text-[var(--color-warning)]', bg: 'bg-[var(--color-warning-bg)]', border: 'border-[var(--color-warning-border)]/60' },
-  'D':        { label: 'D (Eingeschraenkt)', color: 'text-[var(--color-danger)]', bg: 'bg-[var(--color-danger-bg)]', border: 'border-[var(--color-danger-border)]/60' },
+  'H+':       { label: 'H+ (Hohe Anerkennung)', color: 'text-[var(--color-success)]', bg: 'bg-[var(--color-success-bg)]', border: 'border-[rgba(167,243,208,0.6)]' },
+  'H':        { label: 'H (Bedingt anerkennbar)', color: 'text-[var(--color-info)]', bg: 'bg-[var(--color-info-bg)]', border: 'border-[rgba(191,219,254,0.6)]' },
+  'H+-':      { label: 'H+- (Eingeschraenkt)', color: 'text-[var(--color-warning)]', bg: 'bg-[var(--color-warning-bg)]', border: 'border-[rgba(253,230,138,0.6)]' },
+  'D':        { label: 'D (Eingeschraenkt)', color: 'text-[var(--color-danger)]', bg: 'bg-[var(--color-danger-bg)]', border: 'border-[rgba(254,202,202,0.6)]' },
   'pruefen':  { label: 'Pruefen', color: 'text-[var(--color-warning)]', bg: 'bg-[var(--color-warning-bg)]', border: 'border-[var(--color-warning-border)]' },
-  'unbekannt':{ label: 'Unbekannt', color: 'text-[var(--color-text-secondary)]', bg: 'bg-[var(--color-surface-sunken)]', border: 'border-[var(--color-divider)]/60' },
+  'unbekannt':{ label: 'Unbekannt', color: 'text-[var(--color-text-secondary)]', bg: 'bg-[var(--color-surface-sunken)]', border: 'border-[rgba(226,232,240,0.6)]' },
 };
 const STATUS_CONFIG = {
   verified:  { label: 'Verifiziert', color: 'text-[var(--color-success)]', bg: 'bg-[var(--color-success-bg)]', icon: CheckCircle },
@@ -103,7 +103,7 @@ function DashboardTab({ stats, onNavigate }) {
           <h3 className="w2g-section-heading mb-4">Zuletzt geaendert</h3>
           <div className="space-y-2">
             {(stats.recent_changes || []).map((r, i) => (
-              <div key={i} className="flex items-center justify-between p-2.5 rounded-[var(--radius-md)] bg-[var(--color-surface-elevated)]/60 border border-[var(--color-divider-subtle)]">
+              <div key={i} className="flex items-center justify-between p-2.5 rounded-[var(--radius-md)] bg-[rgba(250,251,252,0.6)] border border-[var(--color-divider-subtle)]">
                 <div>
                   <span className="text-sm font-medium text-[var(--color-text-primary)]">{r.country}</span>
                   {r.degree_type && r.degree_type !== 'Allgemein' && <span className="text-xs text-[var(--color-text-tertiary)] ml-2">{r.degree_type}</span>}
@@ -202,7 +202,7 @@ function EntriesTab({ onEdit, onNavigate }) {
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]" />
             <input data-testid="search-input" value={search} onChange={e => { setSearch(e.target.value); setPage(0); }}
               placeholder="Land, Abschluss oder Stichwort suchen..."
-              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/40" />
+              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.2)] focus:border-[rgba(10,25,47,0.4)]" />
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
@@ -229,7 +229,7 @@ function EntriesTab({ onEdit, onNavigate }) {
 
       {/* Bulk Actions */}
       {selected.size > 0 && (
-        <div className="flex items-center gap-3 p-3 rounded-[var(--radius-md)] bg-[var(--color-info-bg)] border border-[var(--color-info-border)]/40">
+        <div className="flex items-center gap-3 p-3 rounded-[var(--radius-md)] bg-[var(--color-info-bg)] border border-[rgba(191,219,254,0.4)]">
           <span className="text-xs font-semibold text-[var(--color-info)]">{selected.size} ausgewaehlt</span>
           <button onClick={() => handleBulkAction({ status: 'verified' })} className="text-xs text-[var(--color-success)] font-medium px-2.5 py-1 rounded-[var(--radius-md)] bg-[var(--color-success-bg)] hover:bg-[var(--color-success-bg)]">Verifizieren</button>
           <button onClick={() => handleBulkAction({ status: 'in_review' })} className="text-xs text-[var(--color-warning)] font-medium px-2.5 py-1 rounded-[var(--radius-md)] bg-[var(--color-warning-bg)] hover:bg-[var(--color-warning-bg)]">Zur Pruefung</button>
@@ -255,7 +255,7 @@ function EntriesTab({ onEdit, onNavigate }) {
             <div className="overflow-x-auto">
               <table className="w-full" data-testid="entries-table">
                 <thead>
-                  <tr className="border-b border-[var(--color-divider-subtle)] bg-[var(--color-surface-elevated)]/80">
+                  <tr className="border-b border-[var(--color-divider-subtle)] bg-[rgba(250,251,252,0.8)]">
                     <th className="w-10 px-4 py-3"><input type="checkbox" checked={selected.size === entries.length && entries.length > 0} onChange={toggleAll} className="rounded" /></th>
                     <th className="px-4 py-3 text-left"><SortHeader field="country">Land</SortHeader></th>
                     <th className="px-4 py-3 text-left"><span className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">Abschluss</span></th>
@@ -355,7 +355,7 @@ function EntryEditor({ entry, onSave, onCancel }) {
       {children}
     </div>
   );
-  const inputCls = "w-full px-3.5 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/40 transition-colors";
+  const inputCls = "w-full px-3.5 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.2)] focus:border-[rgba(10,25,47,0.4)] transition-colors";
   const selectCls = inputCls;
 
   return (
@@ -405,7 +405,7 @@ function EntryEditor({ entry, onSave, onCancel }) {
       </div>
 
       {/* Flags */}
-      <div className="flex flex-wrap gap-4 mb-6 p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-elevated)]/80 border border-[var(--color-divider-subtle)]">
+      <div className="flex flex-wrap gap-4 mb-6 p-4 rounded-[var(--radius-md)] bg-[rgba(250,251,252,0.8)] border border-[var(--color-divider-subtle)]">
         <label className="flex items-center gap-2 text-sm cursor-pointer">
           <input data-testid="flag-special-case" type="checkbox" checked={form.is_special_case} onChange={e => setForm(f => ({ ...f, is_special_case: e.target.checked }))} className="rounded border-[var(--color-divider)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]" />
           <span className="text-[var(--color-text-primary)]">Sonderfall</span>
@@ -418,7 +418,7 @@ function EntryEditor({ entry, onSave, onCancel }) {
 
       {/* History (edit only) */}
       {!isNew && entry.change_history && entry.change_history.length > 0 && (
-        <div className="mb-6 p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-elevated)]/60 border border-[var(--color-divider-subtle)]">
+        <div className="mb-6 p-4 rounded-[var(--radius-md)] bg-[rgba(250,251,252,0.6)] border border-[var(--color-divider-subtle)]">
           <h4 className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-tertiary)] mb-2">Aenderungsverlauf</h4>
           <div className="space-y-1.5 max-h-32 overflow-y-auto">
             {entry.change_history.slice(-5).reverse().map((h, i) => (
@@ -501,7 +501,7 @@ function ReviewQueueTab({ onNavigate }) {
                     <span className="text-sm font-bold text-[var(--color-text-primary)]" style={{ fontFamily: 'var(--font-heading)' }}>{item.country || '?'}</span>
                     {item.degree_type && <span className="text-xs text-[var(--color-text-secondary)]">{item.degree_type}</span>}
                     <Badge config={qst} />
-                    {item.priority && <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${item.priority === 'critical' ? 'bg-[var(--color-danger-bg)] text-[var(--color-danger)] border border-[var(--color-danger-border)]/60' : item.priority === 'high' ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border border-[var(--color-warning-border)]' : 'bg-[var(--color-surface-sunken)] text-[var(--color-text-secondary)]'}`}>{item.priority.toUpperCase()}</span>}
+                    {item.priority && <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${item.priority === 'critical' ? 'bg-[var(--color-danger-bg)] text-[var(--color-danger)] border border-[rgba(254,202,202,0.6)]' : item.priority === 'high' ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border border-[var(--color-warning-border)]' : 'bg-[var(--color-surface-sunken)] text-[var(--color-text-secondary)]'}`}>{item.priority.toUpperCase()}</span>}
                   </div>
                   <p className="text-xs text-[var(--color-text-secondary)] mb-1">{item.reason_label || item.reason}</p>
                   {item.applicant_name && <p className="text-xs text-[var(--color-text-tertiary)]">Bewerber: {item.applicant_name}</p>}
@@ -515,11 +515,11 @@ function ReviewQueueTab({ onNavigate }) {
                   {item.status !== 'resolved' && (
                     <>
                       <button onClick={() => setResolveModal(item)} data-testid={`resolve-${item.id}`}
-                        className="text-xs font-medium text-[var(--color-success)] bg-[var(--color-success-bg)] hover:bg-[var(--color-success-bg)] px-3 py-2 rounded-[var(--radius-md)] border border-[var(--color-success-border)]/60 transition-colors">
+                        className="text-xs font-medium text-[var(--color-success)] bg-[var(--color-success-bg)] hover:bg-[var(--color-success-bg)] px-3 py-2 rounded-[var(--radius-md)] border border-[rgba(167,243,208,0.6)] transition-colors">
                         <CheckCircle size={12} className="inline mr-1" />Loesen
                       </button>
                       <button onClick={() => apiFetch(`/api/anabin/review-queue/${item.id}`, { method: 'PUT', body: JSON.stringify({ status: 'escalated' }) }).then(() => { toast.success('Eskaliert'); load(); })}
-                        className="text-xs font-medium text-[var(--color-danger)] bg-[var(--color-danger-bg)] hover:bg-[var(--color-danger-bg)] px-3 py-2 rounded-[var(--radius-md)] border border-[var(--color-danger-border)]/60 transition-colors">
+                        className="text-xs font-medium text-[var(--color-danger)] bg-[var(--color-danger-bg)] hover:bg-[var(--color-danger-bg)] px-3 py-2 rounded-[var(--radius-md)] border border-[rgba(254,202,202,0.6)] transition-colors">
                         Eskalieren
                       </button>
                     </>
@@ -581,7 +581,7 @@ function ResolveWithFeedbackModal({ item, onClose, onResolved }) {
     finally { setResolving(false); }
   };
 
-  const inputCls = "w-full px-3.5 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/40";
+  const inputCls = "w-full px-3.5 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.2)] focus:border-[rgba(10,25,47,0.4)]";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" data-testid="resolve-modal">
@@ -613,7 +613,7 @@ function ResolveWithFeedbackModal({ item, onClose, onResolved }) {
         </div>
 
         {/* Feedback Toggle */}
-        <div className="mb-4 p-3 rounded-[var(--radius-md)] bg-[var(--color-info-bg)]/50 border border-[var(--color-info-border)]/40">
+        <div className="mb-4 p-3 rounded-[var(--radius-md)] bg-[rgba(239,246,255,0.5)] border border-[rgba(191,219,254,0.4)]">
           <label className="flex items-center gap-2 text-sm cursor-pointer">
             <input data-testid="update-knowledge-toggle" type="checkbox" checked={updateKnowledge}
               onChange={e => setUpdateKnowledge(e.target.checked)}
@@ -625,7 +625,7 @@ function ResolveWithFeedbackModal({ item, onClose, onResolved }) {
 
         {/* Knowledge Base Form */}
         {updateKnowledge && (
-          <div className="grid grid-cols-2 gap-3 mb-5 p-4 rounded-[var(--radius-md)] border border-[var(--color-info-border)]/40 bg-white">
+          <div className="grid grid-cols-2 gap-3 mb-5 p-4 rounded-[var(--radius-md)] border border-[rgba(191,219,254,0.4)] bg-white">
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-[var(--color-text-tertiary)] mb-1">Kategorie</label>
               <select data-testid="kb-category" value={kbForm.category} onChange={e => setKbForm(f => ({ ...f, category: e.target.value }))}
@@ -857,7 +857,7 @@ function CreateReviewItem({ onSave, onCancel }) {
     finally { setSaving(false); }
   };
 
-  const inputCls = "w-full px-3.5 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/40";
+  const inputCls = "w-full px-3.5 py-2.5 text-sm rounded-[var(--radius-md)] border border-[var(--color-divider)] bg-white focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.2)] focus:border-[rgba(10,25,47,0.4)]";
   return (
     <div data-testid="create-review-item" className="w2g-card" style={{ boxShadow: 'var(--shadow-e2)' }}>
       <div className="flex items-center justify-between mb-6">

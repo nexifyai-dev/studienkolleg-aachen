@@ -19,13 +19,13 @@ const apiFetch = async (url, opts = {}) => {
 
 /* ── Status-Konfiguration ───────────────────────────────────────── */
 const STATUS_CONFIG = {
-  queued: { label: 'Wartend', color: 'bg-[var(--color-info-bg)] text-[var(--color-info)] border-[var(--color-info-border)]/60', icon: Clock, dotColor: 'bg-[var(--color-info)]' },
-  running: { label: 'Wird verarbeitet', color: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[var(--color-warning-border)]/60', icon: Activity, dotColor: 'bg-[var(--color-warning)]' },
-  succeeded: { label: 'Erfolgreich', color: 'bg-[var(--color-success-bg)] text-[var(--color-success)] border-[var(--color-success-border)]/60', icon: CheckCircle, dotColor: 'bg-[var(--color-success)]' },
-  failed: { label: 'Fehlgeschlagen', color: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)] border-[var(--color-danger-border)]/60', icon: XCircle, dotColor: 'bg-[var(--color-danger)]' },
+  queued: { label: 'Wartend', color: 'bg-[var(--color-info-bg)] text-[var(--color-info)] border-[rgba(191,219,254,0.6)]', icon: Clock, dotColor: 'bg-[var(--color-info)]' },
+  running: { label: 'Wird verarbeitet', color: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[rgba(253,230,138,0.6)]', icon: Activity, dotColor: 'bg-[var(--color-warning)]' },
+  succeeded: { label: 'Erfolgreich', color: 'bg-[var(--color-success-bg)] text-[var(--color-success)] border-[rgba(167,243,208,0.6)]', icon: CheckCircle, dotColor: 'bg-[var(--color-success)]' },
+  failed: { label: 'Fehlgeschlagen', color: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)] border-[rgba(254,202,202,0.6)]', icon: XCircle, dotColor: 'bg-[var(--color-danger)]' },
   retry_scheduled: { label: 'Erneuter Versuch', color: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[var(--color-warning-border)]', icon: RefreshCw, dotColor: 'bg-[var(--color-warning)]' },
   dead_letter: { label: 'Endgueltig fehlgeschlagen', color: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)] border-[var(--color-danger-border)]', icon: AlertTriangle, dotColor: 'bg-[var(--color-danger)]' },
-  cancelled: { label: 'Abgebrochen', color: 'bg-[var(--color-surface-sunken)] text-[var(--color-text-secondary)] border-[var(--color-divider)]/60', icon: XCircle, dotColor: 'bg-[var(--color-text-tertiary)]' },
+  cancelled: { label: 'Abgebrochen', color: 'bg-[var(--color-surface-sunken)] text-[var(--color-text-secondary)] border-[rgba(226,232,240,0.6)]', icon: XCircle, dotColor: 'bg-[var(--color-text-tertiary)]' },
 };
 
 const TYPE_CONFIG = {
@@ -62,7 +62,7 @@ function TypeBadge({ jobType }) {
   const cfg = TYPE_CONFIG[jobType] || { label: jobType, icon: Activity };
   const Icon = cfg.icon;
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-[var(--radius-md)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] border border-[var(--color-divider)]/50">
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-[var(--radius-md)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] border border-[rgba(226,232,240,0.5)]">
       <Icon size={11} />
       {cfg.label}
     </span>
@@ -134,13 +134,13 @@ export default function AdminJobsPage() {
     >
 
       {/* Tab Navigation */}
-      <div className="flex gap-1 p-1 rounded-[var(--radius-md)] border border-[var(--color-divider)]/50" style={{ background: 'var(--color-surface-elevated)' }}>
+      <div className="flex gap-1 p-1 rounded-[var(--radius-md)] border border-[rgba(226,232,240,0.5)]" style={{ background: 'var(--color-surface-elevated)' }}>
         {tabs.map(t => {
           const Icon = t.icon;
           const isActive = tab === t.key;
           return (
             <button key={t.key} onClick={() => setTab(t.key)} data-testid={`tab-${t.key}`}
-              className={`flex items-center gap-1.5 text-xs font-medium px-4 py-2.5 rounded-[var(--radius-md)] transition-all ${isActive ? 'bg-white shadow-sm text-[var(--color-primary)] border border-[var(--color-divider)]/50' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/50'}`}>
+              className={`flex items-center gap-1.5 text-xs font-medium px-4 py-2.5 rounded-[var(--radius-md)] transition-all ${isActive ? 'bg-white shadow-sm text-[var(--color-primary)] border border-[rgba(226,232,240,0.5)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/50'}`}>
               <Icon size={13} />
               {t.label}
               {t.key === 'failed' && stats && (stats.failed + stats.dead_letter) > 0 && (
@@ -173,7 +173,7 @@ function DashboardTab({ stats, health, loading }) {
   return (
     <div className="space-y-5">
       {/* Worker Status */}
-      <div data-testid="worker-health" className={`p-4 rounded-[var(--radius-md)] border flex items-center gap-3 ${health.is_healthy ? 'bg-[var(--color-success-bg)]/50 border-[var(--color-success-border)]/50' : 'bg-[var(--color-danger-bg)]/50 border-[var(--color-danger-border)]/50'}`}>
+      <div data-testid="worker-health" className={`p-4 rounded-[var(--radius-md)] border flex items-center gap-3 ${health.is_healthy ? 'bg-[rgba(236,253,245,0.5)] border-[rgba(167,243,208,0.5)]' : 'bg-[rgba(254,242,242,0.5)] border-[rgba(254,202,202,0.5)]'}`}>
         <div className={`w-3 h-3 rounded-full animate-pulse ${health.is_healthy ? 'bg-[var(--color-success)]' : 'bg-[var(--color-danger)]'}`} />
         <div className="flex-1">
           <p className="text-sm font-semibold" style={{ color: 'var(--color-primary)' }}>
@@ -236,13 +236,13 @@ function DashboardTab({ stats, health, loading }) {
 
       {/* Letzte Fehler */}
       {stats.recent_errors && stats.recent_errors.length > 0 && (
-        <div className="w2g-card border-[var(--color-danger-border)]/50">
+        <div className="w2g-card border-[rgba(254,202,202,0.5)]">
           <h3 className="text-sm font-bold mb-3 text-[var(--color-danger)]" style={{ fontFamily: 'var(--font-heading)' }}>
             Letzte Fehler
           </h3>
           <div className="space-y-2">
             {stats.recent_errors.map((err, i) => (
-              <div key={i} className="flex items-start gap-3 p-2.5 rounded-[var(--radius-md)] bg-[var(--color-danger-bg)]/50 border border-[var(--color-danger-border)]">
+              <div key={i} className="flex items-start gap-3 p-2.5 rounded-[var(--radius-md)] bg-[rgba(254,242,242,0.5)] border border-[var(--color-danger-border)]">
                 <AlertTriangle size={14} className="text-[var(--color-danger)] mt-0.5 flex-shrink-0" />
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
@@ -307,7 +307,7 @@ function JobListTab({ defaultStatus = '' }) {
   return (
     <div data-testid="job-list-tab" className="space-y-4">
       {/* Filter-Bar */}
-      <div className="flex flex-wrap items-center gap-2 p-3 rounded-[var(--radius-md)] border border-[var(--color-divider)]/50" style={{ background: 'var(--color-surface-elevated)', boxShadow: 'var(--shadow-e1)' }}>
+      <div className="flex flex-wrap items-center gap-2 p-3 rounded-[var(--radius-md)] border border-[rgba(226,232,240,0.5)]" style={{ background: 'var(--color-surface-elevated)', boxShadow: 'var(--shadow-e1)' }}>
         <div className="flex items-center gap-1.5 flex-1 min-w-[200px] bg-white rounded-[var(--radius-md)] border border-[var(--color-divider)] px-3">
           <Search size={13} className="text-[var(--color-text-tertiary)]" />
           <input data-testid="job-search" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
@@ -376,7 +376,7 @@ function JobListTab({ defaultStatus = '' }) {
                     )}
                     {(job.status === 'queued' || job.status === 'retry_scheduled') && (
                       <button onClick={e => { e.stopPropagation(); handleCancel(job.job_id); }} data-testid={`cancel-${job.job_id}`}
-                        className="text-xs font-medium text-[var(--color-danger)] bg-[var(--color-danger-bg)] hover:bg-[var(--color-danger-bg)] px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-danger-border)]/60 transition-colors">
+                        className="text-xs font-medium text-[var(--color-danger)] bg-[var(--color-danger-bg)] hover:bg-[var(--color-danger-bg)] px-3 py-1.5 rounded-[var(--radius-md)] border border-[rgba(254,202,202,0.6)] transition-colors">
                         <XCircle size={11} className="inline mr-1" />Cancel
                       </button>
                     )}

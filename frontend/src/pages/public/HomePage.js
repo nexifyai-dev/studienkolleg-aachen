@@ -314,7 +314,7 @@ export default function HomePage() {
               {/* LEFT: Portrait – 4 Spalten */}
               <div className={`lg:col-span-4 flex justify-center lg:justify-start ${stagger(teamVis, 0)}`}>
                 <div className="relative">
-                  <div className="w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-[3px] border-[var(--color-primary)]/10 relative z-10"
+                  <div className="w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-[3px] border-[rgba(10,25,47,0.1)] relative z-10"
                     style={{ boxShadow: '0 16px 48px rgba(17,54,85,0.12), 0 4px 12px rgba(17,54,85,0.06)' }}>
                     <img src={IMG.lauraSaboor} alt="Laura Saboor – Managing Director"
                       className="w-full h-full object-cover object-top"
@@ -330,7 +330,7 @@ export default function HomePage() {
               <div className={`lg:col-span-8 ${stagger(teamVis, 1)}`} style={staggerDelay(1)}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">{t('home.team_label')}</span>
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">{t('home.team_label')}</span>
                 </div>
                 <h2 className="text-[28px] sm:text-[36px] lg:text-[44px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-3"
                   style={{ fontFamily: 'var(--font-heading)' }}>
@@ -341,7 +341,7 @@ export default function HomePage() {
                   {t('home.team_role')}
                 </p>
                 <blockquote className="relative pl-6 mb-8 border-l-[3px]" style={{ borderColor: 'var(--color-accent)' }}>
-                  <p className="text-[17px] lg:text-[19px] text-[var(--color-primary-dark)]/70 leading-[1.75] italic">
+                  <p className="text-[17px] lg:text-[19px] text-[rgba(2,12,27,0.7)] leading-[1.75] italic">
                     {t('home.team_quote')}
                   </p>
                 </blockquote>
@@ -366,7 +366,7 @@ export default function HomePage() {
             <div className={`mb-12 lg:mb-16 max-w-[600px] ${stagger(campusVis, 0)}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">{t('home.campus_label')}</span>
+                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">{t('home.campus_label')}</span>
               </div>
               <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-4"
                 style={{ fontFamily: 'var(--font-heading)' }}>
@@ -386,7 +386,7 @@ export default function HomePage() {
                   <img src={IMG.campusKlasse} alt="Unterricht am Studienkolleg – Klassenzimmer"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     data-testid="campus-img-klasse" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary-dark)]/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(2,12,27,0.6)] via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 p-4 lg:p-5">
                     <p className="text-[13px] font-semibold text-white/90">{t('home.campus_img_klasse')}</p>
                   </div>
@@ -398,7 +398,7 @@ export default function HomePage() {
                   <img src={IMG.campusDocs} alt="Workshop: Wichtige Dokumente für dein Studium"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     data-testid="campus-img-docs" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary-dark)]/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(2,12,27,0.6)] via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 p-4 lg:p-5">
                     <p className="text-[13px] font-semibold text-white/90">{t('home.campus_img_docs')}</p>
                   </div>
@@ -410,7 +410,7 @@ export default function HomePage() {
                   <img src={IMG.campusHealth} alt="Vortrag: Das deutsche Gesundheitssystem"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     data-testid="campus-img-health" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary-dark)]/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(2,12,27,0.6)] via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 p-4 lg:p-5">
                     <p className="text-[13px] font-semibold text-white/90">{t('home.campus_img_health')}</p>
                   </div>
@@ -423,7 +423,7 @@ export default function HomePage() {
                   <img src={IMG.campusHandshake} alt="Partnerschaft vor dem Studienkolleg Aachen"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     data-testid="campus-img-handshake" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary-dark)]/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(2,12,27,0.6)] via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 p-5 lg:p-6">
                     <span className="inline-block text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-[2px] mb-2"
                       style={{ background: 'rgba(212,175,55,0.9)', color: 'var(--color-primary-dark)' }}>{t('home.campus_img_handshake_badge')}</span>
@@ -437,7 +437,7 @@ export default function HomePage() {
                   <img src={IMG.campusMotivation} alt="Motivationsschreiben-Unterricht"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     data-testid="campus-img-motivation" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary-dark)]/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(2,12,27,0.6)] via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 p-4 lg:p-5">
                     <p className="text-[13px] font-semibold text-white/90">{t('home.campus_img_motivation')}</p>
                   </div>
@@ -606,7 +606,7 @@ export default function HomePage() {
             <div className={`mb-12 lg:mb-16 max-w-[600px] ${stagger(segVis, 0)}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">{t('home.segments_label')}</span>
+                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">{t('home.segments_label')}</span>
               </div>
               <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-4"
                 style={{ fontFamily: 'var(--font-heading)' }}>
@@ -622,7 +622,7 @@ export default function HomePage() {
               {SEGMENTS.map((seg, idx) => (
                 <Link key={seg.key} to={seg.link}
                   className={`group relative p-6 lg:p-8 rounded-[4px] border transition-all duration-500 hover:-translate-y-1 ${
-                    idx === 0 ? 'sm:col-span-2 lg:col-span-2 bg-[var(--color-primary-dark)] border-transparent text-white' : 'bg-white border-[var(--color-primary)]/8 hover:border-[var(--color-primary)]/20'
+                    idx === 0 ? 'sm:col-span-2 lg:col-span-2 bg-[var(--color-primary-dark)] border-transparent text-white' : 'bg-white border-[rgba(10,25,47,0.08)] hover:border-[rgba(10,25,47,0.2)]'
                   } ${stagger(segVis, idx)}`}
                   style={staggerDelay(idx)}
                   data-testid={`segment-${seg.key}`}>
@@ -644,7 +644,7 @@ export default function HomePage() {
                       }`}>{t(`home.segments.${seg.key}.desc`)}</p>
                     </div>
                     <ArrowRight size={16} className={`shrink-0 mt-1 transition-transform duration-300 group-hover:translate-x-1 ${
-                      idx === 0 ? 'text-white/30' : 'text-[var(--color-primary)]/20'
+                      idx === 0 ? 'text-white/30' : 'text-[rgba(10,25,47,0.2)]'
                     }`} />
                   </div>
                 </Link>
@@ -707,7 +707,7 @@ export default function HomePage() {
                       />
                       {/* Play-Overlay – nur sichtbar wenn Video nicht aktiv */}
                       {activeMainVideo !== vid.key && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-primary-dark)]/20 transition-colors duration-300 group-hover:bg-[var(--color-primary-dark)]/10">
+                        <div className="absolute inset-0 flex items-center justify-center bg-[rgba(2,12,27,0.2)] transition-colors duration-300 group-hover:bg-[rgba(2,12,27,0.1)]">
                           <div className="w-16 h-16 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                             style={{ background: 'rgba(212,175,55,0.95)', boxShadow: '0 4px 24px rgba(212,175,55,0.4)' }}>
                             <Play size={24} className="text-[var(--color-primary-dark)] ml-1" fill="#0a2036" />
@@ -735,7 +735,7 @@ export default function HomePage() {
             <div className={`mb-12 lg:mb-16 max-w-[600px] ${stagger(progVis, 0)}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">{t('home.programs_label')}</span>
+                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">{t('home.programs_label')}</span>
               </div>
               <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-4"
                 style={{ fontFamily: 'var(--font-heading)' }}>
@@ -783,7 +783,7 @@ export default function HomePage() {
               <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-5">
                 {PROGRAM_KEYS.slice(1).map((pKey, idx) => (
                   <div key={pKey}
-                    className={`group bg-white rounded-[4px] border border-[var(--color-primary)]/8 p-6 lg:p-8 hover:border-[var(--color-primary)]/20 transition-all duration-500 hover:-translate-y-0.5 ${stagger(progVis, idx + 1)}`}
+                    className={`group bg-white rounded-[4px] border border-[rgba(10,25,47,0.08)] p-6 lg:p-8 hover:border-[rgba(10,25,47,0.2)] transition-all duration-500 hover:-translate-y-0.5 ${stagger(progVis, idx + 1)}`}
                     style={staggerDelay(idx + 1)}
                     data-testid={`program-${pKey}`}>
                     <div className="flex items-start justify-between gap-6">
@@ -795,7 +795,7 @@ export default function HomePage() {
                         <h3 className="text-[17px] font-bold text-[var(--color-primary-dark)] mb-1.5 tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>{t(`home.programs.${pKey}.title`)}</h3>
                         <p className="text-[13px] text-[var(--color-text-secondary)] leading-[1.7]">{t(`home.programs.${pKey}.desc`)}</p>
                       </div>
-                      <div className="flex items-center gap-3 shrink-0 text-[11px] text-[var(--color-text-secondary)]/60">
+                      <div className="flex items-center gap-3 shrink-0 text-[11px] text-[rgba(71,85,105,0.6)]">
                         <span className="flex items-center gap-1"><Clock size={11} /> {t(`home.programs.${pKey}.duration`)}</span>
                       </div>
                     </div>
@@ -856,7 +856,7 @@ export default function HomePage() {
               <div className={`lg:col-span-7 ${stagger(procVis, 0)}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">{t('home.process_title')}</span>
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">{t('home.process_title')}</span>
                 </div>
                 <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-10"
                   style={{ fontFamily: 'var(--font-heading)' }}>
@@ -866,7 +866,7 @@ export default function HomePage() {
                 <div className="space-y-0">
                   {['01','02','03','04'].map((num, idx) => (
                     <div key={num}
-                      className={`flex items-start gap-5 py-7 border-b border-[var(--color-primary)]/8 last:border-b-0 ${stagger(procVis, idx)}`}
+                      className={`flex items-start gap-5 py-7 border-b border-[rgba(10,25,47,0.08)] last:border-b-0 ${stagger(procVis, idx)}`}
                       style={staggerDelay(idx)}>
                       <span className="text-[28px] lg:text-[32px] font-extrabold tracking-tight shrink-0 w-[48px] leading-none pt-0.5"
                         style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-accent)' }}>
@@ -888,7 +888,7 @@ export default function HomePage() {
                     data-testid="process-cta">
                     Bewerbung starten <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                   </Link>
-                  <Link to="/booking" className="inline-flex items-center justify-center gap-2 h-[56px] px-8 text-[15px] font-semibold text-[var(--color-primary)] border-2 border-[var(--color-primary)]/15 rounded-full transition-all duration-300 hover:border-[var(--color-primary)]/30">
+                  <Link to="/booking" className="inline-flex items-center justify-center gap-2 h-[56px] px-8 text-[15px] font-semibold text-[var(--color-primary)] border-2 border-[rgba(10,25,47,0.15)] rounded-full transition-all duration-300 hover:border-[rgba(10,25,47,0.3)]">
                     Beratung buchen
                   </Link>
                 </div>
@@ -914,7 +914,7 @@ export default function HomePage() {
             <div className={`mb-12 lg:mb-16 max-w-[600px] ${stagger(trustVis, 0)}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">{t('home.trust_label')}</span>
+                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">{t('home.trust_label')}</span>
               </div>
               <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em]"
                 style={{ fontFamily: 'var(--font-heading)' }}>
@@ -925,7 +925,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
               {TRUST_ICONS.map((TIcon, i) => (
                 <div key={i}
-                  className={`bg-white rounded-[4px] border border-[var(--color-primary)]/8 p-6 lg:p-8 transition-all duration-500 hover:-translate-y-1 ${stagger(trustVis, i)}`}
+                  className={`bg-white rounded-[4px] border border-[rgba(10,25,47,0.08)] p-6 lg:p-8 transition-all duration-500 hover:-translate-y-1 ${stagger(trustVis, i)}`}
                   style={staggerDelay(i)}>
                   <div className="w2g-icon-wrap mb-5">
                     <TIcon size={20} style={{ color: 'var(--color-accent)' }} />
@@ -939,8 +939,8 @@ export default function HomePage() {
             </div>
 
             {/* Partner-Logos */}
-            <div className={`mt-12 lg:mt-16 pt-10 border-t border-[var(--color-primary)]/8 ${stagger(trustVis, 5)}`} style={staggerDelay(5)}>
-              <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-text-secondary)]/40 mb-6">{t('home.trusted_by')}</p>
+            <div className={`mt-12 lg:mt-16 pt-10 border-t border-[rgba(10,25,47,0.08)] ${stagger(trustVis, 5)}`} style={staggerDelay(5)}>
+              <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(71,85,105,0.4)] mb-6">{t('home.trusted_by')}</p>
               <div className="flex items-center gap-8 lg:gap-12 flex-wrap">
                 <img src="/images/logos/studienkolleg-logo.png" alt="Studienkolleg Aachen" className="h-8 lg:h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" data-testid="partner-logo-stk" />
                 <img src="/images/logos/w2g-logo.png" alt="Way2Germany" className="h-8 lg:h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" data-testid="partner-logo-w2g" />
@@ -961,20 +961,20 @@ export default function HomePage() {
               <div className={`lg:col-span-4 ${stagger(testVis, 0)}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">{t('home.testimonials_label')}</span>
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">{t('home.testimonials_label')}</span>
                 </div>
                 <h2 className="text-[32px] sm:text-[40px] lg:text-[44px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-4"
                   style={{ fontFamily: 'var(--font-heading)' }}>
                   {t('trust.title', 'Was unsere Studierenden sagen')}
                 </h2>
                 <div className="flex items-center gap-3 mt-6">
-                  <button onClick={prevTestimonial} className="w-10 h-10 rounded-full border border-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)]/40 hover:border-[var(--color-primary)]/30 hover:text-[var(--color-primary)] transition-all" data-testid="testimonial-prev">
+                  <button onClick={prevTestimonial} className="w-10 h-10 rounded-full border border-[rgba(10,25,47,0.1)] flex items-center justify-center text-[rgba(10,25,47,0.4)] hover:border-[rgba(10,25,47,0.3)] hover:text-[var(--color-primary)] transition-all" data-testid="testimonial-prev">
                     <ChevronLeft size={16} />
                   </button>
-                  <button onClick={nextTestimonial} className="w-10 h-10 rounded-full border border-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)]/40 hover:border-[var(--color-primary)]/30 hover:text-[var(--color-primary)] transition-all" data-testid="testimonial-next">
+                  <button onClick={nextTestimonial} className="w-10 h-10 rounded-full border border-[rgba(10,25,47,0.1)] flex items-center justify-center text-[rgba(10,25,47,0.4)] hover:border-[rgba(10,25,47,0.3)] hover:text-[var(--color-primary)] transition-all" data-testid="testimonial-next">
                     <ChevronRight size={16} />
                   </button>
-                  <span className="text-[12px] text-[var(--color-text-secondary)]/50 ml-2">{testimonialIdx + 1} / 3</span>
+                  <span className="text-[12px] text-[rgba(71,85,105,0.5)] ml-2">{testimonialIdx + 1} / 3</span>
                 </div>
               </div>
 
@@ -1014,7 +1014,7 @@ export default function HomePage() {
               <div className={`lg:col-span-4 ${stagger(faqVis, 0)}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-6 h-[2px] bg-[var(--color-accent)]" />
-                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]/60">FAQ</span>
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[rgba(10,25,47,0.6)]">FAQ</span>
                 </div>
                 <h2 className="text-[32px] sm:text-[40px] lg:text-[44px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-4"
                   style={{ fontFamily: 'var(--font-heading)' }}>
@@ -1026,7 +1026,7 @@ export default function HomePage() {
               </div>
 
               <div className="lg:col-span-8">
-                <div className="divide-y divide-[var(--color-primary)]/8">
+                <div className="divide-y divide-[rgba(10,25,47,0.08)]">
                   {[0,1,2,3,4].map((i) => (
                     <div key={i} className={stagger(faqVis, i)} style={staggerDelay(i)}>
                       <button
@@ -1037,7 +1037,7 @@ export default function HomePage() {
                           style={{ fontFamily: 'var(--font-heading)' }}>
                           {t(`home.faqs.${i}.q`)}
                         </span>
-                        <ChevronDown size={16} className={`shrink-0 text-[var(--color-text-secondary)]/40 transition-transform duration-300 ${openFaq === i ? 'rotate-180' : ''}`} />
+                        <ChevronDown size={16} className={`shrink-0 text-[rgba(71,85,105,0.4)] transition-transform duration-300 ${openFaq === i ? 'rotate-180' : ''}`} />
                       </button>
                       <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-[200px] pb-5' : 'max-h-0'}`}>
                         <p className="text-[14px] text-[var(--color-text-secondary)] leading-[1.7] max-w-[600px]">{t(`home.faqs.${i}.a`)}</p>

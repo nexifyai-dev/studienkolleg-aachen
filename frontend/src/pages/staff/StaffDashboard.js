@@ -274,7 +274,7 @@ export default function StaffDashboard() {
               <div className="relative mb-3">
                 <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]" />
                 <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Name, E-Mail, Land..." data-testid="dashboard-app-search"
-                  className="w-full h-8 pl-8 pr-8 text-[11px] bg-[var(--color-surface-elevated)] border border-[var(--color-divider)] rounded-[var(--radius-sm)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]/20 transition-all" />
+                  className="w-full h-8 pl-8 pr-8 text-[11px] bg-[var(--color-surface-elevated)] border border-[var(--color-divider)] rounded-[var(--radius-sm)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[rgba(10,25,47,0.2)] transition-all" />
                 {searchQuery && (
                   <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)] hover:text-[var(--color-danger)]" data-testid="dashboard-search-clear"><XCircle size={12} /></button>
                 )}

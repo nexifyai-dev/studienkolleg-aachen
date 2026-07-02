@@ -81,7 +81,7 @@ export default function KnowledgeCenterPage() {
               <div className="relative max-w-[480px]">
                 <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
                 <input value={search} onChange={(e) => setSearch(e.target.value)}
-                  className="w-full h-[48px] pl-11 pr-4 text-[14px] text-white bg-white/8 border border-white/10 rounded-[4px] placeholder-white/25 focus:outline-none focus:border-white/25 transition-colors"
+                  className="w-full h-[48px] pl-11 pr-4 text-[14px] text-white bg-white/10 border border-white/10 rounded-[4px] placeholder-white/25 focus:outline-none focus:border-white/25 transition-colors"
                   placeholder={isEN ? 'Search knowledge base...' : 'Im Wissenscenter suchen...'}
                   data-testid="knowledge-search-input" />
               </div>
@@ -99,7 +99,7 @@ export default function KnowledgeCenterPage() {
                 <button key={item} type="button" onClick={() => setFilter(item)}
                   className={`px-4 py-2 text-[12px] font-semibold rounded-full transition-all ${
                     filter === item
-                      ? 'text-[var(--color-primary-dark)]' : 'border border-[var(--color-primary)]/10 text-[var(--color-text-secondary)] hover:border-[var(--color-primary)]/25 hover:text-[var(--color-primary-dark)]'
+                      ? 'text-[var(--color-primary-dark)]' : 'border border-[rgba(10,25,47,0.1)] text-[var(--color-text-secondary)] hover:border-[rgba(10,25,47,0.25)] hover:text-[var(--color-primary-dark)]'
                   }`}
                   style={filter === item ? { background: 'var(--color-accent)', color: 'var(--color-primary-dark)' } : {}}
                   data-testid={`knowledge-filter-${item.toLowerCase()}`}>
@@ -122,7 +122,7 @@ export default function KnowledgeCenterPage() {
                     const Icon = CATEGORY_ICONS[article.category] || BookOpen;
                     return (
                       <article key={article.id}
-                        className={`group p-6 lg:p-8 rounded-[8px] border border-[var(--color-primary)]/8 transition-all duration-300 hover:border-[var(--color-primary)]/15 ${stagger(gridVis)}`}
+                        className={`group p-6 lg:p-8 rounded-[8px] border border-[rgba(10,25,47,0.08)] transition-all duration-300 hover:border-[rgba(10,25,47,0.15)] ${stagger(gridVis)}`}
                         style={{ ...staggerDelay(idx), boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}
                         data-testid={`knowledge-article-${article.id}`}>
                         <div className="flex items-start gap-4">
@@ -159,7 +159,7 @@ export default function KnowledgeCenterPage() {
               {/* Sidebar */}
               <aside className="lg:col-span-4 space-y-5" data-testid="knowledge-sidepanel">
                 {/* Popular Topics */}
-                <div className="p-6 rounded-[8px] border border-[var(--color-primary)]/8" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
+                <div className="p-6 rounded-[8px] border border-[rgba(10,25,47,0.08)]" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
                   <h3 className="text-[11px] font-semibold tracking-[0.15em] uppercase mb-4" style={{ color: 'var(--color-accent)' }}>
                     {isEN ? 'Popular Topics' : 'Beliebte Themen'}
                   </h3>
@@ -179,7 +179,7 @@ export default function KnowledgeCenterPage() {
                 </div>
 
                 {/* Direct Help */}
-                <div className="p-6 rounded-[8px] border border-[var(--color-primary)]/8" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
+                <div className="p-6 rounded-[8px] border border-[rgba(10,25,47,0.08)]" style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }}>
                   <h3 className="text-[11px] font-semibold tracking-[0.15em] uppercase mb-3" style={{ color: 'var(--color-accent)' }}>
                     {isEN ? 'Direct Help' : 'Direkte Hilfe'}
                   </h3>

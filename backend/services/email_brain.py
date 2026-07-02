@@ -262,7 +262,7 @@ WICHTIG:
             "to_addr": _extract_email_addr(email_data.get("from", "")),
             "lang": lang,
             "status": "draft",  # draft → approved → sent → failed
-            "ai_model": result.get("model", "deepseek/deepseek-v4-flash"),
+            "ai_model": result.get("model", "deepseek-chat"),
             "tokens_used": result.get("tokens", 0),
             "created_at": datetime.now(timezone.utc),
             "approved_by": None,

@@ -198,7 +198,7 @@ export default function BrainPanel({ entityId, context = '', compact = false }) 
               <div className="space-y-0.5">
                 {memories.memories?.slice(0, 8).map((m, i) => (
                   <div key={i} className="text-[10px] text-[var(--color-text-secondary)] flex items-start gap-1">
-                    <span className="text-[8px] bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-1 rounded mt-0.5 whitespace-nowrap">{m.category}</span>
+                    <span className="text-[8px] bg-[rgba(10,25,47,0.1)] text-[var(--color-primary)] px-1 rounded mt-0.5 whitespace-nowrap">{m.category}</span>
                     <span>{m.fact}</span>
                   </div>
                 ))}
@@ -235,7 +235,7 @@ export default function BrainPanel({ entityId, context = '', compact = false }) 
                   msg.role === 'user'
                     ? 'bg-[var(--color-primary)] text-white rounded-br-sm'
                     : msg.error
-                      ? 'bg-[var(--color-danger)]/10 text-[var(--color-danger)] border border-[var(--color-danger-border)] rounded-bl-sm'
+                      ? 'bg-[rgba(220,38,38,0.1)] text-[var(--color-danger)] border border-[var(--color-danger-border)] rounded-bl-sm'
                       : 'bg-[var(--color-surface-elevated)] text-[var(--color-text-primary)] border border-[var(--color-divider)] rounded-bl-sm'
                 }`}>
                   {msg.role === 'user' ? (

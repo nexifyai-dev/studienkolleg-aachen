@@ -236,7 +236,7 @@ export default function UsersPage() {
                   <td className="font-medium text-[var(--color-text-primary)]">{u.full_name || '\u2013'}</td>
                   <td className="text-[var(--color-text-secondary)]">{u.email}</td>
                   <td>
-                    <span className={`w2g-badge ${STAFF_ROLES.includes(u.role) ? 'bg-[#113655]/8 text-[var(--color-primary)]' : 'bg-[var(--color-surface-sunken)] text-[var(--color-text-secondary)]'}`}>
+                    <span className={`w2g-badge ${STAFF_ROLES.includes(u.role) ? 'bg-[#113655]/10 text-[var(--color-primary)]' : 'bg-[var(--color-surface-sunken)] text-[var(--color-text-secondary)]'}`}>
                       {ROLE_LABELS[u.role] || u.role}
                     </span>
                   </td>

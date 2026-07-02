@@ -45,8 +45,8 @@ function KanbanCard({ app, screening, tasks, invoices, followups, provided, isDr
         isDragging
           ? 'border-primary shadow-lg ring-2 ring-primary/25 rotate-[0.5deg] scale-[1.03]'
           : hasRisk
-            ? 'border-[var(--color-warning-border)]/80 hover:border-[var(--color-warning-border)]'
-            : 'border-[var(--color-divider)]/80 hover:border-primary/40 hover:shadow-md'
+            ? 'border-[rgba(253,230,138,0.8)] hover:border-[var(--color-warning-border)]'
+            : 'border-[rgba(226,232,240,0.8)] hover:border-primary/40 hover:shadow-md'
       }`}
       style={{
         ...provided.draggableProps.style,
@@ -391,7 +391,7 @@ export default function KanbanPage() {
       )}
 
       {/* Legend */}
-      <div className="flex items-center gap-4 text-[10px] text-[var(--color-text-secondary)] px-4 py-2 bg-[var(--color-surface-elevated)]/80 rounded-md border border-[var(--color-divider-subtle)]" data-testid="kanban-legend">
+      <div className="flex items-center gap-4 text-[10px] text-[var(--color-text-secondary)] px-4 py-2 bg-[rgba(250,251,252,0.8)] rounded-md border border-[var(--color-divider-subtle)]" data-testid="kanban-legend">
         <span className="flex items-center gap-1.5 font-medium text-[var(--color-text-secondary)]">
           <span className="inline-flex p-0.5 rounded bg-primary-muted text-primary"><GripVertical size={10} /></span>
           {lang === 'de' ? 'Ziehen & Ablegen' : 'Drag & Drop'}

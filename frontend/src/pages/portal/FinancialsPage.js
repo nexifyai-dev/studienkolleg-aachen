@@ -90,7 +90,7 @@ export default function FinancialsPage() {
     >
 
       {/* Orientierungsbox */}
-      <div className="w2g-panel bg-[var(--color-surface-elevated)]/80" data-testid="financials-guidance">
+      <div className="w2g-panel bg-[rgba(250,251,252,0.8)]" data-testid="financials-guidance">
         <div className="flex items-start gap-3">
           <Info size={16} className="text-[var(--color-primary)] mt-0.5 shrink-0" />
           <div className="text-xs text-[var(--color-text-secondary)] space-y-1">
@@ -202,7 +202,7 @@ export default function FinancialsPage() {
 
                 {/* Next Steps */}
                 {(inv.status === 'open' || inv.status === 'overdue') && (
-                  <div className="mt-3 w2g-panel bg-[var(--color-primary)]/[0.03] border-[var(--color-primary)]/10">
+                  <div className="mt-3 w2g-panel bg-[var(--color-primary)]/[0.03] border-[rgba(10,25,47,0.1)]">
                     <div className="flex items-start gap-2 text-xs text-[var(--color-text-secondary)]">
                       <ArrowRight size={12} className="text-[var(--color-primary)] mt-0.5 shrink-0" />
                       <div>

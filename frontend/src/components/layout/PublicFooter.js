@@ -140,7 +140,7 @@ export default function PublicFooter() {
       </div>
 
       {/* CTA-Banner */}
-      <div className="border-t border-white/8">
+      <div className="border-t border-white/10">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[14px] text-white/50">{t('home.cta_desc', 'Bewirb dich jetzt und erhalte innerhalb von 24 Stunden eine Rückmeldung.')}</p>
           <Link to="/apply" className="inline-flex items-center gap-2 h-[44px] px-7 text-[13px] font-bold rounded-full shrink-0 transition-all hover:scale-[1.02] group bg-[var(--color-accent)] text-[var(--color-primary-dark)]" data-testid="footer-cta-apply">
@@ -150,7 +150,7 @@ export default function PublicFooter() {
       </div>
 
       {/* Copyright */}
-      <div className="border-t border-white/6">
+      <div className="border-t border-white/5">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/30">
           <span>&copy; {new Date().getFullYear()} W2G Academy GmbH / Studienkolleg Aachen. {t('footer.rights')}</span>
           <div className="flex items-center gap-4">

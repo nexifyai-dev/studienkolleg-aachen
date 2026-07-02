@@ -104,7 +104,7 @@ function AIReportSection({ report }) {
 
   return (
     <div data-testid="ai-report-section">
-      <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center justify-between px-3 py-2 bg-[var(--color-primary)]/5 rounded-[var(--radius-sm)] hover:bg-[var(--color-primary)]/10 transition-colors mb-2">
+      <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center justify-between px-3 py-2 bg-[rgba(10,25,47,0.05)] rounded-[var(--radius-sm)] hover:bg-[rgba(10,25,47,0.1)] transition-colors mb-2">
         <span className="text-xs font-bold text-[var(--color-primary)] flex items-center gap-2"><Brain size={13} /> KI-Analysebericht</span>
         {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
       </button>
@@ -215,7 +215,7 @@ export default function AIScreeningDeltaPanel({ applicationId }) {
           <>
             {/* ── Status-Vorschlag mit Stage-Label ── */}
             {latest.suggested_stage && (
-              <div className="flex items-center gap-3 p-3 bg-[var(--color-primary)]/5 rounded-[var(--radius-sm)] border border-[var(--color-primary)]/20" data-testid="screening-suggestion">
+              <div className="flex items-center gap-3 p-3 bg-[rgba(10,25,47,0.05)] rounded-[var(--radius-sm)] border border-[rgba(10,25,47,0.2)]" data-testid="screening-suggestion">
                 <Zap size={16} className="text-[var(--color-primary)] shrink-0" />
                 <div className="flex-1">
                   <p className="text-xs font-semibold text-[var(--color-primary)]">Empfohlener Status</p>

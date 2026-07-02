@@ -21,7 +21,7 @@ export default function KnowledgeBox({ title, links, lang = 'de' }) {
             <a key={i} href={link.url}
               target={link.url.startsWith('http') ? '_blank' : '_self'}
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-2 py-2 rounded-[var(--radius-xs)] text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/5 transition-colors group"
+              className="flex items-center gap-2 px-2 py-2 rounded-[var(--radius-xs)] text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[rgba(10,25,47,0.05)] transition-colors group"
               data-testid={`knowledge-link-${i}`}>
               {link.url.startsWith('http') ? (
                 <ExternalLink size={12} className="text-[var(--color-text-tertiary)] group-hover:text-[var(--color-primary)] shrink-0" />

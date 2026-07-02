@@ -62,7 +62,7 @@ function LineItemsEditor({ items, onChange }) {
       <div className="flex items-center justify-between">
         <label className="w2g-label mb-0">Positionen</label>
         <button type="button" onClick={addItem}
-          className="text-[11px] bg-[var(--color-primary)] text-white px-2.5 py-1 rounded-sm hover:bg-[var(--color-primary)]/90 font-medium flex items-center gap-1"
+          className="text-[11px] bg-[var(--color-primary)] text-white px-2.5 py-1 rounded-sm hover:bg-[rgba(10,25,47,0.9)] font-medium flex items-center gap-1"
           data-testid="add-line-item-btn">
           <Plus size={12} /> Position
         </button>

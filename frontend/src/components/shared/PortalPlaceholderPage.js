@@ -20,7 +20,7 @@ export function PortalPlaceholderPage({
           return (
             <div key={section.title} className={`w2g-card lg:col-span-${section.span || 6}`} data-testid={`${testId}-${section.testId}`}>
               <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-lg)] bg-[var(--color-primary)]/8 text-[var(--color-primary)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-lg)] bg-[rgba(10,25,47,0.08)] text-[var(--color-primary)]">
                   <Icon size={18} />
                 </div>
                 <div>

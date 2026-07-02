@@ -75,7 +75,7 @@ function ConvItem({ conv, active, onClick, userId }) {
     <button onClick={onClick} data-testid={`conv-item-${conv.id}`}
       aria-label={`Konversation mit ${name}, ${CHANNEL_CFG[ch]?.label}, ${unread > 0 ? unread + ' ungelesen' : 'keine ungelesenen'}`}
       aria-current={active ? 'true' : undefined}
-      className={`w-full text-left px-3 py-2.5 border-b border-[var(--color-divider-subtle)] hover:bg-[var(--color-surface-elevated)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 focus:ring-inset ${active ? 'bg-[var(--color-primary)]/5 border-l-2 border-l-[var(--color-primary)]' : ''}`}>
+      className={`w-full text-left px-3 py-2.5 border-b border-[var(--color-divider-subtle)] hover:bg-[var(--color-surface-elevated)] transition-colors focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)] focus:ring-inset ${active ? 'bg-[rgba(10,25,47,0.05)] border-l-2 border-l-[var(--color-primary)]' : ''}`}>
       <div className="flex items-start gap-2.5">
         <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[var(--color-primary-muted)] flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">
           <span className="text-[10px] font-bold text-[var(--color-primary)]">{name[0]?.toUpperCase() || '?'}</span>
@@ -214,7 +214,7 @@ function ContextPanel({ convId }) {
               </span>
               {app.course_type && <span className="text-[var(--color-text-tertiary)]">{app.course_type}</span>}
             </div>
-            <Link to={`/staff/applications/${app.id}`} className="text-white bg-[var(--color-primary)] px-2 py-0.5 rounded-sm hover:bg-[var(--color-primary)]/90 flex items-center gap-1 text-[10px] font-medium mt-1 focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]" data-testid="ctx-case-link">
+            <Link to={`/staff/applications/${app.id}`} className="text-white bg-[var(--color-primary)] px-2 py-0.5 rounded-sm hover:bg-[rgba(10,25,47,0.9)] flex items-center gap-1 text-[10px] font-medium mt-1 focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]" data-testid="ctx-case-link">
               <ArrowUpRight size={10} aria-hidden="true" /> Fallakte oeffnen
             </Link>
           </div>
@@ -550,7 +550,7 @@ export default function StaffMessagingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={() => syncImap(false)} disabled={syncing}
-                  className="w2g-btn-secondary text-[10px] px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30"
+                  className="w2g-btn-secondary text-[10px] px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)]"
                   data-testid="imap-sync-btn"
                   aria-label="E-Mails vom Server synchronisieren"
                   title="E-Mails abrufen (IMAP)">
@@ -559,13 +559,13 @@ export default function StaffMessagingPage() {
                   {lastSyncCount !== null && <span className="ml-1 text-[8px] text-[var(--color-text-tertiary)]">({lastSyncCount})</span>}
                 </button>
                 <button onClick={() => { loadConvs(); loadStats(); }}
-                  className="w2g-btn-secondary text-[10px] px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30"
+                  className="w2g-btn-secondary text-[10px] px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)]"
                   data-testid="refresh-btn"
                   aria-label="Konversationen aktualisieren">
                   <RefreshCw size={12} aria-hidden="true" />
                 </button>
                 <button onClick={() => setShowNewConv(!showNewConv)} data-testid="new-conv-btn"
-                  className="w2g-btn-primary text-[10px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50"
+                  className="w2g-btn-primary text-[10px] focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.5)]"
                   aria-label="Neue Nachricht erstellen">
                   <Plus size={12} aria-hidden="true" /> Neue Nachricht
                 </button>
@@ -622,12 +622,12 @@ export default function StaffMessagingPage() {
             <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]" aria-hidden="true" />
             <input value={newConvSearch} onChange={e => setNewConvSearch(e.target.value)} placeholder="Name oder E-Mail..." data-testid="new-conv-search"
               aria-label="Bewerber suchen"
-              className="w-full pl-7 pr-3 py-1.5 text-[11px] border border-[var(--color-divider)] rounded-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 focus:border-[var(--color-primary)]" />
+              className="w-full pl-7 pr-3 py-1.5 text-[11px] border border-[var(--color-divider)] rounded-sm focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)] focus:border-[var(--color-primary)]" />
           </div>
           <div className="max-h-32 overflow-y-auto space-y-0.5" aria-label="Bewerberauswahl">
             {filteredApps.length === 0 ? <p className="text-[10px] text-[var(--color-text-tertiary)] text-center py-2">Keine Bewerber gefunden</p> : filteredApps.map(a => (
               <button key={a.id} onClick={() => startNewConv(a.id)} data-testid={`new-conv-pick-${a.id}`}
-                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left hover:bg-[var(--color-primary)]/5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30">
+                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left hover:bg-[rgba(10,25,47,0.05)] focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)]">
                 <div className="w-5 h-5 rounded-[var(--radius-sm)] bg-[var(--color-primary-muted)] flex items-center justify-center shrink-0" aria-hidden="true"><span className="text-[8px] font-bold text-[var(--color-primary)]">{(a.full_name || '?')[0].toUpperCase()}</span></div>
                 <div className="min-w-0"><p className="text-[10px] font-medium text-[var(--color-text-primary)] truncate">{a.full_name || 'Unbekannt'}</p><p className="text-[8px] text-[var(--color-text-tertiary)] truncate">{a.email}</p></div>
               </button>
@@ -646,7 +646,7 @@ export default function StaffMessagingPage() {
               <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]" aria-hidden="true" />
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Suchen..." data-testid="conv-search"
                 aria-label="Konversationen durchsuchen"
-                className="w-full pl-7 pr-3 py-1.5 text-[11px] border border-[var(--color-divider)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 focus:border-[var(--color-primary)]" />
+                className="w-full pl-7 pr-3 py-1.5 text-[11px] border border-[var(--color-divider)] rounded-md focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)] focus:border-[var(--color-primary)]" />
             </div>
           </div>
           <div className="flex-1 overflow-y-auto" role="list">
@@ -677,7 +677,7 @@ export default function StaffMessagingPage() {
             <>
               {/* Thread Header */}
               <div className="px-3 py-2 border-b border-[var(--color-divider-subtle)] flex items-center gap-2 bg-[var(--color-surface-elevated)] shrink-0">
-                <button onClick={() => setShowList(true)} className="md:hidden text-[var(--color-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 rounded" aria-label="Zurueck zur Liste"><ArrowLeft size={16} /></button>
+                <button onClick={() => setShowList(true)} className="md:hidden text-[var(--color-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)] rounded" aria-label="Zurueck zur Liste"><ArrowLeft size={16} /></button>
                 <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[var(--color-primary-muted)] flex items-center justify-center shrink-0" aria-hidden="true"><span className="text-[10px] font-bold text-[var(--color-primary)]">{otherName[0]?.toUpperCase() || '?'}</span></div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
@@ -721,7 +721,7 @@ export default function StaffMessagingPage() {
                   <button onClick={() => setIsInternal(!isInternal)} data-testid="toggle-internal"
                     aria-pressed={isInternal}
                     aria-label={isInternal ? 'Interne Notiz (nur fuer Staff sichtbar)' : 'Oeffentliche Nachricht'}
-                    className={`text-[9px] font-medium px-2 py-0.5 border transition-all flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 ${isInternal ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[var(--color-warning-border)]' : 'bg-white text-[var(--color-text-secondary)] border-[var(--color-divider)] hover:border-[var(--color-warning-border)]'}`}>
+                    className={`text-[9px] font-medium px-2 py-0.5 border transition-all flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)] ${isInternal ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[var(--color-warning-border)]' : 'bg-white text-[var(--color-text-secondary)] border-[var(--color-divider)] hover:border-[var(--color-warning-border)]'}`}>
                     {isInternal ? <EyeOff size={9} aria-hidden="true" /> : <Eye size={9} aria-hidden="true" />} {isInternal ? 'Interne Notiz' : 'Oeffentlich'}
                   </button>
                   <ChannelBadge channel={activeCh} />
@@ -735,7 +735,7 @@ export default function StaffMessagingPage() {
                     <button
                       type="button"
                       onClick={() => { setShowAiPopup(true); setAiResult(''); setAiHints(''); setAiTemplate(''); setAiDetectedLang(''); }}
-                      className="ml-auto text-[9px] font-medium px-2 py-0.5 rounded border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/5 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 transition-colors flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30"
+                      className="ml-auto text-[9px] font-medium px-2 py-0.5 rounded border border-[rgba(10,25,47,0.3)] bg-[rgba(10,25,47,0.05)] text-[var(--color-primary)] hover:bg-[rgba(10,25,47,0.1)] transition-colors flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)]"
                       data-testid="ai-generate-btn"
                       aria-label="KI-Antwort generieren"
                     >
@@ -744,16 +744,16 @@ export default function StaffMessagingPage() {
                   )}
                 </div>
                 <form onSubmit={sendMsg} className="flex gap-1.5" data-testid="staff-message-form">
-                  <button type="button" onClick={() => fileRef.current?.click()} className="text-[var(--color-text-tertiary)] hover:text-[var(--color-primary)] px-1.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 rounded" data-testid="staff-attach-btn" aria-label="Datei anhaengen"><Paperclip size={15} /></button>
+                  <button type="button" onClick={() => fileRef.current?.click()} className="text-[var(--color-text-tertiary)] hover:text-[var(--color-primary)] px-1.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)] rounded" data-testid="staff-attach-btn" aria-label="Datei anhaengen"><Paperclip size={15} /></button>
                   <input ref={fileRef} type="file" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) { if (f.size > MAX_FILE_MB * 1024 * 1024) { toast.error(`Max ${MAX_FILE_MB} MB`); return; } setAttachFile(f); } }} accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" aria-label="Datei auswaehlen" />
                   <input value={newMsg} onChange={e => setNewMsg(e.target.value)}
                     placeholder={isInternal ? 'Interne Notiz schreiben...' : activeCh === 'email' ? 'E-Mail-Antwort schreiben (mit Signatur)...' : 'Nachricht schreiben...'}
                     data-testid="staff-message-input"
                     aria-label={isInternal ? 'Interne Notiz eingeben' : 'Nachricht eingeben'}
-                    className={`flex-1 border rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 ${isInternal ? 'border-[var(--color-warning-border)] bg-[var(--color-warning-bg)]/30 focus:ring-[var(--color-warning-border)] focus:border-[var(--color-warning-border)]' : 'border-[var(--color-divider)] focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]'}`} />
+                    className={`flex-1 border rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 ${isInternal ? 'border-[var(--color-warning-border)] bg-[rgba(255,251,235,0.3)] focus:ring-[var(--color-warning-border)] focus:border-[var(--color-warning-border)]' : 'border-[var(--color-divider)] focus:ring-[rgba(10,25,47,0.2)] focus:border-[var(--color-primary)]'}`} />
                   <button type="submit" disabled={sending || (!newMsg.trim() && !attachFile)} data-testid="staff-message-send"
                     aria-label="Nachricht senden"
-                    className={`px-3 py-1.5 rounded-md text-white disabled:opacity-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${isInternal ? 'bg-[var(--color-warning)] hover:bg-[var(--color-warning)]/90 focus:ring-[var(--color-warning)]' : 'bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 focus:ring-[var(--color-primary)]'}`}>
+                    className={`px-3 py-1.5 rounded-md text-white disabled:opacity-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${isInternal ? 'bg-[var(--color-warning)] hover:bg-[rgba(217,119,6,0.9)] focus:ring-[var(--color-warning)]' : 'bg-[var(--color-primary)] hover:bg-[rgba(10,25,47,0.9)] focus:ring-[var(--color-primary)]'}`}>
                     <Send size={14} />
                   </button>
                 </form>
@@ -835,7 +835,7 @@ export default function StaffMessagingPage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" data-testid="ai-email-popup-overlay">
                   <div className="bg-white rounded-lg shadow-2xl w-full max-w-lg mx-4 overflow-hidden border border-[var(--color-divider)]" data-testid="ai-email-popup">
                     {/* Header */}
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-divider)] bg-[var(--color-primary)]/5">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-divider)] bg-[rgba(10,25,47,0.05)]">
                       <h3 className="text-sm font-semibold text-[var(--color-primary)] flex items-center gap-2">
                         <Sparkles size={14} /> KI-Mail-Entwurf
                       </h3>
@@ -870,7 +870,7 @@ export default function StaffMessagingPage() {
                               className={`text-[10px] px-2.5 py-1 rounded-full border transition-all font-medium ${
                                 aiTemplate === t.key
                                   ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
-                                  : 'bg-white text-[var(--color-text-secondary)] border-[var(--color-divider)] hover:border-[var(--color-primary)]/40 hover:text-[var(--color-primary)]'
+                                  : 'bg-white text-[var(--color-text-secondary)] border-[var(--color-divider)] hover:border-[rgba(10,25,47,0.4)] hover:text-[var(--color-primary)]'
                               }`}
                             >
                               {t.label}
@@ -888,7 +888,7 @@ export default function StaffMessagingPage() {
                           value={aiHints}
                           onChange={e => setAiHints(e.target.value)}
                           placeholder="z.B. Sprachzertifikat fehlt, Termin am Freitag 14 Uhr, Kurs beginnt im Oktober..."
-                          className="w-full border border-[var(--color-divider)] rounded-md px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] resize-none"
+                          className="w-full border border-[var(--color-divider)] rounded-md px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.2)] focus:border-[var(--color-primary)] resize-none"
                           rows={2}
                           data-testid="ai-hints-input"
                         />
@@ -904,7 +904,7 @@ export default function StaffMessagingPage() {
                         type="button"
                         onClick={generateAiEmail}
                         disabled={aiGenerating}
-                        className="w-full py-2 rounded-md text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 disabled:opacity-50 transition-colors text-xs font-medium flex items-center justify-center gap-2"
+                        className="w-full py-2 rounded-md text-white bg-[var(--color-primary)] hover:bg-[rgba(10,25,47,0.9)] disabled:opacity-50 transition-colors text-xs font-medium flex items-center justify-center gap-2"
                         data-testid="ai-generate-submit"
                       >
                         {aiGenerating ? <><Loader2 size={12} className="animate-spin" /> Generiere...</> : <><Sparkles size={12} /> Entwurf generieren</>}
@@ -930,7 +930,7 @@ export default function StaffMessagingPage() {
                             <button
                               type="button"
                               onClick={() => { setNewMsg(aiResult); setShowAiPopup(false); toast.success('Entwurf uebernommen'); }}
-                              className="flex-1 py-1.5 rounded-md text-white bg-[var(--color-success)] hover:bg-[var(--color-success)]/90 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+                              className="flex-1 py-1.5 rounded-md text-white bg-[var(--color-success)] hover:bg-[rgba(5,150,105,0.9)] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
                               data-testid="ai-accept-btn"
                             >
                               <CheckCircle size={12} /> Uebernehmen
@@ -958,7 +958,7 @@ export default function StaffMessagingPage() {
               <p className="text-sm font-medium">Kommunikation</p>
               <p className="text-[10px] mt-1 text-[var(--color-text-tertiary)] max-w-xs text-center">Waehlen Sie eine Konversation aus der Liste oder starten Sie eine neue Nachricht.</p>
               <button onClick={() => syncImap(false)} disabled={syncing}
-                className="mt-3 text-[10px] text-white bg-[var(--color-primary)] px-3 py-1.5 rounded-sm hover:bg-[var(--color-primary)]/90 font-medium flex items-center gap-1 focus:outline-none"
+                className="mt-3 text-[10px] text-white bg-[var(--color-primary)] px-3 py-1.5 rounded-sm hover:bg-[rgba(10,25,47,0.9)] font-medium flex items-center gap-1 focus:outline-none"
                 data-testid="empty-sync-btn"
                 aria-label="E-Mails synchronisieren">
                 {syncing ? <Loader2 size={10} className="animate-spin" /> : <Mail size={10} aria-hidden="true" />}

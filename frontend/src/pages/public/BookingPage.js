@@ -95,7 +95,7 @@ export default function BookingPage() {
         </section>
 
         {/* Trust Bar */}
-        <section className="border-b border-[var(--color-divider-subtle)] bg-[var(--color-surface-elevated)]/80" data-testid="booking-trust-bar">
+        <section className="border-b border-[var(--color-divider-subtle)] bg-[rgba(250,251,252,0.8)]" data-testid="booking-trust-bar">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[var(--color-divider)]">
               {trustItems.map((item, i) => (
@@ -171,11 +171,11 @@ export default function BookingPage() {
                                 <button key={opt.key} onClick={() => setForm(f => ({ ...f, type: opt.key }))}
                                   className={`text-left px-4 py-3.5 rounded-[var(--radius-md)] border-2 transition-all ${
                                     form.type === opt.key
-                                      ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5 shadow-sm'
+                                      ? 'border-[var(--color-primary)] bg-[rgba(10,25,47,0.05)] shadow-sm'
                                       : 'border-[var(--color-divider)] hover:border-[var(--color-divider)] bg-white'
                                   }`} data-testid={`booking-type-${opt.key}`}>
                                   <div className="flex items-center gap-3">
-                                    <div className={`w-9 h-9 rounded-[var(--radius-md)] flex items-center justify-center shrink-0 ${form.type === opt.key ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'bg-[var(--color-surface-sunken)] text-[var(--color-text-tertiary)]'}`}>
+                                    <div className={`w-9 h-9 rounded-[var(--radius-md)] flex items-center justify-center shrink-0 ${form.type === opt.key ? 'bg-[rgba(10,25,47,0.1)] text-[var(--color-primary)]' : 'bg-[var(--color-surface-sunken)] text-[var(--color-text-tertiary)]'}`}>
                                       <Icon size={16} />
                                     </div>
                                     <div>
@@ -280,7 +280,7 @@ export default function BookingPage() {
                             { label: isEN ? 'Time' : 'Uhrzeit', value: `${form.time} Uhr` },
                             { label: isEN ? 'Location' : 'Ort', value: 'Online (Zoom)' },
                           ].map(({ label, value }) => (
-                            <div key={label} className="flex items-center justify-between py-1.5 border-b border-[var(--color-divider)]/60 last:border-0">
+                            <div key={label} className="flex items-center justify-between py-1.5 border-b border-[rgba(226,232,240,0.6)] last:border-0">
                               <span className="text-xs text-[var(--color-text-secondary)]">{label}</span>
                               <span className="text-sm font-medium text-[var(--color-text-primary)]">{value}</span>
                             </div>
@@ -317,9 +317,9 @@ export default function BookingPage() {
 
             {/* Right: Info Sidebar */}
             <aside className="lg:col-span-4 space-y-4">
-              <div className="w2g-card border-2 border-[var(--color-primary)]/10" data-testid="booking-info-card">
+              <div className="w2g-card border-2 border-[rgba(10,25,47,0.1)]" data-testid="booking-info-card">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-primary)]/10 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[rgba(10,25,47,0.1)] flex items-center justify-center">
                     <Star size={15} className="text-[var(--color-primary)]" />
                   </div>
                   <h2 className="text-sm font-bold text-[var(--color-text-primary)]">{isEN ? 'How It Works' : 'So funktioniert es'}</h2>
@@ -344,19 +344,19 @@ export default function BookingPage() {
                 <h2 className="text-sm font-bold text-[var(--color-text-primary)] mb-3">{isEN ? 'Direct Contact' : 'Direkter Kontakt'}</h2>
                 <div className="space-y-2.5">
                   <a href="tel:+4924199032292" className="flex items-center gap-3 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors group">
-                    <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] group-hover:bg-[var(--color-primary)]/10 flex items-center justify-center transition-colors">
+                    <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] group-hover:bg-[rgba(10,25,47,0.1)] flex items-center justify-center transition-colors">
                       <Phone size={14} className="text-[var(--color-text-tertiary)] group-hover:text-[var(--color-primary)]" />
                     </div>
                     +49 241 990 322 92
                   </a>
                   <a href="mailto:info@stk-aachen.de" className="flex items-center gap-3 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors group">
-                    <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] group-hover:bg-[var(--color-primary)]/10 flex items-center justify-center transition-colors">
+                    <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] group-hover:bg-[rgba(10,25,47,0.1)] flex items-center justify-center transition-colors">
                       <Mail size={14} className="text-[var(--color-text-tertiary)] group-hover:text-[var(--color-primary)]" />
                     </div>
                     info@stk-aachen.de
                   </a>
                   <a href="https://maps.google.com/?q=Theaterstra%C3%9Fe+30-32,+52062+Aachen" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors group">
-                    <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] group-hover:bg-[var(--color-primary)]/10 flex items-center justify-center transition-colors">
+                    <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] group-hover:bg-[rgba(10,25,47,0.1)] flex items-center justify-center transition-colors">
                       <MapPin size={14} className="text-[var(--color-text-tertiary)] group-hover:text-[var(--color-primary)]" />
                     </div>
                     Theaterstr. 30-32, 52062 Aachen

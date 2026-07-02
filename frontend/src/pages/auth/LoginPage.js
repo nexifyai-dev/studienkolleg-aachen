@@ -73,7 +73,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="relative z-10 pt-8 border-t border-white/8">
+        <div className="relative z-10 pt-8 border-t border-white/10">
           <p className="text-[11px] text-white/25">
             &copy; {new Date().getFullYear()} W2G Academy GmbH &middot; Studienkolleg Aachen
           </p>

@@ -78,3 +78,11 @@
 - Frontend: 36 Dateien gefixt — ungültige Tailwind-Klassen (bg-white/8, border-white/6 und ALLE [var(--color-X)]/N Opacity-Modifier erzeugten kein CSS) ersetzt durch gültige Stufen bzw. [rgba(...)]-Arbitrary-Values. Weißer Suchbalken auf /knowledge behoben.
 - Tests: iteration_109 (DeepSeek-Migration 13/13 PASS), iteration_110 (Finale Abnahme: 30/30 Backend, 24 Seiten frontend fehlerfrei, Apply/Booking/Docs/Analytics/Email/Stripe/CSRF grün).
 - 5 echte Kundenfälle (Google Drive) als Testdaten nach /app/testdata geladen und E2E durchgespielt: Lead-Ingest -> 18/18 Dokument-Uploads (Emergent Storage) -> 5/5 KI-Screenings via DeepSeek. KI erkannte korrekt fehlende HZB, Dokumenttyp-Abweichungen und sogar ein APS-Zertifikat einer falschen Person (Fall 3). Testbewerbungen fall1-5.test@stk-aachen.de in DB (source=e2e_case_test).
+
+
+## 2026-07-02 (2) — P0-Bugfixes + Admin-Portal Paket 2
+- BUG: Admin-Fälle nicht öffenbar → /admin/cases Zeilen klickbar, neue Route /admin/cases/:id (ApplicantDetailPage, kontextabhängiger Back-Link).
+- BUG: Partner-Verwaltung read-only → komplettes Management: GET /api/admin/partners/overview (Referral-/Provisions-Stats), Edit (PUT /users/{id}), Aktiv-Toggle, Passwort-Reset (jetzt auch für affiliate), Partner-Einladung (invite role=affiliate).
+- BUG: Messaging langsam/unzuverlässig → Root Cause: synchrone SMTP/IMAP-Calls blockierten die Event-Loop. 9 Stellen mit asyncio.to_thread entblockt (messaging send/sync-imap/send-email, auth invite/forgot-password, applications send-email, automation, dunning, job_handlers). Portal-Send jetzt <2s, IMAP-Sync non-blocking.
+- NEU Paket 2: Bulk-Aktionen (POST /api/applications/bulk-update: set_stage/assign_staff/set_priority/archive, max 100 IDs, Activity-Log), Stage-Filter + CSV-Export auf /admin/cases, Nachrichten-Audit /admin/messages (read-only, Kanal-Filter), Dokumenten-Compliance /admin/documents (GET /api/admin/documents/compliance mit fehlenden Pflicht-Docs je Fall), AdminLayout-Nav erweitert (Nachrichten, Dokumente, Staff-Ansicht-Link).
+- Tests: iteration_111.json — Backend 17/17 PASS, Frontend alle Flows PASS (inkl. RBAC 403-Checks, Regression Staff-Kanban/Messaging/Auth).

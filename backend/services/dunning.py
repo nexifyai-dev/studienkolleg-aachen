@@ -102,7 +102,9 @@ async def check_overdue_invoices():
                             lang = user.get("language_pref", "de")
 
                     from services.email import send_payment_reminder
-                    send_payment_reminder(
+                    import asyncio as _asyncio
+                    await _asyncio.to_thread(
+                        send_payment_reminder,
                         to=applicant_email,
                         full_name=applicant_name,
                         invoice_number=inv_number,

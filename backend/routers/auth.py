@@ -9,6 +9,7 @@ Security notes:
   Mitigation: short TTL (60 min) + server-side user.active check on every request.
 """
 import secrets
+import asyncio
 import bcrypt
 import jwt
 from datetime import datetime, timezone, timedelta
@@ -304,7 +305,7 @@ async def create_invite(data: InviteRequest, user: dict = Depends(get_current_us
         "created_at": datetime.now(timezone.utc),
     })
     invite_url = f"{APP_URL}/auth/register?token={token}"
-    send_invite(data.email, data.full_name, invite_url, data.role)
+    await asyncio.to_thread(send_invite, data.email, data.full_name, invite_url, data.role)
     await write_audit_log("invite_created", user["id"], "invite", token, {"email": data.email, "role": data.role})
     return {"token": token, "invite_url": invite_url, "email": data.email}
 
@@ -324,7 +325,7 @@ async def forgot_password(request: Request, data: ForgotPasswordRequest):
             "created_at": datetime.now(timezone.utc),
         })
         reset_url = f"{APP_URL}/auth/reset-password?token={token}"
-        sent = send_password_reset(email, reset_url)
+        sent = await asyncio.to_thread(send_password_reset, email, reset_url)
         if not sent:
             import logging
             logging.getLogger(__name__).info(f"[RESET] {email}: {reset_url}")

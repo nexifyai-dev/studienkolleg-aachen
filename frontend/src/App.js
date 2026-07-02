@@ -50,6 +50,8 @@ import UsersPage from './pages/admin/UsersPage';
 import AuditPage from './pages/admin/AuditPage';
 import AdminCasesPage from './pages/admin/AdminCasesPage';
 import AdminPartnersPage from './pages/admin/AdminPartnersPage';
+import AdminMessagesPage from './pages/admin/AdminMessagesPage';
+import AdminDocumentsPage from './pages/admin/AdminDocumentsPage';
 import AdminKnowledgePage from './pages/admin/AdminKnowledgePage';
 import AdminJobsPage from './pages/admin/AdminJobsPage';
 import AdminRulesPage from './pages/admin/AdminRulesPage';
@@ -180,6 +182,9 @@ export default function App() {
           }>
             <Route index element={<AdminDashboard />} />
             <Route path="cases" element={<AdminCasesPage />} />
+            <Route path="cases/:id" element={<ApplicantDetailPage />} />
+            <Route path="messages" element={<AdminMessagesPage />} />
+            <Route path="documents" element={<AdminDocumentsPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="staff" element={<AdminStaffPage />} />
             <Route path="finance" element={<AdminFinancePage />} />

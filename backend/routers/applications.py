@@ -8,6 +8,7 @@ Security notes:
 - Stage changes are audit-logged and activity-tracked
 """
 from datetime import datetime, timezone
+import asyncio
 from fastapi import APIRouter, HTTPException, Depends, Request
 from bson import ObjectId
 from database import get_db, get_next_applicant_number
@@ -553,7 +554,7 @@ async def send_case_email(
         lang = data.lang
 
         sender_name = user.get("full_name", "Staff")
-        _send_case_email(to_email, to_name, data.subject, data.body, lang)
+        await asyncio.to_thread(_send_case_email, to_email, to_name, data.subject, data.body, lang)
 
         # Log the email event
         await db.email_events.insert_one({
@@ -1100,3 +1101,70 @@ async def compute_qualification(app_id: str, user: dict = Depends(require_roles(
     )
     result = await compute_qualification_path(app_dict, applicant_dict, anabin)
     return result
+
+
+# ═══ Bulk-Aktionen (Staff/Admin) ═══════════════════════════════════════════════
+
+@router.post("/bulk-update")
+async def bulk_update_applications(request: Request, user: dict = Depends(require_roles(*STAFF_ROLES))):
+    """Bulk-Aktion auf mehrere Bewerbungen: set_stage, assign_staff, set_priority, archive."""
+    body = await request.json()
+    ids = body.get("ids") or []
+    action = body.get("action")
+    value = body.get("value")
+
+    if not isinstance(ids, list) or not ids or len(ids) > 100:
+        raise HTTPException(status_code=400, detail="ids: 1-100 Bewerbungs-IDs erforderlich")
+    if action not in ("set_stage", "assign_staff", "set_priority", "archive"):
+        raise HTTPException(status_code=400, detail="Ungueltige action")
+
+    now = datetime.now(timezone.utc)
+    update = {"last_activity_at": now}
+    if action == "set_stage":
+        from services.state_machine import ALL_STAGES
+        if value not in ALL_STAGES:
+            raise HTTPException(status_code=400, detail=f"Ungueltige Stage: {value}")
+        update["current_stage"] = value
+    elif action == "archive":
+        update["current_stage"] = "archived"
+    elif action == "assign_staff":
+        db_check = get_db()
+        try:
+            staff_user = await db_check.users.find_one({"_id": ObjectId(value)}, {"role": 1})
+        except Exception:
+            raise HTTPException(status_code=400, detail="Ungueltige Staff-ID")
+        if not staff_user or staff_user.get("role") not in ("superadmin", "admin", "staff", "accounting_staff", "teacher"):
+            raise HTTPException(status_code=400, detail="Staff-Nutzer nicht gefunden")
+        update["assigned_staff_id"] = value
+    elif action == "set_priority":
+        if value not in ("low", "normal", "high", "urgent"):
+            raise HTTPException(status_code=400, detail="Ungueltige Prioritaet")
+        update["priority"] = value
+
+    oids = []
+    for i in ids:
+        try:
+            oids.append(ObjectId(i))
+        except Exception:
+            continue
+    if not oids:
+        raise HTTPException(status_code=400, detail="Keine gueltigen IDs")
+
+    db = get_db()
+    res = await db.applications.update_many({"_id": {"$in": oids}}, {"$set": update})
+
+    activity_docs = [{
+        "application_id": str(oid),
+        "action": f"bulk_{action}",
+        "old_value": None,
+        "new_value": str(value) if value else action,
+        "actor_id": user["id"],
+        "actor_name": user.get("full_name", user.get("email", "")),
+        "occurred_at": now,
+    } for oid in oids]
+    if activity_docs:
+        await db.application_activities.insert_many(activity_docs)
+
+    await write_audit_log("applications_bulk_update", user["id"], "application", "bulk",
+                          {"action": action, "value": str(value), "count": res.modified_count})
+    return {"updated": res.modified_count, "action": action}

@@ -719,7 +719,7 @@ export default function ApplicantDetailPage() {
       <Card style={{ borderLeft: '4px solid var(--color-primary)' }} data-testid="case-header">
         <CardContent className="py-3.5">
           <div className="flex items-center gap-4 flex-wrap">
-            <Link to="/staff/kanban" className="w-9 h-9 rounded-[var(--radius-sm)] flex items-center justify-center bg-[var(--color-surface-sunken)] hover:bg-[rgba(10,25,47,0.1)] text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-all" data-testid="back-to-kanban"><ArrowLeft size={16} /></Link>
+            <Link to={window.location.pathname.startsWith('/admin') ? '/admin/cases' : '/staff/kanban'} className="w-9 h-9 rounded-[var(--radius-sm)] flex items-center justify-center bg-[var(--color-surface-sunken)] hover:bg-[rgba(10,25,47,0.1)] text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-all" data-testid="back-to-kanban"><ArrowLeft size={16} /></Link>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)' }}>{app.applicant?.full_name || 'Bewerber'}</h1>

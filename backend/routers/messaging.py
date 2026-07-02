@@ -14,6 +14,7 @@ Conversation fields:
 Message fields:
   - channel, visibility (public | internal), content, sender_id, sent_at, read
 """
+import asyncio
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, HTTPException, Depends, Request
 from bson import ObjectId
@@ -919,7 +920,8 @@ async def send_email_from_inbox(request: Request, user: dict = Depends(get_curre
         raise HTTPException(status_code=400, detail="to_email, subject und content erforderlich")
 
     from services.email_service import send_email as smtp_send
-    result = smtp_send(
+    result = await asyncio.to_thread(
+        smtp_send,
         to_email=to_email,
         subject=subject,
         body=content,
@@ -961,7 +963,7 @@ async def sync_imap_emails(user: dict = Depends(get_current_user)):
         return {"status": "not_configured", "synced": 0}
 
     db = get_db()
-    emails = fetch_new_emails(max_count=20)
+    emails = await asyncio.to_thread(fetch_new_emails, max_count=20)
     synced = 0
 
     # Filter out bounced/returned/mailer-daemon emails
@@ -1061,3 +1063,4 @@ async def email_integration_status(user: dict = Depends(get_current_user)):
         "email_from": os.environ.get("EMAIL_FROM", ""),
         "status": "aktiv" if is_configured() else "nicht_konfiguriert",
     }
+

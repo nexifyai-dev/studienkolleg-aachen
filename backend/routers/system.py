@@ -788,8 +788,8 @@ async def reset_staff_password(
         raise HTTPException(status_code=400, detail="Ungültige User-ID")
     if not target:
         raise HTTPException(status_code=404, detail="Nutzer nicht gefunden")
-    if target.get("role") not in _STAFF_ROLE_LIST:
-        raise HTTPException(status_code=403, detail="Nur Staff-Accounts dürfen so resetet werden")
+    if target.get("role") not in _STAFF_ROLE_LIST + ("affiliate", "agency_admin", "agency_agent"):
+        raise HTTPException(status_code=403, detail="Nur Staff- und Partner-Accounts dürfen so resetet werden")
 
     token = secrets.token_urlsafe(32)
     expires_at = datetime.now(timezone.utc) + __import__("datetime").timedelta(hours=24)
@@ -804,7 +804,7 @@ async def reset_staff_password(
     from services.audit import write_audit_log
     await write_audit_log("admin_password_reset", user["id"], "user", user_id)
 
-    base = os.environ.get("APP_BASE_URL", "")
+    base = os.environ.get("APP_BASE_URL") or os.environ.get("APP_URL") or os.environ.get("FRONTEND_URL", "")
     reset_url = f"{base}/auth/reset-password?token={token}" if base else f"/auth/reset-password?token={token}"
     return {
         "status": "ok",
@@ -812,4 +812,128 @@ async def reset_staff_password(
         "token": token,
         "expires_at": expires_at.isoformat(),
         "expires_in_hours": 24,
+    }
+
+
+# ═══ Partner-Verwaltung (Admin) ════════════════════════════════════════════════
+
+_PARTNER_ROLE_LIST = ("affiliate", "agency_admin", "agency_agent")
+
+
+@system_router.get("/admin/partners/overview")
+async def partners_overview(user: dict = Depends(require_roles(*ADMIN_ROLES))):
+    """Partner/Affiliates mit Referral- und Provisions-Statistiken."""
+    from routers.partner import _calc_commission
+    db = get_db()
+    items = []
+    async for p in db.users.find({"role": {"$in": list(_PARTNER_ROLE_LIST)}}, {"password_hash": 0}):
+        pid = str(p["_id"])
+        apps = await db.applications.find(
+            {"referral_code": pid},
+            {"current_stage": 1, "course_type": 1},
+        ).to_list(500)
+        enrolled = sum(1 for a in apps if a.get("current_stage") == "enrolled")
+        confirmed = 0.0
+        pending = 0.0
+        for a in apps:
+            try:
+                rate, status = _calc_commission(a.get("course_type"), a.get("current_stage"))
+            except Exception:
+                rate, status = 0, ""
+            if status in ("confirmed", "paid", "approved"):
+                confirmed += rate or 0
+            elif rate:
+                pending += rate
+        created = p.get("created_at")
+        items.append({
+            "id": pid,
+            "email": p.get("email"),
+            "full_name": p.get("full_name"),
+            "phone": p.get("phone"),
+            "role": p.get("role"),
+            "active": p.get("active", True),
+            "created_at": created.isoformat() if hasattr(created, "isoformat") else created,
+            "referral_count": len(apps),
+            "enrolled_count": enrolled,
+            "commission_confirmed": round(confirmed, 2),
+            "commission_pending": round(pending, 2),
+        })
+    items.sort(key=lambda x: (-x["referral_count"], (x["full_name"] or "").lower()))
+    return items
+
+
+# ═══ Dokumenten-Compliance (Admin) ═════════════════════════════════════════════
+
+@system_router.get("/admin/documents/compliance")
+async def documents_compliance(user: dict = Depends(require_roles(*ADMIN_ROLES))):
+    """Vollstaendigkeits-Uebersicht aller aktiven Bewerbungen."""
+    from services.ai_screening import _check_completeness
+    db = get_db()
+    apps = await db.applications.find(
+        {"current_stage": {"$nin": ["archived", "declined"]}},
+        {"applicant_id": 1, "current_stage": 1, "course_type": 1, "created_at": 1},
+    ).sort("created_at", -1).to_list(300)
+
+    app_ids = [str(a["_id"]) for a in apps]
+    docs = await db.documents.find(
+        {"application_id": {"$in": app_ids}},
+        {"application_id": 1, "document_type": 1, "status": 1, "validation_status": 1},
+    ).to_list(5000)
+    docs_by_app: dict = {}
+    for d in docs:
+        docs_by_app.setdefault(d.get("application_id"), []).append(d)
+
+    user_ids = [a.get("applicant_id") for a in apps if a.get("applicant_id")]
+    user_map = {}
+    if user_ids:
+        try:
+            users = await db.users.find(
+                {"_id": {"$in": [ObjectId(u) for u in user_ids if u and len(u) == 24]}},
+                {"full_name": 1, "email": 1},
+            ).to_list(None)
+            user_map = {str(u["_id"]): u for u in users}
+        except Exception:
+            pass
+
+    rows = []
+    n_complete = 0
+    n_pending_review = 0
+    for a in apps:
+        aid = str(a["_id"])
+        app_docs = docs_by_app.get(aid, [])
+        comp = _check_completeness(app_docs)
+        pending_review = sum(
+            1 for d in app_docs
+            if d.get("status") in ("uploaded", "in_review", "needs_review")
+            and d.get("validation_status") != "validated"
+        )
+        if comp["complete"]:
+            n_complete += 1
+        n_pending_review += pending_review
+        u = user_map.get(a.get("applicant_id"), {})
+        created = a.get("created_at")
+        rows.append({
+            "application_id": aid,
+            "applicant_name": u.get("full_name") or u.get("email") or "—",
+            "applicant_email": u.get("email", ""),
+            "current_stage": a.get("current_stage"),
+            "course_type": a.get("course_type"),
+            "created_at": created.isoformat() if hasattr(created, "isoformat") else created,
+            "complete": comp["complete"],
+            "missing_labels": comp["missing_labels"],
+            "total_present": comp["total_present"],
+            "total_required": comp["total_required"],
+            "total_validated": comp["total_validated"],
+            "docs_uploaded": len(app_docs),
+            "pending_review": pending_review,
+        })
+
+    return {
+        "items": rows,
+        "stats": {
+            "total": len(rows),
+            "complete": n_complete,
+            "incomplete": len(rows) - n_complete,
+            "pending_review": n_pending_review,
+        },
     }

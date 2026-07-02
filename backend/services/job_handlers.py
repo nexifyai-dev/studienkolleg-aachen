@@ -163,7 +163,7 @@ async def handle_email_send(job: dict) -> dict:
     if not handler:
         raise ValueError(f"Unbekanntes E-Mail-Template: {template}")
 
-    success = handler(payload)
+    success = await __import__("asyncio").to_thread(handler, payload)
     if not success:
         raise RuntimeError(f"E-Mail-Versand fehlgeschlagen: {template} an {to_email}")
 

@@ -13,6 +13,7 @@ Sprache: basierend auf user.language_pref (DE/EN).
 Preisregel: Keine Festpreise – immer individuell/einzelfallabhängig.
 """
 import logging
+import asyncio
 from datetime import datetime, timezone
 from typing import Optional
 from bson import ObjectId
@@ -217,7 +218,7 @@ async def trigger_teacher_assigned(
     """
     try:
         lang = await _get_user_lang(applicant_id)
-        send_teacher_assigned(applicant_email, applicant_name, teacher_name, lang=lang)
+        await asyncio.to_thread(send_teacher_assigned, applicant_email, applicant_name, teacher_name, lang=lang)
         await notify_teacher_assignment(applicant_id, teacher_id, applicant_name, teacher_name)
         await write_audit_log(
             "automation_teacher_assigned",

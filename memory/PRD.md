@@ -1,5 +1,15 @@
 # W2G Platform – PRD
-# 12.05.2026 | v1.4.2 (Go-Live Ready)
+# 02.07.2026 | v1.4.3 (Go-Live Ready, KI auf DeepSeek Direct API)
+
+## Finale Production-Domain
+https://app.deinstudienkolleg.de — WICHTIG: In den Production-Env-Vars muessen
+APP_URL und FRONTEND_URL auf https://app.deinstudienkolleg.de zeigen
+(werden fuer Passwort-Reset-/Einladungs-Links in E-Mails verwendet).
+
+## KI-Provider (seit 02.07.2026)
+- Text-KI: DeepSeek Direct API (https://api.deepseek.com, model deepseek-chat, DEEPSEEK_API_KEY)
+- Vision-KI (Dokumentenanalyse): NSCALE Llama-4-Scout (NSCALE_API_KEY)
+- OpenRouter wird NICHT mehr verwendet (Key kann in Prod entfallen)
 
 ## Kernprodukt
 Voll funktionsfaehiges Full-Stack-CRM fuer das Studienkolleg Aachen (React, FastAPI, MongoDB).

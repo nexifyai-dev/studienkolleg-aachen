@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-02 – v1.4.3: KI-Migration auf DeepSeek Direct API + Chat-Fix
+- Support-Chat ("W2G Assistent / Studienberatung") repariert: OpenRouter-Aufrufe schlugen fehl → komplette KI auf DeepSeek Direct API (https://api.deepseek.com, model `deepseek-chat`, AsyncOpenAI-Client) migriert
+- Neuer `DEEPSEEK_API_KEY` in backend/.env hinterlegt (vom User bereitgestellt)
+- Betroffen: `services/openrouter_provider.py` (komplett neu), `services/brain_memory.py`, `routers/system.py` (ai_provider=deepseek, storage_active inkl. emergent), `services/email_brain.py`
+- Vision-KI (Dokumentenanalyse) bleibt auf NSCALE (DeepSeek hat keine Vision)
+- E2E getestet: iteration_109.json — 13/13 Backend PASS, Chat-Widget liefert echte Antworten, Admin-Regression grün
+
 ## 2026-05-12 – v1.4.2: Demo-Daten-Restore-Endpunkt
 - Neuer Admin-Endpunkt `POST /api/system/seed-demo-data`: legt 12 realistische Demo-Bewerber (Libanon, Türkei, Marokko, China, Vietnam, Iran, Indien, Kolumbien, Russland, Nigeria, Irak, Ägypten) verteilt über 7 Pipeline-Stadien + 5 Staff-Tasks an
 - Idempotent: bestehende Demo-E-Mails werden aktualisiert statt dupliziert

@@ -1,0 +1,55 @@
+
+===== FALL 1 (Indien, G-Kurs) =====
+lead ingest: 200 {"success":true,"user_id":"6a460c4cd2a1fb9bc0d3239e","application_id":"6a460c4cd2a1fb9bc0d3239f","duplicate_flag":false,"message":"Deine Bewerbung ist eingegangen. Wir melden uns innerhalb von 24 Stun
+application_id: 6a460c4cd2a1fb9bc0d3239f
+  upload Dzhuma_Pass.pdf [passport]: 200
+  upload HZB_Schule.pdf [school_certificate]: 200
+  upload HZB_Uni.pdf [university_certificate]: 200
+  upload telc_C1_Hochschule.pdf [language_certificate]: 200
+  KI-Screening OK (24s): complete=False stage=pending_docs anabin=H provider=deepseek
+  Summary: 
+
+===== FALL 2 (Indien, T-Kurs) =====
+lead ingest: 200 {"success":true,"user_id":"6a460cbdd2a1fb9bc0d323cb","application_id":"6a460cbdd2a1fb9bc0d323cc","duplicate_flag":false,"message":"Deine Bewerbung ist eingegangen. Wir melden uns innerhalb von 24 Stun
+application_id: 6a460cbdd2a1fb9bc0d323cc
+  upload dokument_1.jpeg [other]: 200
+  upload image.jpg [other]: 200
+  KI-Screening OK (25s): complete=False stage=pending_docs anabin=H provider=deepseek
+  Summary: 
+
+===== FALL 3 (Ukraine, G-Kurs) =====
+lead ingest: 200 {"success":true,"user_id":"6a460d1cd2a1fb9bc0d323dd","application_id":"6a460d1cd2a1fb9bc0d323de","duplicate_flag":false,"message":"Deine Bewerbung ist eingegangen. Wir melden uns innerhalb von 24 Stun
+application_id: 6a460d1cd2a1fb9bc0d323de
+  upload Passport_Front_Back.pdf [passport]: 200
+  upload 12th_Grade_Marks.pdf [school_certificate]: 200
+  upload APS_Certificate.pdf [aps_certificate]: 200
+  upload TELC_B2.pdf [language_certificate]: 200
+  KI-Screening OK (17s): complete=False stage=pending_docs anabin=H provider=deepseek
+  Summary: 
+
+===== FALL 4 (Marokko, M-Kurs) =====
+lead ingest: 200 {"success":true,"user_id":"6a460d81d2a1fb9bc0d323ff","application_id":"6a460d81d2a1fb9bc0d32400","duplicate_flag":false,"message":"Deine Bewerbung ist eingegangen. Wir melden uns innerhalb von 24 Stun
+application_id: 6a460d81d2a1fb9bc0d32400
+  upload 1000252644.jpg [other]: 200
+  upload 1000252645.jpg [other]: 200
+  upload 1000252647.jpg [other]: 200
+  upload 1000252721.jpg [other]: 200
+  upload 1000253143.jpg [other]: 200
+  KI-Screening OK (15s): complete=False stage=pending_docs anabin=H provider=deepseek
+  Summary: 
+
+===== FALL 5 (Indonesien, T-Kurs) =====
+lead ingest: 200 {"success":true,"user_id":"6a460e0ad2a1fb9bc0d3241d","application_id":"6a460e0ad2a1fb9bc0d3241e","duplicate_flag":false,"message":"Deine Bewerbung ist eingegangen. Wir melden uns innerhalb von 24 Stun
+application_id: 6a460e0ad2a1fb9bc0d3241e
+  upload paspor.pdf [passport]: 200
+  upload skl_navinuel.pdf [school_certificate]: 200
+  upload Zertifikate_digital.pdf [language_certificate]: 200
+  KI-Screening OK (30s): complete=False stage=pending_docs anabin=H provider=deepseek
+  Summary: 
+
+===== ERGEBNIS =====
+(1, 'OK', {'uploads': '4/4', 'stage': 'pending_docs', 'complete': False, 'app_id': '6a460c4cd2a1fb9bc0d3239f', 'secs': 24})
+(2, 'OK', {'uploads': '2/2', 'stage': 'pending_docs', 'complete': False, 'app_id': '6a460cbdd2a1fb9bc0d323cc', 'secs': 25})
+(3, 'OK', {'uploads': '4/4', 'stage': 'pending_docs', 'complete': False, 'app_id': '6a460d1cd2a1fb9bc0d323de', 'secs': 17})
+(4, 'OK', {'uploads': '5/5', 'stage': 'pending_docs', 'complete': False, 'app_id': '6a460d81d2a1fb9bc0d32400', 'secs': 15})
+(5, 'OK', {'uploads': '3/3', 'stage': 'pending_docs', 'complete': False, 'app_id': '6a460e0ad2a1fb9bc0d3241e', 'secs': 30})

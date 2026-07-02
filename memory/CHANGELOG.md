@@ -70,3 +70,11 @@
 ## 2026-04-04 – v1.3.0: RustFS S3 + Stripe + Batch-Screening
 
 ## 2026-04-02 – Visual Root-Cause-Rebuild
+
+
+## 2026-07-02 — DeepSeek-Migration, Frontend-CSS-Fixes, Kundenfall-Tests
+- KI komplett von OpenRouter auf direkte DeepSeek-API migriert (services/openrouter_provider.py = DeepSeek-Gateway via AsyncOpenAI, base_url https://api.deepseek.com, Modell deepseek-chat, Key DEEPSEEK_API_KEY in backend/.env). brain_memory.py, system.py (Integrations-Status ai_provider=deepseek, storage_active inkl. emergent) angepasst.
+- Support-Chat (W2G Assistent) Bug behoben: lieferte vorher Fehler, jetzt DeepSeek-Antworten (public, applicant, staff, multi-turn getestet).
+- Frontend: 36 Dateien gefixt — ungültige Tailwind-Klassen (bg-white/8, border-white/6 und ALLE [var(--color-X)]/N Opacity-Modifier erzeugten kein CSS) ersetzt durch gültige Stufen bzw. [rgba(...)]-Arbitrary-Values. Weißer Suchbalken auf /knowledge behoben.
+- Tests: iteration_109 (DeepSeek-Migration 13/13 PASS), iteration_110 (Finale Abnahme: 30/30 Backend, 24 Seiten frontend fehlerfrei, Apply/Booking/Docs/Analytics/Email/Stripe/CSRF grün).
+- 5 echte Kundenfälle (Google Drive) als Testdaten nach /app/testdata geladen und E2E durchgespielt: Lead-Ingest -> 18/18 Dokument-Uploads (Emergent Storage) -> 5/5 KI-Screenings via DeepSeek. KI erkannte korrekt fehlende HZB, Dokumenttyp-Abweichungen und sogar ein APS-Zertifikat einer falschen Person (Fall 3). Testbewerbungen fall1-5.test@stk-aachen.de in DB (source=e2e_case_test).

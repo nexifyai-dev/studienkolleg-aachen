@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import apiClient from '../../lib/apiClient';
+import CountrySelect from '../../components/shared/CountrySelect';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
 import SEOHead from '../../components/shared/SEOHead';
@@ -87,8 +88,7 @@ export default function ApplyPage() {
     if (!privacyAccepted) { setError(t('apply.error_privacy') || 'Bitte akzeptiere die Datenschutzbestimmungen.'); return; }
     if (form.password && form.password.length < 8) { setError(t('apply.error_password_short') || 'Passwort muss mindestens 8 Zeichen haben.'); return; }
     if (form.password && form.password !== form.password_confirm) { setError(t('apply.error_password_mismatch') || 'Passwoerter stimmen nicht ueberein.'); return; }
-    const missingFiles = REQUIRED_DOC_KEYS.filter(k => !files[k]).map(k => t(`apply.doc_labels.${k}`));
-    if (missingFiles.length > 0) { setError(`${t('apply.error_missing_docs')} ${missingFiles.join(', ')}`); return; }
+    // Dokument-Uploads sind optional – keine Pflichtpruefung mehr
     const tooLarge = Object.values(files).filter(Boolean).find(f => f.size > MAX_FILE_MB * 1024 * 1024);
     if (tooLarge) { setError(`"${tooLarge.name}" ${t('apply.error_file_too_large')}`); return; }
 
@@ -217,7 +217,7 @@ export default function ApplyPage() {
                 <div><label className="w2g-label">{t('apply.lastname')} *</label><input name="last_name" value={form.last_name} onChange={handleChange} required data-testid="apply-input-lastname" className="w2g-input" placeholder={t('apply.lastname')} /></div>
                 <div><label className="w2g-label">{t('apply.email')} *</label><input name="email" type="email" value={form.email} onChange={handleChange} required data-testid="apply-input-email" className="w2g-input" placeholder="deine@email.com" /></div>
                 <div><label className="w2g-label">{t('apply.dob')} *</label><input name="date_of_birth" type="date" value={form.date_of_birth} onChange={handleChange} required data-testid="apply-input-dob" className="w2g-input" /></div>
-                <div><label className="w2g-label">{t('apply.country')} *</label><input name="country" value={form.country} onChange={handleChange} required data-testid="apply-input-country" className="w2g-input" placeholder={t('apply.country_placeholder')} /></div>
+                <div><label className="w2g-label">{t('apply.country')} *</label><CountrySelect name="country" value={form.country} onChange={v => handleChange({ target: { name: 'country', value: v } })} placeholder={t('apply.country_placeholder')} testId="apply-input-country" required /></div>
                 <div><label className="w2g-label">{t('apply.phone')} *</label><input name="phone" value={form.phone} onChange={handleChange} required data-testid="apply-input-phone" className="w2g-input" placeholder={t('apply.phone_placeholder')} /></div>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function ApplyPage() {
               <div><label className="w2g-label">{t('apply.combo_label')}</label><select name="combo_option" value={form.combo_option} onChange={handleChange} data-testid="apply-select-combo" className="w2g-select">{COMBO_VALUES.map((val, i) => <option key={val} value={val}>{t(`apply.combos.${COMBO_KEYS[i]}`)}</option>)}</select></div>
               <div><label className="w2g-label">{t('apply.semester_label')} *</label><select name="desired_start" value={form.desired_start} onChange={handleChange} required data-testid="apply-select-semester" className="w2g-select"><option value="">{t('apply.semester_placeholder')}</option>{SEMESTER_VALUES.map((val, i) => <option key={val} value={val}>{t(`apply.semesters.${SEMESTER_KEYS[i]}`)}</option>)}</select></div>
               <div><label className="w2g-label">{t('apply.german_level_label')} *</label><select name="language_level" value={form.language_level} onChange={handleChange} required data-testid="apply-select-level" className="w2g-select"><option value="">{t('apply.german_level_placeholder')}</option>{LEVEL_VALUES.map(val => <option key={val} value={val}>{t(`apply.levels.${val}`)}</option>)}</select></div>
-              <div><label className="w2g-label">{t('apply.degree_country_label')} *</label><input name="degree_country" value={form.degree_country} onChange={handleChange} required data-testid="apply-input-degree-country" className="w2g-input" placeholder={t('apply.degree_country_placeholder')} /></div>
+              <div><label className="w2g-label">{t('apply.degree_country_label')} *</label><CountrySelect name="degree_country" value={form.degree_country} onChange={v => handleChange({ target: { name: 'degree_country', value: v } })} placeholder={t('apply.degree_country_placeholder')} testId="apply-input-degree-country" required /></div>
               <div><label className="w2g-label">{t('apply.notes_label')}</label><textarea name="notes" value={form.notes} onChange={handleChange} rows={3} data-testid="apply-textarea-notes" className="w2g-input resize-none" placeholder={t('apply.notes_placeholder')} /></div>
             </div>
 

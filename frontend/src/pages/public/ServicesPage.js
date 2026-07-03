@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import apiClient from '../../lib/apiClient';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
 import SEOHead from '../../components/shared/SEOHead';
@@ -37,6 +38,16 @@ export default function ServicesPage() {
   const [locRef, locVis] = useInView(0.1);
   const [procRef, procVis] = useInView(0.1);
   const [ctaRef, ctaVis] = useInView(0.1);
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    apiClient.get('/api/products/public').then(r => setProducts(r.data || [])).catch(() => {});
+  }, []);
+  const SERVICE_PRICE_CODES = { visa: 'VISUM-SERVICE', housing: 'UNTERKUNFT-M' };
+  const servicePrice = (key) => {
+    const p = products.find(x => x.code === SERVICE_PRICE_CODES[key] && x.price > 0);
+    return p ? p.price : null;
+  };
+  const kombis = products.filter(p => p.category === 'kombi' && p.price > 0);
 
   const PROCESS_STEPS = [
     { num: '01', titleKey: 'services_page.steps.apply.title', descKey: 'services_page.steps.apply.desc' },
@@ -95,6 +106,11 @@ export default function ServicesPage() {
                     <p className="text-[14px] text-[var(--color-text-secondary)] leading-[1.7] mb-4">
                       {t(`services.${key}.desc`)}
                     </p>
+                    {servicePrice(key) && (
+                      <p className="text-[13px] font-bold mb-3" style={{ color: 'var(--color-accent)' }} data-testid={`service-price-${key}`}>
+                        {Number(servicePrice(key)).toLocaleString('de-DE')} €{key === 'housing' ? (isEN ? ' / month' : ' / Monat') : ''}
+                      </p>
+                    )}
                     {link && (
                       <a href={link} target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[13px] font-semibold transition-all hover:gap-2.5"
@@ -108,6 +124,39 @@ export default function ServicesPage() {
             </div>
           </div>
         </section>
+
+        {/* ═══ PAKETE & PREISE (dynamisch aus Tarifverwaltung) ═══ */}
+        {kombis.length > 0 && (
+          <section className="py-[56px] lg:py-[80px] bg-white" data-testid="packages-section">
+            <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+              <div className="text-center mb-12">
+                <h2 className="text-[32px] sm:text-[40px] font-extrabold text-[var(--color-primary-dark)] leading-[1.1] tracking-[-0.025em] mb-4"
+                  style={{ fontFamily: 'var(--font-heading)' }}>
+                  {isEN ? 'Packages & Pricing' : 'Pakete & Preise'}
+                </h2>
+                <p className="text-[15px] text-[var(--color-text-secondary)] leading-[1.7] max-w-[480px] mx-auto">
+                  {isEN ? 'Transparent all-in-one packages for your path to studying in Germany.' : 'Transparente Komplettpakete für deinen Weg zum Studium in Deutschland.'}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {kombis.map((p, idx) => (
+                  <div key={p.code} className={`p-6 lg:p-8 rounded-[8px] border transition-all duration-300 ${idx === 1 ? 'border-[rgba(212,175,55,0.4)]' : 'border-[rgba(10,25,47,0.08)]'} hover:border-[rgba(10,25,47,0.2)]`}
+                    style={{ boxShadow: '0 2px 12px rgba(17,54,85,0.04)' }} data-testid={`package-card-${p.code}`}>
+                    <h3 className="text-[16px] font-bold text-[var(--color-primary-dark)] mb-2" style={{ fontFamily: 'var(--font-heading)' }}>{p.name}</h3>
+                    <p className="text-[13px] text-[var(--color-text-secondary)] leading-[1.7] mb-5 min-h-[44px]">{p.description}</p>
+                    <p className="text-[26px] font-extrabold mb-5" style={{ color: 'var(--color-primary-dark)', fontFamily: 'var(--font-heading)' }}>
+                      {Number(p.price).toLocaleString('de-DE')} €
+                    </p>
+                    <Link to="/apply" className="inline-flex items-center gap-1.5 text-[13px] font-semibold transition-all hover:gap-2.5"
+                      style={{ color: 'var(--color-primary)' }} data-testid={`package-apply-${p.code}`}>
+                      {isEN ? 'Apply now' : 'Jetzt bewerben'} <ArrowRight size={13} />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ═══ STANDORT ═══ */}
         <section ref={locRef} className="py-[56px] lg:py-[80px] bg-[var(--color-surface-sunken)]">

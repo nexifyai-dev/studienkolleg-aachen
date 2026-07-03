@@ -52,6 +52,7 @@ import AdminCasesPage from './pages/admin/AdminCasesPage';
 import AdminPartnersPage from './pages/admin/AdminPartnersPage';
 import AdminMessagesPage from './pages/admin/AdminMessagesPage';
 import AdminDocumentsPage from './pages/admin/AdminDocumentsPage';
+import AdminTariffsPage from './pages/admin/AdminTariffsPage';
 import AdminKnowledgePage from './pages/admin/AdminKnowledgePage';
 import AdminJobsPage from './pages/admin/AdminJobsPage';
 import AdminRulesPage from './pages/admin/AdminRulesPage';
@@ -185,6 +186,7 @@ export default function App() {
             <Route path="cases/:id" element={<ApplicantDetailPage />} />
             <Route path="messages" element={<AdminMessagesPage />} />
             <Route path="documents" element={<AdminDocumentsPage />} />
+            <Route path="tariffs" element={<AdminTariffsPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="staff" element={<AdminStaffPage />} />
             <Route path="finance" element={<AdminFinancePage />} />

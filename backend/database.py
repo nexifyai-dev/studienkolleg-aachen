@@ -32,6 +32,11 @@ async def _create_indexes():
     db = get_db()
     # Auth & Users
     await db.users.create_index("email", unique=True)
+    try:
+        await db.products.create_index("code", unique=True)
+    except Exception:
+        pass
+    await db.products.create_index("category")
     await db.login_attempts.create_index("identifier")
     await db.login_attempts.create_index("last_attempt", expireAfterSeconds=900)
     await db.password_reset_tokens.create_index("expires_at", expireAfterSeconds=0)

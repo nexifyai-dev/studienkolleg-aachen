@@ -162,3 +162,76 @@ async def notify_teacher_consent_change(teacher_id: str, applicant_name: str, gr
         msg = f"{applicant_name} revoked data access consent" if lang == "en" else f"{applicant_name} hat die Datenweitergabe widerrufen"
         ntype = "consent_revoked"
     await create_notification(teacher_id, ntype, msg, link="/staff", lang=lang, triggered_by="system")
+
+
+async def notify_new_message(conv_id: str, sender: dict, content: str, visibility: str = "public", channel: str = "portal"):
+    """Systemweite Logik: informiert alle Gespraechsteilnehmer (ausser Absender)
+    ueber neue Nachrichten via In-App-Notification + E-Mail-Hinweis."""
+    import os
+    import asyncio
+    from bson import ObjectId
+
+    db = get_db()
+    try:
+        conv = await db.conversations.find_one({"_id": ObjectId(conv_id)})
+    except Exception:
+        return
+    if not conv:
+        return
+
+    preview = (content or "")[:120]
+    sender_name = sender.get("full_name") or sender.get("email") or "Jemand"
+
+    for pid in conv.get("participants", []):
+        if not pid or pid == sender.get("id"):
+            continue
+        try:
+            recipient = await db.users.find_one(
+                {"_id": ObjectId(pid)},
+                {"role": 1, "email": 1, "full_name": 1, "language_pref": 1},
+            )
+        except Exception:
+            continue
+        if not recipient:
+            continue
+        r_role = recipient.get("role", "")
+        if visibility == "internal" and r_role == "applicant":
+            continue
+
+        link = "/portal/messages" if r_role == "applicant" else "/staff/messaging"
+        try:
+            await create_notification(
+                recipient_id=pid,
+                notification_type="new_message",
+                message=f"{sender_name}: {preview}",
+                link=link,
+                triggered_by=sender.get("id"),
+                lang=recipient.get("language_pref", "de"),
+            )
+        except Exception:
+            logger.warning(f"[notify_new_message] In-App-Notification fehlgeschlagen fuer {pid}")
+
+        # E-Mail-Hinweis an Bewerber bei Portal-Nachrichten (email-Kanal sendet ohnehin via SMTP)
+        if r_role == "applicant" and channel == "portal" and recipient.get("email"):
+            try:
+                from services.email_service import send_email as smtp_send, is_configured
+                if is_configured():
+                    app_url = os.environ.get("APP_URL") or os.environ.get("FRONTEND_URL", "")
+                    body = (
+                        f"Hallo {recipient.get('full_name', '')},\n\n"
+                        f"Sie haben eine neue Nachricht in Ihrem Bewerberportal erhalten:\n\n"
+                        f"\"{preview}\"\n\n"
+                        f"Bitte melden Sie sich in Ihrem Portal an, um zu antworten:\n"
+                        f"{app_url}/portal/messages\n\n"
+                        f"Ihr Team vom Studienkolleg Aachen"
+                    )
+                    asyncio.create_task(asyncio.to_thread(
+                        smtp_send,
+                        to_email=recipient["email"],
+                        subject="Neue Nachricht vom Studienkolleg Aachen",
+                        body=body,
+                        sender_name="Studienkolleg Aachen",
+                        sender_role="staff",
+                    ))
+            except Exception:
+                pass

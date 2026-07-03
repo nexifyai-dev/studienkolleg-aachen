@@ -128,11 +128,17 @@ def fetch_new_emails(max_count: int = 20) -> list:
             return []
 
         msg_ids = data[0].split()[-max_count:] if data[0] else []
-        for msg_id in msg_ids:
-            status, msg_data = mail.fetch(msg_id, "(RFC822)")
-            if status != "OK":
-                continue
-            raw = msg_data[0][1]
+        if not msg_ids:
+            mail.logout()
+            return []
+        # Batch-FETCH: alle neuen Nachrichten in einem einzigen IMAP-Roundtrip
+        id_set = b",".join(msg_ids).decode()
+        status, msg_data = mail.fetch(id_set, "(RFC822)")
+        if status != "OK":
+            mail.logout()
+            return []
+        raw_parts = [p[1] for p in msg_data if isinstance(p, tuple) and p and p[1]]
+        for msg_id, raw in zip(msg_ids, raw_parts):
             msg = email.message_from_bytes(raw)
 
             from_name, from_email = parseaddr(msg.get("From", ""))

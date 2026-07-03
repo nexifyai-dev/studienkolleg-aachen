@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import apiClient from '../../lib/apiClient';
 import PublicNav from '../../components/layout/PublicNav';
 import PublicFooter from '../../components/layout/PublicFooter';
 import SEOHead from '../../components/shared/SEOHead';
@@ -51,6 +52,17 @@ export default function CoursesPage() {
   const isEN = i18n.language === 'en';
   const location = useLocation();
   const [expandedCourse, setExpandedCourse] = useState(null);
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    apiClient.get('/api/products/public').then(r => setProducts(r.data || [])).catch(() => {});
+  }, []);
+  const COURSE_PRICE_CODES = { t: 'SK-TKURS', m: 'SK-MKURS', w: 'SK-WKURS' };
+  const deutschPrices = products.filter(p => p.category === 'sprache' && p.price > 0).map(p => p.price);
+  const coursePrice = (slug) => {
+    if (slug === 'deutsch') return deutschPrices.length ? Math.min(...deutschPrices) : null;
+    const p = products.find(x => x.code === COURSE_PRICE_CODES[slug] && x.price > 0);
+    return p ? p.price : null;
+  };
   const [heroRef, heroVis] = useInView(0.1);
   const [coursesRef, coursesVis] = useInView(0.1);
   const [langRef, langVis] = useInView(0.1);
@@ -195,8 +207,15 @@ export default function CoursesPage() {
                         </>
                       )}
 
-                      <div className="pt-4 border-t border-[rgba(10,25,47,0.06)] flex items-center justify-between">
-                        <p className="text-[12px] text-[var(--color-text-secondary)]">{t(`courses_page.course_cards.${slug}.fsp`)}</p>
+                      <div className="pt-4 border-t border-[rgba(10,25,47,0.06)] flex items-center justify-between gap-3 flex-wrap">
+                        <div className="min-w-0">
+                          <p className="text-[12px] text-[var(--color-text-secondary)]">{t(`courses_page.course_cards.${slug}.fsp`)}</p>
+                          {coursePrice(slug) && (
+                            <p className="text-[13px] font-bold mt-0.5" style={{ color: 'var(--color-accent)' }} data-testid={`course-price-${slug}`}>
+                              {slug === 'deutsch' ? (isEN ? 'from ' : 'ab ') : ''}{Number(coursePrice(slug)).toLocaleString('de-DE')} €
+                            </p>
+                          )}
+                        </div>
                         <Link to="/apply" className="text-[13px] font-semibold flex items-center gap-1 transition-all hover:gap-2"
                           style={{ color: 'var(--color-primary)' }} data-testid={`course-apply-${slug}`}>
                           {t('nav.apply')} <ArrowRight size={13} />

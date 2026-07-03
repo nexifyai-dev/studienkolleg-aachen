@@ -15,6 +15,10 @@ logger = logging.getLogger(__name__)
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 
+EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
+EMERGENT_BASE_URL = "https://integrations.emergentagent.com/llm"
+FALLBACK_MODEL = "gpt-4o-mini"
+
 DEFAULT_MODEL = "deepseek-chat"
 
 # Task-to-model mapping: Ein Modell fuer alles
@@ -26,6 +30,7 @@ TASK_MODELS = {
 }
 
 _client = None
+_fallback_client = None
 
 
 def _get_client() -> AsyncOpenAI:
@@ -35,12 +40,42 @@ def _get_client() -> AsyncOpenAI:
     return _client
 
 
+def _get_fallback_client() -> AsyncOpenAI:
+    global _fallback_client
+    if _fallback_client is None and EMERGENT_LLM_KEY:
+        _fallback_client = AsyncOpenAI(api_key=EMERGENT_LLM_KEY, base_url=EMERGENT_BASE_URL)
+    return _fallback_client
+
+
 def is_enabled() -> bool:
-    return bool(DEEPSEEK_API_KEY)
+    return bool(DEEPSEEK_API_KEY or EMERGENT_LLM_KEY)
 
 
 def _get_model_for_task(task: str) -> str:
     return TASK_MODELS.get(task, DEFAULT_MODEL)
+
+
+async def _do_completion(client, model, system_message, user_message, temperature, max_tokens, task, provider_label):
+    response = await client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_message},
+        ],
+        temperature=temperature,
+        max_tokens=max_tokens,
+        timeout=90.0,
+    )
+    content = response.choices[0].message.content or ""
+    usage = response.usage.model_dump() if response.usage else {}
+    tokens_used = usage.get("total_tokens", 0)
+    logger.info(f"[{provider_label}] task={task} model={model} tokens={tokens_used} status=ok")
+    return {
+        "content": content,
+        "model": response.model or model,
+        "tokens_used": tokens_used,
+        "usage": usage,
+    }
 
 
 async def chat_completion(
@@ -51,42 +86,28 @@ async def chat_completion(
     temperature: float = 0.3,
     model_override: str = None,
 ) -> dict:
-    client = _get_client()
-    if not client:
-        return {"error": "DeepSeek API key not configured", "content": None}
-
+    """Primaer DeepSeek, automatischer Fallback auf Emergent LLM (gpt-4o-mini)."""
     model = model_override or _get_model_for_task(task)
     if not model or "/" in model:
         model = DEFAULT_MODEL
 
-    try:
-        response = await client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": "user", "content": user_message},
-            ],
-            temperature=temperature,
-            max_tokens=override_max_tokens,
-            timeout=90.0,
-        )
+    client = _get_client()
+    primary_error = None
+    if client:
+        try:
+            return await _do_completion(client, model, system_message, user_message,
+                                        temperature, override_max_tokens, task, "DEEPSEEK")
+        except Exception as e:
+            primary_error = str(e)
+            logger.warning(f"[DEEPSEEK] Fehler model={model}: {e} – versuche Fallback")
 
-        content = response.choices[0].message.content or ""
-        usage = response.usage.model_dump() if response.usage else {}
-        tokens_used = usage.get("total_tokens", 0)
+    fallback = _get_fallback_client()
+    if fallback:
+        try:
+            return await _do_completion(fallback, FALLBACK_MODEL, system_message, user_message,
+                                        temperature, override_max_tokens, task, "EMERGENT_FALLBACK")
+        except Exception as e:
+            logger.error(f"[EMERGENT_FALLBACK] Fehler: {e}")
+            return {"error": f"primary={primary_error}; fallback={e}", "content": None}
 
-        logger.info(
-            f"[DEEPSEEK] task={task} model={model} "
-            f"tokens={tokens_used} status=ok"
-        )
-
-        return {
-            "content": content,
-            "model": response.model or model,
-            "tokens_used": tokens_used,
-            "usage": usage,
-        }
-
-    except Exception as e:
-        logger.error(f"[DEEPSEEK] Fehler model={model}: {e}")
-        return {"error": str(e), "content": None}
+    return {"error": primary_error or "Kein KI-Provider konfiguriert", "content": None}

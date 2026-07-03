@@ -178,14 +178,16 @@ export default function DashboardPage() {
           testid="dash-financials"
           alert={openInvoices > 0}
         />
-        <QuickStatCard
-          icon={Bell}
-          label={lang === 'de' ? 'Aufgaben' : 'Tasks'}
-          value={openTasks}
-          path="/portal/journey"
-          testid="dash-tasks"
-          alert={openTasks > 0}
-        />
+        {openTasks > 0 && (
+          <QuickStatCard
+            icon={Bell}
+            label={lang === 'de' ? 'Aufgaben' : 'Tasks'}
+            value={openTasks}
+            path="/portal/journey"
+            testid="dash-tasks"
+            alert={openTasks > 0}
+          />
+        )}
       </div>
 
       {/* ═══ CHECKLISTE + WISSENSBOX ═══════════════════════ */}

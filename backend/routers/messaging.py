@@ -399,7 +399,7 @@ async def send_message(data: MessageCreate, user: dict = Depends(get_current_use
         {"$set": conv_update},
     )
 
-    # If channel is email and user is staff, also send via SMTP
+    # If channel is email and user is staff, also send via SMTP (nicht-blockierend)
     if channel == "email" and user["role"] in STAFF_ROLES:
         try:
             conv_doc = await db.conversations.find_one({"_id": ObjectId(conv_id)})
@@ -419,15 +419,26 @@ async def send_message(data: MessageCreate, user: dict = Depends(get_current_use
                 from services.email_service import send_email as smtp_send, is_configured
                 if is_configured():
                     subject = conv_doc.get("subject", "") or "Nachricht vom Studienkolleg Aachen"
-                    smtp_send(
+                    asyncio.create_task(asyncio.to_thread(
+                        smtp_send,
                         to_email=recipient_email,
                         subject=subject,
                         body=content,
                         sender_name=user.get("full_name", "Staff"),
                         sender_role=user.get("role", "staff"),
-                    )
+                    ))
         except Exception:
             pass  # SMTP-Fehler nicht blockierend
+
+    # Systemweite Benachrichtigung aller Gespraechsteilnehmer (In-App + E-Mail)
+    try:
+        from services.notifications import notify_new_message
+        await notify_new_message(
+            conv_id, sender=user, content=content,
+            visibility=msg.get("visibility", "public"), channel=channel,
+        )
+    except Exception:
+        pass
 
     msg.pop("_id", None)
     msg["id"] = str(result.inserted_id)
@@ -1012,21 +1023,79 @@ async def sync_imap_emails(user: dict = Depends(get_current_user)):
                 conv = await db.conversations.find_one({"_id": result.inserted_id})
 
         if not conv:
-            # Create orphan email conversation
             now = datetime.now(timezone.utc)
             staff_id = await _find_staff_user(db)
             from_name = em.get("from_name") or from_email.split("@")[0].replace(".", " ").title()
-            result = await db.conversations.insert_one({
-                "participants": [staff_id] if staff_id else [],
-                "channel": "email",
-                "status": "open",
-                "subject": em.get("subject", f"E-Mail von {from_name}"),
-                "external_email": from_email,
-                "external_name": from_name,
-                "created_at": now,
-                "last_message_at": now,
-            })
-            conv = await db.conversations.find_one({"_id": result.inserted_id})
+            _NO_LEAD = ("noreply", "no-reply", "donotreply", "newsletter", "notification", "postmaster", "mailer")
+            auto_lead_ok = "@" in from_email and not any(p in from_email.lower() for p in _NO_LEAD)
+            if auto_lead_ok:
+                # Unbekannter Absender: automatisch Nutzer (applicant) + Bewerbung (lead_new) anlegen
+                existing_user = await db.users.find_one({"email": from_email})
+                if existing_user:
+                    new_user_id = str(existing_user["_id"])
+                else:
+                    u_res = await db.users.insert_one({
+                        "email": from_email,
+                        "full_name": from_name,
+                        "role": "applicant",
+                        "active": True,
+                        "language_pref": "de",
+                        "source": "email_inbound",
+                        "created_at": now,
+                    })
+                    new_user_id = str(u_res.inserted_id)
+                app_doc = await db.applications.find_one({"applicant_id": new_user_id})
+                if app_doc:
+                    auto_app_id = str(app_doc["_id"])
+                else:
+                    a_res = await db.applications.insert_one({
+                        "applicant_id": new_user_id,
+                        "current_stage": "lead_new",
+                        "priority": "normal",
+                        "source": "email_inbound",
+                        "notes": f"Automatisch angelegt aus eingehender E-Mail: {em.get('subject', '')}",
+                        "created_at": now,
+                        "last_activity_at": now,
+                    })
+                    auto_app_id = str(a_res.inserted_id)
+                    if staff_id:
+                        try:
+                            from services.notifications import create_notification
+                            await create_notification(
+                                recipient_id=staff_id,
+                                notification_type="application_received",
+                                message=f"Neuer Lead aus E-Mail: {from_name} ({from_email})",
+                                link="/staff/kanban",
+                            )
+                        except Exception:
+                            pass
+                participants = [new_user_id] + ([staff_id] if staff_id else [])
+                result = await db.conversations.insert_one({
+                    "participants": participants,
+                    "channel": "email",
+                    "status": "open",
+                    "subject": em.get("subject", f"E-Mail von {from_name}"),
+                    "external_email": from_email,
+                    "external_name": from_name,
+                    "application_id": auto_app_id,
+                    "created_at": now,
+                    "last_message_at": now,
+                })
+                conv = await db.conversations.find_one({"_id": result.inserted_id})
+                applicant = {"_id": ObjectId(new_user_id)}
+            else:
+                # System-/Newsletter-Mails: Orphan-Konversation ohne Lead
+                result = await db.conversations.insert_one({
+                    "participants": [staff_id] if staff_id else [],
+                    "channel": "email",
+                    "status": "open",
+                    "subject": em.get("subject", f"E-Mail von {from_name}"),
+                    "external_email": from_email,
+                    "external_name": from_name,
+                    "created_at": now,
+                    "last_message_at": now,
+                })
+                conv = await db.conversations.find_one({"_id": result.inserted_id})
 
         conv_id = str(conv["_id"])
         now = datetime.now(timezone.utc)
@@ -1064,3 +1133,77 @@ async def email_integration_status(user: dict = Depends(get_current_user)):
         "status": "aktiv" if is_configured() else "nicht_konfiguriert",
     }
 
+
+
+@router.post("/conversations/start-by-email")
+async def start_conversation_by_email(request: Request, user: dict = Depends(get_current_user)):
+    """Staff startet eine Konversation per E-Mail-Adresse.
+    Unbekannte Adressen werden automatisch als Lead (User + Bewerbung) angelegt."""
+    if user["role"] not in STAFF_ROLES:
+        raise HTTPException(status_code=403, detail="Nur Staff")
+    body = await request.json()
+    email_addr = (body.get("email") or "").strip().lower()
+    name = (body.get("name") or "").strip()
+    import re as _re
+    if not _re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email_addr):
+        raise HTTPException(status_code=400, detail="Ungueltige E-Mail-Adresse")
+
+    db = get_db()
+    now = datetime.now(timezone.utc)
+    lead_created = False
+
+    existing = await db.users.find_one({"email": email_addr})
+    if existing:
+        uid = str(existing["_id"])
+        display_name = existing.get("full_name") or name or email_addr
+    else:
+        display_name = name or email_addr.split("@")[0].replace(".", " ").title()
+        u_res = await db.users.insert_one({
+            "email": email_addr,
+            "full_name": display_name,
+            "role": "applicant",
+            "active": True,
+            "language_pref": "de",
+            "source": "staff_manual",
+            "created_at": now,
+        })
+        uid = str(u_res.inserted_id)
+        lead_created = True
+
+    app_doc = await db.applications.find_one({"applicant_id": uid})
+    if not app_doc:
+        a_res = await db.applications.insert_one({
+            "applicant_id": uid,
+            "current_stage": "lead_new",
+            "priority": "normal",
+            "source": "staff_manual",
+            "notes": f"Manuell angelegt via Messaging durch {user.get('full_name', '')}",
+            "created_at": now,
+            "last_activity_at": now,
+        })
+        app_id = str(a_res.inserted_id)
+        lead_created = True
+    else:
+        app_id = str(app_doc["_id"])
+
+    conv = await db.conversations.find_one({"participants": uid, "channel": "email"})
+    if not conv:
+        result = await db.conversations.insert_one({
+            "participants": [uid, user["id"]],
+            "channel": "email",
+            "status": "open",
+            "subject": (body.get("subject") or "").strip() or f"Konversation mit {display_name}",
+            "external_email": email_addr,
+            "external_name": display_name,
+            "application_id": app_id,
+            "created_at": now,
+            "last_message_at": now,
+        })
+        conv = await db.conversations.find_one({"_id": result.inserted_id})
+
+    return {
+        "conversation_id": str(conv["_id"]),
+        "user_id": uid,
+        "application_id": app_id,
+        "lead_created": lead_created,
+    }

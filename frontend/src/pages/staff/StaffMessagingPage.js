@@ -524,6 +524,18 @@ export default function StaffMessagingPage() {
     } catch { /* ignorieren */ }
   };
 
+  const startNewConvByEmail = async () => {
+    try {
+      const r = await apiClient.post('/api/conversations/start-by-email', { email: newConvSearch.trim() }, { withCredentials: true });
+      setShowNewConv(false); setNewConvSearch('');
+      await loadConvs();
+      const cr = await apiClient.get('/api/conversations', { withCredentials: true });
+      const cList = cr.data.conversations || cr.data || [];
+      const nc = cList.find(c => c.id === r.data.conversation_id);
+      if (nc) selectConv(nc);
+    } catch { /* ignorieren */ }
+  };
+
   const filteredApps = newConvSearch ? applicants.filter(a => { const q = newConvSearch.toLowerCase(); return (a.full_name || '').toLowerCase().includes(q) || (a.email || '').toLowerCase().includes(q); }) : applicants.slice(0, 10);
   const filtered = search ? convs.filter(c => { const n = Object.values(c.participant_names || {}).join(' ').toLowerCase(); const subj = (c.subject || '').toLowerCase(); const ext = (c.external_email || '').toLowerCase(); return n.includes(search.toLowerCase()) || subj.includes(search.toLowerCase()) || ext.includes(search.toLowerCase()); }) : convs;
 
@@ -625,7 +637,19 @@ export default function StaffMessagingPage() {
               className="w-full pl-7 pr-3 py-1.5 text-[11px] border border-[var(--color-divider)] rounded-sm focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)] focus:border-[var(--color-primary)]" />
           </div>
           <div className="max-h-32 overflow-y-auto space-y-0.5" aria-label="Bewerberauswahl">
-            {filteredApps.length === 0 ? <p className="text-[10px] text-[var(--color-text-tertiary)] text-center py-2">Keine Bewerber gefunden</p> : filteredApps.map(a => (
+            {filteredApps.length === 0 ? (
+              /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(newConvSearch.trim()) ? (
+                <button onClick={startNewConvByEmail} data-testid="new-conv-create-lead"
+                  className="w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left bg-[rgba(212,175,55,0.08)] hover:bg-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.3)] transition-colors">
+                  <Plus size={12} className="text-[var(--color-accent)] shrink-0" aria-hidden="true" />
+                  <span className="text-[10px] font-medium text-[var(--color-text-primary)]">
+                    „{newConvSearch.trim()}" als neuen Lead anlegen & Konversation starten
+                  </span>
+                </button>
+              ) : (
+                <p className="text-[10px] text-[var(--color-text-tertiary)] text-center py-2">Keine Bewerber gefunden – E-Mail-Adresse eingeben, um einen neuen Lead anzulegen</p>
+              )
+            ) : filteredApps.map(a => (
               <button key={a.id} onClick={() => startNewConv(a.id)} data-testid={`new-conv-pick-${a.id}`}
                 className="w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left hover:bg-[rgba(10,25,47,0.05)] focus:outline-none focus:ring-2 focus:ring-[rgba(10,25,47,0.3)]">
                 <div className="w-5 h-5 rounded-[var(--radius-sm)] bg-[var(--color-primary-muted)] flex items-center justify-center shrink-0" aria-hidden="true"><span className="text-[8px] font-bold text-[var(--color-primary)]">{(a.full_name || '?')[0].toUpperCase()}</span></div>

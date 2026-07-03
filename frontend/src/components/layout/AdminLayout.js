@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, FolderOpen, Users, UserCog, Euro, Handshake, BookOpen, Cpu, Scale, Shield, BarChart3, Settings, MessageSquare, FileCheck2, ArrowLeftRight } from 'lucide-react';
+import { LayoutDashboard, FolderOpen, Users, UserCog, Euro, Handshake, BookOpen, Cpu, Scale, Shield, BarChart3, Settings, MessageSquare, FileCheck2, ArrowLeftRight, Tag } from 'lucide-react';
 import { PortalShell } from './PortalShell';
 
 export default function AdminLayout() {
@@ -15,6 +15,7 @@ export default function AdminLayout() {
     { path: '/admin/users', label: t('layout.admin.users'), testId: 'users', icon: Users },
     { path: '/admin/partners', label: t('layout.admin.partners'), testId: 'partners', icon: Handshake },
     { path: '/admin/finance', label: 'Finanzen', testId: 'finance', icon: Euro },
+    { path: '/admin/tariffs', label: 'Tarife', testId: 'tariffs', icon: Tag },
     { path: '/admin/reports', label: t('layout.admin.reports'), testId: 'reports', icon: BarChart3 },
     { path: '/admin/knowledge', label: t('layout.admin.knowledge'), testId: 'knowledge', icon: BookOpen },
     { path: '/admin/jobs', label: t('layout.admin.jobs'), testId: 'jobs', icon: Cpu },

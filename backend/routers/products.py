@@ -1,11 +1,15 @@
 """
-Produkt-/Paketkatalog fuer Rechnungserstellung.
-Systemweit als Auswahl-/Suchfeld verfuegbar.
+Produkt-/Tarifkatalog: dynamische Preise fuer Website, Bewerbung und Rechnungen.
+Admin-CRUD unter /admin/tariffs, Soft-Delete via is_active=False.
 """
-from fastapi import APIRouter, Depends, HTTPException
-from deps import get_current_user, get_db
+from datetime import datetime, timezone
+from fastapi import APIRouter, Depends, HTTPException, Request
+from bson import ObjectId
+from deps import get_current_user, require_roles, ADMIN_ROLES, get_db
 
 router = APIRouter(prefix="/api/products", tags=["products"])
+
+CATEGORIES = ("kurs", "sprache", "pruefung", "gebuehr", "service", "unterkunft", "kombi", "sonstig")
 
 DEFAULT_PRODUCTS = [
     {"code": "SK-TKURS", "name": "T-Kurs (Technik)", "description": "Studienkolleg Vorbereitungskurs Technik", "price": 4500, "currency": "EUR", "category": "kurs"},
@@ -28,10 +32,128 @@ DEFAULT_PRODUCTS = [
 ]
 
 
-@router.get("")
-async def list_products(user: dict = Depends(get_current_user)):
-    """Liste aller verfuegbaren Produkte/Pakete."""
+def _serialize(p: dict) -> dict:
+    return {
+        "id": str(p["_id"]),
+        "code": p.get("code"),
+        "name": p.get("name"),
+        "description": p.get("description", ""),
+        "price": p.get("price", 0),
+        "currency": p.get("currency", "EUR"),
+        "category": p.get("category", "sonstig"),
+        "is_active": p.get("is_active", True),
+    }
+
+
+async def _ensure_seed(db):
+    if await db.products.count_documents({}) == 0:
+        now = datetime.now(timezone.utc)
+        await db.products.insert_many([
+            {**p, "is_active": True, "created_at": now} for p in DEFAULT_PRODUCTS
+        ])
+
+
+@router.get("/public")
+async def list_public_products():
+    """Oeffentlicher Katalog: nur aktive Produkte (fuer /courses, /services, /apply)."""
     db = get_db()
-    custom = await db.products.find({}, {"_id": 0}).to_list(200)
-    all_products = DEFAULT_PRODUCTS + custom if custom else DEFAULT_PRODUCTS
-    return all_products
+    await _ensure_seed(db)
+    items = await db.products.find({"is_active": {"$ne": False}}).sort("category", 1).to_list(300)
+    return [_serialize(p) for p in items]
+
+
+@router.get("")
+async def list_products(include_inactive: bool = False, user: dict = Depends(get_current_user)):
+    """Interner Katalog (Rechnungen, Admin). include_inactive nur fuer Admins."""
+    db = get_db()
+    await _ensure_seed(db)
+    query = {} if (include_inactive and user.get("role") in ADMIN_ROLES) else {"is_active": {"$ne": False}}
+    items = await db.products.find(query).sort([("category", 1), ("name", 1)]).to_list(300)
+    return [_serialize(p) for p in items]
+
+
+@router.post("")
+async def create_product(request: Request, user: dict = Depends(require_roles(*ADMIN_ROLES))):
+    body = await request.json()
+    code = (body.get("code") or "").strip().upper()
+    name = (body.get("name") or "").strip()
+    if not code or not name:
+        raise HTTPException(status_code=400, detail="code und name sind erforderlich")
+    try:
+        price = float(body.get("price", 0))
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="Ungueltiger Preis")
+    category = body.get("category") or "sonstig"
+    if category not in CATEGORIES:
+        raise HTTPException(status_code=400, detail=f"Ungueltige Kategorie. Erlaubt: {', '.join(CATEGORIES)}")
+    db = get_db()
+    await _ensure_seed(db)
+    if await db.products.find_one({"code": code}):
+        raise HTTPException(status_code=409, detail=f"Produkt-Code '{code}' existiert bereits")
+    doc = {
+        "code": code, "name": name,
+        "description": (body.get("description") or "").strip(),
+        "price": price, "currency": body.get("currency") or "EUR",
+        "category": category, "is_active": True,
+        "created_at": datetime.now(timezone.utc),
+        "created_by": user["id"],
+    }
+    result = await db.products.insert_one(doc)
+    doc["_id"] = result.inserted_id
+    return _serialize(doc)
+
+
+@router.put("/{product_id}")
+async def update_product(product_id: str, request: Request, user: dict = Depends(require_roles(*ADMIN_ROLES))):
+    body = await request.json()
+    db = get_db()
+    try:
+        oid = ObjectId(product_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungueltige ID")
+    update = {}
+    for field in ("name", "description", "currency"):
+        if field in body:
+            update[field] = (body[field] or "").strip()
+    if "price" in body:
+        try:
+            update["price"] = float(body["price"])
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=400, detail="Ungueltiger Preis")
+    if "category" in body:
+        if body["category"] not in CATEGORIES:
+            raise HTTPException(status_code=400, detail="Ungueltige Kategorie")
+        update["category"] = body["category"]
+    if "is_active" in body:
+        update["is_active"] = bool(body["is_active"])
+    if "code" in body:
+        new_code = (body["code"] or "").strip().upper()
+        existing = await db.products.find_one({"code": new_code, "_id": {"$ne": oid}})
+        if existing:
+            raise HTTPException(status_code=409, detail=f"Produkt-Code '{new_code}' existiert bereits")
+        update["code"] = new_code
+    if not update:
+        raise HTTPException(status_code=400, detail="Keine Aenderungen")
+    update["updated_at"] = datetime.now(timezone.utc)
+    result = await db.products.update_one({"_id": oid}, {"$set": update})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
+    doc = await db.products.find_one({"_id": oid})
+    return _serialize(doc)
+
+
+@router.delete("/{product_id}")
+async def archive_product(product_id: str, user: dict = Depends(require_roles(*ADMIN_ROLES))):
+    """Soft-Delete: Produkt wird archiviert (is_active=False), nicht geloescht."""
+    db = get_db()
+    try:
+        oid = ObjectId(product_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungueltige ID")
+    result = await db.products.update_one(
+        {"_id": oid},
+        {"$set": {"is_active": False, "updated_at": datetime.now(timezone.utc)}},
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
+    return {"status": "archived", "id": product_id}

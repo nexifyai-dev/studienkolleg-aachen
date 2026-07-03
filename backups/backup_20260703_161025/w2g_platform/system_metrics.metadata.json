@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"timestamp":{"$numberInt":"-1"}},"name":"timestamp_-1"}],"uuid":"d54d026fa139469484291701958a7353","collectionName":"system_metrics","type":"collection"}

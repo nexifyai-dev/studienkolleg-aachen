@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, FolderOpen, Users, UserCog, Euro, Handshake, BookOpen, Cpu, Scale, Shield, BarChart3, Settings, MessageSquare, FileCheck2, ArrowLeftRight, Tag } from 'lucide-react';
+import { LayoutDashboard, FolderOpen, Users, UserCog, Euro, Handshake, BookOpen, Cpu, Scale, Shield, BarChart3, Settings, MessageSquare, FileCheck2, ArrowLeftRight, Tag, HardDrive, Plug } from 'lucide-react';
 import { PortalShell } from './PortalShell';
 
 export default function AdminLayout() {
@@ -22,6 +22,8 @@ export default function AdminLayout() {
     { path: '/admin/rules', label: t('layout.admin.rules'), testId: 'rules', icon: Scale },
     { path: '/admin/audit', label: t('layout.admin.audit'), testId: 'audit', icon: Shield },
     { path: '/admin/settings', label: t('layout.admin.settings'), testId: 'settings', icon: Settings },
+    { path: '/admin/integrations', label: 'Integrationen', testId: 'integrations', icon: Plug },
+    { path: '/admin/backups', label: 'Backups', testId: 'backups', icon: HardDrive },
     { path: '/staff', label: 'Staff-Ansicht', testId: 'staff-view', icon: ArrowLeftRight },
   ];
 

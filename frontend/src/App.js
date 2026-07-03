@@ -9,6 +9,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import ScrollToTop from './components/ScrollToTop';
 import CookieBanner from './components/shared/CookieBanner';
 import SupportChatWidget from './components/shared/SupportChatWidget';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import HomePage from './pages/public/HomePage';
 import ApplyPage from './pages/public/ApplyPage';
 import ContactPage from './pages/public/ContactPage';
@@ -60,6 +61,8 @@ import AdminReportsPage from './pages/admin/AdminReportsPage';
 import AdminStaffPage from './pages/admin/AdminStaffPage';
 import AdminFinancePage from './pages/admin/AdminFinancePage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import AdminBackupsPage from './pages/admin/AdminBackupsPage';
+import AdminIntegrationsPage from './pages/admin/AdminIntegrationsPage';
 import PartnerLayout from './components/layout/PartnerLayout';
 import PartnerDashboardPage from './pages/partner/PartnerDashboardPage';
 import PartnerReferralsPage from './pages/partner/PartnerReferralsPage';
@@ -114,6 +117,7 @@ export default function App() {
         <ScrollToTop />
         <CookieBanner />
         <SupportChatWidget />
+        <PWAInstallPrompt />
         <Toaster position="top-right" richColors closeButton duration={3000} />
         <Routes>
           {/* Public */}
@@ -197,6 +201,8 @@ export default function App() {
             <Route path="audit" element={<AuditPage />} />
             <Route path="reports" element={<AdminReportsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
+            <Route path="backups" element={<AdminBackupsPage />} />
+            <Route path="integrations" element={<AdminIntegrationsPage />} />
           </Route>
 
           {/* Partner / Affiliate */}

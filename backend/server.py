@@ -57,6 +57,9 @@ from routers.lms import router as lms_router
 from routers.products import router as products_router
 from routers.payments import router as payments_router
 from routers.payments import webhook_router as stripe_webhook_router
+from routers.backups import router as backups_router
+from routers.oauth_google import router as oauth_google_router
+from routers.whatsapp import router as whatsapp_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -229,6 +232,9 @@ app.include_router(products_router)
 app.include_router(lms_router)
 app.include_router(payments_router)
 app.include_router(stripe_webhook_router)
+app.include_router(backups_router)
+app.include_router(oauth_google_router)
+app.include_router(whatsapp_router)
 
 # ─── Lifecycle ────────────────────────────────────────────────────────────────
 @app.on_event("startup")

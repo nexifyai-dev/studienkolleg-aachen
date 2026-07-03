@@ -72,6 +72,20 @@ async def create_appointment(request: Request, user: dict = Depends(get_current_
     result = await db.appointments.insert_one(apt)
     apt["id"] = str(result.inserted_id)
     apt.pop("_id", None)
+
+    # Google Calendar Sync (best-effort)
+    try:
+        from services import google_calendar as _gcal
+        event_id = await _gcal.sync_event(apt)
+        if event_id:
+            await db.appointments.update_one(
+                {"_id": result.inserted_id},
+                {"$set": {"google_event_id": event_id}},
+            )
+            apt["google_event_id"] = event_id
+    except Exception:
+        pass
+
     return apt
 
 
@@ -93,12 +107,28 @@ async def update_appointment(apt_id: str, request: Request, user: dict = Depends
     )
     if not result:
         raise HTTPException(status_code=404, detail="Appointment not found")
+
+    # Google Calendar Sync (best-effort)
+    try:
+        from services import google_calendar as _gcal
+        merged = {**result, "id": str(result.get("_id"))}
+        event_id = await _gcal.sync_event(merged)
+        if event_id and event_id != result.get("google_event_id"):
+            await db.appointments.update_one(
+                {"_id": ObjectId(apt_id)},
+                {"$set": {"google_event_id": event_id}},
+            )
+            result["google_event_id"] = event_id
+    except Exception:
+        pass
+
     return serialize(result)
 
 
 @router.delete("/{apt_id}")
 async def cancel_appointment(apt_id: str, user: dict = Depends(get_current_user)):
     db = get_db()
+    existing = await db.appointments.find_one({"_id": ObjectId(apt_id)})
     result = await db.appointments.find_one_and_update(
         {"_id": ObjectId(apt_id)},
         {"$set": {"status": "cancelled", "updated_at": datetime.now(timezone.utc).isoformat()}},
@@ -106,6 +136,15 @@ async def cancel_appointment(apt_id: str, user: dict = Depends(get_current_user)
     )
     if not result:
         raise HTTPException(status_code=404, detail="Appointment not found")
+
+    # Google Calendar: Event löschen (best-effort)
+    try:
+        if existing and existing.get("google_event_id"):
+            from services import google_calendar as _gcal
+            await _gcal.delete_event(existing["google_event_id"])
+    except Exception:
+        pass
+
     return serialize(result)
 
 

@@ -1,6 +1,7 @@
 {
   "short_name": "STK Aachen",
   "name": "Studienkolleg Aachen – Way2Germany",
+  "description": "Bewerberportal und Vorbereitung auf die Feststellungsprüfung am Studienkolleg Aachen.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,16 +11,38 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "theme_color": "#113655",
-  "background_color": "#f8fafc"
+  "background_color": "#f8fafc",
+  "lang": "de",
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Portal",
+      "short_name": "Portal",
+      "description": "Zum Bewerberportal",
+      "url": "/portal",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Bewerben",
+      "short_name": "Bewerben",
+      "description": "Jetzt bewerben",
+      "url": "/apply",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ]
 }

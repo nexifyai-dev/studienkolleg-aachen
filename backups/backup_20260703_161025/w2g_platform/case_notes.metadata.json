@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"application_id":{"$numberInt":"1"},"created_at":{"$numberInt":"-1"}},"name":"application_id_1_created_at_-1"}],"uuid":"6f6d279616454d4fb6f25672ea19ba4b","collectionName":"case_notes","type":"collection"}

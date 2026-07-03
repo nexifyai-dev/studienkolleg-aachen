@@ -45,6 +45,7 @@ async def start_scheduler():
         asyncio.create_task(_run_periodic("health_metrics", 300, _collect_health_metrics)),
         asyncio.create_task(_run_periodic("dunning_check", 3600 * 12, _check_dunning)),
         asyncio.create_task(_run_periodic("brain_email_poll", 600, _poll_brain_emails)),
+        asyncio.create_task(_run_periodic("nightly_backup", 3600 * 24, _run_nightly_backup)),
     ]
 
     try:
@@ -218,3 +219,13 @@ async def _poll_brain_emails():
         logger.info(f"[SCHEDULER:brain_email_poll] Ergebnis: {result}")
     except Exception as e:
         logger.error(f"[SCHEDULER:brain_email_poll] Fehler: {e}")
+
+
+async def _run_nightly_backup():
+    """Führt jede Nacht ein MongoDB-Backup durch (Retention 7 Tage)."""
+    try:
+        from services.backup import run_backup
+        result = await run_backup()
+        logger.info(f"[SCHEDULER:nightly_backup] Ergebnis: {result.get('status')}")
+    except Exception as e:
+        logger.error(f"[SCHEDULER:nightly_backup] Fehler: {e}")

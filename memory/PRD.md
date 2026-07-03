@@ -62,12 +62,24 @@ Bewerber-Verwaltung, Kommunikation (Portal/E-Mail/WhatsApp), Dokumenten-Manageme
 
 ## Verbleibend
 - [ ] **GO-LIVE TODO**: User muss "Save to Github" + "Deploy" ausführen, damit Storage-Fix (emergent default) live ist
-- [ ] Google Kalender Integration (P1)
+- [x] Google Kalender Integration (P1) – Skeleton fertig, benötigt GOOGLE_CLIENT_ID/SECRET (03.07.2026)
+- [x] Automatisches Backup-System (P2) – Nightly + Restore UI (03.07.2026)
+- [x] PWA Integration (P3) – Manifest + Service Worker + Install Prompt (03.07.2026)
+- [x] WhatsApp API Integration (P3) – Twilio-Skeleton, benötigt TWILIO_ACCOUNT_SID/AUTH_TOKEN/WHATSAPP_FROM (03.07.2026)
 - [ ] Erweiterte Reports (P2)
-- [ ] PWA Integration (P3)
-- [ ] WhatsApp API Integration (P3)
 - [ ] SSR/SEO Optimierung (P3)
 - [ ] Kanban-Ansicht zusammenfuehren (P3)
+
+## MVP v1.5.0 – Features (03.07.2026)
+- **Google Kalender**: OAuth-Flow (`/api/oauth/google/*`), Auto-Sync bei Termin CRUD in `routers/appointments.py`.
+  Setup: `.env`-Variablen `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, optional `GOOGLE_CALENDAR_ID`.
+  Redirect-URI: `{APP_URL}/api/oauth/google/callback`. Admin-UI unter `/admin/integrations`.
+- **Backup-System**: `services/backup.py` (mongodump, Retention 7 Tage) + Nightly-Scheduler-Task `nightly_backup`
+  in `services/scheduler.py`. Admin-UI unter `/admin/backups` mit Status, Liste, Manual-Backup, Delete, Restore-mit-Bestätigung.
+- **PWA**: `public/sw.js` (Cache-First static, Network-First HTML, API nie cachen), `public/manifest.json`
+  (Icons + Shortcuts), `components/PWAInstallPrompt.js` mit 30-Tage-Dismiss.
+- **WhatsApp/Twilio**: `services/whatsapp_service.py`, Router `/api/whatsapp/*`, Log-Collection `whatsapp_messages`.
+  Setup: `.env`-Variablen `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM`.
 
 ## Go-Live Status (12.05.2026)
 - [x] STORAGE_BACKEND Default = 'emergent' (config.py) – Code fertig, Preview verifiziert

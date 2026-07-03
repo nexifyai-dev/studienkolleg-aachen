@@ -1,5 +1,37 @@
 # CHANGELOG
 
+## 2026-07-03 – v1.5.0: Alle offenen Roadmap-Items (Google Calendar, Backup, PWA, WhatsApp)
+
+### Google Kalender (P1)
+- OAuth2-Flow: `/api/oauth/google/authorize`, `/api/oauth/google/callback`, `/api/oauth/google/status`, `/api/oauth/google/disconnect`, `/api/oauth/google/upcoming`
+- Service `services/google_calendar.py`: Auth-URL-Bau, Token-Exchange, Auto-Refresh, Create/Update/Delete Events
+- Hooks in `routers/appointments.py`: bei POST/PUT/DELETE wird best-effort mit Google Calendar synchronisiert (Feld `google_event_id`)
+- Setup: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALENDAR_ID` in `.env`; Redirect-URI = `{APP_URL}/api/oauth/google/callback`
+
+### Backup-System (P2)
+- Nightly Scheduler-Task `nightly_backup` (24h) in `services/scheduler.py` – ruft `services/backup.py::run_backup()` auf
+- Retention 7 Tage, Cleanup automatisch
+- Admin-Router `/api/backups/*`: status, list, run, delete, restore (mongorestore --drop)
+- Admin-UI `/admin/backups`: Status-Cards (Pfad, Anzahl, Retention, Tool-Verfügbarkeit), Tabelle, Manual-Backup, Restore mit Bestätigungs-Modal
+
+### PWA (P3)
+- Enhanced `public/manifest.json` (Icons maskable, Shortcuts für Portal + Bewerben, Kategorien)
+- Neuer Service Worker `public/sw.js`: Cache-First für statische Assets, Network-First für HTML, API-Calls werden NIE gecacht
+- `src/lib/registerSW.js`: Registrierung nur auf HTTPS
+- `src/components/PWAInstallPrompt.js`: Install-Banner via `beforeinstallprompt`, 30-Tage-Dismiss
+
+### WhatsApp (P3)
+- Twilio-Service `services/whatsapp_service.py`: E.164-Normalisierung, send_message mit Log in `whatsapp_messages`
+- Router `/api/whatsapp/*`: status, send, messages
+- Admin-UI-Sektion `/admin/integrations`: Setup-Hinweise, Test-Sender, Nachrichten-Log
+- Setup: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM` in `.env`
+- Feature bleibt sicher deaktiviert wenn Keys fehlen (`status=skipped`, `reason=twilio_not_configured`)
+
+### Testing
+- Iteration 113: 19/19 Backend pytest PASS + Frontend E2E PASS
+- Neue Testids: `admin-backups-page`, `admin-integrations-page`, `backups-run-btn`, `backup-row-*`, `google-connect-btn`, `whatsapp-send-btn`
+
+
 ## 2026-07-02 – v1.4.3: KI-Migration auf DeepSeek Direct API + Chat-Fix
 - Support-Chat ("W2G Assistent / Studienberatung") repariert: OpenRouter-Aufrufe schlugen fehl → komplette KI auf DeepSeek Direct API (https://api.deepseek.com, model `deepseek-chat`, AsyncOpenAI-Client) migriert
 - Neuer `DEEPSEEK_API_KEY` in backend/.env hinterlegt (vom User bereitgestellt)

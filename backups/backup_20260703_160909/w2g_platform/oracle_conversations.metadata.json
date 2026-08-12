@@ -1,1 +1,0 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"created_by":{"$numberInt":"1"}},"name":"created_by_1"},{"v":{"$numberInt":"2"},"key":{"updated_at":{"$numberInt":"1"}},"name":"updated_at_1"}],"uuid":"ca4bfbae4ad0433798f8bc04cf400c01","collectionName":"oracle_conversations","type":"collection"}

@@ -47,6 +47,7 @@ from routers.followups import router as followups_router
 from routers.export import router as export_router
 from routers.partner import router as partner_router
 from routers.invoices import router as invoices_router
+from routers.quotes import router as quotes_router
 from routers.appointments import router as appointments_router
 from routers.anabin_admin import router as anabin_admin_router
 from routers.brain import router as brain_router
@@ -223,6 +224,7 @@ app.include_router(export_router)
 app.include_router(partner_router)
 app.include_router(appointments_router)
 app.include_router(invoices_router)
+app.include_router(quotes_router)
 app.include_router(anabin_admin_router)
 app.include_router(brain_router)
 app.include_router(jobs_router)
@@ -261,4 +263,6 @@ async def shutdown():
     from services.scheduler import stop_scheduler
     await stop_worker()
     await stop_scheduler()
+    await disconnect()
+
     await disconnect()

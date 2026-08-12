@@ -39,6 +39,7 @@ import ApplicantDetailPage from './pages/staff/ApplicantDetailPage';
 import StaffTasksPage from './pages/staff/StaffTasksPage';
 import StaffMessagingPage from './pages/staff/StaffMessagingPage';
 import StaffInvoicesPage from './pages/staff/StaffInvoicesPage';
+import StaffQuotesPage from './pages/staff/StaffQuotesPage';
 import StaffCasesPage from './pages/staff/StaffCasesPage';
 import StaffDocumentsReviewPage from './pages/staff/StaffDocumentsReviewPage';
 import TeacherStudentsPage from './pages/staff/TeacherStudentsPage';
@@ -168,6 +169,7 @@ export default function App() {
             <Route path="messaging" element={<StaffMessagingPage />} />
             <Route path="documents" element={<StaffDocumentsReviewPage />} />
             <Route path="invoices" element={<StaffInvoicesPage />} />
+            <Route path="quotes" element={<StaffQuotesPage />} />
             <Route path="reporting" element={<Suspense fallback={<LazyFallback />}><StaffReportingPage /></Suspense>} />
             <Route path="appointments" element={<Suspense fallback={<LazyFallback />}><StaffAppointmentsPage /></Suspense>} />
             <Route path="oracle" element={<Suspense fallback={<LazyFallback />}><OraclePage /></Suspense>} />

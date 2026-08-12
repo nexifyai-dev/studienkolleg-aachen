@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, Columns, Users, CheckSquare, FileText, Receipt, MessageSquare, BarChart3, Sparkles, GraduationCap, MoreHorizontal, CalendarDays } from 'lucide-react';
+import { LayoutDashboard, Columns, Users, CheckSquare, FileText, FileSignature, Receipt, MessageSquare, BarChart3, Sparkles, GraduationCap, MoreHorizontal, CalendarDays } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { PortalShell } from './PortalShell';
 
@@ -23,6 +23,7 @@ export default function StaffLayout() {
         { path: '/staff/tasks', label: t('layout.staff.tasks'), testId: 'tasks', icon: CheckSquare },
         { path: '/staff/documents', label: t('layout.staff.documents'), testId: 'documents', icon: FileText },
         { path: '/staff/invoices', label: t('layout.staff.invoices'), testId: 'invoices', icon: Receipt },
+        { path: '/staff/quotes', label: t('layout.staff.quotes', 'Angebote'), testId: 'quotes', icon: FileSignature },
         { path: '/staff/messaging', label: t('layout.staff.messages'), testId: 'messages', icon: MessageSquare },
         { path: '/staff/appointments', label: t('layout.staff.appointments', 'Termine'), testId: 'appointments', icon: CalendarDays },
         { path: '/staff/reporting', label: t('layout.staff.reporting'), testId: 'reporting', icon: BarChart3 },

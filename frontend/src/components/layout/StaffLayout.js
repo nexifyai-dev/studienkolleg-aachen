@@ -23,6 +23,7 @@ export default function StaffLayout() {
         { path: '/staff/tasks', label: t('layout.staff.tasks'), testId: 'tasks', icon: CheckSquare },
         { path: '/staff/documents', label: t('layout.staff.documents'), testId: 'documents', icon: FileText },
         { path: '/staff/invoices', label: t('layout.staff.invoices'), testId: 'invoices', icon: Receipt },
+        { path: '/staff/quotes', label: t('layout.staff.quotes'), testId: 'quotes', icon: FileText },
         { path: '/staff/messaging', label: t('layout.staff.messages'), testId: 'messages', icon: MessageSquare },
         { path: '/staff/appointments', label: t('layout.staff.appointments', 'Termine'), testId: 'appointments', icon: CalendarDays },
         { path: '/staff/reporting', label: t('layout.staff.reporting'), testId: 'reporting', icon: BarChart3 },

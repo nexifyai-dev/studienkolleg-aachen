@@ -218,3 +218,14 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# Lokale Deployment-Infra (VPS-Install) – nicht ins Repo
+backend/.env
+venv/
+data/
+logs/
+scripts/requirements-install.txt
+scripts/start.sh
+scripts/watchdog.sh
+scripts/server-frontend.js
+PORTS.md

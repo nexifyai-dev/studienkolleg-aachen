@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { PageScaffold, ToolbarRow } from '../../components/layout/PageScaffold';
 import { Card, CardContent } from '../../components/ui/card';
+import TariffSelect from '../../components/staff/TariffSelect';
 import { INVOICE_STATUS_LABELS, getLang } from '../../lib/utils';
 import { API } from '../../lib/apiBase';
 
@@ -138,6 +139,15 @@ function CreateInvoiceModal({ onClose, onCreated, applicants }) {
   const selectedApplicant = applicants.find(a => a.id === form.applicant_id);
   const total = form.items.reduce((s, i) => s + (parseFloat(i.quantity) || 0) * (parseFloat(i.unit_price) || 0), 0);
 
+  const addTariff = (tariff) => {
+    setForm(f => ({
+      ...f,
+      items: f.items.every(i => !i.description)
+        ? [{ description: tariff.name, quantity: 1, unit_price: tariff.price, code: tariff.code }]
+        : [...f.items, { description: tariff.name, quantity: 1, unit_price: tariff.price, code: tariff.code }],
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.applicant_id || !form.due_date || form.items.every(i => !i.description)) return;
@@ -217,6 +227,9 @@ function CreateInvoiceModal({ onClose, onCreated, applicants }) {
             <input type="date" value={form.due_date} onChange={e => setForm(f => ({...f, due_date: e.target.value}))}
               className="w2g-input" data-testid="invoice-due-date-input" required />
           </div>
+
+          {/* Tarif-Dropdown */}
+          <TariffSelect onAdd={addTariff} label="Tarif hinzufuegen" />
 
           {/* Line Items */}
           <LineItemsEditor items={form.items} onChange={items => setForm(f => ({...f, items}))} />

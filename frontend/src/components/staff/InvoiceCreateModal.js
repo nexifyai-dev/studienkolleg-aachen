@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { X, Search, Plus, Trash2, Send, FileText, Loader2, Receipt } from 'lucide-react';
 import apiClient from '../../lib/apiClient';
 import { toast } from 'sonner';
+import TariffSelect from './TariffSelect';
 
 const CATEGORIES = {
   kurs: 'Kurse',
@@ -138,6 +139,11 @@ export default function InvoiceCreateModal({ applicant, onClose, onCreated }) {
         <div className="flex flex-col lg:flex-row" style={{ maxHeight: 'calc(90vh - 160px)' }}>
           {/* Linke Seite: Positionen */}
           <div className="flex-1 p-5 overflow-y-auto border-r border-[var(--color-divider-subtle)]">
+            {/* Tarif-Dropdown */}
+            <div className="mb-4">
+              <TariffSelect onAdd={addProduct} label="Tarif hinzufuegen (Dropdown)" />
+            </div>
+
             {/* Produkt-Suche */}
             <div className="mb-4">
               <label className="w2g-label">Paket / Leistung hinzufuegen</label>

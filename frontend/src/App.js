@@ -38,6 +38,7 @@ import ApplicantDetailPage from './pages/staff/ApplicantDetailPage';
 import StaffTasksPage from './pages/staff/StaffTasksPage';
 import StaffMessagingPage from './pages/staff/StaffMessagingPage';
 import StaffInvoicesPage from './pages/staff/StaffInvoicesPage';
+import StaffQuotesPage from './pages/staff/StaffQuotesPage';
 import StaffCasesPage from './pages/staff/StaffCasesPage';
 import StaffDocumentsReviewPage from './pages/staff/StaffDocumentsReviewPage';
 import TeacherStudentsPage from './pages/staff/TeacherStudentsPage';
@@ -58,6 +59,7 @@ import AdminRulesPage from './pages/admin/AdminRulesPage';
 import AdminReportsPage from './pages/admin/AdminReportsPage';
 import AdminStaffPage from './pages/admin/AdminStaffPage';
 import AdminFinancePage from './pages/admin/AdminFinancePage';
+import AdminTariffsPage from './pages/admin/AdminTariffsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import PartnerLayout from './components/layout/PartnerLayout';
 import PartnerDashboardPage from './pages/partner/PartnerDashboardPage';
@@ -163,6 +165,7 @@ export default function App() {
             <Route path="messaging" element={<StaffMessagingPage />} />
             <Route path="documents" element={<StaffDocumentsReviewPage />} />
             <Route path="invoices" element={<StaffInvoicesPage />} />
+            <Route path="quotes" element={<StaffQuotesPage />} />
             <Route path="reporting" element={<Suspense fallback={<LazyFallback />}><StaffReportingPage /></Suspense>} />
             <Route path="appointments" element={<Suspense fallback={<LazyFallback />}><StaffAppointmentsPage /></Suspense>} />
             <Route path="oracle" element={<Suspense fallback={<LazyFallback />}><OraclePage /></Suspense>} />
@@ -188,6 +191,7 @@ export default function App() {
             <Route path="users" element={<UsersPage />} />
             <Route path="staff" element={<AdminStaffPage />} />
             <Route path="finance" element={<AdminFinancePage />} />
+            <Route path="tariffs" element={<AdminTariffsPage />} />
             <Route path="partners" element={<AdminPartnersPage />} />
             <Route path="knowledge" element={<AdminKnowledgePage />} />
             <Route path="jobs" element={<AdminJobsPage />} />

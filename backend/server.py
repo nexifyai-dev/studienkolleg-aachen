@@ -55,6 +55,7 @@ from routers.oracle import router as oracle_router
 from routers.support_chat import router as support_chat_router
 from routers.lms import router as lms_router
 from routers.products import router as products_router
+from routers.quotes import router as quotes_router
 from routers.payments import router as payments_router
 from routers.payments import webhook_router as stripe_webhook_router
 
@@ -226,6 +227,7 @@ app.include_router(jobs_router)
 app.include_router(oracle_router)
 app.include_router(support_chat_router)
 app.include_router(products_router)
+app.include_router(quotes_router)
 app.include_router(lms_router)
 app.include_router(payments_router)
 app.include_router(stripe_webhook_router)

@@ -212,3 +212,24 @@ class InvoiceUpdate(BaseModel):
     notes: Optional[str] = None
     paid_at: Optional[str] = None
     items: Optional[List[dict]] = None  # [{description, quantity, unit_price}]
+
+
+class QuoteCreate(BaseModel):
+    applicant_id: str
+    application_id: Optional[str] = None
+    description: str = ""
+    amount: Optional[float] = None
+    currency: str = "EUR"
+    valid_until: Optional[str] = None  # ISO date, default +30 Tage
+    items: Optional[List[dict]] = None  # [{code, description, quantity, unit_price}]
+    line_items: Optional[List[dict]] = None  # Alias
+    notes: Optional[str] = None
+
+
+class QuoteUpdate(BaseModel):
+    status: Optional[str] = None  # draft | sent | accepted | declined | invoiced
+    description: Optional[str] = None
+    amount: Optional[float] = None
+    valid_until: Optional[str] = None
+    notes: Optional[str] = None
+    items: Optional[List[dict]] = None

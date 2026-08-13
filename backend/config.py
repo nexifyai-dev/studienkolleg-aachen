@@ -15,8 +15,11 @@ JWT_SECRET: str = os.environ["JWT_SECRET"]
 
 # ─── Seed credentials (loaded from env – no code defaults for passwords) ─────
 # ADMIN_EMAIL has a safe default (non-secret). ADMIN_PASSWORD has NO default.
+# ÄNDERUNG 2026-08-13 09:45 CEST — Default Admin-Default entfernt (Secret-Scanner-
+#   Fund 13.08.; widersprach Docstring Zeile 3 „NO fallback values for secrets").
+#   Fail-fast via os.environ[]: Fehlen bricht Start mit klarem Fehler ab.
 ADMIN_EMAIL: str = os.environ.get("ADMIN_EMAIL", "admin@studienkolleg-aachen.de")
-ADMIN_PASSWORD: str = os.environ.get("ADMIN_PASSWORD", "Admin@2026!")
+ADMIN_PASSWORD: str = os.environ["ADMIN_PASSWORD"]
 
 # ─── App URLs ─────────────────────────────────────────────────────────────────
 FRONTEND_URL: str = os.environ.get("FRONTEND_URL", "http://localhost:3000")

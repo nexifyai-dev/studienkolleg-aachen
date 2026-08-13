@@ -97,7 +97,12 @@ async def seed():
             user_id = str(existing["_id"])
         else:
             from bcrypt import hashpw, gensalt
-            pw_hash = hashpw("DevSeed@2026!".encode(), gensalt()).decode()
+            # ÄNDERUNG 2026-08-13 09:45 CEST — Default Seed-Default entfernt
+            #   (Secret-Scanner-Fund 13.08.). Fail-fast statt bekanntem Default.
+            seed_pw = os.environ.get("SEED_DEV_PASSWORD")
+            if not seed_pw:
+                raise RuntimeError("SEED_DEV_PASSWORD not configured")
+            pw_hash = hashpw(seed_pw.encode(), gensalt()).decode()
             user_doc = {
                 "email": demo["email"],
                 "full_name": demo["full_name"],

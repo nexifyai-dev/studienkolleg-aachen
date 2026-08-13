@@ -283,7 +283,11 @@ async def seed_demo_data(user: dict = Depends(require_roles(*ADMIN_ROLES))):
     import bcrypt
 
     db = get_db()
-    seed_pw = os.environ.get("SEED_DEV_PASSWORD", "DevSeed@2026!")
+    # ÄNDERUNG 2026-08-13 09:45 CEST — Default Seed-Default entfernt
+    #   (Secret-Scanner-Fund 13.08.). Fail-fast statt bekanntem Default.
+    seed_pw = os.environ.get("SEED_DEV_PASSWORD")
+    if not seed_pw:
+        raise HTTPException(status_code=503, detail="SEED_DEV_PASSWORD nicht konfiguriert")
     now = datetime.now(timezone.utc)
 
     # Workspace anchor

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { PageScaffold, ToolbarRow } from '../../components/layout/PageScaffold';
 import { Card, CardContent } from '../../components/ui/card';
+import { TariffSelect } from '../../components/staff/TariffSelect';
 import { INVOICE_STATUS_LABELS, getLang } from '../../lib/utils';
 import { API } from '../../lib/apiBase';
 
@@ -38,9 +39,15 @@ function StatusBadge({ status }) {
 }
 
 /* ═══════ Line Items Editor ═══════ */
-function LineItemsEditor({ items, onChange }) {
+function LineItemsEditor({ items, onChange, products }) {
   const addItem = () => {
     onChange([...items, { description: '', quantity: 1, unit_price: 0 }]);
+  };
+
+  const addProduct = (product) => {
+    const emptyOnly = items.length === 1 && !items[0].description && !parseFloat(items[0].unit_price);
+    const newItem = { description: product.name, quantity: 1, unit_price: product.price };
+    onChange(emptyOnly ? [newItem] : [...items, newItem]);
   };
 
   const updateItem = (idx, field, value) => {
@@ -67,6 +74,10 @@ function LineItemsEditor({ items, onChange }) {
           <Plus size={12} /> Position
         </button>
       </div>
+
+      {products?.length > 0 && (
+        <TariffSelect products={products} onSelect={addProduct} testId="invoice-tariff-select" />
+      )}
 
       {/* Table Header */}
       <div className="grid grid-cols-[1fr_80px_100px_90px_32px] gap-2 text-[10px] font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider px-1">
@@ -121,7 +132,7 @@ function LineItemsEditor({ items, onChange }) {
 }
 
 /* ═══════ Create Invoice Modal ═══════ */
-function CreateInvoiceModal({ onClose, onCreated, applicants }) {
+function CreateInvoiceModal({ onClose, onCreated, applicants, products }) {
   const [form, setForm] = useState({
     applicant_id: '', description: '', due_date: '',
     items: [{ description: '', quantity: 1, unit_price: 0 }],
@@ -219,7 +230,7 @@ function CreateInvoiceModal({ onClose, onCreated, applicants }) {
           </div>
 
           {/* Line Items */}
-          <LineItemsEditor items={form.items} onChange={items => setForm(f => ({...f, items}))} />
+          <LineItemsEditor items={form.items} products={products} onChange={items => setForm(f => ({...f, items}))} />
         </form>
         <div className="w2g-modal-footer">
           <button type="button" onClick={onClose} className="w2g-btn-secondary">Abbrechen</button>
@@ -301,7 +312,7 @@ function InvoiceSettingsPanel({ onClose }) {
 }
 
 /* ═══════ Edit Invoice Modal (Line Items) ═══════ */
-function EditInvoiceModal({ invoice, onClose, onSaved }) {
+function EditInvoiceModal({ invoice, onClose, onSaved, products }) {
   const initialItems = invoice?.items?.length
     ? invoice.items.map(i => ({
         description: i.description || '',
@@ -376,7 +387,7 @@ function EditInvoiceModal({ invoice, onClose, onSaved }) {
           </div>
 
           {/* Line Items */}
-          <LineItemsEditor items={form.items} onChange={items => setForm(f => ({...f, items}))} />
+          <LineItemsEditor items={form.items} products={products} onChange={items => setForm(f => ({...f, items}))} />
         </div>
         <div className="w2g-modal-footer">
           <button onClick={onClose} className="w2g-btn-secondary">Abbrechen</button>
@@ -394,6 +405,7 @@ export default function StaffInvoicesPage() {
   const [invoices, setInvoices] = useState([]);
   const [stats, setStats] = useState(null);
   const [applicants, setApplicants] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
@@ -446,6 +458,7 @@ export default function StaffInvoicesPage() {
   useEffect(() => { fetchData(); }, [fetchData]);
   useEffect(() => {
     apiClient.get('/api/invoices/applicants').then(r => setApplicants(r.data || [])).catch(() => {});
+    apiClient.get('/api/products').then(r => setProducts(r.data || [])).catch(() => {});
   }, []);
 
   const handleStatusChange = async (invoiceNumber, newStatus) => {
@@ -685,13 +698,13 @@ export default function StaffInvoicesPage() {
 
       {/* Modals */}
       {showCreate && (
-        <CreateInvoiceModal applicants={applicants}
+        <CreateInvoiceModal applicants={applicants} products={products}
           onClose={() => setShowCreate(false)}
           onCreated={() => { setShowCreate(false); fetchData(); }} />
       )}
       {showSettings && <InvoiceSettingsPanel onClose={() => setShowSettings(false)} />}
       {editInvoice && (
-        <EditInvoiceModal invoice={editInvoice}
+        <EditInvoiceModal invoice={editInvoice} products={products}
           onClose={() => setEditInvoice(null)}
           onSaved={() => { setEditInvoice(null); fetchData(); }} />
       )}

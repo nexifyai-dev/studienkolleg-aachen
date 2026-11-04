@@ -1,0 +1,1470 @@
+[
+  {
+    "c": 3410,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 500,
+        "nh": 777,
+        "nw": 871,
+        "src": "assets/hero-woman.webp",
+        "w": 560
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 350
+      },
+      {
+        "fit": "contain",
+        "h": 480,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 727
+      },
+      {
+        "fit": "contain",
+        "h": 480,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 727
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 3410,
+    "url": "#/",
+    "w": 3425
+  },
+  {
+    "c": 3410,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-single-0acab186.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-single-a7a853a6.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-double-cb87492c.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser2-double-0f6295b8.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 768,
+        "nw": 1024,
+        "src": "assets/roemer-single-4dfe40ea.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 3410,
+    "url": "#/wohnen",
+    "w": 3425
+  },
+  {
+    "c": 3410,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 969
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-double-0acab186.jpg",
+        "w": 969
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-9cbeaa62.jpg",
+        "w": 969
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 3410,
+    "url": "#/wohnen/objekt/kapellen-double",
+    "w": 3425
+  },
+  {
+    "c": 3410,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 350
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 3410,
+    "url": "#/team",
+    "w": 3425
+  },
+  {
+    "c": 3410,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 969
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 969
+      },
+      {
+        "fit": "contain",
+        "h": 480,
+        "nh": 500,
+        "nw": 800,
+        "src": "assets/aachen-dom.jpg",
+        "w": 2930
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 3410,
+    "url": "#/campus",
+    "w": 3425
+  },
+  {
+    "c": 3410,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-0.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-1.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-2.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-3.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-4.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-5.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 420,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-6.jpg",
+        "w": 961
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 3410,
+    "url": "#/campus/videos",
+    "w": 3425
+  },
+  {
+    "c": 3410,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 3410,
+    "url": "#/studienkolleg",
+    "w": 3425
+  },
+  {
+    "c": 1905,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 500,
+        "nh": 777,
+        "nw": 871,
+        "src": "assets/hero-woman.webp",
+        "w": 560
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 350
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 350
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 350
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 1905,
+    "url": "#/",
+    "w": 1920
+  },
+  {
+    "c": 1905,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 345,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-single-0acab186.jpg",
+        "w": 460
+      },
+      {
+        "fit": "contain",
+        "h": 345,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 460
+      },
+      {
+        "fit": "contain",
+        "h": 345,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-single-a7a853a6.jpg",
+        "w": 460
+      },
+      {
+        "fit": "contain",
+        "h": 345,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-double-cb87492c.jpg",
+        "w": 460
+      },
+      {
+        "fit": "contain",
+        "h": 345,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser2-double-0f6295b8.jpg",
+        "w": 460
+      },
+      {
+        "fit": "contain",
+        "h": 345,
+        "nh": 768,
+        "nw": 1024,
+        "src": "assets/roemer-single-4dfe40ea.jpg",
+        "w": 460
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 1905,
+    "url": "#/wohnen",
+    "w": 1920
+  },
+  {
+    "c": 1905,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 467
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-double-0acab186.jpg",
+        "w": 467
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-9cbeaa62.jpg",
+        "w": 467
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 1905,
+    "url": "#/wohnen/objekt/kapellen-double",
+    "w": 1920
+  },
+  {
+    "c": 1905,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 350
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 1905,
+    "url": "#/team",
+    "w": 1920
+  },
+  {
+    "c": 1905,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 467
+      },
+      {
+        "fit": "contain",
+        "h": 350,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 467
+      },
+      {
+        "fit": "contain",
+        "h": 480,
+        "nh": 500,
+        "nw": 800,
+        "src": "assets/aachen-dom.jpg",
+        "w": 1425
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 1905,
+    "url": "#/campus",
+    "w": 1920
+  },
+  {
+    "c": 1905,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 344,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-0.jpg",
+        "w": 459
+      },
+      {
+        "fit": "contain",
+        "h": 344,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-1.jpg",
+        "w": 459
+      },
+      {
+        "fit": "contain",
+        "h": 344,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-2.jpg",
+        "w": 459
+      },
+      {
+        "fit": "contain",
+        "h": 344,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-3.jpg",
+        "w": 459
+      },
+      {
+        "fit": "contain",
+        "h": 344,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-4.jpg",
+        "w": 459
+      },
+      {
+        "fit": "contain",
+        "h": 344,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-5.jpg",
+        "w": 459
+      },
+      {
+        "fit": "contain",
+        "h": 344,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-6.jpg",
+        "w": 459
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 1905,
+    "url": "#/campus/videos",
+    "w": 1920
+  },
+  {
+    "c": 1905,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 62,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 75
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 1905,
+    "url": "#/studienkolleg",
+    "w": 1920
+  },
+  {
+    "c": 753,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 300,
+        "nh": 777,
+        "nw": 871,
+        "src": "assets/hero-woman.webp",
+        "w": 360
+      },
+      {
+        "fit": "contain",
+        "h": 280,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 280
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 753,
+    "url": "#/",
+    "w": 768
+  },
+  {
+    "c": 753,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-single-0acab186.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-single-a7a853a6.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-double-cb87492c.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser2-double-0f6295b8.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 768,
+        "nw": 1024,
+        "src": "assets/roemer-single-4dfe40ea.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 753,
+    "url": "#/wohnen",
+    "w": 768
+  },
+  {
+    "c": 753,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 260,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 347
+      },
+      {
+        "fit": "contain",
+        "h": 260,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-double-0acab186.jpg",
+        "w": 347
+      },
+      {
+        "fit": "contain",
+        "h": 260,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-9cbeaa62.jpg",
+        "w": 347
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 753,
+    "url": "#/wohnen/objekt/kapellen-double",
+    "w": 768
+  },
+  {
+    "c": 753,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 280,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 280
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 753,
+    "url": "#/team",
+    "w": 768
+  },
+  {
+    "c": 753,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 260,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 347
+      },
+      {
+        "fit": "contain",
+        "h": 260,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 347
+      },
+      {
+        "fit": "contain",
+        "h": 441,
+        "nh": 500,
+        "nw": 800,
+        "src": "assets/aachen-dom.jpg",
+        "w": 705
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 753,
+    "url": "#/campus",
+    "w": 768
+  },
+  {
+    "c": 753,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-0.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-1.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-2.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-3.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-4.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-5.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 255,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-6.jpg",
+        "w": 341
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 753,
+    "url": "#/campus/videos",
+    "w": 768
+  },
+  {
+    "c": 753,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 753,
+    "url": "#/studienkolleg",
+    "w": 768
+  },
+  {
+    "c": 305,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 229,
+        "nh": 777,
+        "nw": 871,
+        "src": "assets/hero-woman.webp",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 257,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 305,
+    "url": "#/",
+    "w": 320
+  },
+  {
+    "c": 305,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-single-0acab186.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-single-a7a853a6.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser-double-cb87492c.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/vaalser2-double-0f6295b8.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 191,
+        "nh": 768,
+        "nw": 1024,
+        "src": "assets/roemer-single-4dfe40ea.jpg",
+        "w": 255
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 305,
+    "url": "#/wohnen",
+    "w": 320
+  },
+  {
+    "c": 305,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 96,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-54959208.jpg",
+        "w": 129
+      },
+      {
+        "fit": "contain",
+        "h": 96,
+        "nh": 570,
+        "nw": 1024,
+        "src": "assets/kapellen-double-0acab186.jpg",
+        "w": 129
+      },
+      {
+        "fit": "contain",
+        "h": 96,
+        "nh": 1024,
+        "nw": 768,
+        "src": "assets/kapellen-double-9cbeaa62.jpg",
+        "w": 129
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 305,
+    "url": "#/wohnen/objekt/kapellen-double",
+    "w": 320
+  },
+  {
+    "c": 305,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 257,
+        "nh": 400,
+        "nw": 400,
+        "src": "assets/laura-saboor.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 305,
+    "url": "#/team",
+    "w": 320
+  },
+  {
+    "c": 305,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 78,
+        "nh": 1080,
+        "nw": 1080,
+        "src": "assets/campus-classroom.jpg",
+        "w": 105
+      },
+      {
+        "fit": "contain",
+        "h": 78,
+        "nh": 1440,
+        "nw": 1440,
+        "src": "assets/campus-workshop.jpg",
+        "w": 105
+      },
+      {
+        "fit": "contain",
+        "h": 161,
+        "nh": 500,
+        "nw": 800,
+        "src": "assets/aachen-dom.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 305,
+    "url": "#/campus",
+    "w": 320
+  },
+  {
+    "c": 305,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 193,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-0.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 193,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-1.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 193,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-2.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 193,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-3.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 193,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-4.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 193,
+        "nh": 853,
+        "nw": 480,
+        "src": "assets/video-poster-5.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 193,
+        "nh": 1024,
+        "nw": 576,
+        "src": "assets/video-poster-6.jpg",
+        "w": 257
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 305,
+    "url": "#/campus/videos",
+    "w": 320
+  },
+  {
+    "c": 305,
+    "images": [
+      {
+        "fit": "contain",
+        "h": 56,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 61
+      },
+      {
+        "fit": "contain",
+        "h": 65,
+        "nh": 467,
+        "nw": 613,
+        "src": "assets/studienkolleg-logo.png",
+        "w": 74
+      }
+    ],
+    "lang": "en",
+    "s": 305,
+    "url": "#/studienkolleg",
+    "w": 320
+  }
+]

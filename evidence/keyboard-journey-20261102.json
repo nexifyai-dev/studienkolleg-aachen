@@ -1,0 +1,46 @@
+{
+  "observed_at": "2026-11-02T02:15:58.165370+00:00",
+  "baseline_commit": "327ee20e79289c9361358712eeb6451634181f48",
+  "scope": "Keyboard-only entry and application step transitions in static pilot",
+  "browser_before": [
+    "Skip from /apply changed fragment to #main and rendered undefined-route page",
+    "Continue via Enter left activeElement BODY"
+  ],
+  "browser_after": [
+    "Skip preserves #/apply and focuses MAIN",
+    "Continue focuses documents H3; next Tab focuses Add sample button",
+    "Back/step selection/complete/edit focus corresponding headings"
+  ],
+  "hashes": {
+    "dist/v3.js": "f767e30786ebe94623b1a5caa87744777341076e69b4019678fddabff99c72f0",
+    "dist/v3-migration.js": "d1beb23e86aa735ecacba10b7832607c16f0833cc7825cfbd0e54f3183c66c83",
+    "test-keyboard-journey.cjs": "cb67837aa7be9edcd3273ec3ae7a050964dce5b61e002b385f3f5c98760c381b"
+  },
+  "tests": {
+    "test-keyboard-journey.cjs": {
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"checks\": [\n    \"Skiplink preserves route and draft while focusing current main\",\n    \"Explicit application transitions move focus; edits and other routes do not\"\n  ],\n  \"scope\": \"Local event/DOM stub; browser keyboard proof separate\"\n}\n"
+    },
+    "test-application-continuity.cjs": {
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"checks\": [\n    \"Application choices retain stable values with translated labels\",\n    \"Review and applicant portal preserve all draft selections without granting admission\",\n    \"Unset and adversarial sample values remain honest and escaped\",\n    \"German summary and staff contexts stay separate\",\n    \"Applicant tasks and messages agree with all document masks in DE/EN\",\n    \"Booking review and confirmation translate all stable topic values\"\n  ],\n  \"scope\": \"Local VM assertions; no backend/auth/real upload or production acceptance\"\n}\n"
+    },
+    "test-v2.cjs": {
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"routePatterns\": 222,\n  \"profileRenders\": 291,\n  \"checks\": [\n    \"housing filters empty/reset\",\n    \"external evidence gate\",\n    \"exam capacity and payment gates\",\n    \"university save/compare/consent\",\n    \"occupancy overlap gate\",\n    \"finance receipt/match/review\",\n    \"voluntary candidate activation\",\n    \"idempotent local retry\",\n    \"area-note isolation\",\n    \"workflow progress/no branch\",\n    \"DE/EN\"\n  ],\n  \"scope\": \"Node VM DOM stub; not browser, production or source-level acceptance\"\n}\nLINK CRAWL PASS: 405 concrete linked hash routes.\nAPPLICATION IDENTITY AND CASE-CHANGE CONSENT RESET: PASS\n"
+    },
+    "test-v3.cjs": {
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"checks\": [\n    \"Public shell removes mixed mode selector and coverage navigation\",\n    \"Original housing six source records and17 published room rows\",\n    \"Housing filters discriminate single/double and budget\",\n    \"1770 original knowledge entries, stable unique identifiers,15 themes\",\n    \"Provider comparison uses four sources without fake tariff prices\",\n    \"University8criteria filters and multi-program comparison\",\n    \"Public brief continuity; staff and role separation\",\n    \"Individual university approval remains case bound\",\n    \"Exam breadth, no onSET offered booking, official provider paths\",\n    \"Preserved exam negative payment/capacity gates\",\n    \"Legal source wording and original course factual panels\",\n    \"Meaningful English shell and source-language transparency\",\n    \"Application document count and topic brief reach applicant portal\",\n    \"62 source-language editorial pages render with journey links and source date\",\n    \"Video source references preserved without automatic playback\",\n    \"German timeline and recognition/mentoring and booking types\"\n  ],\n  \"concreteLinksRendered\": 149,\n  \"scope\": \"Node VM rendering/state assertions, not real browser/production acceptance\",\n  \"remaining\": \"Independent browser review and final migration coverage classification\"\n}\n"
+    }
+  },
+  "limits": [
+    "Local Chromium and Node VM, no full accessibility/screenreader acceptance",
+    "No backend/auth/runtime changes"
+  ],
+  "independent_review": {
+    "reviewer": "pruefe_stk_nutzerfluss",
+    "result": "PASS",
+    "scope": "Code/VM tests and instrumented single binding after 16 renders; not full accessibility acceptance"
+  }
+}

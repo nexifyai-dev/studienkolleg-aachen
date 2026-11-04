@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "routePatterns": 222,
+  "profileRenders": 291,
+  "checks": [
+    "housing filters empty/reset",
+    "external evidence gate",
+    "exam capacity and payment gates",
+    "university save/compare/consent",
+    "occupancy overlap gate",
+    "finance receipt/match/review",
+    "voluntary candidate activation",
+    "idempotent local retry",
+    "area-note isolation",
+    "workflow progress/no branch",
+    "DE/EN",
+    "housing period filter",
+    "all emitted hash links resolve",
+    "individual university case identity and consent reset"
+  ],
+  "scope": "Node VM DOM stub; not browser, production or source-level acceptance",
+  "linked_hash_routes_checked": 405,
+  "browser_evidence": {
+    "file": "V2-BROWSER-QA.json",
+    "source": "/workspace/shared/stk-pilot-v2-browser-qa-20261030.json",
+    "sha256": "5a4f1cea5653a073f97a657f131d91f4a397f283859a2590443296420e4db921",
+    "scope": "Limited root browser evidence: desktop geometry, zoom-based narrow reflow, housing gates and exam gates. Not physical-device or full family acceptance."
+  },
+  "source_supplement_verified": true,
+  "designed_business_tests": 992,
+  "executed_production_tests": 0
+}

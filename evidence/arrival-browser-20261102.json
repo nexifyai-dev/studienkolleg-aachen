@@ -1,0 +1,146 @@
+[
+  {
+    "client": 305,
+    "heading": "28px",
+    "route": "#/staff/arrival",
+    "scroll": 305,
+    "targets": [
+      {
+        "height": 48,
+        "label": "AdministrationSchool leadUnassigned role"
+      },
+      {
+        "height": 48,
+        "label": "Record question locally"
+      },
+      {
+        "height": 48,
+        "label": "Record review locally"
+      },
+      {
+        "height": 51.25,
+        "label": "Internal review history"
+      },
+      {
+        "height": 51.25,
+        "label": "Plan versions and shared history"
+      }
+    ],
+    "width": 320
+  },
+  {
+    "client": 753,
+    "heading": "28px",
+    "route": "#/staff/arrival",
+    "scroll": 753,
+    "targets": [
+      {
+        "height": 48,
+        "label": "AdministrationSchool leadUnassigned role"
+      },
+      {
+        "height": 48,
+        "label": "Record question locally"
+      },
+      {
+        "height": 48,
+        "label": "Record review locally"
+      },
+      {
+        "height": 51.25,
+        "label": "Internal review history"
+      },
+      {
+        "height": 51.25,
+        "label": "Plan versions and shared history"
+      }
+    ],
+    "width": 768
+  },
+  {
+    "client": 1905,
+    "heading": "40px",
+    "route": "#/staff/arrival",
+    "scroll": 1905,
+    "targets": [
+      {
+        "height": 48,
+        "label": "AdministrationSchool leadUnassigned role"
+      },
+      {
+        "height": 48,
+        "label": "Record question locally"
+      },
+      {
+        "height": 48,
+        "label": "Record review locally"
+      },
+      {
+        "height": 51.25,
+        "label": "Internal review history"
+      },
+      {
+        "height": 51.25,
+        "label": "Plan versions and shared history"
+      }
+    ],
+    "width": 1920
+  },
+  {
+    "client": 3410,
+    "heading": "40px",
+    "route": "#/staff/arrival",
+    "scroll": 3410,
+    "targets": [
+      {
+        "height": 48,
+        "label": "AdministrationSchool leadUnassigned role"
+      },
+      {
+        "height": 48,
+        "label": "Record question locally"
+      },
+      {
+        "height": 48,
+        "label": "Record review locally"
+      },
+      {
+        "height": 51.25,
+        "label": "Internal review history"
+      },
+      {
+        "height": 51.25,
+        "label": "Plan versions and shared history"
+      }
+    ],
+    "width": 3425
+  },
+  {
+    "client": 305,
+    "heading": "28px",
+    "route": "#/portal/arrival",
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "client": 753,
+    "heading": "28px",
+    "route": "#/portal/arrival",
+    "scroll": 753,
+    "width": 768
+  },
+  {
+    "client": 1905,
+    "heading": "40px",
+    "route": "#/portal/arrival",
+    "scroll": 1905,
+    "width": 1920
+  },
+  {
+    "client": 3410,
+    "heading": "40px",
+    "route": "#/portal/arrival",
+    "scroll": 3410,
+    "width": 3425
+  }
+]

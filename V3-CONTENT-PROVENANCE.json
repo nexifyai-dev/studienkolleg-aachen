@@ -1,0 +1,18 @@
+{
+  "knowledge": 1770,
+  "legal": 4,
+  "source_files": [
+    {
+      "file": "/workspace/shared/stk-source-audit-v3-20261030/public-site/knowledge-all.json",
+      "sha256": "15bc7141c4b2d1e49922724af46b27f0525df6e04c5f9b601830b5f8be25ad98"
+    },
+    {
+      "file": "/workspace/shared/stk-source-audit-v3-20261030/public-site/legal-sections.json",
+      "sha256": "3cc60cc7684d4af9257d6768c86ee1ea57136cb378130815d57394e907387df3"
+    },
+    {
+      "file": "/workspace/shared/stk-source-audit-v3-20261030/public-site/migration-content-matrix.json",
+      "sha256": "237cba5777ba216582678c09e00a0106ce23b12c4ea5ccd1c0a9d2f71c170277"
+    }
+  ]
+}

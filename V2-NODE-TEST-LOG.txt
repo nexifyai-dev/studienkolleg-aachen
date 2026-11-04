@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "routePatterns": 222,
+  "profileRenders": 291,
+  "checks": [
+    "housing filters empty/reset",
+    "external evidence gate",
+    "exam capacity and payment gates",
+    "university save/compare/consent",
+    "occupancy overlap gate",
+    "finance receipt/match/review",
+    "voluntary candidate activation",
+    "idempotent local retry",
+    "area-note isolation",
+    "workflow progress/no branch",
+    "DE/EN"
+  ],
+  "scope": "Node VM DOM stub; not browser, production or source-level acceptance"
+}
+LINK CRAWL PASS: 405 concrete linked hash routes.
+APPLICATION IDENTITY AND CASE-CHANGE CONSENT RESET: PASS

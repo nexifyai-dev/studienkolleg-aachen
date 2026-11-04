@@ -1,0 +1,13 @@
+# Localhost layout incident — 2026-11-02
+
+Confirmed target: http://127.0.0.1:4173/#/, title Studienkolleg Aachen · Dein Weg ins Studium. Existing Chrome tab1842715072. Listener Python PID93917, cwd /Users/gast/Documents/Codex/2026-11-02/task-2/stk-site (lsof). No server kill/replacement, Factory changes or zoom reset. ps command was sandbox-denied; lsof independently establishes binding.
+
+Original browser viewport3425x1254, DPR1, visualViewport.scale1. These do not establish native Chrome zoom percentage. Page client/scroll width3410; sidebar368. Hero image1308x1167 within600px hero, severe head cropping; portrait1172x350; campus images1453x190. Screenshots layout-ultrawide-before.png and layout-ultrawide-after.png.
+
+Local correction: grid-flow hero with contained media max560x500; portrait square350x350; campus cards horizontal at>=1800 only when direct child image exists, otherwise retain existing text-card flow. Full shell/sidebar width retained. After3425: hero560x500 fully within600px section, portrait350x350, campus727x480; no horizontal overflow.1920: client/scroll1905, sidebar starts1537; hero560x500.320: client/scroll305, hero257x229, visible complete portrait.768: client/scroll753, hero360x300 contain. Browser temporary viewport reset. Native zoom not verified.
+
+Independent review found overbroad horizontal-card selector; corrected to :has(>img). Ten regression suites passed in reviewer run before selector-only narrowing. Changes remain LOCAL, no new publication. Existing housing package remains pending browser completion and evidence ledger update; baseline recovery review/test passed. Last deployed source befae72a5eb8237d714e92d9ccac0463cc7325ad. Existing server left running for user inspection.
+
+## Final verification (supersedes initial pending status)
+
+Expanded to property cards, gallery, video thumbnails and city photo: full original image retained with contain; aspect-ratio frames, no stretch. At320px found detail-table min-content overflow and video-grid min-width overflow; corrected shrinkable detail children and one-column mobile video. EN rental sidebar min-width overflow corrected.28 final measurements, seven routes x four sizes, all no document overflow (media-layout-measurements.json). Visual full-page Home/Campus screenshots inspected; original hero and portrait framing preserved. Native200% eventually SUCCESS: Chrome AX Zoom200%, DPR2,1712CSS viewport; nine routes including housing roles no overflow. Original100% restored via native Cmd+0, AX100%,DPR1. See zoom-200.json and layout-zoom-200.png. No new publication at time of this evidence entry; publication recorded by native deployment result.

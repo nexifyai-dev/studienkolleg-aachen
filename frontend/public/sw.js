@@ -18,9 +18,29 @@ const CORE_ASSETS = [
   '/apple-touch-icon.png',
 ];
 
+const offlineResponse = () => new Response('', { status: 503, statusText: 'Offline' });
+
+// Die gehashten CRA-Bundles der Startseite stehen im asset-manifest.json
+// und müssen vorab gecacht werden, sonst startet die App offline nicht.
+async function precacheEntrypoints(cache) {
+  try {
+    const resp = await fetch('/asset-manifest.json', { cache: 'no-cache' });
+    if (!resp.ok) return;
+    const manifest = await resp.json();
+    const paths = (manifest.entrypoints || [])
+      .filter((p) => /\.(js|css)$/.test(p))
+      .map((p) => (p.startsWith('/') ? p : `/${p}`));
+    await Promise.all(paths.map((p) => cache.add(p).catch(() => {})));
+  } catch (e) {
+    // Vorab-Caching ist best-effort; Laufzeit-Cache greift danach
+  }
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
+    caches.open(STATIC_CACHE)
+      .then((cache) => cache.addAll(CORE_ASSETS).then(() => precacheEntrypoints(cache)))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -51,7 +71,7 @@ self.addEventListener('fetch', (event) => {
           caches.open(RUNTIME_CACHE).then((c) => c.put(request, clone)).catch(() => {});
           return resp;
         })
-        .catch(() => caches.match(request).then((c) => c || caches.match('/')))
+        .catch(() => caches.match(request).then((c) => c || caches.match('/')).then((c) => c || offlineResponse()))
     );
     return;
   }
@@ -67,7 +87,7 @@ self.addEventListener('fetch', (event) => {
             caches.open(RUNTIME_CACHE).then((c) => c.put(request, clone)).catch(() => {});
           }
           return resp;
-        }).catch(() => cached);
+        }).catch(() => offlineResponse());
       })
     );
   }

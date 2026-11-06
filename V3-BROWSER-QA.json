@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-30",
+  "scope": "Real browser observations, not physical mobile or complete production acceptance",
+  "final_desktop": {
+    "cssViewport": [
+      1180,
+      758
+    ],
+    "devicePixelRatio": 1,
+    "scrollWidth": 1165,
+    "mainWidth": 845,
+    "assistant": {
+      "x": 845,
+      "y": 104,
+      "width": 320,
+      "height": 654,
+      "bottom": 758,
+      "position": "sticky"
+    },
+    "evidence": "evidence/v3-home-desktop.jpg"
+  },
+  "independent_desktop": {
+    "cssViewport": [
+      1267,
+      835
+    ],
+    "mainWidth": 908,
+    "assistantWidth": 344,
+    "horizontalOverflow": false
+  },
+  "narrow_window": {
+    "cssViewport": [
+      500,
+      758
+    ],
+    "devicePixelRatio": 1,
+    "scrollWidth": 485,
+    "assistantPosition": "static",
+    "heroBottomEqualsAssistantTop": 586,
+    "assistantBottomEqualsNextSectionTop": 916.5156
+  },
+  "zoom_reflow": {
+    "cssViewport": [
+      400,
+      606
+    ],
+    "devicePixelRatio": 1.25,
+    "browserZoomPercent": 125,
+    "scrollWidth": 388,
+    "physicalMobileEmulation": false,
+    "evidence": [
+      "evidence/v3-home-400css-125percent.jpg",
+      "evidence/v3-assistant-400css-in-flow.jpg"
+    ],
+    "passed": [
+      "housing detail/room enquiry",
+      "source editorial reading",
+      "three-step advisory simulation"
+    ]
+  },
+  "revision_note": "Narrow screenshots precede final CSS making collapsed brief disclosure visible on mobile. This adds in-flow height; final mobile height after that change was not remeasured. Desktop screenshot is final. Own test window restored to1180CSS px and100% zoom; original root window was not resized.",
+  "independent_functional": [
+    "provider compare→brief",
+    "housing room2→enquiry",
+    "application3documents→portal truthfulness",
+    "typed application brief→summary→portal exact retention at18:39:20"
+  ],
+  "limitations": [
+    "No physical mobile device",
+    "No cross-browser suite",
+    "No backend/live effects",
+    "Not all remote video playback verified"
+  ]
+}

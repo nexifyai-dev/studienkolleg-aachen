@@ -1,0 +1,50 @@
+[
+  {
+    "suite": "test-admissions.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-application-continuity.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-appointments.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-arrival.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-attendance.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-cases.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-keyboard-journey.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-learning.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-library.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-rental.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-v2.cjs",
+    "status": "PASS"
+  },
+  {
+    "suite": "test-v3.cjs",
+    "status": "PASS"
+  }
+]

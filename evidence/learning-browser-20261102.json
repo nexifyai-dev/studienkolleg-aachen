@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-02",
+  "baseline": "d297376f36509aaef46743dcd2508fda63818527",
+  "browser": "Chrome via CUA",
+  "before": "Teacher homework route rendered only specification workbench; no task/answer/feedback form",
+  "checks": [
+    "assignment -> empty response error/focus -> sample late response -> teacher feedback draft hidden -> explicit release visible",
+    "DE/EN retains sample response and translates default task",
+    "revised response sets current feedback null and focuses learning-heading; review pending",
+    "learning course navigation preserves state",
+    "final sidebar uses participant learning paths rather than applicant links"
+  ],
+  "geometry": [
+    {
+      "viewport": 390,
+      "documentWidth": 375,
+      "minimumTestedControlHeight": 48
+    },
+    {
+      "viewport": 768,
+      "documentWidth": 753
+    },
+    {
+      "viewport": 1920,
+      "documentWidth": 1905,
+      "frameWidth": 1905,
+      "mainRight": 1537,
+      "sidebarLeft": 1537
+    }
+  ],
+  "limits": [
+    "Viewport overrides, not physical-device certification",
+    "Browser zoom shortcut attempt did not verify a changed zoom factor; full zoom acceptance remains open",
+    "No screenreader, real permissions, server storage, LMS or grade acceptance"
+  ],
+  "screenshot": "evidence/learning-browser-20261102.png"
+}

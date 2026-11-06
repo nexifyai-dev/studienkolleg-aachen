@@ -1,0 +1,1444 @@
+{
+  "date": "2026-11-02",
+  "source": "FRONTEND-PAGE-MATRIX.json",
+  "definition": "Role routes are existing matrix patterns beginning /portal, /staff, /admin or /master. Partial vertical evidence means representative local simulation only; not complete page/family/production acceptance.",
+  "counts": {
+    "areaFamilies": 34,
+    "sourceProfiles": 291,
+    "totalRoutePatterns": 222,
+    "roleRoutePatterns": 131,
+    "rolePatternsWithNewPartialVerticalEvidence": 22,
+    "rolePatternsWithoutNewVerticalEvidence": 109,
+    "fullyAcceptedRolePatterns": 0
+  },
+  "packages": [
+    {
+      "id": "admissions",
+      "profiles": [
+        "WF-W03-03-01",
+        "WF-W03-03-02"
+      ],
+      "patterns": [
+        "/portal/applicant",
+        "/staff/admissions",
+        "/staff/admissions/:id"
+      ],
+      "representatives": [
+        "/portal/applicant",
+        "/staff/admissions",
+        "/staff/admissions/DEMO-001"
+      ],
+      "tests": "test-admissions.cjs"
+    },
+    {
+      "id": "learning",
+      "profiles": [
+        "WF-W11-07-01"
+      ],
+      "patterns": [
+        "/portal/learning",
+        "/portal/learning/course/:id",
+        "/portal/teacher/homework"
+      ],
+      "representatives": [
+        "/portal/learning",
+        "/portal/learning/course/T-01",
+        "/portal/teacher/homework"
+      ],
+      "tests": "test-learning.cjs"
+    },
+    {
+      "id": "attendance",
+      "profiles": [
+        "WF-W11-02-01",
+        "WF-W11-02-02"
+      ],
+      "patterns": [
+        "/portal/teacher/attendance",
+        "/portal/teacher/classbook"
+      ],
+      "representatives": [
+        "/portal/teacher/attendance",
+        "/portal/teacher/classbook"
+      ],
+      "tests": "test-attendance.cjs"
+    },
+    {
+      "id": "cases-and-followups",
+      "profiles": [
+        "WF-W15-02-01",
+        "WF-W15-03-01",
+        "WF-W15-08-01",
+        "WF-W15-08-02"
+      ],
+      "patterns": [
+        "/portal/support",
+        "/portal/messages",
+        "/staff/inbox",
+        "/staff/cases",
+        "/staff/tasks",
+        "/staff/calendar"
+      ],
+      "representatives": [
+        "/portal/support",
+        "/portal/messages",
+        "/staff/inbox",
+        "/staff/cases",
+        "/staff/tasks",
+        "/staff/calendar"
+      ],
+      "tests": "test-cases.cjs"
+    },
+    {
+      "id": "appointments-and-documentation",
+      "profiles": [
+        "WF-W15-07-01",
+        "WF-W15-07-02"
+      ],
+      "patterns": [
+        "/portal/appointments",
+        "/staff/calendar"
+      ],
+      "representatives": [
+        "/portal/appointments",
+        "/staff/calendar"
+      ],
+      "tests": "test-appointments.cjs"
+    },
+    {
+      "id": "housing-records",
+      "profiles": [
+        "WF-W07-05-01",
+        "WF-W07-06-01",
+        "WF-W07-06-02",
+        "WF-W07-09-01"
+      ],
+      "patterns": [
+        "/portal/tenant/handover",
+        "/portal/tenant/issues",
+        "/portal/tenant/moveout",
+        "/staff/housing",
+        "/staff/housing/maintenance"
+      ],
+      "representatives": [
+        "/portal/tenant/handover",
+        "/portal/tenant/issues",
+        "/portal/tenant/moveout",
+        "/staff/housing",
+        "/staff/housing/maintenance"
+      ],
+      "tests": "test-rental.cjs"
+    },
+    {
+      "id": "library-and-vocabulary",
+      "profiles": [
+        "WF-W09-05-01",
+        "WF-W09-05-02"
+      ],
+      "patterns": [
+        "/staff/library",
+        "/portal/drive"
+      ],
+      "representatives": [
+        "/staff/library",
+        "/portal/drive"
+      ],
+      "tests": "test-library.cjs"
+    }
+  ],
+  "roleRoutes": [
+    {
+      "pattern": "/portal/applicant",
+      "areas": [
+        "admission"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "admissions",
+      "evidencePackages": [
+        "admissions"
+      ]
+    },
+    {
+      "pattern": "/staff/admissions",
+      "areas": [
+        "admission"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "admissions",
+      "evidencePackages": [
+        "admissions"
+      ]
+    },
+    {
+      "pattern": "/staff/admissions/:id",
+      "areas": [
+        "admission"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "admissions",
+      "evidencePackages": [
+        "admissions"
+      ]
+    },
+    {
+      "pattern": "/portal/applicant/assessment",
+      "areas": [
+        "admission"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/contracts",
+      "areas": [
+        "contract"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/contracts/:id",
+      "areas": [
+        "contract"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/contracts",
+      "areas": [
+        "contract"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/identities",
+      "areas": [
+        "contract"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/learning/subscription",
+      "areas": [
+        "selflearning"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/exams",
+      "areas": [
+        "exam"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/exams",
+      "areas": [
+        "exam"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/fsp",
+      "areas": [
+        "fsp"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/fsp/documents",
+      "areas": [
+        "fsp"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/fsp",
+      "areas": [
+        "fsp"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/fsp/dispatch",
+      "areas": [
+        "fsp"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/testas",
+      "areas": [
+        "testaspath"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/testas",
+      "areas": [
+        "testaspath"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/tenant",
+      "areas": [
+        "tenant"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/tenant/contract",
+      "areas": [
+        "tenant"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/tenant/payments",
+      "areas": [
+        "tenant"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/tenant/handover",
+      "areas": [
+        "tenant"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "housing-records",
+      "evidencePackages": [
+        "housing-records"
+      ]
+    },
+    {
+      "pattern": "/portal/tenant/issues",
+      "areas": [
+        "tenant"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "housing-records",
+      "evidencePackages": [
+        "housing-records"
+      ]
+    },
+    {
+      "pattern": "/portal/tenant/extension",
+      "areas": [
+        "tenant"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/tenant/moveout",
+      "areas": [
+        "tenant"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "housing-records",
+      "evidencePackages": [
+        "housing-records"
+      ]
+    },
+    {
+      "pattern": "/staff/housing",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "housing-records",
+      "evidencePackages": [
+        "housing-records"
+      ]
+    },
+    {
+      "pattern": "/staff/housing/occupancy",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/housing/properties/:id",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/housing/waitlist",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/housing/owners",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/housing/headleases",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/housing/maintenance",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "housing-records",
+      "evidencePackages": [
+        "housing-records"
+      ]
+    },
+    {
+      "pattern": "/staff/housing/settlements",
+      "areas": [
+        "propertyadmin"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/arrival",
+      "areas": [
+        "arrival"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/visa",
+      "areas": [
+        "arrival"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/visa",
+      "areas": [
+        "arrival"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/arrival",
+      "areas": [
+        "arrival"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/welcome",
+      "areas": [
+        "services"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/transfers",
+      "areas": [
+        "shuttle"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/transport",
+      "areas": [
+        "shuttle"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/university",
+      "areas": [
+        "university"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/university/applications/:id",
+      "areas": [
+        "university"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/university",
+      "areas": [
+        "university"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal",
+      "areas": [
+        "portal"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/profile",
+      "areas": [
+        "portal"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/documents",
+      "areas": [
+        "portal"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/tasks",
+      "areas": [
+        "portal"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/settings",
+      "areas": [
+        "portal"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/student360/:id",
+      "areas": [
+        "portal"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/search",
+      "areas": [
+        "portal"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/learning",
+      "areas": [
+        "lms"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "learning",
+      "evidencePackages": [
+        "learning"
+      ]
+    },
+    {
+      "pattern": "/portal/learning/course/:id",
+      "areas": [
+        "lms"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "learning",
+      "evidencePackages": [
+        "learning"
+      ]
+    },
+    {
+      "pattern": "/portal/drive",
+      "areas": [
+        "lms"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "library-and-vocabulary",
+      "evidencePackages": [
+        "library-and-vocabulary"
+      ]
+    },
+    {
+      "pattern": "/staff/library",
+      "areas": [
+        "lms"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "library-and-vocabulary",
+      "evidencePackages": [
+        "library-and-vocabulary"
+      ]
+    },
+    {
+      "pattern": "/staff/lms-sync",
+      "areas": [
+        "lms"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/courses",
+      "areas": [
+        "scheduling"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/programmes",
+      "areas": [
+        "scheduling"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/timetable",
+      "areas": [
+        "scheduling"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/rooms",
+      "areas": [
+        "scheduling"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/teachers",
+      "areas": [
+        "scheduling",
+        "hr"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/calendar",
+      "areas": [
+        "scheduling"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/teacher",
+      "areas": [
+        "teaching"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/teacher/attendance",
+      "areas": [
+        "teaching"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "attendance",
+      "evidencePackages": [
+        "attendance"
+      ]
+    },
+    {
+      "pattern": "/portal/teacher/classbook",
+      "areas": [
+        "teaching"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "attendance",
+      "evidencePackages": [
+        "attendance"
+      ]
+    },
+    {
+      "pattern": "/portal/teacher/homework",
+      "areas": [
+        "teaching"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "learning",
+      "evidencePackages": [
+        "learning"
+      ]
+    },
+    {
+      "pattern": "/portal/teacher/grades",
+      "areas": [
+        "teaching"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/academic/warnings",
+      "areas": [
+        "teaching"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/certificates",
+      "areas": [
+        "completion"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/alumni",
+      "areas": [
+        "completion"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/semester",
+      "areas": [
+        "completion"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/certificates",
+      "areas": [
+        "completion"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/messages",
+      "areas": [
+        "communication"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "cases-and-followups",
+      "evidencePackages": [
+        "cases-and-followups"
+      ]
+    },
+    {
+      "pattern": "/portal/appointments",
+      "areas": [
+        "communication"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "appointments-and-documentation",
+      "evidencePackages": [
+        "appointments-and-documentation"
+      ]
+    },
+    {
+      "pattern": "/portal/support",
+      "areas": [
+        "communication"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "cases-and-followups",
+      "evidencePackages": [
+        "cases-and-followups"
+      ]
+    },
+    {
+      "pattern": "/staff/inbox",
+      "areas": [
+        "communication"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "cases-and-followups",
+      "evidencePackages": [
+        "cases-and-followups"
+      ]
+    },
+    {
+      "pattern": "/staff/cases",
+      "areas": [
+        "communication"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "cases-and-followups",
+      "evidencePackages": [
+        "cases-and-followups"
+      ]
+    },
+    {
+      "pattern": "/staff/tasks",
+      "areas": [
+        "communication"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "cases-and-followups",
+      "evidencePackages": [
+        "cases-and-followups"
+      ]
+    },
+    {
+      "pattern": "/staff/calendar",
+      "areas": [
+        "communication"
+      ],
+      "status": "partial_local_vertical_evidence",
+      "package": "cases-and-followups",
+      "evidencePackages": [
+        "cases-and-followups",
+        "appointments-and-documentation"
+      ]
+    },
+    {
+      "pattern": "/staff/knowledge",
+      "areas": [
+        "chat"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/chat-monitoring",
+      "areas": [
+        "chat"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/leads",
+      "areas": [
+        "marketing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/marketing",
+      "areas": [
+        "marketing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/content-calendar",
+      "areas": [
+        "marketing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/templates",
+      "areas": [
+        "marketing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/campaigns",
+      "areas": [
+        "marketing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/partner",
+      "areas": [
+        "agency"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/partner/candidates",
+      "areas": [
+        "agency"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/partner/commissions",
+      "areas": [
+        "agency"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/agencies",
+      "areas": [
+        "agency"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/financials",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/ledger",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/payments",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/refunds",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/cash",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/payables",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/e-invoices",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/closing",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/budget",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/approvals",
+      "areas": [
+        "finance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/nursing",
+      "areas": [
+        "nursing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/nursing/rotations",
+      "areas": [
+        "nursing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/nursing/logbook",
+      "areas": [
+        "nursing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/supervisor",
+      "areas": [
+        "nursing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/nursing",
+      "areas": [
+        "nursing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/nursing/audit",
+      "areas": [
+        "nursing"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/candidate",
+      "areas": [
+        "jobs"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/candidate/profile",
+      "areas": [
+        "jobs"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/candidate/matches",
+      "areas": [
+        "jobs"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/employer",
+      "areas": [
+        "employer"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/employer/talentpool",
+      "areas": [
+        "employer"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/employer/matches",
+      "areas": [
+        "employer"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/employer/interviews",
+      "areas": [
+        "employer"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/employer/billing",
+      "areas": [
+        "employer"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/master",
+      "areas": [
+        "saas"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/master/tenants",
+      "areas": [
+        "saas"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/master/domains",
+      "areas": [
+        "saas"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/master/apps",
+      "areas": [
+        "saas"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/master/subscriptions",
+      "areas": [
+        "saas"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/master/health",
+      "areas": [
+        "saas"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/roles",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/audit",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/integrations",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/sync-errors",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/rules",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/migration",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/backups",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/acceptance",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/admin/privacy",
+      "areas": [
+        "governance"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/staff/finance/fees",
+      "areas": [
+        "hr"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/staff/payslips",
+      "areas": [
+        "hr"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    },
+    {
+      "pattern": "/portal/staff/leave",
+      "areas": [
+        "hr"
+      ],
+      "status": "baseline_only_not_reaccepted",
+      "package": null,
+      "evidencePackages": []
+    }
+  ],
+  "supportingConcreteRoutesOutsideMatrix": [
+    "/portal/student/tasks",
+    "/portal/student/attendance",
+    "/portal/student/appointments",
+    "/portal/applicant/appointments"
+  ],
+  "limits": [
+    "Additional role routes outside the source matrix do not increase the matrix denominator.",
+    "Shared shell/navigation changes are not counted as completed roles.",
+    "Previously existing pilot functionality is not claimed absent merely because this continuation has not reaccepted it.",
+    "No completed-percent metric: scope depth differs between routes."
+  ],
+  "remainingWork": {
+    "source": "FRONTEND-PAGE-MATRIX.json/remainingWork",
+    "groupingBaseSha": "befae72a5eb8237d714e92d9ccac0463cc7325ad",
+    "definition": "Current counts exclude newly partially evidenced patterns; these are not fully accepted.",
+    "counts": {
+      "frontend": {
+        "bundles": 13,
+        "routePatterns": 36
+      },
+      "variant": {
+        "bundles": 10,
+        "routePatterns": 21
+      },
+      "gated": {
+        "bundles": 15,
+        "routePatterns": 52
+      }
+    }
+  },
+  "localPreparations": [
+    {
+      "id": "arrival",
+      "status": "local-tested",
+      "routes": [
+        "/portal/arrival",
+        "/staff/arrival"
+      ],
+      "profiles": [
+        "WF-W06-05-01"
+      ],
+      "tests": "test-arrival.cjs",
+      "outstanding": [
+        "native200% visual review",
+        "publication approval"
+      ],
+      "countedInPartialCoverage": false
+    },
+    {
+      "id": "knowledge",
+      "status": "local-tested",
+      "routes": [
+        "/staff/knowledge",
+        "/staff/chat-monitoring"
+      ],
+      "profiles": [
+        "WF-W15-05-02",
+        "WF-W15-06-01"
+      ],
+      "tests": "test-knowledge.cjs",
+      "outstanding": [
+        "native200% visual review",
+        "publication approval"
+      ],
+      "countedInPartialCoverage": false
+    }
+  ]
+}

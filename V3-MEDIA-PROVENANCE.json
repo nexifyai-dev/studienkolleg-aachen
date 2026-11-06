@@ -1,0 +1,134 @@
+[
+  {
+    "id": "V01",
+    "title": [
+      "W-Kurs kennenlernen",
+      "Explore the W course"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/w-kurs-vorstellung.mp4",
+    "poster": "assets/video-poster-0.jpg",
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": "4dbde6c5aac18ee1c3ccebbc9bca6aff0d97dc70179841e72ede67f5dcf0a571"
+  },
+  {
+    "id": "V02",
+    "title": [
+      "Studienkolleg erleben",
+      "Experience Studienkolleg"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/benefits-studienkolleg.mp4",
+    "poster": "assets/video-poster-1.jpg",
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": "3fbe332424e14d482f7f4cabfb5c69d734da6f744bd6d93fe90a72dd12d2ea00"
+  },
+  {
+    "id": "V03",
+    "title": [
+      "Pedro erzählt",
+      "Pedro’s story"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/pedro-testimonial.mp4",
+    "poster": "assets/video-poster-2.jpg",
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": "f7cc337a3da907f768a76924bd8feb6fed094fb244dcb116dcbbd8d064db2421"
+  },
+  {
+    "id": "V04",
+    "title": [
+      "Internationale Gemeinschaft",
+      "International community"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/international-students.mp4",
+    "poster": "assets/video-poster-3.jpg",
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": "1e83f45f47f8e3581ef1b325253979fc9876756fe7a121819468f899e94f0905"
+  },
+  {
+    "id": "V05",
+    "title": [
+      "M-Kurs kennenlernen",
+      "Explore the M course"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/m-kurs-vorstellung.mp4",
+    "poster": "assets/video-poster-4.jpg",
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": "586a9b9956e70dd203e299e45cc53347695062a08f9a359f7801fdcbb1234d39"
+  },
+  {
+    "id": "V06",
+    "title": [
+      "Deutsch: Wortschatz",
+      "German vocabulary"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/deutsch-vokabeln.mp4",
+    "poster": "assets/video-poster-5.jpg",
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": "0448d86b5ce24c5e31b89d69ad03bef5a1a71ec7a96ef56de610d7abbe22ce3f"
+  },
+  {
+    "id": "V07",
+    "title": [
+      "Tipps zum Deutschlernen",
+      "German learning tips"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/deutsch-tipps.mp4",
+    "poster": "assets/video-poster-6.jpg",
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": "d7f0a91cb7c5cc7bce3938f85e0535ef0e673ec16da6c21a2fa1973bd1ae8957"
+  },
+  {
+    "id": "V08",
+    "title": [
+      "Feststellungsprüfung erklärt",
+      "The assessment examination"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/fsp-erkl%C3%A4rt.mp4",
+    "poster": null,
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": null
+  },
+  {
+    "id": "V09",
+    "title": [
+      "Einblick ins Wohnen",
+      "A glimpse of housing"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/wohnheim-tour.mp4",
+    "poster": null,
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": null
+  },
+  {
+    "id": "V10",
+    "title": [
+      "Studienkolleg Aachen",
+      "Studienkolleg Aachen"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/imagevideo-studienkolleg.mp4",
+    "poster": null,
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": null
+  },
+  {
+    "id": "V11",
+    "title": [
+      "Unterstützung beim Ankommen",
+      "Support for your arrival"
+    ],
+    "src": "https://deinstudienkolleg.de/videos/services-studienkolleg.mp4",
+    "poster": null,
+    "source": "https://deinstudienkolleg.de/",
+    "captured": "2026-10-30",
+    "poster_sha256": null
+  }
+]

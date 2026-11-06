@@ -1,0 +1,12 @@
+{
+ "date":"2026-11-02",
+ "browser":"Chrome via CUA, local preview",
+ "base":"adeebb7b59a70506910a1f587f1e5d70b2a8abf4",
+ "before":"Static Tuesday 10:00 sample appointment; no connected availability/review/documentation",
+ "checks":["Empty released availability","Missing place/verification -> meeting-error focus","Release two sample slots","Local booking; unreviewed cancellation blocked","Reviewed rescheduling leaves one active appointment","Private note and internally reviewed summary absent from learner view","Explicit portal summary release","Bridge to existing case/task and task-derived calendar dates","DE/EN state continuity","Action focus meeting-heading"],
+ "geometry":[{"route":"portal/appointments","viewport":320,"document":305,"client":305,"journeyWidth":305,"mainDisplay":"contents"},{"route":"portal/appointments","viewport":768,"document":753,"client":753},{"route":"portal/appointments","viewport":1920,"document":1905,"client":1905,"mainRight":1537,"railLeft":1537},{"route":"staff/calendar","viewport":320,"document":305,"client":305},{"route":"staff/calendar","viewport":768,"document":753,"client":753}],
+ "minimumMeasuredButtonSelectHeight":48,
+ "viewportReset":true,
+ "screenshots":["appointments-browser-20261102.png","appointments-mobile-20261102.png"],
+ "limits":["No complete browser zoom or screenreader acceptance","No physical device acceptance","No real availability, booking, CRM, identity or channel integration"]
+}

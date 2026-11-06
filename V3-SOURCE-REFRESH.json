@@ -1,0 +1,18 @@
+{
+  "observed": "2026-10-30",
+  "scope": "Read-only source binding; no new feature acceptance or implementation claim;291 profiles/992 designed tests remain unchanged",
+  "files": [
+    {
+      "path": "/workspace/shared/aachen-customer-20261030/content/project-brochure-ci-v4-reviewed.json",
+      "sha256": "a6df4287bd7870da6c3557145d67cf1255a84deb72576cbdc77cf14d66ae3e7d"
+    },
+    {
+      "path": "/workspace/shared/aachen-customer-20261030/content/project-source-appendix-ci-v4.json",
+      "sha256": "24742dda140c0e1f8199050ee6a4094ec3bf8f729a033f1775581405a83a4d6c"
+    },
+    {
+      "path": "/workspace/shared/aachen-customer-20261030/delivery-ci-v4/FINAL-CI-MANIFEST.json",
+      "sha256": "01135aafd5ea49603b213be3c233707a9aed1d8ad933cf2506cbba6ecb632aec"
+    }
+  ]
+}

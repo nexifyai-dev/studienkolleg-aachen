@@ -1,0 +1,2526 @@
+{
+  "date": "2026-11-02",
+  "baseline": "cdc27a26309756926b6a3cb7cf457b6df9d9de6d",
+  "source": "V2-TRACEABILITY.json + dist/coverage-data.js",
+  "areas": [
+    {
+      "area": "public",
+      "title": "Studienkolleg / Kurswelt",
+      "roles": [
+        "Interessent"
+      ],
+      "sources": [
+        "W0.2",
+        "W3.2",
+        "C4",
+        "C1.2"
+      ],
+      "routes": [
+        "/studienkolleg",
+        "/courses",
+        "/course/T",
+        "/course/M",
+        "/course/W",
+        "/course/G",
+        "/course/TM",
+        "/course/TestAS"
+      ],
+      "profileIds": [],
+      "baselineEvidence": "Sieben Kurskarten/Details /courses und /course/* vorhanden; kein vollständiges Angebotsökosystem.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "admission",
+      "title": "Bewerbung / Zulassung / Beratung",
+      "roles": [
+        "Bewerber",
+        "Zulassung"
+      ],
+      "sources": [
+        "W3.2–3.8",
+        "C4.1–4.2",
+        "O2.2"
+      ],
+      "routes": [
+        "/apply",
+        "/admission",
+        "/portal/applicant",
+        "/staff/admissions",
+        "/staff/admissions/:id",
+        "/portal/applicant/assessment"
+      ],
+      "profileIds": [
+        "WF-W03-02-01",
+        "WF-W03-02-02",
+        "WF-W03-03-01",
+        "WF-W03-03-02",
+        "WF-W03-04-01",
+        "WF-W03-06-01",
+        "WF-W03-07-01",
+        "WF-W03-07-02",
+        "WF-W03-07-03",
+        "WF-W03-05-01",
+        "WF-W03-05-02",
+        "WF-W03-05-03",
+        "WF-W03-05-04",
+        "WF-W03-05-05",
+        "WF-W03-05-06",
+        "WF-X029",
+        "WF-X030",
+        "WF-X032",
+        "WF-X035",
+        "WF-X036"
+      ],
+      "baselineEvidence": "Bewerbungswizard, Dokumentdemo und Zulassungs-Kanban/Fallmodal vorhanden; differenzierte Prüf-/Sprach-/Nachtestwege fehlen.",
+      "frontendStatus": "Connected local review journey added; remaining admission routes still baseline previews",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "contract",
+      "title": "Vertrag / weitere Angebote / Kennungen",
+      "roles": [
+        "Teilnehmer",
+        "Verwaltung"
+      ],
+      "sources": [
+        "W4.2–4.6",
+        "O2.6"
+      ],
+      "routes": [
+        "/portal/contracts",
+        "/portal/contracts/:id",
+        "/staff/contracts",
+        "/staff/identities"
+      ],
+      "profileIds": [
+        "WF-W04-02-01",
+        "WF-W04-03-01",
+        "WF-W04-04-01",
+        "WF-W04-05-01",
+        "WF-W04-06-01",
+        "WF-W04-06-02",
+        "WF-X093"
+      ],
+      "baselineEvidence": "Mustervertrag/financials nur generische Vorschau, kein vollständiger Zustandsweg.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "language",
+      "title": "Sprachschule / Pakete / Einstufung",
+      "roles": [
+        "Interessent",
+        "Sprachschüler",
+        "DaF-Leitung"
+      ],
+      "sources": [
+        "W0.2",
+        "W3.2",
+        "W3.5",
+        "C5.1–5.3"
+      ],
+      "routes": [
+        "/sprachschule",
+        "/sprachschule/A1",
+        "/sprachschule/A2",
+        "/sprachschule/B1",
+        "/sprachschule/B2",
+        "/sprachschule/C1",
+        "/sprachschule/pakete",
+        "/sprachschule/einstufung"
+      ],
+      "profileIds": [
+        "WF-W03-05-01",
+        "WF-W03-05-02",
+        "WF-W03-05-03",
+        "WF-W03-05-04",
+        "WF-W03-05-05",
+        "WF-W03-05-06",
+        "WF-X034"
+      ],
+      "baselineEvidence": "Nur gemeinsame Deutsch-Kursdetailseite, keine einzelnen Stufen-/Paket-/Einstufungsseiten.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "selflearning",
+      "title": "Selbstlernen / externe digitale Lernpakete",
+      "roles": [
+        "Externer Lerner",
+        "Sprachschüler"
+      ],
+      "sources": [
+        "W5.2",
+        "W19.1–19.4",
+        "C5"
+      ],
+      "routes": [
+        "/sprachschule/selbstlernen",
+        "/lernen/pakete",
+        "/lernen/pakete/:id",
+        "/portal/learning/subscription"
+      ],
+      "profileIds": [
+        "WF-W05-02-02",
+        "WF-X098",
+        "WF-X099"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "nursinglanguage",
+      "title": "ÖSD B2 Pflege / Fachsprache",
+      "roles": [
+        "Pflegeinteressent"
+      ],
+      "sources": [
+        "W0.2",
+        "W3.2",
+        "W5.2",
+        "W9.3",
+        "W17.3"
+      ],
+      "routes": [
+        "/sprachschule/b2-pflege",
+        "/pflege/fachsprache"
+      ],
+      "profileIds": [],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "exam",
+      "title": "Prüfungszentrum / ÖSD / TestDaF / TestAS",
+      "roles": [
+        "Externe Prüflinge",
+        "Teilnehmer",
+        "Prüfungsverwaltung",
+        "Partner"
+      ],
+      "sources": [
+        "W12.1–12.8"
+      ],
+      "routes": [
+        "/pruefungszentrum",
+        "/pruefungszentrum/oesd",
+        "/pruefungszentrum/oesd/:termin",
+        "/pruefungszentrum/oesd/buchung",
+        "/pruefungszentrum/testdaf",
+        "/pruefungszentrum/testas",
+        "/portal/exams",
+        "/staff/exams"
+      ],
+      "profileIds": [
+        "WF-W12-02-01",
+        "WF-W12-03-01",
+        "WF-W12-03-02",
+        "WF-W12-04-01",
+        "WF-W12-04-02",
+        "WF-W12-04-03",
+        "WF-W12-05-01",
+        "WF-W12-05-02",
+        "WF-W12-05-03",
+        "WF-W12-05-04",
+        "WF-W12-06-01",
+        "WF-W12-06-02",
+        "WF-W12-07-01",
+        "WF-W12-07-02"
+      ],
+      "baselineEvidence": "Ein Informationsmodal aus services(), keine Termin-/Modul-/Buchungs-/Ergebnis-/Organisationsseiten.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "fsp",
+      "title": "FSP / externe Registrierung / Behördenakte",
+      "roles": [
+        "Interner/externer FSP-Kandidat",
+        "FSP-Verwaltung",
+        "DaF-Leitung"
+      ],
+      "sources": [
+        "W0.2",
+        "W13.2–13.10"
+      ],
+      "routes": [
+        "/studienkolleg/fsp",
+        "/studienkolleg/fsp/extern",
+        "/portal/fsp",
+        "/portal/fsp/documents",
+        "/staff/fsp",
+        "/staff/fsp/dispatch"
+      ],
+      "profileIds": [
+        "WF-W13-03-01",
+        "WF-W13-04-01",
+        "WF-W13-05-01",
+        "WF-W13-05-02",
+        "WF-W13-06-01",
+        "WF-W13-06-02",
+        "WF-W13-07-01",
+        "WF-W13-07-02",
+        "WF-W13-08-01",
+        "WF-W13-08-02",
+        "WF-W13-08-03",
+        "WF-W13-09-01",
+        "WF-W13-10-01",
+        "WF-W13-10-02"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "testaspath",
+      "title": "TestAS-Bildungsweg / Kohorten",
+      "roles": [
+        "Teilnehmer",
+        "Schulleitung"
+      ],
+      "sources": [
+        "W13.11",
+        "W13.12"
+      ],
+      "routes": [
+        "/studienkolleg/testas",
+        "/portal/testas",
+        "/staff/testas"
+      ],
+      "profileIds": [
+        "WF-W13-11-01",
+        "WF-W13-11-02",
+        "WF-W13-11-03",
+        "WF-W13-11-04",
+        "WF-W13-11-05",
+        "WF-W13-11-06"
+      ],
+      "baselineEvidence": "TestAS-Kursdetail vorhanden; spezifischer Portalweg fehlt.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "housing",
+      "title": "Stay in Aachen – Immobiliensuche",
+      "roles": [
+        "Interessent",
+        "Teilnehmer",
+        "externer Studierender/Auszubildender"
+      ],
+      "sources": [
+        "W7.1–7.3",
+        "C6.1–6.3",
+        "E2.5",
+        "E4.2.D"
+      ],
+      "routes": [
+        "/wohnen",
+        "/wohnen/suche",
+        "/wohnen/objekt/:id",
+        "/wohnen/zimmer/:id",
+        "/wohnen/anfrage",
+        "/wohnen/extern"
+      ],
+      "profileIds": [
+        "WF-W07-02-01",
+        "WF-W07-02-02",
+        "WF-W07-02-03",
+        "WF-W07-03-01",
+        "WF-W07-03-02",
+        "WF-X039",
+        "WF-X040",
+        "WF-X041",
+        "WF-X043"
+      ],
+      "baselineEvidence": "/services/housing fällt auf generisches services() zurück; Anfrage-Modal vorhanden, Immobilien-Suche/Detail vollständig fehlend.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "tenant",
+      "title": "Mieterportal – gesamter Mietlebenszyklus",
+      "roles": [
+        "Mieter"
+      ],
+      "sources": [
+        "W7.4–7.9",
+        "C6.3"
+      ],
+      "routes": [
+        "/portal/tenant",
+        "/portal/tenant/contract",
+        "/portal/tenant/payments",
+        "/portal/tenant/handover",
+        "/portal/tenant/issues",
+        "/portal/tenant/extension",
+        "/portal/tenant/moveout"
+      ],
+      "profileIds": [
+        "WF-W07-04-01",
+        "WF-W07-04-02",
+        "WF-W07-05-01",
+        "WF-W07-06-01",
+        "WF-W07-06-02",
+        "WF-W07-07-01",
+        "WF-W07-08-01",
+        "WF-W07-09-01",
+        "WF-W07-09-02",
+        "WF-W07-10-01",
+        "WF-W07-11-01",
+        "WF-X093"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "propertyadmin",
+      "title": "Immobilienverwaltung / Eigentümer / Hauptmieten",
+      "roles": [
+        "Wohnverwaltung",
+        "Buchhaltung",
+        "GF",
+        "Eigentümer nur freigegebene eigene Sicht"
+      ],
+      "sources": [
+        "W7.2–7.12",
+        "W16.5",
+        "C6.1–6.2",
+        "E2.5"
+      ],
+      "routes": [
+        "/staff/housing",
+        "/staff/housing/occupancy",
+        "/staff/housing/properties/:id",
+        "/staff/housing/waitlist",
+        "/staff/housing/owners",
+        "/staff/housing/headleases",
+        "/staff/housing/maintenance",
+        "/staff/housing/settlements"
+      ],
+      "profileIds": [
+        "WF-W07-02-01",
+        "WF-W07-02-02",
+        "WF-W07-02-03",
+        "WF-W07-03-01",
+        "WF-W07-03-02",
+        "WF-W07-04-01",
+        "WF-W07-04-02",
+        "WF-W07-05-01",
+        "WF-W07-06-01",
+        "WF-W07-06-02",
+        "WF-W07-07-01",
+        "WF-W07-08-01",
+        "WF-W07-09-01",
+        "WF-W07-09-02",
+        "WF-W07-10-01",
+        "WF-W07-11-01",
+        "WF-X039",
+        "WF-X040",
+        "WF-X041",
+        "WF-X043"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "arrival",
+      "title": "Visum / Ankunft / Behörden",
+      "roles": [
+        "Teilnehmer",
+        "Verwaltung",
+        "Schulleitung"
+      ],
+      "sources": [
+        "W6.2–6.8",
+        "C4.3",
+        "C2.5"
+      ],
+      "routes": [
+        "/services/visum",
+        "/services/ankunft",
+        "/portal/arrival",
+        "/portal/visa",
+        "/staff/visa",
+        "/staff/arrival"
+      ],
+      "profileIds": [
+        "WF-W06-02-01",
+        "WF-W06-03-01",
+        "WF-W06-05-01",
+        "WF-W06-06-01",
+        "WF-W06-07-01",
+        "WF-X033"
+      ],
+      "baselineEvidence": "Ankunftscheck-Modal, kein vollständiger Visa-/Ankunftsbereich.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "services",
+      "title": "Partner-Services / Welcome Guide",
+      "roles": [
+        "Interessent",
+        "Teilnehmer"
+      ],
+      "sources": [
+        "W6.4",
+        "W8.6",
+        "C7.1–7.2"
+      ],
+      "routes": [
+        "/services",
+        "/services/sperrkonto",
+        "/services/versicherung",
+        "/services/bank",
+        "/services/mobilitaet",
+        "/services/telekommunikation",
+        "/portal/welcome"
+      ],
+      "profileIds": [
+        "WF-W06-04-01",
+        "WF-X046"
+      ],
+      "baselineEvidence": "Generische services()-Karten; keine spezialisierten Service-Unterseiten.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "shuttle",
+      "title": "Flughafen- und Campus-Shuttle",
+      "roles": [
+        "Teilnehmer",
+        "Disposition"
+      ],
+      "sources": [
+        "C2.5",
+        "C7.2"
+      ],
+      "routes": [
+        "/services/transfer",
+        "/portal/transfers",
+        "/staff/transport"
+      ],
+      "profileIds": [
+        "WF-X018",
+        "WF-X019"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "university",
+      "title": "Hochschulbewerbungsservice / Hochschul- und Studiengangsuche",
+      "roles": [
+        "Interne/externe Bewerber",
+        "Hochschulberatung"
+      ],
+      "sources": [
+        "W14.5"
+      ],
+      "routes": [
+        "/hochschule",
+        "/hochschule/service",
+        "/hochschule/suche",
+        "/hochschule/studiengang/:id",
+        "/hochschule/vergleich",
+        "/portal/university",
+        "/portal/university/applications/:id",
+        "/staff/university"
+      ],
+      "profileIds": [
+        "WF-W14-05-01",
+        "WF-W14-05-02",
+        "WF-W14-05-03",
+        "WF-W14-05-04",
+        "WF-W14-05-05",
+        "WF-W14-05-06",
+        "WF-W14-05-07",
+        "WF-W14-05-08",
+        "WF-W14-05-09",
+        "WF-W14-05-10",
+        "WF-W14-05-11",
+        "WF-W14-05-12",
+        "WF-W14-05-13",
+        "WF-W14-05-14",
+        "WF-W14-05-15",
+        "WF-W14-05-16",
+        "WF-W14-05-17",
+        "WF-W14-05-18",
+        "WF-W14-05-19"
+      ],
+      "baselineEvidence": "Nur Services-Karte und Beratungsbrief; keine Suche, Detailseiten oder 19 Teilprozesse.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "portal",
+      "title": "Ein Portal / Person / Dokumente / Aufgaben",
+      "roles": [
+        "Alle erlaubten Rollen"
+      ],
+      "sources": [
+        "W8.2–8.7",
+        "O2.2–2.3",
+        "O2.6"
+      ],
+      "routes": [
+        "/portal",
+        "/portal/profile",
+        "/portal/documents",
+        "/portal/tasks",
+        "/portal/settings",
+        "/staff/student360/:id",
+        "/staff/search"
+      ],
+      "profileIds": [
+        "WF-W08-03-01",
+        "WF-W08-04-01",
+        "WF-W08-05-01",
+        "WF-W08-06-01",
+        "WF-W08-06-02",
+        "WF-W15-11-01"
+      ],
+      "baselineEvidence": "Rollenwechsel/Tasks/Documents vorhanden; keine echte ACL, kein vollwertiges Student360/Identitätsänderungs-/Versionenmodell.",
+      "frontendStatus": "Connected local teacher/learner task and feedback journey added; other routes retain baseline previews",
+      "remaining": "Other course/classbook/attendance and participant workflows; live LMS identity, enrolment, submission storage, reminders, institutional review rules and complete device/accessibility acceptance",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "lms",
+      "title": "Lernen / OpenOLAT / Materialien / Drive",
+      "roles": [
+        "Teilnehmer",
+        "Lehrkraft",
+        "Fachleitung",
+        "Integration"
+      ],
+      "sources": [
+        "W9.1–9.9",
+        "C3.1–3.2",
+        "E2.4",
+        "O2.5"
+      ],
+      "routes": [
+        "/portal/learning",
+        "/portal/learning/course/:id",
+        "/portal/drive",
+        "/staff/library",
+        "/staff/lms-sync"
+      ],
+      "profileIds": [
+        "WF-W08-06-01",
+        "WF-W08-06-02",
+        "WF-W09-02-01",
+        "WF-W09-02-02",
+        "WF-W09-03-01",
+        "WF-W09-04-01",
+        "WF-W09-04-02",
+        "WF-W09-05-01",
+        "WF-W09-05-02",
+        "WF-W09-07-01",
+        "WF-X007",
+        "WF-X021",
+        "WF-X022",
+        "WF-X024",
+        "WF-X025",
+        "WF-X026",
+        "WF-X027",
+        "WF-X028",
+        "WF-X098",
+        "WF-X099"
+      ],
+      "baselineEvidence": "Ein OpenOLAT-Modal, Dokumente-Demo; keine getrennten Kursräume/Bibliothek/Synckonflikte.",
+      "frontendStatus": "Connected local teacher/learner task and feedback journey added; other routes retain baseline previews",
+      "remaining": "Other course/classbook/attendance and participant workflows; live LMS identity, enrolment, submission storage, reminders, institutional review rules and complete device/accessibility acceptance",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "scheduling",
+      "title": "Kurs-/Programmverwaltung / Kalender / Raumplan",
+      "roles": [
+        "Schulleitung",
+        "Verwaltung",
+        "Lehrkraft"
+      ],
+      "sources": [
+        "W10.2–10.10",
+        "K"
+      ],
+      "routes": [
+        "/staff/courses",
+        "/staff/programmes",
+        "/staff/timetable",
+        "/staff/rooms",
+        "/staff/teachers",
+        "/portal/calendar"
+      ],
+      "profileIds": [
+        "WF-W10-02-01",
+        "WF-W10-03-01",
+        "WF-W10-03-02",
+        "WF-W10-04-01",
+        "WF-W10-05-01",
+        "WF-W10-06-01",
+        "WF-W10-07-01",
+        "WF-W10-07-02",
+        "WF-W10-07-03",
+        "WF-W10-08-01",
+        "WF-W10-09-01"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "teaching",
+      "title": "Lehrkräfteportal / Unterricht / Leistungen",
+      "roles": [
+        "Lehrkräfte",
+        "Schulleitung",
+        "Teilnehmer eigene Sicht"
+      ],
+      "sources": [
+        "W11.2–11.12",
+        "K"
+      ],
+      "routes": [
+        "/portal/teacher",
+        "/portal/teacher/attendance",
+        "/portal/teacher/classbook",
+        "/portal/teacher/homework",
+        "/portal/teacher/grades",
+        "/staff/academic/warnings"
+      ],
+      "profileIds": [
+        "WF-W11-02-01",
+        "WF-W11-02-02",
+        "WF-W11-02-03",
+        "WF-W11-03-02",
+        "WF-W11-04-01",
+        "WF-W11-05-01",
+        "WF-W11-07-01",
+        "WF-W11-08-01",
+        "WF-W11-09-01",
+        "WF-W11-09-02",
+        "WF-W11-10-01",
+        "WF-W11-11-01",
+        "WF-W11-11-02",
+        "WF-X011"
+      ],
+      "baselineEvidence": "Teacher attendance/grades plus Klassenbuchmodal vorhanden; keine vollständigen Aufgaben-/Curriculum-/Warn-/Zeugniswege.",
+      "frontendStatus": "Local task/feedback and attendance correction journeys connected; classbook is attendance extract only",
+      "remaining": "Full classbook content, curriculum, warnings, assessments, semester/certificate paths and production authorization/integrations; no full role acceptance",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "completion",
+      "title": "Semester / Abschluss / Zertifikate / Alumni",
+      "roles": [
+        "Teilnehmer",
+        "Alumni",
+        "Schulleitung",
+        "Verwaltung",
+        "öffentliche Dokumentprüfung"
+      ],
+      "sources": [
+        "W14.2–14.4",
+        "W14.6–14.7",
+        "K",
+        "C2.2"
+      ],
+      "routes": [
+        "/portal/certificates",
+        "/portal/alumni",
+        "/staff/semester",
+        "/staff/certificates",
+        "/verify"
+      ],
+      "profileIds": [
+        "WF-W11-10-01",
+        "WF-W14-02-01",
+        "WF-W14-03-01",
+        "WF-W14-04-01",
+        "WF-W14-04-02",
+        "WF-W14-04-03",
+        "WF-W14-06-01",
+        "WF-W14-07-01",
+        "WF-X010",
+        "WF-X013",
+        "WF-X020"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "communication",
+      "title": "Kommunikation / Fälle / Termine / Feedback",
+      "roles": [
+        "Teilnehmer",
+        "Interessent",
+        "Mitarbeiter",
+        "GF"
+      ],
+      "sources": [
+        "W15.2–15.11",
+        "O2.4",
+        "O2.7"
+      ],
+      "routes": [
+        "/kontakt",
+        "/beratung",
+        "/portal/messages",
+        "/portal/appointments",
+        "/portal/support",
+        "/staff/inbox",
+        "/staff/cases",
+        "/staff/tasks",
+        "/staff/calendar",
+        "/feedback",
+        "/beschwerde/anonym",
+        "/beschwerde/status"
+      ],
+      "profileIds": [
+        "WF-W15-02-01",
+        "WF-W15-03-01",
+        "WF-W15-04-01",
+        "WF-W15-07-01",
+        "WF-W15-07-02",
+        "WF-W15-08-01",
+        "WF-W15-08-02",
+        "WF-W15-09-01",
+        "WF-W15-09-02",
+        "WF-W15-09-03",
+        "WF-W15-10-01",
+        "WF-W15-10-02",
+        "WF-W15-11-01",
+        "WF-X091",
+        "WF-X092"
+      ],
+      "baselineEvidence": "Nachrichten/Termine/Chat/Brief simuliert; unabhängige Beschwerden/Feedback, Fachqueues/Kalender fehlen.",
+      "frontendStatus": "Partial local vertical evidence for seven unique case/message/task/calendar/appointment routes; not complete area acceptance",
+      "remaining": "Feedback, anonymous complaint and public contact/guidance remain baseline-only in this continuation. Appointment scopes: three editable sample slots, one fictional person, no real availability/video/calendar/CRM/notification connection. Production identity/permissions, channels, configured change rules and document visibility policy pending.",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "chat",
+      "title": "Rechte Assistenz als Seitenarchitektur / Wissensbetrieb",
+      "roles": [
+        "Besucher",
+        "berechtigte Portalnutzer",
+        "Wissensredaktion"
+      ],
+      "sources": [
+        "W1.8",
+        "W15.5–15.6",
+        "Nutzer16:39"
+      ],
+      "routes": [
+        "alle öffentlichen und Portalrouten",
+        "/staff/knowledge",
+        "/staff/chat-monitoring"
+      ],
+      "profileIds": [
+        "WF-W01-08-01",
+        "WF-W15-05-01",
+        "WF-W15-05-02",
+        "WF-W15-06-01"
+      ],
+      "baselineEvidence": "Assistant-Renderer vorhanden; Nutzer beanstandet überlagerte Darstellung. Layout separat visuell prüfen, nicht mit Rendererexistenz als erfüllt werten.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "marketing",
+      "title": "Marketing / Vertrieb / Redaktionskalender",
+      "roles": [
+        "Marketing",
+        "Vertrieb",
+        "GF"
+      ],
+      "sources": [
+        "W1.2–1.11",
+        "C11.3–11.4"
+      ],
+      "routes": [
+        "/staff/leads",
+        "/staff/marketing",
+        "/staff/content-calendar",
+        "/staff/templates",
+        "/staff/campaigns"
+      ],
+      "profileIds": [
+        "WF-W01-02-01",
+        "WF-W01-03-01",
+        "WF-W01-04-01",
+        "WF-W01-05-01",
+        "WF-W01-06-01",
+        "WF-W01-06-02",
+        "WF-W01-07-01",
+        "WF-W01-09-01",
+        "WF-W01-10-01",
+        "WF-X077",
+        "WF-X079"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "agency",
+      "title": "Agenturen / Partnerportal",
+      "roles": [
+        "Agentur",
+        "Buchhaltung",
+        "GF"
+      ],
+      "sources": [
+        "W2.2–2.7",
+        "W5.8",
+        "C1.3"
+      ],
+      "routes": [
+        "/partner",
+        "/portal/partner",
+        "/portal/partner/candidates",
+        "/portal/partner/commissions",
+        "/staff/agencies"
+      ],
+      "profileIds": [
+        "WF-W02-02-01",
+        "WF-W02-02-02",
+        "WF-W02-03-01",
+        "WF-W02-04-01",
+        "WF-W02-06-01"
+      ],
+      "baselineEvidence": "Partneransicht vorhanden, vollständige Einreichungs-/Vertrags-/Konfliktwege nicht belegt.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "finance",
+      "title": "Finanzen / Student Ledger / Kasse / Finance Control Plane",
+      "roles": [
+        "Teilnehmer",
+        "Buchhaltung",
+        "GF"
+      ],
+      "sources": [
+        "W5.2–5.8",
+        "W11.11",
+        "W12.7",
+        "W17.4",
+        "O2.1",
+        "C10",
+        "E2.8"
+      ],
+      "routes": [
+        "/portal/financials",
+        "/staff/finance",
+        "/staff/finance/ledger",
+        "/staff/finance/payments",
+        "/staff/finance/refunds",
+        "/staff/finance/cash",
+        "/staff/finance/payables",
+        "/staff/finance/e-invoices",
+        "/staff/finance/closing",
+        "/staff/finance/budget",
+        "/staff/finance/approvals"
+      ],
+      "profileIds": [
+        "WF-W05-02-01",
+        "WF-W05-02-02",
+        "WF-W05-02-03",
+        "WF-W05-03-01",
+        "WF-W05-04-01",
+        "WF-W05-05-01",
+        "WF-W05-05-02",
+        "WF-W05-06-01",
+        "WF-W05-06-02",
+        "WF-W05-06-03",
+        "WF-W05-06-04",
+        "WF-W05-07-01",
+        "WF-W05-07-02",
+        "WF-W05-07-03",
+        "WF-W05-07-04",
+        "WF-W05-07-05",
+        "WF-W05-07-06",
+        "WF-W05-08-01",
+        "WF-W11-11-01",
+        "WF-W11-11-02",
+        "WF-W12-07-01",
+        "WF-W12-07-02",
+        "WF-X014",
+        "WF-X063",
+        "WF-X064",
+        "WF-X065",
+        "WF-X067",
+        "WF-X068",
+        "WF-X069",
+        "WF-X070",
+        "WF-X071",
+        "WF-X072",
+        "WF-X083",
+        "WF-X084",
+        "WF-X085",
+        "WF-X086",
+        "WF-X087",
+        "WF-X088",
+        "WF-X096"
+      ],
+      "baselineEvidence": "Financials/Mustervertrag vorhanden; vollständige Finance Control Plane fehlt. O separat erhalten, W17.4 streicht sie nicht.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "management",
+      "title": "Management / Wirtschaftlichkeit / Berichte",
+      "roles": [
+        "GF",
+        "Schulleitung pädagogisch begrenzt"
+      ],
+      "sources": [
+        "W16.2–16.7",
+        "O2.8"
+      ],
+      "routes": [
+        "/management",
+        "/management/areas",
+        "/management/profitability",
+        "/management/reports"
+      ],
+      "profileIds": [
+        "WF-W16-03-01",
+        "WF-W16-04-01",
+        "WF-W16-05-01",
+        "WF-W16-05-02",
+        "WF-W16-06-01",
+        "WF-W16-06-02"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "nursing",
+      "title": "Pflege / Anerkennung / Praxisportal",
+      "roles": [
+        "Pflegeinteressent",
+        "Pflegeschüler",
+        "Praxisanleiter",
+        "Praxisträger",
+        "Schulleitung"
+      ],
+      "sources": [
+        "W17.3",
+        "C8.1–8.4",
+        "E2.6",
+        "E4.2.C"
+      ],
+      "routes": [
+        "/pflege",
+        "/pflege/ausbildung",
+        "/pflege/anerkennung",
+        "/portal/nursing",
+        "/portal/nursing/rotations",
+        "/portal/nursing/logbook",
+        "/portal/supervisor",
+        "/staff/nursing",
+        "/staff/nursing/audit"
+      ],
+      "profileIds": [
+        "WF-X037",
+        "WF-X047",
+        "WF-X048",
+        "WF-X049",
+        "WF-X050",
+        "WF-X051",
+        "WF-X052",
+        "WF-X053",
+        "WF-X054"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "jobs",
+      "title": "Healthcare / Work & Career / Kandidatenportal",
+      "roles": [
+        "Externer/interner Kandidat"
+      ],
+      "sources": [
+        "W17.2",
+        "C9.1",
+        "C9.4",
+        "E2.7"
+      ],
+      "routes": [
+        "/karriere",
+        "/karriere/stellen",
+        "/karriere/stellen/:id",
+        "/karriere/registrieren",
+        "/portal/candidate",
+        "/portal/candidate/profile",
+        "/portal/candidate/matches"
+      ],
+      "profileIds": [
+        "WF-X055",
+        "WF-X056",
+        "WF-X057",
+        "WF-X062"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "employer",
+      "title": "Arbeitgeberportal / Recruiting",
+      "roles": [
+        "Krankenhaus",
+        "Pflegeheim",
+        "B2B-Arbeitgeber"
+      ],
+      "sources": [
+        "W17.2",
+        "C9.2",
+        "C10.3.B",
+        "E4.2.E"
+      ],
+      "routes": [
+        "/arbeitgeber",
+        "/arbeitgeber/registrieren",
+        "/portal/employer",
+        "/portal/employer/talentpool",
+        "/portal/employer/matches",
+        "/portal/employer/interviews",
+        "/portal/employer/billing"
+      ],
+      "profileIds": [
+        "WF-X058",
+        "WF-X059",
+        "WF-X060",
+        "WF-X061"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "saas",
+      "title": "White-Label / Schulpartner / Multi-Site / Master Admin",
+      "roles": [
+        "Partnerschule",
+        "SaaS-Interessent",
+        "Träger/Master-Admin"
+      ],
+      "sources": [
+        "C1.3–1.4",
+        "C9.3",
+        "C10.3.A",
+        "E2.1"
+      ],
+      "routes": [
+        "/plattform",
+        "/plattform/schulen",
+        "/plattform/white-label",
+        "/plattform/plaene",
+        "/plattform/demo",
+        "/standorte",
+        "/standorte/:id",
+        "/master",
+        "/master/tenants",
+        "/master/domains",
+        "/master/apps",
+        "/master/subscriptions",
+        "/master/health"
+      ],
+      "profileIds": [
+        "WF-X001",
+        "WF-X002",
+        "WF-X003",
+        "WF-X004",
+        "WF-X005",
+        "WF-X006"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "publiccontent",
+      "title": "Campus / Wissen / Länder / Recht / Mehrmarken-Navigation",
+      "roles": [
+        "Öffentlich",
+        "CMS/Redaktion"
+      ],
+      "sources": [
+        "C1.2–1.3",
+        "C11.1–11.4",
+        "W0.9",
+        "W8.6"
+      ],
+      "routes": [
+        "/campus",
+        "/campus/leben",
+        "/team",
+        "/wissen",
+        "/wissen/:artikel",
+        "/wissen/laender/:land",
+        "/faq",
+        "/rechtliches",
+        "/datenschutz",
+        "/agb",
+        "/widerruf",
+        "/preise"
+      ],
+      "profileIds": [
+        "WF-X073",
+        "WF-X074",
+        "WF-X075",
+        "WF-X076",
+        "WF-X078",
+        "WF-X080",
+        "WF-X081",
+        "WF-X097"
+      ],
+      "baselineEvidence": "Startseite/Transparenz und Datenschutzmodal vorhanden, kein vollständiger Wissens-/Campus-/Marken-/Rechtsseitenbaum.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "governance",
+      "title": "Administration / Integration / Migration / Abnahme",
+      "roles": [
+        "GF",
+        "Berechtigte Administration",
+        "Integration"
+      ],
+      "sources": [
+        "W0.4",
+        "W0.8",
+        "W17.5",
+        "W18.2–18.4",
+        "O2.9–2.11",
+        "E1",
+        "E4",
+        "E5"
+      ],
+      "routes": [
+        "/admin/roles",
+        "/admin/audit",
+        "/admin/integrations",
+        "/admin/sync-errors",
+        "/admin/rules",
+        "/admin/migration",
+        "/admin/backups",
+        "/admin/acceptance",
+        "/admin/privacy"
+      ],
+      "profileIds": [
+        "WF-W00-04-01",
+        "WF-W00-08-01",
+        "WF-W00-08-02",
+        "WF-W00-08-03",
+        "WF-W18-02-01",
+        "WF-W18-03-01",
+        "WF-W18-03-02",
+        "WF-W18-03-03",
+        "WF-X001",
+        "WF-X002",
+        "WF-X003",
+        "WF-X004",
+        "WF-X005",
+        "WF-X006",
+        "WF-X008",
+        "WF-X082",
+        "WF-X090",
+        "WF-X095"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    },
+    {
+      "area": "hr",
+      "title": "Personal-/Honorarfunktionen und Canvas-Abweichungen",
+      "roles": [
+        "Lehrkraft",
+        "Verwaltung",
+        "Buchhaltung"
+      ],
+      "sources": [
+        "W10.6",
+        "W11.11",
+        "C2.4"
+      ],
+      "routes": [
+        "/staff/teachers",
+        "/staff/finance/fees",
+        "/portal/staff/payslips",
+        "/portal/staff/leave"
+      ],
+      "profileIds": [
+        "WF-X015",
+        "WF-X016",
+        "WF-X017"
+      ],
+      "baselineEvidence": "Kein spezifischer Renderer/Workflow im geprüften Pilotstand.",
+      "frontendStatus": "Existing page/domain renderer or source workbench; not fully implemented/accepted",
+      "remaining": "Route-by-route product depth and UI acceptance; authoritative content and backend-dependent functions pending",
+      "acceptance": "NOT COMPLETE"
+    }
+  ],
+  "disclaimer": "34 source area families / 291 specification profiles, not 291 implemented functions. Baseline evidence is historical, not new acceptance.",
+  "latestPackage": {
+    "base_sha": "021b2f4fc5e8929aeb3abd240ec2ff66fed36500",
+    "profiles": [
+      "WF-W09-05-01",
+      "WF-W09-05-02"
+    ],
+    "routes": [
+      "/staff/library",
+      "/portal/drive"
+    ],
+    "scope": "Two partial text-only RAM paths: draft/revision/review/approved-version reuse and assigned vocabulary/self-reflection. No real files, rights or LMS."
+  },
+  "progressEvidence": "FRONTEND-PROGRESS.json",
+  "remainingWork": {
+    "base_sha": "befae72a5eb8237d714e92d9ccac0463cc7325ad",
+    "scope": "116 role route patterns without new vertical evidence at this grouping; not all project pages or 116 functions. Existing baseline behavior remains.",
+    "definitions": {
+      "frontend": "Independent local nonbinding user journeys implementable from current source boundaries; production integrations still pending.",
+      "variant": "Overview/detail/source-view variants to implement with their shared domain journey, not independent functions.",
+      "gated": "Central live action depends on specifically missing source rules, identity/runtime or authorization integration. This does NOT block safe frontend layout, draft, evidence or error views."
+    },
+    "countsAtGrouping": {
+      "frontend": {
+        "bundles": 15,
+        "routePatterns": 43
+      },
+      "variant": {
+        "bundles": 10,
+        "routePatterns": 21
+      },
+      "gated": {
+        "bundles": 15,
+        "routePatterns": 52
+      }
+    },
+    "bundles": [
+      {
+        "id": "assessment",
+        "kind": "gated",
+        "title": "Einstufungsentscheidung",
+        "routes": [
+          "/portal/applicant/assessment"
+        ],
+        "sourceAreas": [
+          "admission"
+        ],
+        "profileRefs": [
+          "WF-W03-02-01",
+          "WF-W03-02-02",
+          "WF-W03-03-01",
+          "WF-W03-03-02",
+          "WF-W03-04-01",
+          "WF-W03-05-01",
+          "WF-W03-05-02",
+          "WF-W03-05-03",
+          "WF-W03-05-04",
+          "WF-W03-05-05",
+          "WF-W03-05-06",
+          "WF-W03-06-01",
+          "WF-W03-07-01",
+          "WF-W03-07-02",
+          "WF-W03-07-03",
+          "WF-X029",
+          "WF-X030",
+          "WF-X032",
+          "WF-X035",
+          "WF-X036"
+        ],
+        "reason": "W03-05-02/-03: Aufgaben, Lösungen und Schwellen fehlen; keine Bewertung oder Einstufung erfinden. Eingabe-/Prüfoberflächen bleiben möglich."
+      },
+      {
+        "id": "contracts",
+        "kind": "gated",
+        "title": "Vertrag und Kennungsfreigabe",
+        "routes": [
+          "/portal/contracts",
+          "/portal/contracts/:id",
+          "/staff/contracts",
+          "/staff/identities"
+        ],
+        "sourceAreas": [
+          "contract"
+        ],
+        "profileRefs": [
+          "WF-W04-02-01",
+          "WF-W04-03-01",
+          "WF-W04-04-01",
+          "WF-W04-05-01",
+          "WF-W04-06-01",
+          "WF-W04-06-02",
+          "WF-X093"
+        ],
+        "reason": "W04: freigegebene Vertragsanlagen, Signaturverfahren und Kennungs-/Aktivierungsregeln fehlen. Kein rechtlicher Abschluss oder Identitätsfreischaltung."
+      },
+      {
+        "id": "subscription",
+        "kind": "gated",
+        "title": "Digitale Lernlaufzeit",
+        "routes": [
+          "/portal/learning/subscription"
+        ],
+        "sourceAreas": [
+          "selflearning"
+        ],
+        "profileRefs": [
+          "WF-W05-02-02",
+          "WF-X098",
+          "WF-X099"
+        ],
+        "reason": "W05-02-02/X098: Laufzeitbeginn, Monatsberechnung und Paketregeln unvollständig; kein realer Zugangsanspruch."
+      },
+      {
+        "id": "exam-work",
+        "kind": "frontend",
+        "title": "Prüfungsorganisation und eigener Status",
+        "routes": [
+          "/portal/exams",
+          "/staff/exams"
+        ],
+        "sourceAreas": [
+          "exam"
+        ],
+        "profileRefs": [
+          "WF-W12-02-01",
+          "WF-W12-03-01",
+          "WF-W12-03-02",
+          "WF-W12-04-01",
+          "WF-W12-04-02",
+          "WF-W12-04-03",
+          "WF-W12-05-01",
+          "WF-W12-05-02",
+          "WF-W12-05-03",
+          "WF-W12-05-04",
+          "WF-W12-06-01",
+          "WF-W12-06-02",
+          "WF-W12-07-01",
+          "WF-W12-07-02"
+        ],
+        "reason": "W12: lokale Organisations-/Statusansichten möglich; echte Kapazität, Gebühren, Anbieterregeln und Ergebnisfreigaben getrennt gesperrt."
+      },
+      {
+        "id": "fsp-files",
+        "kind": "frontend",
+        "title": "FSP-Unterlagen und Versandvorbereitung",
+        "routes": [
+          "/portal/fsp",
+          "/portal/fsp/documents",
+          "/staff/fsp",
+          "/staff/fsp/dispatch"
+        ],
+        "sourceAreas": [
+          "fsp"
+        ],
+        "profileRefs": [
+          "WF-W13-03-01",
+          "WF-W13-04-01",
+          "WF-W13-05-01",
+          "WF-W13-05-02",
+          "WF-W13-06-01",
+          "WF-W13-06-02",
+          "WF-W13-07-01",
+          "WF-W13-07-02",
+          "WF-W13-08-01",
+          "WF-W13-08-02",
+          "WF-W13-08-03",
+          "WF-W13-09-01",
+          "WF-W13-10-01",
+          "WF-W13-10-02"
+        ],
+        "reason": "W13: Dokument-/Original-/Prüfstatus zusammenhängend darstellbar. Reale Behördenfristen, Empfänger/Vorlagen und Versand benötigen Bestätigung."
+      },
+      {
+        "id": "testas-cohort",
+        "kind": "frontend",
+        "title": "TestAS-Kohorte und Wege",
+        "routes": [
+          "/portal/testas",
+          "/staff/testas"
+        ],
+        "sourceAreas": [
+          "testaspath"
+        ],
+        "profileRefs": [
+          "WF-W13-11-01",
+          "WF-W13-11-02",
+          "WF-W13-11-03",
+          "WF-W13-11-04",
+          "WF-W13-11-05",
+          "WF-W13-11-06"
+        ],
+        "reason": "W13-11: Kohorten-/Nachweisnavigation möglich; konkrete Termine, Sprach-/Hochschulanforderungen und Wegentscheidungen nicht erfinden."
+      },
+      {
+        "id": "housing-records",
+        "kind": "frontend",
+        "title": "Einzug, Meldung, Maßnahmen und Rückgabe",
+        "routes": [
+          "/portal/tenant/handover",
+          "/portal/tenant/issues",
+          "/portal/tenant/moveout",
+          "/staff/housing",
+          "/staff/housing/maintenance"
+        ],
+        "sourceAreas": [
+          "tenant",
+          "propertyadmin"
+        ],
+        "profileRefs": [
+          "WF-W07-02-01",
+          "WF-W07-02-02",
+          "WF-W07-02-03",
+          "WF-W07-03-01",
+          "WF-W07-03-02",
+          "WF-W07-04-01",
+          "WF-W07-04-02",
+          "WF-W07-05-01",
+          "WF-W07-06-01",
+          "WF-W07-06-02",
+          "WF-W07-07-01",
+          "WF-W07-08-01",
+          "WF-W07-09-01",
+          "WF-W07-09-02",
+          "WF-W07-10-01",
+          "WF-W07-11-01",
+          "WF-X039",
+          "WF-X040",
+          "WF-X041",
+          "WF-X043",
+          "WF-X093"
+        ],
+        "reason": "W07-05/06/09: gemeinsame protokollierte Zustände ohne Schuld-, Kosten- oder Zahlungsentscheidung; nächste Priorität."
+      },
+      {
+        "id": "housing-views",
+        "kind": "variant",
+        "title": "Wohnübersicht und Objektansichten",
+        "routes": [
+          "/portal/tenant",
+          "/staff/housing/properties/:id",
+          "/staff/housing/owners"
+        ],
+        "sourceAreas": [
+          "tenant",
+          "propertyadmin"
+        ],
+        "profileRefs": [
+          "WF-W07-02-01",
+          "WF-W07-02-02",
+          "WF-W07-02-03",
+          "WF-W07-03-01",
+          "WF-W07-03-02",
+          "WF-W07-04-01",
+          "WF-W07-04-02",
+          "WF-W07-05-01",
+          "WF-W07-06-01",
+          "WF-W07-06-02",
+          "WF-W07-07-01",
+          "WF-W07-08-01",
+          "WF-W07-09-01",
+          "WF-W07-09-02",
+          "WF-W07-10-01",
+          "WF-W07-11-01",
+          "WF-X039",
+          "WF-X040",
+          "WF-X041",
+          "WF-X043",
+          "WF-X093"
+        ],
+        "reason": "W07: Übersicht/Detailvarianten des gemeinsamen Wohnbestands, keine eigenständige Funktionszahl; echte Eigentümersicht erst mit Rechtebindung."
+      },
+      {
+        "id": "housing-allocation",
+        "kind": "frontend",
+        "title": "Belegung und Warteliste",
+        "routes": [
+          "/staff/housing/occupancy",
+          "/staff/housing/waitlist"
+        ],
+        "sourceAreas": [
+          "propertyadmin"
+        ],
+        "profileRefs": [
+          "WF-W07-02-01",
+          "WF-W07-02-02",
+          "WF-W07-02-03",
+          "WF-W07-03-01",
+          "WF-W07-03-02",
+          "WF-W07-04-01",
+          "WF-W07-04-02",
+          "WF-W07-05-01",
+          "WF-W07-06-01",
+          "WF-W07-06-02",
+          "WF-W07-07-01",
+          "WF-W07-08-01",
+          "WF-W07-09-01",
+          "WF-W07-09-02",
+          "WF-W07-10-01",
+          "WF-W07-11-01",
+          "WF-X039",
+          "WF-X040",
+          "WF-X041",
+          "WF-X043"
+        ],
+        "reason": "W07-02/03: Konflikt-/Wartelistenoberfläche möglich, tatsächliche Reservierungswirkung und Gleichstandsregeln offen."
+      },
+      {
+        "id": "housing-contract",
+        "kind": "gated",
+        "title": "Mietvertrag, Zahlungen, Verlängerung und Abrechnung",
+        "routes": [
+          "/portal/tenant/contract",
+          "/portal/tenant/payments",
+          "/portal/tenant/extension",
+          "/staff/housing/headleases",
+          "/staff/housing/settlements"
+        ],
+        "sourceAreas": [
+          "tenant",
+          "propertyadmin"
+        ],
+        "profileRefs": [
+          "WF-W07-02-01",
+          "WF-W07-02-02",
+          "WF-W07-02-03",
+          "WF-W07-03-01",
+          "WF-W07-03-02",
+          "WF-W07-04-01",
+          "WF-W07-04-02",
+          "WF-W07-05-01",
+          "WF-W07-06-01",
+          "WF-W07-06-02",
+          "WF-W07-07-01",
+          "WF-W07-08-01",
+          "WF-W07-09-01",
+          "WF-W07-09-02",
+          "WF-W07-10-01",
+          "WF-W07-11-01",
+          "WF-X039",
+          "WF-X040",
+          "WF-X041",
+          "WF-X043",
+          "WF-X093"
+        ],
+        "reason": "W07-04/08/09-02: Vertragsvorlagen, wirksamer Verlängerungszeitpunkt, Mietfristen und Erstattungskompetenz nicht abschließend freigegeben. Liveaktion blockiert; sichere Entwürfe möglich."
+      },
+      {
+        "id": "arrival",
+        "kind": "frontend",
+        "title": "Reiseplan, Visumstatus und Ankunft",
+        "routes": [
+          "/portal/arrival",
+          "/portal/visa",
+          "/staff/visa",
+          "/staff/arrival"
+        ],
+        "sourceAreas": [
+          "arrival"
+        ],
+        "profileRefs": [
+          "WF-W06-02-01",
+          "WF-W06-03-01",
+          "WF-W06-05-01",
+          "WF-W06-06-01",
+          "WF-W06-07-01",
+          "WF-X033"
+        ],
+        "reason": "W06: eigene Angaben, Nachweis-/Prüfstatus und Rückfragen möglich. Keine Visaentscheidung oder ungeprüfte aktuelle Behördenfrist."
+      },
+      {
+        "id": "welcome",
+        "kind": "variant",
+        "title": "Welcome-Inhaltsansicht",
+        "routes": [
+          "/portal/welcome"
+        ],
+        "sourceAreas": [
+          "services"
+        ],
+        "profileRefs": [
+          "WF-W06-04-01",
+          "WF-X046"
+        ],
+        "reason": "W06-04/W08-06: Variante vorhandener Dienste-/Checklistenansichten; geprüfte Inhalte und Partnerbindung gesondert erforderlich."
+      },
+      {
+        "id": "transport",
+        "kind": "gated",
+        "title": "Transportbuchung",
+        "routes": [
+          "/portal/transfers",
+          "/staff/transport"
+        ],
+        "sourceAreas": [
+          "shuttle"
+        ],
+        "profileRefs": [
+          "WF-X018",
+          "WF-X019"
+        ],
+        "reason": "X018/019: Betreiber, Kapazität, Tarife, Storno, Wartezeit und Genehmigungen fehlen; kein buchbarer Transfer."
+      },
+      {
+        "id": "university",
+        "kind": "frontend",
+        "title": "Studienwünsche und einzelne Bewerbungsfreigabe",
+        "routes": [
+          "/portal/university",
+          "/portal/university/applications/:id",
+          "/staff/university"
+        ],
+        "sourceAreas": [
+          "university"
+        ],
+        "profileRefs": [
+          "WF-W14-05-01",
+          "WF-W14-05-02",
+          "WF-W14-05-03",
+          "WF-W14-05-04",
+          "WF-W14-05-05",
+          "WF-W14-05-06",
+          "WF-W14-05-07",
+          "WF-W14-05-08",
+          "WF-W14-05-09",
+          "WF-W14-05-10",
+          "WF-W14-05-11",
+          "WF-W14-05-12",
+          "WF-W14-05-13",
+          "WF-W14-05-14",
+          "WF-W14-05-15",
+          "WF-W14-05-16",
+          "WF-W14-05-17",
+          "WF-W14-05-18",
+          "WF-W14-05-19"
+        ],
+        "reason": "W14-05: lokale Wunsch-/Nachweis-/Einzelfreigabewege möglich; keine realen Bewerbungen, Vertretung oder Hochschulentscheidung."
+      },
+      {
+        "id": "portal-shell",
+        "kind": "variant",
+        "title": "Portalübersichten und Suche",
+        "routes": [
+          "/portal",
+          "/portal/tasks",
+          "/staff/student360/:id",
+          "/staff/search"
+        ],
+        "sourceAreas": [
+          "portal"
+        ],
+        "profileRefs": [
+          "WF-W08-03-01",
+          "WF-W08-04-01",
+          "WF-W08-05-01",
+          "WF-W08-06-01",
+          "WF-W08-06-02",
+          "WF-W15-11-01"
+        ],
+        "reason": "W08: zusammengeführte Ansichten bereits vorhandener Fachobjekte, keine vier neuen Fachprozesse; echte Such-/Akte-Rechte offen."
+      },
+      {
+        "id": "profile-documents",
+        "kind": "frontend",
+        "title": "Profiländerung und Dokumentenanforderung",
+        "routes": [
+          "/portal/profile",
+          "/portal/documents"
+        ],
+        "sourceAreas": [
+          "portal"
+        ],
+        "profileRefs": [
+          "WF-W08-03-01",
+          "WF-W08-04-01",
+          "WF-W08-05-01",
+          "WF-W08-06-01",
+          "WF-W08-06-02",
+          "WF-W15-11-01"
+        ],
+        "reason": "W08-04/05: Änderungsvorschlag, Prüfung und dokumentbezogene Rückfragen frontendfähig; Datenführer und Pflichtlisten bleiben Gate."
+      },
+      {
+        "id": "account-settings",
+        "kind": "gated",
+        "title": "Kontoeinstellungen",
+        "routes": [
+          "/portal/settings"
+        ],
+        "sourceAreas": [
+          "portal"
+        ],
+        "profileRefs": [
+          "WF-W08-03-01",
+          "WF-W08-04-01",
+          "WF-W08-05-01",
+          "WF-W08-06-01",
+          "WF-W08-06-02",
+          "WF-W15-11-01"
+        ],
+        "reason": "W08-03/04: SSO, Identitätsprüfung, E-Mail-Wechsel und Recovery nicht konkretisiert; keine reale Kontomutation."
+      },
+      {
+        "id": "library",
+        "kind": "frontend",
+        "title": "Materialbereitstellung und eigener Bestand",
+        "routes": [
+          "/portal/drive",
+          "/staff/library"
+        ],
+        "sourceAreas": [
+          "lms"
+        ],
+        "profileRefs": [
+          "WF-W08-06-01",
+          "WF-W08-06-02",
+          "WF-W09-02-01",
+          "WF-W09-02-02",
+          "WF-W09-03-01",
+          "WF-W09-04-01",
+          "WF-W09-04-02",
+          "WF-W09-05-01",
+          "WF-W09-05-02",
+          "WF-W09-07-01",
+          "WF-X007",
+          "WF-X021",
+          "WF-X022",
+          "WF-X024",
+          "WF-X025",
+          "WF-X026",
+          "WF-X027",
+          "WF-X028",
+          "WF-X098",
+          "WF-X099"
+        ],
+        "reason": "W09: Metadaten-/Freigabe-/Versionsansichten lokal möglich; echte Dateien und Berechtigungen benötigen Drive/LMS-Instanz."
+      },
+      {
+        "id": "lms-sync",
+        "kind": "gated",
+        "title": "LMS-Synchronisation",
+        "routes": [
+          "/staff/lms-sync"
+        ],
+        "sourceAreas": [
+          "lms"
+        ],
+        "profileRefs": [
+          "WF-W08-06-01",
+          "WF-W08-06-02",
+          "WF-W09-02-01",
+          "WF-W09-02-02",
+          "WF-W09-03-01",
+          "WF-W09-04-01",
+          "WF-W09-04-02",
+          "WF-W09-05-01",
+          "WF-W09-05-02",
+          "WF-W09-07-01",
+          "WF-X007",
+          "WF-X021",
+          "WF-X022",
+          "WF-X024",
+          "WF-X025",
+          "WF-X026",
+          "WF-X027",
+          "WF-X028",
+          "WF-X098",
+          "WF-X099"
+        ],
+        "reason": "W09: Instanz/API, führende Daten, Zahlungs-/Einschreibungsgates und Konfliktregeln fehlen; kein erfolgreicher Sync behauptbar."
+      },
+      {
+        "id": "timetable",
+        "kind": "frontend",
+        "title": "Kurse, Programme, Räume und Stundenplan",
+        "routes": [
+          "/staff/courses",
+          "/staff/programmes",
+          "/staff/timetable",
+          "/staff/rooms",
+          "/staff/teachers",
+          "/portal/calendar"
+        ],
+        "sourceAreas": [
+          "scheduling",
+          "hr"
+        ],
+        "profileRefs": [
+          "WF-W10-02-01",
+          "WF-W10-03-01",
+          "WF-W10-03-02",
+          "WF-W10-04-01",
+          "WF-W10-05-01",
+          "WF-W10-06-01",
+          "WF-W10-07-01",
+          "WF-W10-07-02",
+          "WF-W10-07-03",
+          "WF-W10-08-01",
+          "WF-W10-09-01",
+          "WF-X015",
+          "WF-X016",
+          "WF-X017"
+        ],
+        "reason": "W10: gemeinsamer Planeditor/Konfliktprüfung/Veröffentlichung in Musterzuständen möglich; reale Ressourcen und Feiertags-/Meetingregeln gesondert."
+      },
+      {
+        "id": "teaching-view",
+        "kind": "variant",
+        "title": "Lehrkräfteübersicht",
+        "routes": [
+          "/portal/teacher"
+        ],
+        "sourceAreas": [
+          "teaching"
+        ],
+        "profileRefs": [
+          "WF-W11-02-01",
+          "WF-W11-02-02",
+          "WF-W11-02-03",
+          "WF-W11-03-02",
+          "WF-W11-04-01",
+          "WF-W11-05-01",
+          "WF-W11-07-01",
+          "WF-W11-08-01",
+          "WF-W11-09-01",
+          "WF-W11-09-02",
+          "WF-W11-10-01",
+          "WF-W11-11-01",
+          "WF-W11-11-02",
+          "WF-X011"
+        ],
+        "reason": "W11: gemeinsame Einstiegsansicht vorhandener Aufgaben-/Anwesenheitswege; keine eigenständige Fachfunktion."
+      },
+      {
+        "id": "academic-outcomes",
+        "kind": "gated",
+        "title": "Noten, Warnungen, Abschluss und Zertifikate",
+        "routes": [
+          "/portal/teacher/grades",
+          "/staff/academic/warnings",
+          "/portal/certificates",
+          "/staff/semester",
+          "/staff/certificates"
+        ],
+        "sourceAreas": [
+          "teaching",
+          "completion"
+        ],
+        "profileRefs": [
+          "WF-W11-02-01",
+          "WF-W11-02-02",
+          "WF-W11-02-03",
+          "WF-W11-03-02",
+          "WF-W11-04-01",
+          "WF-W11-05-01",
+          "WF-W11-07-01",
+          "WF-W11-08-01",
+          "WF-W11-09-01",
+          "WF-W11-09-02",
+          "WF-W11-10-01",
+          "WF-W11-11-01",
+          "WF-W11-11-02",
+          "WF-W14-02-01",
+          "WF-W14-03-01",
+          "WF-W14-04-01",
+          "WF-W14-04-02",
+          "WF-W14-04-03",
+          "WF-W14-06-01",
+          "WF-W14-07-01",
+          "WF-X010",
+          "WF-X011",
+          "WF-X013",
+          "WF-X020"
+        ],
+        "reason": "W11/W14: Bewertungs-/Warnschwellen, Vorlagen, Signatur, Ausstellungsregeln benötigen Freigabe; keine tatsächlichen Bildungsentscheidungen."
+      },
+      {
+        "id": "alumni",
+        "kind": "variant",
+        "title": "Alumni-Inhalte",
+        "routes": [
+          "/portal/alumni"
+        ],
+        "sourceAreas": [
+          "completion"
+        ],
+        "profileRefs": [
+          "WF-W11-10-01",
+          "WF-W14-02-01",
+          "WF-W14-03-01",
+          "WF-W14-04-01",
+          "WF-W14-04-02",
+          "WF-W14-04-03",
+          "WF-W14-06-01",
+          "WF-W14-07-01",
+          "WF-X010",
+          "WF-X013",
+          "WF-X020"
+        ],
+        "reason": "W14-06/07: Anschluss-/Informationsansicht; Kontakt-/Archivregeln und reale Kommunikation gesondert."
+      },
+      {
+        "id": "knowledge",
+        "kind": "frontend",
+        "title": "Wissen und Qualitätsprüfung",
+        "routes": [
+          "/staff/knowledge",
+          "/staff/chat-monitoring"
+        ],
+        "sourceAreas": [
+          "chat"
+        ],
+        "profileRefs": [
+          "WF-W01-08-01",
+          "WF-W15-05-01",
+          "WF-W15-05-02",
+          "WF-W15-06-01"
+        ],
+        "reason": "W15-05/06: Quellen-/Entwurfs-/Reviewweg möglich; echte KI-/Kanalanschlüsse und Kennzahlen fehlen."
+      },
+      {
+        "id": "marketing-work",
+        "kind": "frontend",
+        "title": "Leadbearbeitung, Vorlagen und Redaktionsplan",
+        "routes": [
+          "/staff/leads",
+          "/staff/content-calendar",
+          "/staff/templates"
+        ],
+        "sourceAreas": [
+          "marketing"
+        ],
+        "profileRefs": [
+          "WF-W01-02-01",
+          "WF-W01-03-01",
+          "WF-W01-04-01",
+          "WF-W01-05-01",
+          "WF-W01-06-01",
+          "WF-W01-06-02",
+          "WF-W01-07-01",
+          "WF-W01-09-01",
+          "WF-W01-10-01",
+          "WF-X077",
+          "WF-X079"
+        ],
+        "reason": "W01: Entwürfe, manuelle Prüfung und Zuständigkeit möglich; echte Kanal-/Consent-/Freigabebindung gesondert."
+      },
+      {
+        "id": "marketing-views",
+        "kind": "variant",
+        "title": "Marketingbestände und Kampagnenübersicht",
+        "routes": [
+          "/staff/marketing",
+          "/staff/campaigns"
+        ],
+        "sourceAreas": [
+          "marketing"
+        ],
+        "profileRefs": [
+          "WF-W01-02-01",
+          "WF-W01-03-01",
+          "WF-W01-04-01",
+          "WF-W01-05-01",
+          "WF-W01-06-01",
+          "WF-W01-06-02",
+          "WF-W01-07-01",
+          "WF-W01-09-01",
+          "WF-W01-10-01",
+          "WF-X077",
+          "WF-X079"
+        ],
+        "reason": "W01: aggregierte Varianten desselben Lead-/Redaktionsbestands; Attributionsformeln und Datenanschlüsse offen."
+      },
+      {
+        "id": "agency-work",
+        "kind": "frontend",
+        "title": "Agentur und zugeordnete Kandidaten",
+        "routes": [
+          "/portal/partner/candidates",
+          "/staff/agencies"
+        ],
+        "sourceAreas": [
+          "agency"
+        ],
+        "profileRefs": [
+          "WF-W02-02-01",
+          "WF-W02-02-02",
+          "WF-W02-03-01",
+          "WF-W02-04-01",
+          "WF-W02-06-01"
+        ],
+        "reason": "W02: eigene Zuordnung/Prüfung frontendfähig; Identität, Dubletten und Verträge ohne Livewirkung."
+      },
+      {
+        "id": "agency-overview",
+        "kind": "variant",
+        "title": "Partnerübersicht",
+        "routes": [
+          "/portal/partner"
+        ],
+        "sourceAreas": [
+          "agency"
+        ],
+        "profileRefs": [
+          "WF-W02-02-01",
+          "WF-W02-02-02",
+          "WF-W02-03-01",
+          "WF-W02-04-01",
+          "WF-W02-06-01"
+        ],
+        "reason": "W02: Überblick desselben Kandidaten-/Agenturbestands."
+      },
+      {
+        "id": "agency-commission",
+        "kind": "gated",
+        "title": "Partnerprovision",
+        "routes": [
+          "/portal/partner/commissions"
+        ],
+        "sourceAreas": [
+          "agency"
+        ],
+        "profileRefs": [
+          "WF-W02-02-01",
+          "WF-W02-02-02",
+          "WF-W02-03-01",
+          "WF-W02-04-01",
+          "WF-W02-06-01"
+        ],
+        "reason": "W02-03/04: tatsächliche Agenturverträge, Rückwirkung und Zahlungsaufteilung offen; keine Zahlungs-/Provisionsfreigabe."
+      },
+      {
+        "id": "finance-views",
+        "kind": "variant",
+        "title": "Finanzübersicht und Ledgeransichten",
+        "routes": [
+          "/portal/financials",
+          "/staff/finance",
+          "/staff/finance/ledger",
+          "/staff/finance/budget"
+        ],
+        "sourceAreas": [
+          "finance"
+        ],
+        "profileRefs": [
+          "WF-W05-02-01",
+          "WF-W05-02-02",
+          "WF-W05-02-03",
+          "WF-W05-03-01",
+          "WF-W05-04-01",
+          "WF-W05-05-01",
+          "WF-W05-05-02",
+          "WF-W05-06-01",
+          "WF-W05-06-02",
+          "WF-W05-06-03",
+          "WF-W05-06-04",
+          "WF-W05-07-01",
+          "WF-W05-07-02",
+          "WF-W05-07-03",
+          "WF-W05-07-04",
+          "WF-W05-07-05",
+          "WF-W05-07-06",
+          "WF-W05-08-01",
+          "WF-W11-11-01",
+          "WF-W11-11-02",
+          "WF-W12-07-01",
+          "WF-W12-07-02",
+          "WF-X014",
+          "WF-X063",
+          "WF-X064",
+          "WF-X065",
+          "WF-X067",
+          "WF-X068",
+          "WF-X069",
+          "WF-X070",
+          "WF-X071",
+          "WF-X072",
+          "WF-X083",
+          "WF-X084",
+          "WF-X085",
+          "WF-X086",
+          "WF-X087",
+          "WF-X088",
+          "WF-X096"
+        ],
+        "reason": "W05/W16: Bestands-/Aggregationsansichten, keine vier Zahlungsprozesse; Beträge/Quoten nur aus verifizierter Datenbasis."
+      },
+      {
+        "id": "finance-actions",
+        "kind": "gated",
+        "title": "Zahlungsprüfung, Rückzahlung und Abschluss",
+        "routes": [
+          "/staff/finance/payments",
+          "/staff/finance/refunds",
+          "/staff/finance/cash",
+          "/staff/finance/payables",
+          "/staff/finance/e-invoices",
+          "/staff/finance/closing",
+          "/staff/finance/approvals"
+        ],
+        "sourceAreas": [
+          "finance"
+        ],
+        "profileRefs": [
+          "WF-W05-02-01",
+          "WF-W05-02-02",
+          "WF-W05-02-03",
+          "WF-W05-03-01",
+          "WF-W05-04-01",
+          "WF-W05-05-01",
+          "WF-W05-05-02",
+          "WF-W05-06-01",
+          "WF-W05-06-02",
+          "WF-W05-06-03",
+          "WF-W05-06-04",
+          "WF-W05-07-01",
+          "WF-W05-07-02",
+          "WF-W05-07-03",
+          "WF-W05-07-04",
+          "WF-W05-07-05",
+          "WF-W05-07-06",
+          "WF-W05-08-01",
+          "WF-W11-11-01",
+          "WF-W11-11-02",
+          "WF-W12-07-01",
+          "WF-W12-07-02",
+          "WF-X014",
+          "WF-X063",
+          "WF-X064",
+          "WF-X065",
+          "WF-X067",
+          "WF-X068",
+          "WF-X069",
+          "WF-X070",
+          "WF-X071",
+          "WF-X072",
+          "WF-X083",
+          "WF-X084",
+          "WF-X085",
+          "WF-X086",
+          "WF-X087",
+          "WF-X088",
+          "WF-X096"
+        ],
+        "reason": "W05/X06x: Bank-/Buchhaltungsinstanz, Steuer-/Freigabe-/Abschlussregeln fehlen; keine Zahlungen/Buchungen. Sichere Entwurfs- und Ausnahmeansichten bleiben möglich."
+      },
+      {
+        "id": "nursing",
+        "kind": "gated",
+        "title": "Pflegeprogramme, Praxis und Nachweise",
+        "routes": [
+          "/portal/nursing",
+          "/portal/nursing/rotations",
+          "/portal/nursing/logbook",
+          "/portal/supervisor",
+          "/staff/nursing",
+          "/staff/nursing/audit"
+        ],
+        "sourceAreas": [
+          "nursing"
+        ],
+        "profileRefs": [
+          "WF-X037",
+          "WF-X047",
+          "WF-X048",
+          "WF-X049",
+          "WF-X050",
+          "WF-X051",
+          "WF-X052",
+          "WF-X053",
+          "WF-X054"
+        ],
+        "reason": "W17.3/X037/047ff: späterer Detailauftrag, Ausbildungsmodell, fachliche Stunden-/Einsatzregeln und Partnerintegration fehlen; keine Pflege-/Ausbildungsentscheidung."
+      },
+      {
+        "id": "career-profile",
+        "kind": "frontend",
+        "title": "Kandidatenprofil und freiwillige Sichtbarkeit",
+        "routes": [
+          "/portal/candidate/profile"
+        ],
+        "sourceAreas": [
+          "jobs"
+        ],
+        "profileRefs": [
+          "WF-X055",
+          "WF-X056",
+          "WF-X057",
+          "WF-X062"
+        ],
+        "reason": "X056/057: Entwurf und ausdrückliche lokale Sichtbarkeitswahl möglich; tatsächliche Berufs-/Identitäts-/Einwilligungsprüfung bleibt Gate."
+      },
+      {
+        "id": "career-overview",
+        "kind": "variant",
+        "title": "Kandidaten- und Arbeitgeberübersichten",
+        "routes": [
+          "/portal/candidate",
+          "/portal/employer"
+        ],
+        "sourceAreas": [
+          "jobs",
+          "employer"
+        ],
+        "profileRefs": [
+          "WF-X055",
+          "WF-X056",
+          "WF-X057",
+          "WF-X058",
+          "WF-X059",
+          "WF-X060",
+          "WF-X061",
+          "WF-X062"
+        ],
+        "reason": "X055ff: Übersichten der späteren Recruitingprozesse, keine zusätzliche Vermittlungsfunktion."
+      },
+      {
+        "id": "recruiting",
+        "kind": "gated",
+        "title": "Talentzugang, Matches, Interviews und Abrechnung",
+        "routes": [
+          "/portal/candidate/matches",
+          "/portal/employer/talentpool",
+          "/portal/employer/matches",
+          "/portal/employer/interviews",
+          "/portal/employer/billing"
+        ],
+        "sourceAreas": [
+          "jobs",
+          "employer"
+        ],
+        "profileRefs": [
+          "WF-X055",
+          "WF-X056",
+          "WF-X057",
+          "WF-X058",
+          "WF-X059",
+          "WF-X060",
+          "WF-X061",
+          "WF-X062"
+        ],
+        "reason": "X058-062: Zugangsfenster/Abos/AVGS, Einzelfreigabeumfang, Rechte/Datenschutz und Gebühren unbestätigt. Keine echten Arbeitgeberfreigaben oder Beschäftigungsentscheidungen."
+      },
+      {
+        "id": "master-views",
+        "kind": "variant",
+        "title": "Masterübersicht und Status",
+        "routes": [
+          "/master",
+          "/master/health"
+        ],
+        "sourceAreas": [
+          "saas"
+        ],
+        "profileRefs": [
+          "WF-X001",
+          "WF-X002",
+          "WF-X003",
+          "WF-X004",
+          "WF-X005",
+          "WF-X006"
+        ],
+        "reason": "X001-006: aggregierte Ansichten; kein Nachweis existierender Mandanten/Healthdaten."
+      },
+      {
+        "id": "master-actions",
+        "kind": "gated",
+        "title": "Mandanten, Domains, Apps und Abos",
+        "routes": [
+          "/master/tenants",
+          "/master/domains",
+          "/master/apps",
+          "/master/subscriptions"
+        ],
+        "sourceAreas": [
+          "saas"
+        ],
+        "profileRefs": [
+          "WF-X001",
+          "WF-X002",
+          "WF-X003",
+          "WF-X004",
+          "WF-X005",
+          "WF-X006"
+        ],
+        "reason": "X001-006: Isolation, DNS/TLS, Storekonten, Signier-/Veröffentlichungsrechte, Kosten/Quoten und Verträge fehlen; reale Provisionierung blockiert."
+      },
+      {
+        "id": "admin-review",
+        "kind": "frontend",
+        "title": "Integrationsfehler, Audit und Abnahmeprüfung",
+        "routes": [
+          "/admin/audit",
+          "/admin/sync-errors",
+          "/admin/acceptance"
+        ],
+        "sourceAreas": [
+          "governance"
+        ],
+        "profileRefs": [
+          "WF-W00-04-01",
+          "WF-W00-08-01",
+          "WF-W00-08-02",
+          "WF-W00-08-03",
+          "WF-W18-02-01",
+          "WF-W18-03-01",
+          "WF-W18-03-02",
+          "WF-W18-03-03",
+          "WF-X001",
+          "WF-X002",
+          "WF-X003",
+          "WF-X004",
+          "WF-X005",
+          "WF-X006",
+          "WF-X008",
+          "WF-X082",
+          "WF-X090",
+          "WF-X095"
+        ],
+        "reason": "W00/W18: lokale Prüf-/Fehler-/Nachweisansichten möglich, keine nachträglich erfundene bestandene Abnahme."
+      },
+      {
+        "id": "admin-rules",
+        "kind": "gated",
+        "title": "Rechte, Integrationen, Regeln, Migration, Backup und Datenschutz",
+        "routes": [
+          "/admin/roles",
+          "/admin/integrations",
+          "/admin/rules",
+          "/admin/migration",
+          "/admin/backups",
+          "/admin/privacy"
+        ],
+        "sourceAreas": [
+          "governance"
+        ],
+        "profileRefs": [
+          "WF-W00-04-01",
+          "WF-W00-08-01",
+          "WF-W00-08-02",
+          "WF-W00-08-03",
+          "WF-W18-02-01",
+          "WF-W18-03-01",
+          "WF-W18-03-02",
+          "WF-W18-03-03",
+          "WF-X001",
+          "WF-X002",
+          "WF-X003",
+          "WF-X004",
+          "WF-X005",
+          "WF-X006",
+          "WF-X008",
+          "WF-X082",
+          "WF-X090",
+          "WF-X095"
+        ],
+        "reason": "W00/W18: konkrete Rechte-, Aufbewahrungs-, Import-/Restore-/Integrationsregeln und Runtime fehlen. Keine wirksamen Sicherheits-, Lösch-, Import- oder Backupaktionen."
+      },
+      {
+        "id": "personnel",
+        "kind": "gated",
+        "title": "Honorare, Abrechnungen und Abwesenheiten",
+        "routes": [
+          "/staff/finance/fees",
+          "/portal/staff/payslips",
+          "/portal/staff/leave"
+        ],
+        "sourceAreas": [
+          "hr"
+        ],
+        "profileRefs": [
+          "WF-X015",
+          "WF-X016",
+          "WF-X017"
+        ],
+        "reason": "X015-017: Personalverträge, Steuer-/Abwesenheits-/Nachweis-/Freigaberegeln fehlen; keine tatsächlichen Personalentscheidungen."
+      }
+    ],
+    "judgment": "Implementation prioritization against bound source profiles, not a new contractual scope or claim that all gated frontend work is impossible."
+  },
+  "localPreparations": [
+    {
+      "id": "arrival",
+      "status": "local-tested",
+      "routes": [
+        "/portal/arrival",
+        "/staff/arrival"
+      ],
+      "profiles": [
+        "WF-W06-05-01"
+      ],
+      "tests": "test-arrival.cjs",
+      "outstanding": [
+        "native200% visual review",
+        "publication approval"
+      ],
+      "countedInPartialCoverage": false
+    },
+    {
+      "id": "knowledge",
+      "status": "local-tested",
+      "routes": [
+        "/staff/knowledge",
+        "/staff/chat-monitoring"
+      ],
+      "profiles": [
+        "WF-W15-05-02",
+        "WF-W15-06-01"
+      ],
+      "tests": "test-knowledge.cjs",
+      "outstanding": [
+        "native200% visual review",
+        "publication approval"
+      ],
+      "countedInPartialCoverage": false
+    }
+  ]
+}

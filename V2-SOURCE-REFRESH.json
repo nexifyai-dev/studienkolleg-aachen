@@ -1,0 +1,20 @@
+{
+  "source": "/workspace/shared/aachen-customer-20261030/content/workflow-full/parts/core-07-12-integrated-variants-v1706.json",
+  "sha256": "4060e456e19821bbbf3be7b35e7a1e2257a71deb86710912aa9c76736904003d",
+  "coverage_source": "/workspace/shared/aachen-customer-20261030/content/workflow-full/FULL-SOURCE-COVERAGE-integrated-v2.json",
+  "coverage_sha256": "7338138bcc4d97aad7aaaaf6689fb6e62123bf4e328d2b1c388f8a9cb7a3e117",
+  "profile_ids": [
+    "WF-W07-03-01",
+    "WF-W07-04-01",
+    "WF-W07-05-01",
+    "WF-W09-02-02"
+  ],
+  "unchanged_other_profiles": 287,
+  "designed_tests_total": 992,
+  "production_tests_executed": 0,
+  "independent_final_review": {
+    "path": "/workspace/shared/aachen-customer-20261030/analysis-original/core-07-11-independent-final-review.json",
+    "sha256": "cdefdd8c4ced13f422e43bd4e8ae6d6ba76f3c5376006fb17ff61d04ad65c5df",
+    "scope": "53 profiles and 11 integrated variants reviewed; source content, not PDF delivery or production acceptance"
+  }
+}

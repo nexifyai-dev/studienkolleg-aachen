@@ -1,0 +1,59 @@
+{
+  "observed_at": "2026-11-02T02:05:47.729700+00:00",
+  "baseline_commit": "2e280ef6ebc457c5e153e6488693368e07349e9f",
+  "site_id": "appgprj_6ae4be62e26881918285f0ee65abbb92",
+  "scope": "Private static pilot; three linked corrections in application/advisory journey",
+  "reviewer": "pruefe_stk_nutzerfluss",
+  "independent_review": "PASS for code and VM only",
+  "hashes": {
+    "dist/app.js": "5ab47599390fe46210495b3b7d23727e76b477fb49c1ec1a05373292296bf30b",
+    "dist/v3-content.js": "5a819e42c40d342fe1fb7a9a3cccd449a8f1c94641bca4dcce34a8638314242e",
+    "dist/v3-migration.js": "4734fe78951b128e811ccff5f931f88f717cfb063d26021b0ae94c6c1bb7216f",
+    "test-application-continuity.cjs": "1203087ceffca0c29ac56e93935d3edbd258875a60ff49fe325323c6d833bdb2"
+  },
+  "browser": {
+    "tool": "CUA Chromium cloud preview",
+    "url": "http://127.0.0.1:4173/",
+    "observed_routes": [
+      "/apply",
+      "/portal/applicant",
+      "/portal/applicant/tasks",
+      "/portal/applicant/messages",
+      "/beratung"
+    ],
+    "fictional_data_only": true,
+    "checks": [
+      "DE selections preserved under EN labels",
+      "three sample documents and supplementary passport",
+      "country/timing/passport/brief shown in overview and portal",
+      "no submission/admission claims",
+      "missing tasks disappear after adding corresponding sample",
+      "messages distinguish local state from admissions reply",
+      "course-guidance topic translated in review/confirmation"
+    ],
+    "reflow": {
+      "css_width": 291,
+      "document_scroll_width": 291,
+      "task_rows_client_and_scroll_width": 205
+    },
+    "limits": [
+      "No physical-device or cross-browser acceptance",
+      "No full accessibility audit",
+      "No productive backend or tenant acceptance"
+    ]
+  },
+  "tests": {
+    "test-application-continuity.cjs": {
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"checks\": [\n    \"Application choices retain stable values with translated labels\",\n    \"Review and applicant portal preserve all draft selections without granting admission\",\n    \"Unset and adversarial sample values remain honest and escaped\",\n    \"German summary and staff contexts stay separate\",\n    \"Applicant tasks and messages agree with all document masks in DE/EN\",\n    \"Booking review and confirmation translate all stable topic values\"\n  ],\n  \"scope\": \"Local VM assertions; no backend/auth/real upload or production acceptance\"\n}\n"
+    },
+    "test-v2.cjs": {
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"routePatterns\": 222,\n  \"profileRenders\": 291,\n  \"checks\": [\n    \"housing filters empty/reset\",\n    \"external evidence gate\",\n    \"exam capacity and payment gates\",\n    \"university save/compare/consent\",\n    \"occupancy overlap gate\",\n    \"finance receipt/match/review\",\n    \"voluntary candidate activation\",\n    \"idempotent local retry\",\n    \"area-note isolation\",\n    \"workflow progress/no branch\",\n    \"DE/EN\"\n  ],\n  \"scope\": \"Node VM DOM stub; not browser, production or source-level acceptance\"\n}\nLINK CRAWL PASS: 405 concrete linked hash routes.\nAPPLICATION IDENTITY AND CASE-CHANGE CONSENT RESET: PASS\n"
+    },
+    "test-v3.cjs": {
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"checks\": [\n    \"Public shell removes mixed mode selector and coverage navigation\",\n    \"Original housing six source records and17 published room rows\",\n    \"Housing filters discriminate single/double and budget\",\n    \"1770 original knowledge entries, stable unique identifiers,15 themes\",\n    \"Provider comparison uses four sources without fake tariff prices\",\n    \"University8criteria filters and multi-program comparison\",\n    \"Public brief continuity; staff and role separation\",\n    \"Individual university approval remains case bound\",\n    \"Exam breadth, no onSET offered booking, official provider paths\",\n    \"Preserved exam negative payment/capacity gates\",\n    \"Legal source wording and original course factual panels\",\n    \"Meaningful English shell and source-language transparency\",\n    \"Application document count and topic brief reach applicant portal\",\n    \"62 source-language editorial pages render with journey links and source date\",\n    \"Video source references preserved without automatic playback\",\n    \"German timeline and recognition/mentoring and booking types\"\n  ],\n  \"concreteLinksRendered\": 149,\n  \"scope\": \"Node VM rendering/state assertions, not real browser/production acceptance\",\n  \"remaining\": \"Independent browser review and final migration coverage classification\"\n}\n"
+    }
+  }
+}

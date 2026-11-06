@@ -1,0 +1,46 @@
+{
+  "observed_at": "2026-10-30T17:22:51.774575+00:00",
+  "vantage": "Cloud Chromium through supported browser UI; local Sites preview",
+  "checks": [
+    {
+      "flow": "housing filter -> object -> room -> enquiry",
+      "result": "pass",
+      "details": "Single room filter shows H-01; R-01 detail and enquiry reachable. External enquiry blocks without sample evidence and reaches manual-review demo after sample evidence."
+    },
+    {
+      "flow": "exam capacity and payment simulation",
+      "result": "pass",
+      "details": "No payment does not confirm; payment + capacity confirms demo only; changed capacity to sold out removes confirmation."
+    },
+    {
+      "flow": "desktop grid geometry",
+      "result": "pass",
+      "viewport_css_width": 1180,
+      "document_scroll_width": 1165,
+      "main_right": 835,
+      "assistant_left": 835,
+      "overlap_px": 0
+    },
+    {
+      "flow": "narrow reflow via browser zoom",
+      "result": "pass",
+      "viewport_css_width": 393,
+      "viewport_css_height": 252,
+      "document_scroll_width": 388,
+      "assistant_position": "static",
+      "main_bottom": 1072.697998046875,
+      "assistant_top": 1072.697998046875,
+      "overlap_px": 0
+    }
+  ],
+  "fixes_requested": [
+    "Public build-narration removed; sources collapsed under conceptdetails",
+    "Old negative status cleared after positive enquiry",
+    "Singular result label"
+  ],
+  "limits": [
+    "Not physical mobile-device testing",
+    "Not backend/payment/authentication acceptance",
+    "Remaining route families and authoritative corrected profile hashes require separate checks"
+  ]
+}

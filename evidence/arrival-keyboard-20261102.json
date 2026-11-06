@@ -1,0 +1,17 @@
+[
+  {
+    "error": "Current arrival revision, review note, response and confirmation required.",
+    "focus": "arrival-error",
+    "route": "#/staff/arrival"
+  },
+  {
+    "error": null,
+    "focus": "arrival-heading",
+    "route": "#/staff/arrival"
+  },
+  {
+    "error": "Add a valid sample date, time, flight number and airport.",
+    "focus": "arrival-error",
+    "route": "#/portal/arrival"
+  }
+]

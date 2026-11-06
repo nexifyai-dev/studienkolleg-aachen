@@ -1,0 +1,11 @@
+{
+ "date":"2026-11-02",
+ "browser":"Chrome via CUA, local preview",
+ "sourceBase":"31ba06b81caf0c741f7f64209bbb127cf52ffa5c",
+ "before":"/staff/cases rendered source workflow reader, no connected case workspace",
+ "checks":["Blank enquiry error focus case-error","Unclear category held in manual triage","Manual handover and staff question returned to learner","Learner reply in same conversation","Unverified task creation blocked","Task due date edit reflected in calendar","Task completion permitted final case reply","DE/EN and translated system history","Explicit action focus case-heading","Reload discarded records as advertised"],
+ "geometry":[{"viewport":320,"beforeDocument":360,"client":305,"afterDocument":305,"views":["staff calendar empty","support populated","staff tasks with history"]},{"viewport":768,"client":753,"document":753,"view":"populated staff calendar"},{"viewport":1920,"client":1905,"document":1905,"mainRight":1525,"railLeft":1525,"view":"populated staff calendar"}],
+ "targets":"Measured new calendar buttons and select: 48px height; other new controls CSS minimum48, checkbox label48",
+ "screenshots":["cases-calendar-20261102.png","cases-mobile-20261102.png"],
+ "limits":["No complete browser zoom verification","No screenreader or physical-device acceptance","No production backend or permission acceptance"]
+}

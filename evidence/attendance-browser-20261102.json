@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-02",
+  "browser": "Chrome via CUA, local preview",
+  "scope": "Fictional attendance journey; no production acceptance",
+  "checks": ["Participant report keeps original attendance", "Correction without verification blocked with focused error", "Verified teacher correction returned to participant", "History retains reason, actor, time and before/after", "DE/EN continuity", "Actual subject group D-B1-02 differs from home T-01", "Classbook extract retains corrected history"],
+  "geometry": [{"viewport":390,"documentScrollWidth":375,"overflow":false},{"viewport":1920,"documentScrollWidth":1905,"frameWidth":1905,"mainRight":1537,"railLeft":1537,"overflow":false}],
+  "limits": ["No physical device or screenreader acceptance", "Full browser zoom remains open: native app control timed out", "Additional browser observation approval review timed out; one retry succeeded"],
+  "screenshot": "attendance-browser-20261102.png"
+}

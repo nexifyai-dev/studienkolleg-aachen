@@ -1,0 +1,54 @@
+[
+  {
+    "client": 305,
+    "minTarget": 23.25,
+    "route": "#/staff/knowledge",
+    "scroll": 307,
+    "width": 320
+  },
+  {
+    "client": 753,
+    "minTarget": 23.25,
+    "route": "#/staff/knowledge",
+    "scroll": 753,
+    "width": 768
+  },
+  {
+    "client": 1905,
+    "minTarget": 23.25,
+    "route": "#/staff/knowledge",
+    "scroll": 1905,
+    "width": 1920
+  },
+  {
+    "client": 3410,
+    "minTarget": 23.25,
+    "route": "#/staff/knowledge",
+    "scroll": 3410,
+    "width": 3425
+  },
+  {
+    "client": 305,
+    "route": "#/staff/chat-monitoring",
+    "scroll": 307,
+    "width": 320
+  },
+  {
+    "client": 753,
+    "route": "#/staff/chat-monitoring",
+    "scroll": 753,
+    "width": 768
+  },
+  {
+    "client": 1905,
+    "route": "#/staff/chat-monitoring",
+    "scroll": 1905,
+    "width": 1920
+  },
+  {
+    "client": 3410,
+    "route": "#/staff/chat-monitoring",
+    "scroll": 3410,
+    "width": 3425
+  }
+]

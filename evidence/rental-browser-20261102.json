@@ -1,0 +1,59 @@
+[
+  {
+    "c": 1905,
+    "route": "#/portal/tenant/moveout",
+    "s": 1905,
+    "targets": [
+      52.390625
+    ],
+    "w": 1920
+  },
+  {
+    "c": 1905,
+    "route": "#/staff/housing/maintenance",
+    "s": 1905,
+    "targets": [
+      48,
+      147.65625
+    ],
+    "w": 1920
+  },
+  {
+    "c": 753,
+    "route": "#/portal/tenant/moveout",
+    "s": 753,
+    "targets": [
+      52.390625
+    ],
+    "w": 768
+  },
+  {
+    "c": 753,
+    "route": "#/staff/housing/maintenance",
+    "s": 753,
+    "targets": [
+      48,
+      147.65625
+    ],
+    "w": 768
+  },
+  {
+    "c": 305,
+    "route": "#/portal/tenant/moveout",
+    "s": 316,
+    "targets": [
+      52.390625
+    ],
+    "w": 320
+  },
+  {
+    "c": 305,
+    "route": "#/staff/housing/maintenance",
+    "s": 305,
+    "targets": [
+      48,
+      209.625
+    ],
+    "w": 320
+  }
+]

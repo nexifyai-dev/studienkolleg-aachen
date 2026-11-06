@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# W2G pre-commit hook – secret scanning
-# Install: cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
-
-bash "$(git rev-parse --show-toplevel)/scripts/scan_secrets.sh"

@@ -1,94 +1,31 @@
-# W2G Platform – Studienkolleg Aachen / Way2Germany / W2G Academy
+# Studienkolleg Aachen · Website & Portale
 
-Zentrale Plattform fuer die Verwaltung von Studienkolleg-Bewerbungen, Dokumenten, Kommunikation, Rechnungen und KI-gestuetztem Screening.
+Quellstand des klickbaren, statischen Frontendpiloten. Die Ansichten verwenden fiktive Daten und lokale Simulationen; es gibt keine angebundenen produktiven Bewerbungs-, Zahlungs-, Nachrichten- oder Verwaltungssysteme.
 
-## Tech Stack
+## Lokal starten
 
-| Schicht | Technologie |
-|---------|-------------|
-| Frontend | React 18 + Tailwind CSS + shadcn/ui |
-| Backend | FastAPI (Python) |
-| Datenbank | MongoDB 7.x |
-| Auth | JWT (Cookie-basiert, httpOnly) |
-| AI/KI | nscale API (deepseek-chat / deepseek-reasoner) |
-| PDF | ReportLab (serverseitig) |
-| E-Mail | IMAP/SMTP (Strato) + Resend (transaktional, vorbereitet) |
-| i18n | react-i18next (DE/EN) |
+Benötigt werden Python 3 und Node.js. Es gibt keinen Paketinstallations- oder Buildschritt.
 
-Zur Begruendung der Architekturabweichung vom Gesamtkonzept (Supabase/Next.js) siehe [ADR-001](docs/adr/ADR-001-mongodb-fastapi-statt-supabase-nextjs.md).
-
-## Portale
-
-| Portal | Rollen | URL-Prefix |
-|--------|--------|------------|
-| Public | Alle | `/` |
-| Applicant | applicant | `/portal` |
-| Staff | staff, accounting_staff | `/staff` |
-| Teacher | teacher | `/staff` |
-| Admin | superadmin, admin | `/admin` |
-| Partner | affiliate, agency_admin, agency_agent | `/partner` |
-
-## Projektstruktur
-
-```
-/app/
-├── backend/
-│   ├── config.py          # Zentrale Konfiguration (ENV-Variablen)
-│   ├── server.py          # FastAPI App-Factory
-│   ├── database.py        # MongoDB-Verbindung
-│   ├── seed.py            # Idempotenter Admin-/Workspace-Seed
-│   ├── routers/           # API-Endpunkte nach Domaene
-│   ├── services/          # Business-Logik (Audit, Email, Storage, AI)
-│   └── models/            # Pydantic-Schemas
-├── frontend/
-│   ├── src/
-│   │   ├── pages/         # Seitenkomponenten nach Portal
-│   │   ├── components/    # UI-Komponenten (layout, shared, ui)
-│   │   ├── contexts/      # React Context (Auth)
-│   │   └── locales/       # Uebersetzungen (DE/EN)
-├── docs/
-│   ├── adr/               # Architecture Decision Records
-│   ├── governance/        # Projekt- und Memory-Regeln
-│   ├── qa-release/        # Deployment, Runbook
-│   ├── history/           # Chronologische Aenderungshistorie
-│   └── wiki/              # Wiki-taugliche Kurzfassungen
-├── memory/
-│   ├── PRD.md             # Produktanforderungen und Backlog
-│   ├── CHANGELOG.md       # Feature-Chronologie
-│   ├── FEHLERREGISTER.md  # Bekannte Fehler und Muster
-│   ├── GO_LIVE_BLOCKERS.md# Produktionsblocker
-│   └── ROLES_MATRIX.md   # Rollenmodell
-└── scripts/               # Hilfsskripte (pre-commit, secret-scan)
+```sh
+python3 -m http.server 4173 --bind 127.0.0.1 --directory dist
 ```
 
-## Dokumentation
+Danach http://127.0.0.1:4173/ öffnen. Die Anwendung verwendet Hash-Routen. Änderungen im Arbeitsspeicher gehen beim Neuladen verloren.
 
-| Dokument | Pfad | Inhalt |
-|----------|------|--------|
-| Governance-Policy | `docs/governance/agent_memory_and_writeback_policy.md` | Memory-Regeln, Recall/Writeback, Definition of Done |
-| ADR-001 | `docs/adr/ADR-001-mongodb-fastapi-statt-supabase-nextjs.md` | Architekturabweichung |
-| Deployment | `docs/qa-release/DEPLOYMENT.md` | ENV-Gruppen, Start-Reihenfolge, Health-Checks |
-| Runbook | `docs/qa-release/RUNBOOK.md` | Incident-Triage, Fehlerbilder, Eskalation |
-| Gesamtkonzept | `/app/01-20_*.md` | Extrahierte Kapitel aus Gesamtkonzept_2026 |
+## Prüfungen
 
-## Schnellstart (Entwicklung)
-
-```bash
-# Services starten (Emergent-Umgebung)
-sudo supervisorctl start mongodb backend frontend
-
-# Health-Check
-curl http://localhost:8001/api/health
-
-# API-Docs
-# Browser: http://localhost:8001/api/docs
+```sh
+for test in test-*.cjs; do node "$test" || exit 1; done
 ```
 
-Fuer Deployment-Details siehe [DEPLOYMENT.md](docs/qa-release/DEPLOYMENT.md).  
-Fuer Incident-Handling siehe [RUNBOOK.md](docs/qa-release/RUNBOOK.md).
+Die Tests prüfen den Piloten und ersetzen keine fachliche, Sicherheits-, Barrierefreiheits- oder Produktionsabnahme. Browser und native Zoomdarstellung sind gesondert zu prüfen.
 
-## Sicherheitshinweise
+## Orientierung
 
-- Keine Secrets in Code oder Git-History (siehe [GO_LIVE_BLOCKERS.md](memory/GO_LIVE_BLOCKERS.md))
-- `.env`-Dateien sind in `.gitignore` und werden nicht committed
-- Pre-Commit-Hook fuer Secret-Scanning: `scripts/pre-commit`
+- `dist/`: auslieferbarer statischer Frontendstand und Original-Referenzassets.
+- `CONCEPT.md`, `V2-ARCHITECTURE.md`, `V2-TRACEABILITY.json`: Konzept, Architektur und fachliche Rückverfolgbarkeit.
+- `FRONTEND-PAGE-MATRIX.md` und `FRONTEND-PROGRESS.json`: Seitenstand und ausdrücklich begrenzte lokale Nachweise.
+- `V3-HANDOFF.md`: Umsetzungsstand, Tests und offene Punkte.
+- `PROJEKTQUELLEN.md`: identifizierte externe Originalquellen und Grenzen der Bestandsaufnahme.
+
+Die Unterlagen enthalten auch ältere Quellen und Entwürfe. Datierungen, fachliche Freigaben und Quellrang sind vor produktiver Nutzung zu prüfen. Geheimnisse gehören nicht ins Repository.

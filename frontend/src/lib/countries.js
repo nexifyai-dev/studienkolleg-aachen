@@ -1,0 +1,31 @@
+/* Länderliste (ISO-3166, deutsche Namen).
+   Ausgeschlossen: alle EU-Mitgliedsstaaten + Ukraine (nicht Zielgruppe des Studienkollegs). */
+
+export const COUNTRIES = [
+  'Afghanistan', 'Ägypten', 'Albanien', 'Algerien', 'Andorra', 'Angola', 'Antigua und Barbuda',
+  'Äquatorialguinea', 'Argentinien', 'Armenien', 'Aserbaidschan', 'Äthiopien', 'Australien',
+  'Bahamas', 'Bahrain', 'Bangladesch', 'Barbados', 'Belarus', 'Belize', 'Benin', 'Bhutan',
+  'Bolivien', 'Bosnien und Herzegowina', 'Botsuana', 'Brasilien', 'Brunei', 'Burkina Faso',
+  'Burundi', 'Chile', 'China', 'Costa Rica', 'Dominica', 'Dominikanische Republik',
+  'Dschibuti', 'Ecuador', 'El Salvador', 'Elfenbeinküste (Côte d\'Ivoire)', 'Eritrea', 'Eswatini',
+  'Fidschi', 'Gabun', 'Gambia', 'Georgien', 'Ghana', 'Grenada', 'Guatemala', 'Guinea',
+  'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Indien', 'Indonesien', 'Irak', 'Iran',
+  'Island', 'Israel', 'Jamaika', 'Japan', 'Jemen', 'Jordanien', 'Kambodscha', 'Kamerun',
+  'Kanada', 'Kap Verde', 'Kasachstan', 'Katar', 'Kenia', 'Kirgisistan', 'Kiribati',
+  'Kolumbien', 'Komoren', 'Kongo (Demokratische Republik)', 'Kongo (Republik)', 'Kosovo',
+  'Kuba', 'Kuwait', 'Laos', 'Lesotho', 'Libanon', 'Liberia', 'Libyen', 'Liechtenstein',
+  'Madagaskar', 'Malawi', 'Malaysia', 'Malediven', 'Mali', 'Marokko', 'Marshallinseln',
+  'Mauretanien', 'Mauritius', 'Mexiko', 'Mikronesien', 'Moldau (Republik)', 'Monaco',
+  'Mongolei', 'Montenegro', 'Mosambik', 'Myanmar', 'Namibia', 'Nauru', 'Nepal',
+  'Neuseeland', 'Nicaragua', 'Niger', 'Nigeria', 'Nordkorea', 'Nordmazedonien', 'Norwegen',
+  'Oman', 'Pakistan', 'Palau', 'Palästina', 'Panama', 'Papua-Neuguinea', 'Paraguay', 'Peru',
+  'Philippinen', 'Ruanda', 'Russland', 'Salomonen', 'Sambia', 'Samoa', 'San Marino',
+  'São Tomé und Príncipe', 'Saudi-Arabien', 'Schweiz', 'Senegal', 'Serbien', 'Seychellen',
+  'Sierra Leone', 'Simbabwe', 'Singapur', 'Somalia', 'Sri Lanka', 'St. Kitts und Nevis',
+  'St. Lucia', 'St. Vincent und die Grenadinen', 'Südafrika', 'Sudan', 'Südkorea',
+  'Südsudan', 'Suriname', 'Syrien', 'Tadschikistan', 'Taiwan', 'Tansania', 'Thailand',
+  'Timor-Leste', 'Togo', 'Tonga', 'Trinidad und Tobago', 'Tschad', 'Tunesien', 'Türkei',
+  'Turkmenistan', 'Tuvalu', 'Uganda', 'Uruguay', 'USA (Vereinigte Staaten)', 'Usbekistan',
+  'Vanuatu', 'Vatikanstadt', 'Venezuela', 'Vereinigte Arabische Emirate',
+  'Vereinigtes Königreich (UK)', 'Vietnam', 'Zentralafrikanische Republik', 'Zypern (Nordteil)',
+];

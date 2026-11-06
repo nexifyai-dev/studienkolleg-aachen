@@ -13,9 +13,18 @@ async def status(user: dict = Depends(require_roles(*ADMIN_ROLES))):
 
 @router.post("/send")
 async def send(request: Request, user: dict = Depends(require_roles(*ADMIN_ROLES))):
-    body = await request.json()
-    to = (body.get("to") or "").strip()
-    msg = (body.get("body") or "").strip()
+    try:
+        body = await request.json()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Ungültiger JSON-Body")
+    if not isinstance(body, dict):
+        raise HTTPException(status_code=400, detail="JSON-Objekt erwartet")
+    to = body.get("to") or ""
+    msg = body.get("body") or ""
+    if not isinstance(to, str) or not isinstance(msg, str):
+        raise HTTPException(status_code=400, detail="Felder 'to' und 'body' müssen Text sein")
+    to = to.strip()
+    msg = msg.strip()
     if not to or not msg:
         raise HTTPException(status_code=400, detail="Felder 'to' und 'body' sind erforderlich")
     applicant_id = body.get("applicant_id")

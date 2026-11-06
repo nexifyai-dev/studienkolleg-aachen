@@ -16,13 +16,15 @@ import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://live-demo-fix.preview.emergentagent.com").rstrip("/")
 
-ADMIN_EMAIL = "admin@studienkolleg-aachen.de"
-ADMIN_PASSWORD = "Admin@2026!"
+ADMIN_EMAIL = os.environ.get("TEST_ADMIN_EMAIL", "admin@studienkolleg-aachen.de")
+ADMIN_PASSWORD = os.environ.get("TEST_ADMIN_PASSWORD", "")
 
 
 # ─── Fixtures ─────────────────────────────────────────────────────────────────
 @pytest.fixture(scope="session")
 def admin_session():
+    if not ADMIN_PASSWORD:
+        pytest.skip("Test credentials missing: set TEST_ADMIN_PASSWORD")
     s = requests.Session()
     # Fetch csrf cookie
     r = s.get(f"{BASE_URL}/api/health", timeout=15)

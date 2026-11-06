@@ -9,12 +9,14 @@ import requests
 
 BASE_URL = (os.environ.get("REACT_APP_BACKEND_URL") or "https://live-demo-fix.preview.emergentagent.com").rstrip("/")
 
-ADMIN = ("admin@studienkolleg-aachen.de", "Admin@2026!")
-STAFF = ("staff@studienkolleg-aachen.de", "DevSeed@2026!")
-APPLICANT = ("applicant@studienkolleg-aachen.de", "DevSeed@2026!")
+ADMIN = (os.environ.get("TEST_ADMIN_EMAIL", "admin@studienkolleg-aachen.de"), os.environ.get("TEST_ADMIN_PASSWORD", ""))
+STAFF = (os.environ.get("TEST_STAFF_EMAIL", "staff@studienkolleg-aachen.de"), os.environ.get("TEST_STAFF_PASSWORD", ""))
+APPLICANT = (os.environ.get("TEST_APPLICANT_EMAIL", "applicant@studienkolleg-aachen.de"), os.environ.get("TEST_APPLICANT_PASSWORD", ""))
 
 
 def _login(email, password):
+    if not password:
+        pytest.skip("Test credentials missing: set TEST_ADMIN_PASSWORD, TEST_STAFF_PASSWORD and TEST_APPLICANT_PASSWORD")
     s = requests.Session()
     r = s.post(f"{BASE_URL}/api/auth/login", json={"email": email, "password": password}, timeout=15)
     assert r.status_code == 200, f"Login failed for {email}: {r.status_code} {r.text[:200]}"
@@ -327,6 +329,8 @@ class TestRegression:
 
     def test_all_role_logins(self):
         for email, pw in (ADMIN, STAFF, APPLICANT):
+            if not pw:
+                pytest.skip("Test credentials missing: set TEST_ADMIN_PASSWORD, TEST_STAFF_PASSWORD and TEST_APPLICANT_PASSWORD")
             s = requests.Session()
             r = s.post(f"{BASE_URL}/api/auth/login", json={"email": email, "password": pw}, timeout=15)
             assert r.status_code == 200, f"Login failed for {email}"
